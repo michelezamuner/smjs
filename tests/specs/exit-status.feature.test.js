@@ -40,10 +40,12 @@ test('let program terminate naturally', () => {
  * Scenario: terminate program with specific exit status
  *   Given the program is:
  *     """
- *     mov eax, 1
- *     mov ebx, 5
- *     mov ecx, 3
- *     syscall
+ *     mov eax, 1   ; system call 1: exit
+ *     mov ebx, 5   ; exit status
+ *     mov ecx, 3   ; shouldn't affect the system call
+ *     syscall      ; execute system call
+ *
+ *     ; the following lines shouldn't be executed
  *     mov eax, 1
  *     mov eax, 4
  *     syscall
@@ -53,10 +55,12 @@ test('let program terminate naturally', () => {
  */
 test('terminate program with specific exit status', () => {
     return expect.exitStatus(`
-        mov eax, 1
-        mov ebx, 5
-        mov ecx, 3
-        syscall
+        mov eax, 1  ; system call 1: exit
+        mov ebx, 5  ; exit status
+        mov ecx, 3  ; shouldn't affect the system call
+        syscall     ; execute system call
+        
+        ; the following lines shouldn't be executed
         mov eax, 1
         mov eax, 4
         syscall

@@ -9,19 +9,29 @@ module.exports = class Parser {
      * @return {array}
      */
     parse(code) {
-        let instructions = [];
+        return code.split("\n")
+            .map(line => line.trim())
+            .filter(this._isNotEmptyLine)
+            .filter(this._isNotCommentLine)
+            .map(this._parseInstruction);
+    }
 
-        const trimmedCode = code.trim();
-        if (trimmedCode === '') {
-            return instructions;
-        }
+    /**
+     * @param {string} line
+     * @returns {boolean}
+     * @private
+     */
+    _isNotEmptyLine(line) {
+        return line !== '';
+    }
 
-        const lines = trimmedCode.split("\n").map(line => line.trim());
-        lines.forEach(line => {
-            instructions.push(this._parseInstruction(line));
-        });
-
-        return instructions;
+    /**
+     * @param {string} line
+     * @returns {boolean}
+     * @private
+     */
+    _isNotCommentLine(line) {
+        return line.indexOf(';') !== 0;
     }
 
     /**
@@ -30,6 +40,11 @@ module.exports = class Parser {
      * @private
      */
     _parseInstruction(line) {
+        const commentDelimiter = line.indexOf(';');
+        if (commentDelimiter !== -1) {
+            line = line.substring(0, commentDelimiter).trim();
+        }
+
         const opcodeDelimiter = line.indexOf(' ');
         if (opcodeDelimiter === -1) {
             return {opcode: line, operands: []};
