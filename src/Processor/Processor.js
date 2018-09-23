@@ -21,11 +21,11 @@ module.exports = class Processor {
      */
     run(instructions) {
         while (true) {
-            if (instructions.length <= this._registers.ip) {
-                this._registers.setStatus(Registers.REG_ESC, 0);
+            if (this._registers.getStatus(Registers.REG_ESC) !== undefined) {
                 break;
             }
-            if (this._registers.getStatus(Registers.REG_ESC) !== undefined) {
+            if (instructions.length <= this._registers.ip) {
+                this._registers.setStatus(Registers.REG_ESC, 0);
                 break;
             }
 

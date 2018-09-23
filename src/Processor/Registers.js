@@ -56,7 +56,7 @@ module.exports = class Registers {
     constructor()
     {
         Registers.MAIN_REGISTERS.forEach(register => {
-            this[`_${register}`] = new Byte();
+            this[`_${register}`] = new Byte(undefined);
         });
 
         this._ip = 0;
@@ -64,12 +64,13 @@ module.exports = class Registers {
 
     /**
      * @param {string} register
-     * @param {number|string} value
+     * @param {string|number|Byte} value
      */
     setMain(register, value) {
         if (!Registers.MAIN_REGISTERS.includes(register)) {
             throw `Invalid main register '${register}'`;
         }
+
         this[`_${register}`] = new Byte(value);
     }
 
@@ -81,6 +82,7 @@ module.exports = class Registers {
         if (!Registers.MAIN_REGISTERS.includes(register)) {
             throw `Invalid main register '${register}'`;
         }
+
         return this[`_${register}`];
     }
 
@@ -92,7 +94,7 @@ module.exports = class Registers {
     }
 
     /**
-     * @param {*} ip
+     * @param {number|string} ip
      */
     set ip(ip) {
         const ipVal = parseInt(ip);
@@ -105,7 +107,7 @@ module.exports = class Registers {
 
     /**
      * @param {string} register
-     * @param {number|string} value
+     * @param {number|string|Byte} value
      */
     setStatus(register, value) {
         if (!Registers.STATUS_REGISTERS.includes(register)) {

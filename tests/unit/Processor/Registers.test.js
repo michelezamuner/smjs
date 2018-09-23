@@ -6,15 +6,20 @@ const Byte = require('../../../src/Processor/DataTypes/Byte');
  */
 let registers = null;
 
+/**
+ * @type {null|number}
+ */
+let random = null;
+
 beforeEach(() => {
     registers = new Registers;
+    random = Math.floor(Math.random() * 10);
 });
 
 test('sets main registers as bytes', () => {
     Registers.MAIN_REGISTERS.forEach(register => {
-        const value = Math.floor(Math.random() * 10);
-        registers.setMain(register, value);
-        expect(registers.getMain(register)).toEqual(new Byte(value));
+        registers.setMain(register, random);
+        expect(registers.getMain(register)).toEqual(new Byte(random));
     });
 });
 
@@ -30,49 +35,38 @@ test('instruction pointer starts at zero', () => {
 });
 
 test('sets instruction pointer', () => {
-    const value = Math.floor(Math.random() * 10);
-
-    registers.ip = value;
-
-    expect(registers.ip).toBe(value);
+    registers.ip = random;
+    expect(registers.ip).toBe(random);
 });
 
 test('fails if setting non numeric instruction pointer', () => {
     const value = 'non numeric value';
-
     expect(() => registers.ip = value).toThrow(`Invalid instruction pointer ${value}`)
 });
 
 test('fails if setting negative instruction pointer', () => {
-    const value = -1 * Math.floor(Math.random() * 10);
-
+    const value = -1 * random;
     expect(() => registers.ip = value).toThrow(`Invalid instruction pointer ${value}`);
 });
 
 test('sets status registers', () => {
     Registers.STATUS_REGISTERS.forEach(register => {
-        const value = Math.floor(Math.random() * 10);
-
-        registers.setStatus(register, value);
-        expect(registers.getStatus(register)).toBe(value);
+        registers.setStatus(register, random);
+        expect(registers.getStatus(register)).toBe(random);
     });
 });
 
 test('status registers are converted to integer if possible', () => {
     Registers.STATUS_REGISTERS.forEach(register => {
-        const value = Math.floor(Math.random() * 10);
-
-        registers.setStatus(register, '' + value);
-        expect(registers.getStatus(register)).toBe(value);
+        registers.setStatus(register, '' + random);
+        expect(registers.getStatus(register)).toBe(random);
     });
 });
 
 test('status registers convert bytes to integers', () => {
     Registers.STATUS_REGISTERS.forEach(register => {
-        const value = Math.floor(Math.random() * 10);
-
-        registers.setStatus(register, new Byte(value));
-        expect(registers.getStatus(register)).toBe(value);
+        registers.setStatus(register, new Byte(random));
+        expect(registers.getStatus(register)).toBe(random);
     });
 });
 

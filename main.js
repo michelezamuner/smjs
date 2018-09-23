@@ -6,5 +6,6 @@ const Processor = require('./src/Processor/Processor');
 require('fs').readFile(process.argv[2], {encoding: 'utf-8'}, (err, data) => {
     const instructions = (new Parser).parse(data);
     const processor = new Processor(new InstructionSet, new Registers);
-    process.exit(processor.run(instructions));
+    const status = processor.run(instructions);
+    process.exit(status);
 });

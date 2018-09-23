@@ -18,6 +18,7 @@ module.exports = class InstructionSet {
      * @param {Registers} registers
      */
     mov([register, value], registers) {
+        value = Registers.MAIN_REGISTERS.includes(value) ? registers.getMain(value) : value;
         registers.setMain(register, value);
     }
 

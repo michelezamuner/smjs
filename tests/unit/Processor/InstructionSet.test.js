@@ -8,36 +8,45 @@ const Byte = require('../../../src/Processor/DataTypes/Byte');
 let instructionSet = null;
 
 /**
+ * @type {null|Object}
+ */
+let registers = null;
+
+/**
  * @type {null|number}
  */
-let code = null;
+let random = null;
 
 beforeEach(() => {
     instructionSet = new InstructionSet;
-    code = Math.floor(Math.random() * 10);
+    registers = {
+        setMain: jest.fn(),
+        getMain: jest.fn(),
+        setStatus: jest.fn(),
+    };
+    random = Math.floor(Math.random() * 10);
 });
 
-test('implements move with immediate value', () => {
-    const registers = {
-        setMain: jest.fn(),
-    };
+test('implements move with immediate addressing', () => {
+    instructionSet.mov(['eax', random], registers);
 
-    instructionSet.mov(['eax', code], registers);
+    expect(registers.setMain.mock.calls[0][0]).toBe(Registers.REG_EAX);
+    expect(registers.setMain.mock.calls[0][1]).toEqual(random);
+});
 
-    expect(registers.setMain.mock.calls.length).toBe(1);
-    expect(registers.setMain.mock.calls[0][0]).toBe('eax');
-    expect(registers.setMain.mock.calls[0][1]).toBe(code);
+test('implements move with register addressing', () => {
+    registers.getMain = jest.fn(reg => new Byte(reg === Registers.REG_EBX ? random : undefined));
+    instructionSet.mov(['eax', 'ebx'], registers);
+
+    expect(registers.getMain.mock.calls[0][0]).toBe(Registers.REG_EBX);
+    expect(registers.setMain.mock.calls[0][0]).toBe(Registers.REG_EAX);
+    expect(registers.setMain.mock.calls[0][1]).toEqual(new Byte(random));
 });
 
 test('implements syscall exit', () => {
-    const registers = {
-        getMain: jest.fn(reg => new Byte(reg === 'eax' ? InstructionSet.SYS_EXIT : code)),
-        setStatus: jest.fn(),
-    };
-
+    registers.getMain = jest.fn(reg => new Byte(reg === 'eax' ? InstructionSet.SYS_EXIT : random));
     instructionSet.syscall([], registers);
 
-    expect(registers.setStatus.mock.calls.length).toBe(1);
     expect(registers.setStatus.mock.calls[0][0]).toBe(Registers.REG_ESC);
-    expect(registers.setStatus.mock.calls[0][1]).toEqual(new Byte(code));
+    expect(registers.setStatus.mock.calls[0][1]).toEqual(new Byte(random));
 });

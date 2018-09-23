@@ -12,7 +12,5 @@
   "scripts": {
     "test": "node --use_strict ./node_modules/.bin/jest"
   },
-  "dependencies": {
-    "q": "^1.5.1"
-  }
+  "dependencies": {}
 }

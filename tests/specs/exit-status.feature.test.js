@@ -1,3 +1,5 @@
+const expect = require('../expect');
+
 /**
  * Feature: Exit status
  *   As a programmer
@@ -14,7 +16,7 @@
  *   Then the program terminates with exit status 0
  */
 test('run empty program', () => {
-    return expectExitStatus('', 0);
+    return expect.exitStatus('', 0);
 });
 
 /**
@@ -28,7 +30,7 @@ test('run empty program', () => {
  *   Then the program terminates with exit status 0
  */
 test('let program terminate naturally', () => {
-    return expectExitStatus(`
+    return expect.exitStatus(`
         mov eax, 1
         mov ebx, 2
     `, 0);
@@ -50,7 +52,7 @@ test('let program terminate naturally', () => {
  *   Then the program terminates with exit status 5
  */
 test('terminate program with specific exit status', () => {
-    return expectExitStatus(`
+    return expect.exitStatus(`
         mov eax, 1
         mov ebx, 5
         mov ecx, 3
@@ -60,31 +62,3 @@ test('terminate program with specific exit status', () => {
         syscall
     `, 5)
 });
-
-const fs = require('fs');
-const exec = require('child_process').exec;
-const q = require('q');
-
-/**
- * @param {string} code
- * @param {number} status
- * @returns {Promise<T | never>}
- */
-function expectExitStatus(code, status) {
-    const defer = q.defer();
-    fs.writeFile('test.sm', code, () => defer.resolve());
-
-    return defer.promise.then(() => {
-        const defer = q.defer();
-        exec('node main.js test.sm', error => defer.resolve(error ? error.code : 0));
-
-        return defer.promise.then(code => {
-            expect(code).toBe(status);
-
-            const defer = q.defer();
-            fs.unlink('test.sm', () => defer.resolve());
-
-            return defer.promise;
-        });
-    });
-}
