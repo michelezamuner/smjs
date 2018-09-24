@@ -45,7 +45,7 @@ test('fails if setting non numeric instruction pointer', () => {
 });
 
 test('fails if setting negative instruction pointer', () => {
-    const value = -1 * random;
+    const value = -1 * (random + 1);
     expect(() => registers.ip = value).toThrow(`Invalid instruction pointer ${value}`);
 });
 

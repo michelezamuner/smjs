@@ -30,9 +30,8 @@ module.exports = class Processor {
                 this._registers.es = Registers.EXIT_STATUS_OK;
                 break;
             }
-
-            const instruction = instructions[this._registers.ip++];
-            this._interpreter[instruction.opcode](instruction.operands, this._registers);
+            
+            this._interpreter.exec(instructions[this._registers.ip++]);
         }
 
         return this._registers.es.toInt();

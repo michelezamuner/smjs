@@ -29,7 +29,9 @@ beforeEach(() => {
 });
 
 test('implements move with immediate addressing', () => {
-    interpreter.mov(['eax', random]);
+    const instruction = {opcode: 'mov', operands: ['eax', random]};
+
+    interpreter.exec(instruction);
 
     expect(registers.setMain.mock.calls[0][0]).toBe(Registers.REG_EAX);
     expect(registers.setMain.mock.calls[0][1]).toEqual(random);
@@ -37,7 +39,10 @@ test('implements move with immediate addressing', () => {
 
 test('implements move with register addressing', () => {
     registers.getMain = jest.fn(reg => new Byte(reg === Registers.REG_EBX ? random : undefined));
-    interpreter.mov(['eax', 'ebx']);
+
+    const instruction = {opcode: 'mov', operands: ['eax', 'ebx']};
+
+    interpreter.exec(instruction);
 
     expect(registers.getMain.mock.calls[0][0]).toBe(Registers.REG_EBX);
     expect(registers.setMain.mock.calls[0][0]).toBe(Registers.REG_EAX);
@@ -46,8 +51,11 @@ test('implements move with register addressing', () => {
 
 test('implements syscall exit', () => {
     registers.getMain = jest.fn(reg => new Byte(reg === 'eax' ? Interpreter.SYS_EXIT : random));
-    interpreter.syscall([]);
 
-    expect(registers.et).toEqual(new Byte(1));
+    const instruction = {opcode: 'syscall', operands: []};
+
+    interpreter.exec(instruction);
+
+    expect(registers.et).toEqual(Registers.EXIT_TRIGGER_ON);
     expect(registers.es).toEqual(new Byte(random));
 });

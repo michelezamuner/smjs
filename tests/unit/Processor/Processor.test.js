@@ -24,7 +24,7 @@ let random = null;
 
 beforeEach(() => {
     interpreter = {
-        test: jest.fn(),
+        exec: jest.fn(),
     };
     registers = {
         et: Registers.EXIT_TRIGGER_OFF,
@@ -52,16 +52,19 @@ test('executes the given instructions in sequence and returns exit status zero',
     const exitStatus = processor.run(instructions);
 
     expect(exitStatus).toBe(Registers.EXIT_STATUS_OK.toInt());
-    expect(interpreter.test.mock.calls.length).toBe(3);
-    expect(interpreter.test.mock.calls[0][0]).toEqual([1]);
-    expect(interpreter.test.mock.calls[1][0]).toEqual([2]);
-    expect(interpreter.test.mock.calls[2][0]).toEqual([3]);
+    expect(interpreter.exec.mock.calls.length).toBe(3);
+    expect(interpreter.exec.mock.calls[0][0]).toEqual(instructions[0]);
+    expect(interpreter.exec.mock.calls[1][0]).toEqual(instructions[1]);
+    expect(interpreter.exec.mock.calls[2][0]).toEqual(instructions[2]);
 });
 
 test('exits with exit registers skipping following instructions', () => {
-    interpreter.exit = ([op]) => {
+    interpreter.exec = instruction => {
+        if (instruction.opcode !== 'exit') {
+            return;
+        }
         registers.et = Registers.EXIT_TRIGGER_ON;
-        registers.es = new Byte(op);
+        registers.es = new Byte(instruction.operands[0]);
     };
 
     const instructions = [
@@ -76,9 +79,12 @@ test('exits with exit registers skipping following instructions', () => {
 });
 
 test('exits with exit status registers as last instruction', () => {
-    interpreter.exit = ([op]) => {
+    interpreter.exec = instruction => {
+        if (instruction.opcode !== 'exit') {
+            return;
+        }
         registers.et = Registers.EXIT_TRIGGER_ON;
-        registers.es = new Byte(op);
+        registers.es = new Byte(instruction.operands[0]);
     };
 
     const instructions = [

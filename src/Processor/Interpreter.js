@@ -20,18 +20,33 @@ module.exports = class Interpreter {
     }
 
     /**
+     * @param {Object} instruction
+     */
+    exec(instruction) {
+        switch (instruction.opcode) {
+            case 'mov':
+                this._mov(instruction.operands);
+                break;
+            case 'syscall':
+                this._syscall();
+                break;
+        }
+    }
+
+    /**
      * @param {string} register
      * @param {number|string} value
+     * @private
      */
-    mov([register, value]) {
+    _mov([register, value]) {
         value = Registers.MAIN_REGISTERS.includes(value) ? this._registers.getMain(value) : value;
         this._registers.setMain(register, value);
     }
 
     /**
-     * @param {array} []
+     * @private
      */
-    syscall([]) {
+    _syscall() {
         if (this._registers.getMain(Registers.REG_EAX).equals(new Byte(Interpreter.SYS_EXIT))) {
             this._registers.et = Registers.EXIT_TRIGGER_ON;
             this._registers.es = this._registers.getMain(Registers.REG_EBX);
