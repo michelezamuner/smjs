@@ -22,7 +22,8 @@ beforeEach(() => {
     registers = {
         setMain: jest.fn(),
         getMain: jest.fn(),
-        setStatus: jest.fn(),
+        et: new Byte(0),
+        es: new Byte(0),
     };
     random = Math.floor(Math.random() * 10);
 });
@@ -47,6 +48,6 @@ test('implements syscall exit', () => {
     registers.getMain = jest.fn(reg => new Byte(reg === 'eax' ? InstructionSet.SYS_EXIT : random));
     instructionSet.syscall([], registers);
 
-    expect(registers.setStatus.mock.calls[0][0]).toBe(Registers.REG_ESC);
-    expect(registers.setStatus.mock.calls[0][1]).toEqual(new Byte(random));
+    expect(registers.et).toEqual(new Byte(1));
+    expect(registers.es).toEqual(new Byte(random));
 });

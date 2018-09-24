@@ -5,6 +5,26 @@ const Byte = require('./DataTypes/Byte');
  */
 module.exports = class Registers {
     /**
+     * @returns {Byte}
+     */
+    static get EXIT_TRIGGER_OFF() {
+        return new Byte(0);
+    }
+
+    /**
+     * @returns {Byte}
+     */
+    static get EXIT_TRIGGER_ON() {
+        return new Byte(1);
+    }
+
+    /**
+     * @returns {Byte}
+     */
+    static get EXIT_STATUS_OK() {
+        return new Byte(0);
+    }
+    /**
      * @returns {string}
      */
     static get REG_EAX() {
@@ -33,24 +53,10 @@ module.exports = class Registers {
     }
 
     /**
-     * @returns {string}
-     */
-    static get REG_ESC() {
-        return 'esc';
-    }
-
-    /**
      * @returns {string[]}
      */
     static get MAIN_REGISTERS() {
         return [Registers.REG_EAX, Registers.REG_EBX, Registers.REG_ECX, Registers.REG_EDX];
-    }
-
-    /**
-     * @returns {string[]}
-     */
-    static get STATUS_REGISTERS() {
-        return [Registers.REG_ESC];
     }
 
     constructor()
@@ -60,6 +66,40 @@ module.exports = class Registers {
         });
 
         this._ip = 0;
+    }
+
+    /**
+     * @returns {Byte}
+     */
+    get et() {
+        return this._et;
+    }
+
+    /**
+     * @param {Byte} et
+     */
+    set et(et) {
+        if (!(et instanceof Byte)) {
+            throw `Exit trigger register must be set to byte, got ${et} instead`;
+        }
+        this._et = et;
+    }
+
+    /**
+     * @returns {Byte}
+     */
+    get es() {
+        return this._es;
+    }
+
+    /**
+     * @param {Byte} es
+     */
+    set es(es) {
+        if (!(es instanceof Byte)) {
+            throw `Exit status register must be set to byte, got ${es} instead`;
+        }
+        this._es = es;
     }
 
     /**
@@ -103,38 +143,5 @@ module.exports = class Registers {
             throw `Invalid instruction pointer ${ip}`;
         }
         this._ip = ipVal;
-    }
-
-    /**
-     * @param {string} register
-     * @param {number|string|Byte} value
-     */
-    setStatus(register, value) {
-        if (!Registers.STATUS_REGISTERS.includes(register)) {
-            throw `Invalid status register '${register}'`;
-        }
-
-        if (value instanceof Byte) {
-            value = value.toInt();
-        }
-
-        const parsedValue = typeof value === 'string' ? parseFloat(value) : value;
-        if (!Number.isInteger(parsedValue)) {
-            throw `Status register must be integer, got '${value}' instead`;
-        }
-
-        this[`_${register}`] = parsedValue;
-    }
-
-    /**
-     * @param {string} register
-     * @returns {number}
-     */
-    getStatus(register) {
-        if (!Registers.STATUS_REGISTERS.includes(register)) {
-            throw `Invalid status register '${register}'`;
-        }
-
-        return this[`_${register}`];
     }
 };

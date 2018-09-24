@@ -16,7 +16,7 @@ beforeEach(() => {
     random = Math.floor(Math.random() * 10);
 });
 
-test('sets main registers as bytes', () => {
+test('sets main registers', () => {
     Registers.MAIN_REGISTERS.forEach(register => {
         registers.setMain(register, random);
         expect(registers.getMain(register)).toEqual(new Byte(random));
@@ -49,39 +49,32 @@ test('fails if setting negative instruction pointer', () => {
     expect(() => registers.ip = value).toThrow(`Invalid instruction pointer ${value}`);
 });
 
-test('sets status registers', () => {
-    Registers.STATUS_REGISTERS.forEach(register => {
-        registers.setStatus(register, random);
-        expect(registers.getStatus(register)).toBe(random);
-    });
+test('handles exit trigger', () => {
+    const setSpy = jest.spyOn(registers, 'et', 'set');
+    const getSpy = jest.spyOn(registers, 'et', 'get');
+
+    registers.et = new Byte(1);
+
+    expect(setSpy).toHaveBeenCalled();
+    expect(registers.et).toEqual(new Byte(1));
+    expect(getSpy).toHaveBeenCalled();
 });
 
-test('status registers are converted to integer if possible', () => {
-    Registers.STATUS_REGISTERS.forEach(register => {
-        registers.setStatus(register, '' + random);
-        expect(registers.getStatus(register)).toBe(random);
-    });
+test('handles exit status', () => {
+    const setSpy = jest.spyOn(registers, 'es', 'set');
+    const getSpy = jest.spyOn(registers, 'es', 'get');
+
+    registers.es = new Byte(random);
+
+    expect(setSpy).toHaveBeenCalled();
+    expect(registers.es).toEqual(new Byte(random));
+    expect(getSpy).toHaveBeenCalled();
 });
 
-test('status registers convert bytes to integers', () => {
-    Registers.STATUS_REGISTERS.forEach(register => {
-        registers.setStatus(register, new Byte(random));
-        expect(registers.getStatus(register)).toBe(random);
-    });
+test('fails if exit trigger is set to non-byte', () => {
+    expect(() => registers.et = random).toThrow(`Exit trigger register must be set to byte, got ${random} instead`);
 });
 
-test('fails if setting non integer status register', () => {
-    Registers.STATUS_REGISTERS.forEach(register => {
-        ['non integer value', 1.454].forEach(value => {
-            expect(() => registers.setStatus(register, value))
-                .toThrow(`Status register must be integer, got '${value}' instead`);
-        });
-    });
-});
-
-test('fails if setting or getting wrong status register', () => {
-    const register = 'invalid';
-
-    expect(() => registers.setStatus(register, 10)).toThrow(`Invalid status register '${register}'`);
-    expect(() => registers.getStatus(register)).toThrow(`Invalid status register '${register}'`);
+test('fails if exit status is set to non-byte', () => {
+    expect(() => registers.es = random).toThrow(`Exit status register must be set to byte, got ${random} instead`);
 });
