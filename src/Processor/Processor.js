@@ -5,11 +5,11 @@ const Registers = require('./Registers');
  */
 module.exports = class Processor {
     /**
-     * @param {InstructionSet} instructionSet
+     * @param {Interpreter} interpreter
      * @param {Registers} registers
      */
-    constructor(instructionSet, registers) {
-        this._instructionSet = instructionSet;
+    constructor(interpreter, registers) {
+        this._interpreter = interpreter;
         this._registers = registers;
         this._registers.et = Registers.EXIT_TRIGGER_OFF;
         this._registers.es = Registers.EXIT_STATUS_OK;
@@ -32,7 +32,7 @@ module.exports = class Processor {
             }
 
             const instruction = instructions[this._registers.ip++];
-            this._instructionSet[instruction.opcode](instruction.operands, this._registers);
+            this._interpreter[instruction.opcode](instruction.operands, this._registers);
         }
 
         return this._registers.es.toInt();
