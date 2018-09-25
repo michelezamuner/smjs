@@ -22,7 +22,7 @@ const Type = class extends DataType {
 };
 
 beforeEach(() => {
-    random = Math.floor(Math.random() * 10);
+    random = Math.floor(Math.random() * Type.MAX);
 });
 
 test('cannot be instantiated', () => {
@@ -49,10 +49,20 @@ test('implements equals', () => {
     expect(t1.equals(t3)).toBe(false);
 });
 
-test('accepts only integers in constructor', () => {
+test('accepts only integers', () => {
     ['some string', 1.234, {}].forEach(value => {
-        expect(() => new Type(value)).toThrow(`Data types must be constructed from integers, got '${value}' instead`);
+        expect(() => new Type(value)).toThrow(`Data types must be constructed from positive integers, got '${value}' instead`);
     });
+});
+
+test('accepts only positive integers', () => {
+    const value = -random;
+    expect(() => new Type(value)).toThrow(`Data types must be constructed from positive integers, got '${value}' instead`);
+});
+
+test('fails if value out of bounds', () => {
+    const random = Math.floor(Type.MAX + Math.random() * 10 + 1);
+    expect(() => new Type(random)).toThrow('Value out of bounds');
 });
 
 test('support copy constructor', () => {
@@ -62,14 +72,13 @@ test('support copy constructor', () => {
     expect(t1.equals(t2)).toBe(true);
 });
 
-test('fails if value out of bounds', () => {
-    const random = Math.floor(Type.MAX + Math.random() * 10 + 1);
-    expect(() => new Type(random)).toThrow('Value out of bounds');
-    expect(() => new Type(-random)).toThrow('Value out of bounds');
+test('get integer value in twos complement', () => {
+    [[5, 5], [16, 16], [61, 61], [62, -62], [63, -61], [122, -2], [123, -1]].forEach(([value, expected]) => {
+        expect((new Type(value)).getSigned()).toBe(expected);
+    });
 });
 
-test('casts to integer', () => {
+test('get integer value unsigned', () => {
     const t = new Type(random);
-
-    expect(t.toInt()).toBe(random);
+    expect(t.get()).toBe(random);
 });

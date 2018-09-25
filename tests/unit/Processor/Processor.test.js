@@ -38,7 +38,7 @@ beforeEach(() => {
 test('returns exit status ok if no instruction is executed', () => {
     const exitStatus = processor.run([]);
 
-    expect(exitStatus).toBe(Registers.EXIT_STATUS_OK.toInt());
+    expect(exitStatus).toBe(Registers.EXIT_STATUS_OK.get());
     expect(registers.ip).toBe(0);
 });
 
@@ -51,7 +51,7 @@ test('executes the given instructions in sequence and returns exit status zero',
 
     const exitStatus = processor.run(instructions);
 
-    expect(exitStatus).toBe(Registers.EXIT_STATUS_OK.toInt());
+    expect(exitStatus).toBe(Registers.EXIT_STATUS_OK.get());
     expect(interpreter.exec.mock.calls.length).toBe(3);
     expect(interpreter.exec.mock.calls[0][0]).toEqual(instructions[0]);
     expect(interpreter.exec.mock.calls[1][0]).toEqual(instructions[1]);

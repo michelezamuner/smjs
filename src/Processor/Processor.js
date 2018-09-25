@@ -34,6 +34,6 @@ module.exports = class Processor {
             this._interpreter.exec(instructions[this._registers.ip++]);
         }
 
-        return this._registers.es.toInt();
+        return this._registers.es.get();
     }
 };

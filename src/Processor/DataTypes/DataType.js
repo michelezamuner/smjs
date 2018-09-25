@@ -22,13 +22,15 @@ module.exports = class DataType {
             this._value = value;
         }
 
-        if (this._value < -new.target.MAX || value > new.target.MAX) {
-            throw 'Value out of bounds';
+        if (this._value > new.target.MAX) {
+            throw `Value out of bounds: ${this._value}`;
         }
 
-        if (this._value === undefined) {
-            throw `Data types must be constructed from integers, got '${value}' instead`;
+        if (this._value === undefined || this._value < 0) {
+            throw `Data types must be constructed from positive integers, got '${value}' instead`;
         }
+
+        this._max = new.target.MAX;
     }
 
     /**
@@ -42,7 +44,14 @@ module.exports = class DataType {
     /**
      * @returns {number}
      */
-    toInt() {
+    getSigned() {
+        return this._value <= Math.floor(this._max / 2) ? this._value : this._value - this._max - 1;
+    }
+
+    /**
+     * @returns {number}
+     */
+    get() {
         return this._value;
     }
 };
