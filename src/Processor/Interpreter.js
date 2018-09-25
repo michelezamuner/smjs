@@ -39,7 +39,7 @@ module.exports = class Interpreter {
      * @private
      */
     _mov([register, value]) {
-        value = Registers.MAIN_REGISTERS.includes(value) ? this._registers.getMain(value) : value;
+        value = Registers.MAIN_REGISTERS.includes(value) ? this._registers.getMain(value) : parseInt(value);
         this._registers.setMain(register, value);
     }
 

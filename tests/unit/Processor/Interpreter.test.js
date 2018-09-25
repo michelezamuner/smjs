@@ -29,12 +29,12 @@ beforeEach(() => {
 });
 
 test('implements move with immediate addressing', () => {
-    const instruction = {opcode: 'mov', operands: ['eax', random]};
+    const instruction = {opcode: 'mov', operands: ['eax', '' + random]};
 
     interpreter.exec(instruction);
 
     expect(registers.setMain.mock.calls[0][0]).toBe(Registers.REG_EAX);
-    expect(registers.setMain.mock.calls[0][1]).toEqual(random);
+    expect(registers.setMain.mock.calls[0][1]).toBe(random);
 });
 
 test('implements move with register addressing', () => {

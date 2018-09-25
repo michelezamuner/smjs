@@ -62,7 +62,7 @@ module.exports = class Registers {
     constructor()
     {
         Registers.MAIN_REGISTERS.forEach(register => {
-            this[`_${register}`] = new Byte(undefined);
+            this[`_${register}`] = new Byte(0);
         });
 
         this._ip = 0;
@@ -104,7 +104,7 @@ module.exports = class Registers {
 
     /**
      * @param {string} register
-     * @param {string|number|Byte} value
+     * @param {number|Byte} value
      */
     setMain(register, value) {
         if (!Registers.MAIN_REGISTERS.includes(register)) {
