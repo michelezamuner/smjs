@@ -1,80 +1,72 @@
 const Registers = require('../../../src/Processor/Registers');
 const Byte = require('../../../src/Processor/DataTypes/Byte');
+const Word = require('../../../src/Processor/DataTypes/Word');
+const Double = require('../../../src/Processor/DataTypes/Double');
 
 /**
  * @type {null|Registers}
  */
 let registers = null;
 
-/**
- * @type {null|number}
- */
-let random = null;
-
 beforeEach(() => {
-    registers = new Registers;
-    random = Math.floor(Math.random() * 10);
-});
-
-test('sets main registers', () => {
-    Registers.MAIN_REGISTERS.forEach(register => {
-        registers.setMain(register, random);
-        expect(registers.getMain(register)).toEqual(new Byte(random));
+    registers = new Registers({
+        eax: Word,
+        ebx: Word,
+        et: Byte
     });
 });
 
-test('fails if setting or getting wrong main register', () => {
-    const register = 'invalid';
+/**
+ * @param {Class} dataType
+ * @param {number} min
+ * @returns {number}
+ */
+function random(dataType, min = 0) {
+    return Math.floor(Math.random() * (dataType.MAX - min)) + min;
+}
 
-    expect(() => registers.setMain(register, 10)).toThrow(`Invalid main register '${register}'`);
-    expect(() => registers.getMain(register)).toThrow(`Invalid main register '${register}'`);
+test('defines registers addresses and initializes them at zero', () => {
+    expect(registers.eax instanceof Byte).toBe(true);
+    expect(registers.ebx instanceof Byte).toBe(true);
+    expect(registers.et instanceof Byte).toBe(true);
+
+    expect(registers.eax).not.toEqual(registers.ebx);
+    expect(registers.eax).not.toEqual(registers.et);
+    expect(registers.ebx).not.toEqual(registers.et);
 });
 
-test('instruction pointer starts at zero', () => {
-    expect(registers.ip).toBe(0);
+test('initializes defined registers to zero', () => {
+    expect(registers.get(registers.eax)).toEqual(new Word(0x00));
+    expect(registers.get(registers.ebx)).toEqual(new Word(0x00));
+    expect(registers.get(registers.et)).toEqual(new Byte(0x00));
 });
 
-test('sets instruction pointer', () => {
-    registers.ip = random;
-    expect(registers.ip).toBe(random);
+test('fails if trying to get undefined register', () => {
+    const register = random(Byte, 3);
+    expect(() => registers.get(new Byte(register))).toThrow(`No register exists at address ${register}`);
 });
 
-test('fails if setting non numeric instruction pointer', () => {
-    const value = 'non numeric value';
-    expect(() => registers.ip = value).toThrow(`Invalid instruction pointer ${value}`)
+test('sets registers', () => {
+    let value = new Word(random(Word));
+    registers.set(registers.eax, value);
+    expect(registers.get(registers.eax)).toEqual(value);
+
+    value = new Word(random(Word));
+    registers.set(registers.ebx, value);
+    expect(registers.get(registers.ebx)).toEqual(value);
+
+    value = new Byte(random(Byte));
+    registers.set(registers.et, value);
+    expect(registers.get(registers.et)).toEqual(value);
 });
 
-test('fails if setting negative instruction pointer', () => {
-    const value = -1 * (random + 1);
-    expect(() => registers.ip = value).toThrow(`Invalid instruction pointer ${value}`);
+test('fails if setting invalid register', () => {
+    const register = random(Byte, 3);
+    expect(() => registers.set(new Byte(register), new Byte(0x00))).toThrow(`No register exists at address ${register}`);
 });
 
-test('handles exit trigger', () => {
-    const setSpy = jest.spyOn(registers, 'et', 'set');
-    const getSpy = jest.spyOn(registers, 'et', 'get');
-
-    registers.et = new Byte(1);
-
-    expect(setSpy).toHaveBeenCalled();
-    expect(registers.et).toEqual(new Byte(1));
-    expect(getSpy).toHaveBeenCalled();
-});
-
-test('handles exit status', () => {
-    const setSpy = jest.spyOn(registers, 'es', 'set');
-    const getSpy = jest.spyOn(registers, 'es', 'get');
-
-    registers.es = new Byte(random);
-
-    expect(setSpy).toHaveBeenCalled();
-    expect(registers.es).toEqual(new Byte(random));
-    expect(getSpy).toHaveBeenCalled();
-});
-
-test('fails if exit trigger is set to non-byte', () => {
-    expect(() => registers.et = random).toThrow(`Exit trigger register must be set to byte, got ${random} instead`);
-});
-
-test('fails if exit status is set to non-byte', () => {
-    expect(() => registers.es = random).toThrow(`Exit status register must be set to byte, got ${random} instead`);
+test('fails if setting register with wrong sized value', () => {
+    expect(() => registers.set(registers.eax, new Byte(random(Byte)))).toThrow('Invalid size of register value.');
+    expect(() => registers.set(registers.ebx, new Double(random(Double)))).toThrow('Invalid size of register value.');
+    expect(() => registers.set(registers.et, new Word(random(Word)))).toThrow('Invalid size of register value.');
 });

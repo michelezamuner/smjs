@@ -5,7 +5,7 @@ module.exports = class Byte extends DataType {
      * @returns {number}
      */
     static get MAX() {
-        return 127;
+        return 255;
     }
 
     /**

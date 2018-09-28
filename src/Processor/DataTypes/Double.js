@@ -5,7 +5,7 @@ module.exports = class Double extends DataType {
      * @returns {number}
      */
     static get MAX() {
-        return 2147483647;
+        return 4294967295;
     }
 
     /**

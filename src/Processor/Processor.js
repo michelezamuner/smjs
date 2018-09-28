@@ -1,4 +1,6 @@
-const Registers = require('./Registers');
+const Interpreter = require('../Interpreter/Interpreter');
+const ControlRegisters = require('../../src/ProcessorArchitecture/ControlRegisters');
+const Byte = require('./DataTypes/Byte');
 
 /**
  * Processor, interpreting instructions.
@@ -6,34 +8,46 @@ const Registers = require('./Registers');
 module.exports = class Processor {
     /**
      * @param {Interpreter} interpreter
-     * @param {Registers} registers
+     * @param {ControlRegisters} registers
      */
     constructor(interpreter, registers) {
         this._interpreter = interpreter;
         this._registers = registers;
-        this._registers.et = Registers.EXIT_TRIGGER_OFF;
-        this._registers.es = Registers.EXIT_STATUS_OK;
     }
 
     /**
      * Run the processor, interpreting the given instructions, and returning the program's exit status.
      *
-     * @param {Object[]} instructions
+     * @param {Byte[]} bytes
      * @return {number}
      */
-    run(instructions) {
+    run(bytes) {
+        let exitStatus = 0;
+        let instruction = [];
+        let byteIndex = 0;
+
         while (true) {
-            if (this._registers.et.equals(Registers.EXIT_TRIGGER_ON)) {
+            if (this._registers.shouldExit()) {
+                exitStatus = this._registers.getEs().get();
                 break;
             }
-            if (instructions.length <= this._registers.ip) {
-                this._registers.es = Registers.EXIT_STATUS_OK;
+            if (bytes.length <= this._registers.getIp().get()) {
+                exitStatus = 0;
                 break;
             }
-            
-            this._interpreter.exec(instructions[this._registers.ip++]);
+
+            if (instruction.length < this._registers.getIs()) {
+                instruction.push(bytes[this._registers.getIp().get() + byteIndex])
+                byteIndex++;
+                continue;
+            }
+
+            this._interpreter.exec(instruction);
+            this._registers.incrementIp();
+            instruction = [];
+            byteIndex = 0;
         }
 
-        return this._registers.es.get();
+        return exitStatus;
     }
 };

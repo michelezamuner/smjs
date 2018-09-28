@@ -1,4 +1,11 @@
 const Parser = require('../../../src/Parser/Parser');
+const Mnemonics = require('../../../src/Interpreter/Mnemonics');
+const Byte = require('../../../src/Processor/DataTypes/Byte');
+
+/**
+ * @type {null|Object}
+ */
+let registers = null;
 
 /**
  * @type {null|Parser}
@@ -6,13 +13,17 @@ const Parser = require('../../../src/Parser/Parser');
 let parser = null;
 
 beforeEach(() => {
-    parser = new Parser();
+    registers = {
+        eax: new Byte(0x00),
+        ebx: new Byte(0x01)
+    };
+    parser = new Parser(registers);
 });
 
 test('parses code into instructions', () => {
     const code = `
         mov eax, 1
-        mov ebx, 2
+        mov ebx, eax
         syscall
     `;
 
@@ -31,7 +42,7 @@ test('accepts empty lines', () => {
     const code = `
         mov eax, 1
         
-        mov ebx, 2
+        mov ebx, eax
         
         syscall
     `;
@@ -43,7 +54,7 @@ test('accepts comment lines', () => {
     const code = `
         mov eax, 1
         ; comment line
-        mov ebx, 2
+        mov ebx, eax
         ; another comment line
         syscall
     `;
@@ -53,8 +64,8 @@ test('accepts comment lines', () => {
 
 test('accepts inline comments', () => {
     const code = `
-        mov eax, 1  ; inline comment
-        mov ebx, 2  ; another inline comment
+        mov eax, 1    ; inline comment
+        mov ebx, eax  ; another inline comment
         syscall
     `;
 
@@ -62,10 +73,12 @@ test('accepts inline comments', () => {
 });
 
 function verifyStandardCode(code) {
-    const instructions = parser.parse(code);
+    const bytes = parser.parse(code);
 
-    expect(instructions.length).toBe(3);
-    expect(instructions[0]).toEqual({opcode: 'mov', operands: ['eax', '1']});
-    expect(instructions[1]).toEqual({opcode: 'mov', operands: ['ebx', '2']});
-    expect(instructions[2]).toEqual({opcode: 'syscall', operands: []});
+    expect(bytes.length).toBe(12);
+    expect(bytes).toEqual([
+        Mnemonics.movi, registers.eax, new Byte(0x01), new Byte(0x00),
+        Mnemonics.mov, registers.ebx, registers.eax, new Byte(0x00),
+        Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
 }

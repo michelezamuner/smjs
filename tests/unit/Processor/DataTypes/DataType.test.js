@@ -49,6 +49,10 @@ test('implements equals', () => {
     expect(t1.equals(t3)).toBe(false);
 });
 
+test('does not accept non numbers', () => {
+
+});
+
 test('accepts only integers', () => {
     ['some string', 1.234, {}].forEach(value => {
         expect(() => new Type(value)).toThrow(`Data types must be constructed from positive integers, got '${value}' instead`);

@@ -6,3 +6,7 @@ test('implements data type', () => {
     const d = new Double(random);
     expect(d instanceof DataType).toBe(true);
 });
+
+test('holds up to 32 bits', () => {
+    expect(Double.MAX).toBe(4294967295);
+});

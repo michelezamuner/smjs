@@ -1,3 +1,4 @@
+const DataType = require('./DataTypes/DataType');
 const Byte = require('./DataTypes/Byte');
 
 /**
@@ -5,143 +6,41 @@ const Byte = require('./DataTypes/Byte');
  */
 module.exports = class Registers {
     /**
-     * @returns {Byte}
+     * @param {Object} config
      */
-    static get EXIT_TRIGGER_OFF() {
-        return new Byte(0);
-    }
-
-    /**
-     * @returns {Byte}
-     */
-    static get EXIT_TRIGGER_ON() {
-        return new Byte(1);
-    }
-
-    /**
-     * @returns {Byte}
-     */
-    static get EXIT_STATUS_OK() {
-        return new Byte(0);
-    }
-    /**
-     * @returns {string}
-     */
-    static get REG_EAX() {
-        return 'eax';
-    }
-
-    /**
-     * @returns {string}
-     */
-    static get REG_EBX() {
-        return 'ebx';
-    }
-
-    /**
-     * @returns {string}
-     */
-    static get REG_ECX() {
-        return 'ecx';
-    }
-
-    /**
-     * @returns {string}
-     */
-    static get REG_EDX() {
-        return 'edx';
-    }
-
-    /**
-     * @returns {string[]}
-     */
-    static get MAIN_REGISTERS() {
-        return [Registers.REG_EAX, Registers.REG_EBX, Registers.REG_ECX, Registers.REG_EDX];
-    }
-
-    constructor()
+    constructor(config)
     {
-        Registers.MAIN_REGISTERS.forEach(register => {
-            this[`_${register}`] = new Byte(0);
-        });
-
-        this._ip = 0;
-    }
-
-    /**
-     * @returns {Byte}
-     */
-    get et() {
-        return this._et;
-    }
-
-    /**
-     * @param {Byte} et
-     */
-    set et(et) {
-        if (!(et instanceof Byte)) {
-            throw `Exit trigger register must be set to byte, got ${et} instead`;
+        this._registers = [];
+        this._types = [];
+        for (const register in config) {
+            this[register] = new Byte(this._registers.length);
+            this._types[this._registers.length] = config[register];
+            this._registers[this._registers.length] = new config[register](0x00);
         }
-        this._et = et;
     }
 
     /**
-     * @returns {Byte}
+     * @param {Byte} register
+     * @returns {DataType}
      */
-    get es() {
-        return this._es;
-    }
-
-    /**
-     * @param {Byte} es
-     */
-    set es(es) {
-        if (!(es instanceof Byte)) {
-            throw `Exit status register must be set to byte, got ${es} instead`;
+    get(register) {
+        if (this._registers.length <= register.get()) {
+            throw `No register exists at address ${register.get()}`;
         }
-        this._es = es;
+        return this._registers[register.get()];
     }
 
     /**
-     * @param {string} register
-     * @param {number|Byte} value
+     * @param {Byte} register
+     * @param {DataType} value
      */
-    setMain(register, value) {
-        if (!Registers.MAIN_REGISTERS.includes(register)) {
-            throw `Invalid main register '${register}'`;
+    set(register, value) {
+        if (this._registers.length <= register.get()) {
+            throw `No register exists at address ${register.get()}`;
         }
-
-        this[`_${register}`] = new Byte(value);
-    }
-
-    /**
-     * @param {string} register
-     * @returns {Byte}
-     */
-    getMain(register) {
-        if (!Registers.MAIN_REGISTERS.includes(register)) {
-            throw `Invalid main register '${register}'`;
+        if (!(value instanceof this._types[register.get()])) {
+            throw 'Invalid size of register value.';
         }
-
-        return this[`_${register}`];
-    }
-
-    /**
-     * @returns {number}
-     */
-    get ip() {
-        return this._ip;
-    }
-
-    /**
-     * @param {number|string} ip
-     */
-    set ip(ip) {
-        const ipVal = parseInt(ip);
-
-        if (isNaN(ipVal) || ipVal < 0) {
-            throw `Invalid instruction pointer ${ip}`;
-        }
-        this._ip = ipVal;
+        this._registers[register.get()] = value;
     }
 };

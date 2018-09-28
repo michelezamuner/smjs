@@ -4,6 +4,7 @@ const exec = require('child_process').exec;
 
 module.exports = {
     exitStatus: async (code, status) => {
+        // tests are run in parallel, and we want to avoid them to overwrite the same file
         const file = Math.floor(Math.random() * 1000) + '.sm';
         let exp = null;
 

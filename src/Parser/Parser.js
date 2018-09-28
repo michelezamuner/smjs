@@ -1,7 +1,20 @@
+const Mnemonics = require('../../src/Interpreter/Mnemonics');
+const Registers = require('../../src/Interpreter/Registers');
+const Byte = require('../../src/Processor/DataTypes/Byte');
+
 /**
  * Source code parser.
+ *
+ * @todo Should be injected only with an interface providing registers addresses, it doesn't need to have access to all
+ * registers functionality.
  */
 module.exports = class Parser {
+    /**
+     * @param {Registers} registers
+     */
+    constructor(registers) {
+        this._registers = registers;
+    }
     /**
      * Parse the given source code to produce executable instructions.
      *
@@ -13,7 +26,8 @@ module.exports = class Parser {
             .map(line => line.trim())
             .filter(this._isNotEmptyLine)
             .filter(this._isNotCommentLine)
-            .map(this._parseInstruction);
+            .reduce((bytes, instruction) => [...bytes, ...this._parseInstruction(instruction)], [])
+        ;
     }
 
     /**
@@ -47,13 +61,50 @@ module.exports = class Parser {
 
         const opcodeDelimiter = line.indexOf(' ');
         if (opcodeDelimiter === -1) {
-            return {opcode: line, operands: []};
+            return [new Byte(Mnemonics[line]), new Byte(0), new Byte(0), new Byte(0)];
         }
 
-        const opcode = line.substring(0, opcodeDelimiter);
-        const operandsString = line.substring(opcodeDelimiter + 1);
-        const operands = operandsString.split(',').map(operand => operand.trim());
+        const operands = line.substring(opcodeDelimiter + 1).split(',').map(operand => operand.trim());
 
-        return {opcode: opcode, operands: operands};
+        return [
+            this._parseOpcode(line.substring(0, opcodeDelimiter), operands),
+            this._parseOperand(operands[0]),
+            this._parseOperand(operands[1]),
+            new Byte(0x00),
+        ];
+    }
+
+    /**
+     * @param {string} opcode
+     * @param {[string, string]}operands
+     * @returns {Byte}
+     * @private
+     */
+    _parseOpcode(opcode, operands) {
+        switch (opcode) {
+            case 'mov':
+                if (Number.isInteger(parseInt(operands[1]))) {
+                    return Mnemonics.movi;
+                }
+
+                return Mnemonics.mov;
+        }
+    }
+
+    /**
+     * @param {string} operand
+     * @returns {Byte}
+     * @private
+     */
+    _parseOperand(operand) {
+        if (Mnemonics[operand]) {
+            return Mnemonics[operand];
+        }
+
+        if (this._registers[operand]) {
+            return this._registers[operand];
+        }
+
+        return new Byte(parseInt(operand));
     }
 };

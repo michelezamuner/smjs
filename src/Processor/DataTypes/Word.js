@@ -25,6 +25,9 @@ module.exports = class Word extends DataType {
      */
     static _parseValue(first, second) {
         if (second === undefined) {
+            if (!Number.isInteger(first)) {
+                throw 'Word must be constructed with one integer or two bytes';
+            }
             return first;
         }
 
