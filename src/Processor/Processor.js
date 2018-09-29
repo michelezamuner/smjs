@@ -1,6 +1,7 @@
-const Interpreter = require('../Interpreter/Interpreter');
-const ControlRegisters = require('../../src/ProcessorArchitecture/ControlRegisters');
-const Byte = require('./DataTypes/Byte');
+const Interpreter = require('../ProcessorArchitecture/Interpreter');
+const ControlRegisters = require('../ProcessorArchitecture/ControlRegisters');
+const Byte = require('../DataTypes/Byte');
+const Double = require('../DataTypes/Double');
 
 /**
  * Processor, interpreting instructions.
@@ -42,7 +43,8 @@ module.exports = class Processor {
                 continue;
             }
 
-            this._interpreter.exec(instruction);
+            this._registers.setIr(new Double(...instruction));
+            this._interpreter.exec();
             this._registers.incrementIp();
             instruction = [];
             byteIndex = 0;

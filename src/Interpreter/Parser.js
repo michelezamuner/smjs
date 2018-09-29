@@ -1,6 +1,6 @@
-const Mnemonics = require('../../src/Interpreter/Mnemonics');
-const Registers = require('../../src/Interpreter/Registers');
-const Byte = require('../../src/Processor/DataTypes/Byte');
+const Mnemonics = require('./Mnemonics');
+const Registers = require('./Registers');
+const Byte = require('../DataTypes/Byte');
 
 /**
  * Source code parser.

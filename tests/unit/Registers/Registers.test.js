@@ -1,7 +1,9 @@
-const Registers = require('../../../src/Processor/Registers');
-const Byte = require('../../../src/Processor/DataTypes/Byte');
-const Word = require('../../../src/Processor/DataTypes/Word');
-const Double = require('../../../src/Processor/DataTypes/Double');
+const Registers = require('../../../src/Registers/Registers');
+const DataType = require('../../../src/DataTypes/DataType');
+const Byte = require('../../../src/DataTypes/Byte');
+const Word = require('../../../src/DataTypes/Word');
+const Double = require('../../../src/DataTypes/Double');
+const random = require('../random');
 
 /**
  * @type {null|Registers}
@@ -15,15 +17,6 @@ beforeEach(() => {
         et: Byte
     });
 });
-
-/**
- * @param {Class} dataType
- * @param {number} min
- * @returns {number}
- */
-function random(dataType, min = 0) {
-    return Math.floor(Math.random() * (dataType.MAX - min)) + min;
-}
 
 test('defines registers addresses and initializes them at zero', () => {
     expect(registers.eax instanceof Byte).toBe(true);

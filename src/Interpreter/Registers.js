@@ -1,9 +1,9 @@
 /** @interface */
 const ControlRegisters = require('../../src/ProcessorArchitecture/ControlRegisters');
-const Registers = require('../../src/Processor/Registers');
-const Byte = require('../../src/Processor/DataTypes/Byte');
-const Word = require('../../src/Processor/DataTypes/Word');
-const Double = require('../../src/Processor/DataTypes/Double');
+const Registers = require('../../src/Registers/Registers');
+const Byte = require('../DataTypes/Byte');
+const Word = require('../DataTypes/Word');
+const Double = require('../DataTypes/Double');
 
 /**
  * @implements ControlRegisters

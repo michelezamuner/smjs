@@ -1,5 +1,4 @@
-const DataType = require('../../src/Processor/DataTypes/DataType');
-const Byte = require('../../src/Processor/DataTypes/Byte');
+const DataType = require('../DataTypes/DataType');
 
 /**
  * @interface

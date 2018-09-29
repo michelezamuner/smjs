@@ -1,13 +1,16 @@
+const InterpreterInterface = require('../ProcessorArchitecture/Interpreter');
 const Mnemonics = require('./Mnemonics');
 const Registers = require('./Registers');
-const DataType = require('../Processor/DataTypes/DataType');
-const Byte = require('../Processor/DataTypes/Byte');
-const Word = require('../Processor/DataTypes/Word');
+const Normalizer = require('../DataTypes/Normalizer');
+const Byte = require('../DataTypes/Byte');
+const Word = require('../DataTypes/Word');
 
 /**
  * Interpreter of instructions
+ *
+ * @implements InterpreterInterface
  */
-module.exports = class Interpreter {
+module.exports = class extends InterpreterInterface {
     /**
      * @returns {Byte}
      */
@@ -17,18 +20,19 @@ module.exports = class Interpreter {
 
     /**
      * @param {Registers} registers
+     * @param {Normalizer} normalizer
      */
-    constructor(registers) {
+    constructor(registers, normalizer) {
+        super();
         this._registers = registers;
+        this._normalizer = normalizer;
     }
 
     /**
-     * @param {Byte} byte1
-     * @param {Byte} byte2
-     * @param {Byte} byte3
-     * @param {Byte} byte4
+     * @inheritDoc
      */
-    exec([byte1, byte2, byte3, byte4]) {
+    exec() {
+        const [byte1, byte2, byte3, byte4] = this._normalizer.normalize(this._registers.getIr());
         if (byte1.equals(Mnemonics.mov)) {
             this._mov(byte2, byte3);
         } else if (byte1.equals(Mnemonics.movi)) {
@@ -61,7 +65,7 @@ module.exports = class Interpreter {
      */
     _syscall() {
         const eax = this._registers.get(this._registers.eax);
-        if (eax.equals(Interpreter.SYS_EXIT)) {
+        if (eax.equals(this.constructor.SYS_EXIT)) {
             this._registers.setExit();
             this._registers.setEs(this._registers.get(this._registers.ebx));
         }

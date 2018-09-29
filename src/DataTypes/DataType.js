@@ -10,8 +10,8 @@ module.exports = class DataType {
             throw 'Abstract class cannot be instantiated';
         }
 
-        if (new.target.MAX === undefined) {
-            throw 'MAX constant must be implemented';
+        if (new.target.SIZE === undefined) {
+            throw 'SIZE constant must be implemented';
         }
 
         if (value instanceof new.target) {
@@ -22,15 +22,16 @@ module.exports = class DataType {
             this._value = value;
         }
 
-        if (this._value > new.target.MAX) {
+        this._size = new.target.SIZE;
+        this._max = 2 ** (8 * this._size) - 1;
+
+        if (this._value > this._max) {
             throw `Value out of bounds: ${this._value}`;
         }
 
         if (this._value === undefined || this._value < 0) {
             throw `Data types must be constructed from positive integers, got '${value}' instead`;
         }
-
-        this._max = new.target.MAX;
     }
 
     /**

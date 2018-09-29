@@ -1,5 +1,5 @@
-const DataType = require('./DataTypes/DataType');
-const Byte = require('./DataTypes/Byte');
+const DataType = require('../DataTypes/DataType');
+const Byte = require('../DataTypes/Byte');
 
 /**
  * Set of registers for a processor.

@@ -1,15 +1,15 @@
 const DataType = require('./DataType');
 
-module.exports = class Double extends DataType {
+module.exports = class Byte extends DataType {
     /**
      * @returns {number}
      */
-    static get MAX() {
-        return 4294967295;
+    static get SIZE() {
+        return 1;
     }
 
     /**
-     * @param {number|Double} value
+     * @param {number|Byte} value
      */
     constructor(value) {
         super(value);

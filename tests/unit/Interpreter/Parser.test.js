@@ -1,6 +1,6 @@
-const Parser = require('../../../src/Parser/Parser');
+const Parser = require('../../../src/Interpreter/Parser');
 const Mnemonics = require('../../../src/Interpreter/Mnemonics');
-const Byte = require('../../../src/Processor/DataTypes/Byte');
+const Byte = require('../../../src/DataTypes/Byte');
 
 /**
  * @type {null|Object}
