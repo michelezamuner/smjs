@@ -12,25 +12,21 @@ const random = require('../random');
 let interpreter = null;
 
 /**
- * @type {null|Object}
+ * @type {Object}
  */
-let registers = null;
+let registers = {};
 
 /**
- * @type {null|Object}
+ * @type {Object}
  */
-let normalizer = null;
+let normalizer = {};
 
 beforeEach(() => {
-    registers = {
-        eax: new Byte(0x00),
-        ebx: new Byte(0x01),
-        get: jest.fn(),
-        set: jest.fn(),
-        setExit: jest.fn(),
-        setEs: jest.fn(),
-    };
-    normalizer = {normalize: jest.fn()};
+    registers.eax = new Byte(0x00);
+    registers.ebx = new Byte(0x01);
+    registers.set = jest.fn();
+    registers.setExit = jest.fn();
+    registers.setEs = jest.fn();
     interpreter = new Interpreter(registers, normalizer);
 });
 
@@ -43,15 +39,15 @@ test('implements move with register addressing', () => {
     const instructionBytes = [Mnemonics.mov, registers.eax, registers.ebx, new Byte(0x00)];
     const instruction = new Double(...instructionBytes);
 
-    registers.get = jest.fn(reg => reg.equals(registers.ebx) ? new Word(value) : new Word(0x00));
-    registers.getIr = jest.fn(() => instruction);
-    normalizer.normalize = jest.fn(data => data === instruction ? instructionBytes : []);
+    registers.get = jest.fn(() => new Word(value));
+    registers.getIr = () => instruction;
+    normalizer.normalize = jest.fn(() => instructionBytes);
 
     interpreter.exec();
 
-    expect(registers.get.mock.calls[0][0]).toEqual(registers.ebx);
-    expect(registers.set.mock.calls[0][0]).toEqual(registers.eax);
-    expect(registers.set.mock.calls[0][1]).toEqual(new Word(value));
+    expect(normalizer.normalize).toBeCalledWith(instruction);
+    expect(registers.get).toBeCalledWith(registers.ebx);
+    expect(registers.set).toBeCalledWith(registers.eax, new Word(value));
 });
 
 test('implements move with immediate addressing', () => {
@@ -59,13 +55,13 @@ test('implements move with immediate addressing', () => {
     const instructionBytes = [Mnemonics.movi, registers.eax, new Byte(value), new Byte(0x00)];
     const instruction = new Double(...instructionBytes);
 
-    registers.getIr = jest.fn(() => instruction);
-    normalizer.normalize = jest.fn(data => data === instruction ? instructionBytes : []);
+    registers.getIr = () => instruction;
+    normalizer.normalize = jest.fn(() => instructionBytes);
 
     interpreter.exec();
 
-    expect(registers.set.mock.calls[0][0]).toEqual(registers.eax);
-    expect(registers.set.mock.calls[0][1]).toEqual(new Word(value));
+    expect(normalizer.normalize).toBeCalledWith(instruction);
+    expect(registers.set).toBeCalledWith(registers.eax, new Word(value));
 });
 
 test('implements syscall exit', () => {
@@ -73,12 +69,15 @@ test('implements syscall exit', () => {
     const instructionBytes = [Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00)];
     const instruction = new Double(...instructionBytes);
 
-    registers.getIr = jest.fn(() => instruction);
-    normalizer.normalize = jest.fn(data => data === instruction ? instructionBytes : []);
-    registers.get = jest.fn(reg => reg.equals(registers.eax) ? Interpreter.SYS_EXIT : new Word(value));
+    registers.get = jest.fn(register => register.equals(registers.eax) ? Interpreter.SYS_EXIT : new Word(value));
+    registers.getIr = () => instruction;
+    normalizer.normalize = jest.fn(() => instructionBytes);
 
     interpreter.exec();
 
-    expect(registers.setExit).toHaveBeenCalled();
-    expect(registers.setEs.mock.calls[0][0]).toEqual(new Word(value));
+    expect(normalizer.normalize).toBeCalledWith(instruction);
+    expect(registers.get).nthCalledWith(1, registers.eax);
+    expect(registers.get).nthCalledWith(2, registers.ebx);
+    expect(registers.setExit).toBeCalled();
+    expect(registers.setEs).toBeCalledWith(new Word(value));
 });

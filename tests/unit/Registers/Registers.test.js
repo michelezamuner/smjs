@@ -1,5 +1,4 @@
 const Registers = require('../../../src/Registers/Registers');
-const DataType = require('../../../src/DataTypes/DataType');
 const Byte = require('../../../src/DataTypes/Byte');
 const Word = require('../../../src/DataTypes/Word');
 const Double = require('../../../src/DataTypes/Double');

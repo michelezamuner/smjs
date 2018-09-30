@@ -3,17 +3,16 @@ const Byte = require('../../../src/DataTypes/Byte');
 const Word = require('../../../src/DataTypes/Word');
 const Double = require('../../../src/DataTypes/Double');
 const random = require('../random');
-const Normalizer = require('../../../src/DataTypes/Normalizer');
 
 /**
- * @type {null|Object}
+ * @type {Object}
  */
-let interpreter = null;
+let interpreter = {};
 
 /**
- * @type {null|Object}
+ * @type {Object}
  */
-let registers = null;
+let registers = {};
 
 /**
  * @type {null|Processor}
@@ -21,28 +20,22 @@ let registers = null;
 let processor = null;
 
 beforeEach(() => {
-    interpreter = {
-        exec: jest.fn(),
-    };
+    interpreter.exec = jest.fn();
+
     let ip = new Word(0x00);
-    registers = {
-        getIs: jest.fn(() => 4),
-        getIp: jest.fn(() => ip),
-        incrementIp: jest.fn(() => ip = new Word(ip.get() + 4)),
-        shouldExit: jest.fn(() => false),
-        getEs: jest.fn(() => new Word(0x00)),
-        setIr: jest.fn(),
-    };
+    registers.getIs = () => 4;
+    registers.getIp = () => ip;
+    registers.incrementIp = () => ip = new Word(ip.get() + registers.getIs());
+    registers.shouldExit = () => false;
+    registers.setIr = jest.fn();
     processor = new Processor(interpreter, registers);
 });
 
 test('returns exit status ok if no instruction is executed', () => {
     const exitStatus = processor.run([]);
 
+    expect(interpreter.exec).not.toBeCalled();
     expect(exitStatus).toBe(0);
-    expect(interpreter.exec.mock.calls.length).toBe(0);
-    expect(registers.shouldExit()).toBe(false);
-    expect(registers.getEs()).toEqual(new Word(0x00));
 });
 
 test('executes the given instructions in sequence and returns exit status zero', () => {
@@ -54,50 +47,50 @@ test('executes the given instructions in sequence and returns exit status zero',
 
     const exitStatus = processor.run([...instructions[0], ...instructions[1], ...instructions[2]]);
 
+    expect(registers.setIr).toBeCalledTimes(3);
+    expect(registers.setIr).nthCalledWith(1, new Double(...instructions[0]));
+    expect(registers.setIr).nthCalledWith(2, new Double(...instructions[1]));
+    expect(registers.setIr).nthCalledWith(3, new Double(...instructions[2]));
+    expect(interpreter.exec).toBeCalledTimes(3);
     expect(exitStatus).toBe(0);
-    expect(interpreter.exec.mock.calls.length).toBe(3);
-    expect(registers.setIr.mock.calls.length).toBe(3);
-    expect(registers.setIr.mock.calls[0][0]).toEqual(new Double(...instructions[0]));
-    expect(registers.setIr.mock.calls[1][0]).toEqual(new Double(...instructions[1]));
-    expect(registers.setIr.mock.calls[2][0]).toEqual(new Double(...instructions[2]));
 });
 
 test('exits with exit registers skipping following instructions', () => {
     const value = random(Byte);
     const instructions = [
-        [new Byte(0x01), new Byte(0x00), new Byte(0x00), new Byte(0x00)],
-        [new Byte(0x00), new Byte(value), new Byte(0x00), new Byte(0x00)],
-        [new Byte(0x02), new Byte(0x03), new Byte(0x04), new Byte(0x05)]
+        [new Byte(0x00), new Byte(0x01), new Byte(0x02), new Byte(0x03)],
+        [new Byte(0x04), new Byte(0x05), new Byte(0x06), new Byte(0x07)],
+        [new Byte(0x08), new Byte(0x09), new Byte(0x0A), new Byte(0x0B)],
     ];
 
-    registers.setIr = instruction => registers.ir = instruction;
-    interpreter.exec = () => {
-        const instruction = (new Normalizer).normalize(registers.ir);
-        if (instruction[0].equals(new Byte(0x00))) {
+    interpreter.exec = jest.fn(() => {
+        if (registers.getIp().equals(new Word(0x04))) {
             registers.shouldExit = () => true;
-            registers.getEs = () => new Word(new Byte(0x00), instruction[1]);
+            registers.getEs = () => new Word(value);
         }
-    };
+    });
 
     const exitStatus = processor.run([...instructions[0], ...instructions[1], ...instructions[2]]);
 
+    expect(registers.setIr).toBeCalledTimes(2);
+    expect(registers.setIr).nthCalledWith(1, new Double(...instructions[0]));
+    expect(registers.setIr).nthCalledWith(2, new Double(...instructions[1]));
+    expect(interpreter.exec).toBeCalledTimes(2);
     expect(exitStatus).toBe(value);
 });
 
 test('exits with exit status registers as last instruction', () => {
     const value = random(Byte);
-    const instructions = [new Byte(0x00), new Byte(value), new Byte(0x00), new Byte(0x00)];
+    const instruction = [new Byte(0x00), new Byte(0x01), new Byte(0x02), new Byte(0x03)];
 
-    registers.setIr = instruction => registers.ir = instruction;
-    interpreter.exec = () => {
-        const instruction = (new Normalizer).normalize(registers.ir);
-        if (instruction[0].equals(new Byte(0x00))) {
-            registers.shouldExit = () => true;
-            registers.getEs = () => new Word(new Byte(0x00), instruction[1]);
-        }
-    };
+    interpreter.exec = jest.fn(() => {
+        registers.shouldExit = () => true;
+        registers.getEs = () => new Word(value);
+    });
 
-    const exitStatus = processor.run(instructions);
+    const exitStatus = processor.run(instruction);
 
+    expect(registers.setIr).toBeCalledWith(new Double(...instruction));
+    expect(interpreter.exec).toBeCalled();
     expect(exitStatus).toBe(value);
 });

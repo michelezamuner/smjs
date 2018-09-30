@@ -6,16 +6,16 @@ const Byte = require('../DataTypes/Byte');
  */
 module.exports = class Registers {
     /**
-     * @param {Object} config
+     * @param {Object} types
      */
-    constructor(config)
+    constructor(types)
     {
         this._registers = [];
         this._types = [];
-        for (const register in config) {
+        for (const register in types) {
             this[register] = new Byte(this._registers.length);
-            this._types[this._registers.length] = config[register];
-            this._registers[this._registers.length] = new config[register](0x00);
+            this._types[this._registers.length] = types[register];
+            this._registers[this._registers.length] = new types[register](0x00);
         }
     }
 
