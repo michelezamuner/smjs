@@ -3,15 +3,39 @@
  */
 module.exports = class DataType {
     /**
+     * @return {number}
+     * @abstract
+     */
+    static get SIZE() {
+        throw 'Not implemented';
+    }
+
+    /**
+     * @param {number} size
+     * @returns {number}
+     * @private
+     */
+    static _getMax(size) {
+        return 2 ** (8 * size) - 1;
+    }
+
+    /**
+     * @param {number} size
+     * @param {number} value
+     * @returns {number}
+     * @private
+     */
+    static _toSignedInt(size, value) {
+        const max = DataType._getMax(size);
+        return value <= Math.floor(max / 2) ? value : value - max - 1;
+    }
+
+    /**
      * @param {number|DataType} value
      */
     constructor(value) {
         if (new.target === DataType) {
             throw 'Abstract class cannot be instantiated';
-        }
-
-        if (new.target.SIZE === undefined) {
-            throw 'SIZE constant must be implemented';
         }
 
         if (value instanceof new.target) {
@@ -22,10 +46,7 @@ module.exports = class DataType {
             this._value = value;
         }
 
-        this._size = new.target.SIZE;
-        this._max = 2 ** (8 * this._size) - 1;
-
-        if (this._value > this._max) {
+        if (this._value > DataType._getMax(new.target.SIZE)) {
             throw `Value out of bounds: ${this._value}`;
         }
 
@@ -44,15 +65,16 @@ module.exports = class DataType {
 
     /**
      * @returns {number}
+     * @abstract
      */
-    getSigned() {
-        return this._value <= Math.floor(this._max / 2) ? this._value : this._value - this._max - 1;
+    toSignedInt() {
+        throw 'Not implemented';
     }
 
     /**
      * @returns {number}
      */
-    get() {
+    toInt() {
         return this._value;
     }
 };

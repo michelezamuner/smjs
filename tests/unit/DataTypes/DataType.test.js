@@ -3,7 +3,7 @@ const random = require('../random');
 
 const Type = class extends DataType {
     /**
-     * @returns {number}
+     * @inheritDoc
      */
     static get SIZE() {
         return 2;
@@ -14,6 +14,13 @@ const Type = class extends DataType {
      */
     constructor(value) {
         super(value);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    toSignedInt() {
+        return super.constructor._toSignedInt(this.constructor.SIZE, this._value);
     }
 };
 
@@ -27,7 +34,7 @@ test('subclass must implement SIZE constant', () => {
             super(value);
         }
     };
-    expect(() => new Sub(0)).toThrow('SIZE constant must be implemented');
+    expect(() => new Sub(random(Sub))).toThrow('Not implemented');
 });
 
 test('implements equals', () => {
@@ -66,12 +73,32 @@ test('support copy constructor', () => {
 
 test('get integer value in twos complement', () => {
     [[5, 5], [16, 16], [32767, 32767], [32768, -32768], [32769, -32767], [65534, -2], [65535, -1]].forEach(([value, expected]) => {
-        expect((new Type(value)).getSigned()).toBe(expected);
+        expect((new Type(value)).toSignedInt()).toBe(expected);
     });
+});
+
+test('fails to cast to signed int if method is not implemented', () => {
+    const Sub = class extends DataType {
+        /**
+         * @inheritDoc
+         */
+        static get SIZE() {
+            return 2;
+        }
+
+        /**
+         * @param {number} value
+         */
+        constructor(value) {
+            super(value);
+        }
+    };
+
+    expect(() => (new Sub(random(Sub))).toSignedInt()).toThrow('Not implemented');
 });
 
 test('get integer value unsigned', () => {
     const value = random(Type);
     const t = new Type(value);
-    expect(t.get()).toBe(value);
+    expect(t.toInt()).toBe(value);
 });

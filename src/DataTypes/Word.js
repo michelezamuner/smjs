@@ -35,6 +35,13 @@ module.exports = class Word extends DataType {
             throw 'Word must be constructed from one value or two bytes';
         }
 
-        return (byte1.get() * 256) + byte2.get();
+        return (byte1.toInt() * 256) + byte2.toInt();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    toSignedInt() {
+        return super.constructor._toSignedInt(this.constructor.SIZE, this._value);
     }
 };

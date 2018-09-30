@@ -12,6 +12,10 @@ test('holds up to 4 bytes', () => {
     expect(Double.SIZE).toBe(4);
 });
 
+test('implements to signed int', () => {
+    expect((new Double(4294967295)).toSignedInt()).toBe(-1);
+});
+
 test('can be constructed from four bytes', () => {
     let bytes = [new Byte(0x01), new Byte(0x02), new Byte(0x03), new Byte(0x04)];
     let expected = 16909060;

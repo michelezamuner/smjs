@@ -25,7 +25,7 @@ beforeEach(() => {
     let ip = new Word(0x00);
     registers.getIs = () => 4;
     registers.getIp = () => ip;
-    registers.incrementIp = () => ip = new Word(ip.get() + registers.getIs());
+    registers.incrementIp = () => ip = new Word(ip.toInt() + registers.getIs());
     registers.shouldExit = () => false;
     registers.setIr = jest.fn();
     processor = new Processor(interpreter, registers);

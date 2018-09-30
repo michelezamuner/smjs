@@ -1,8 +1,14 @@
 const ControlRegisters = require('../../../src/ProcessorArchitecture/ControlRegisters');
 const Registers = require('../../../src/Interpreter/Registers');
+const Byte = require('../../../src/DataTypes/Byte');
 const Word = require('../../../src/DataTypes/Word');
 const Double = require('../../../src/DataTypes/Double');
 const random = require('../random');
+
+/**
+ * @type {Object}
+ */
+let delegate = {};
 
 /**
  * @type {Registers}
@@ -10,7 +16,21 @@ const random = require('../random');
 let registers = null;
 
 beforeEach(() => {
-    registers = new Registers;
+    const factory = {
+        create: () => delegate,
+    };
+
+    delegate.eax = new Byte(0x00);
+    delegate.ebx = new Byte(0x01);
+    delegate.ecx = new Byte(0x02);
+    delegate.edx = new Byte(0x03);
+    delegate.ip = new Byte(0x04);
+    delegate.ir = new Byte(0x05);
+    delegate.et = new Byte(0x06);
+    delegate.es = new Byte(0x07);
+    delegate.set = jest.fn();
+
+    registers = new Registers(factory);
 });
 
 test('Implements control registers', () => {
@@ -21,52 +41,83 @@ test('Defines instruction size', () => {
     expect(registers.getIs()).toBe(4);
 });
 
+test('Defines main registers and exposes their addresses', () => {
+    expect(registers.eax).toBeDefined();
+    expect(registers.ebx).toBeDefined();
+    expect(registers.ecx).toBeDefined();
+    expect(registers.edx).toBeDefined();
+});
+
 test('Implements main registers', () => {
-    expect(registers.get(registers.eax)).toEqual(new Word(0x0000));
     const eax = new Word(random(Word));
-    registers.set(registers.eax, eax);
+    delegate.get = jest.fn(() => eax);
     expect(registers.get(registers.eax)).toEqual(eax);
+    expect(delegate.get).toBeCalledWith(registers.eax);
+    registers.set(registers.eax, eax);
+    expect(delegate.set).toBeCalledWith(registers.eax, eax);
 
-    expect(registers.get(registers.ebx)).toEqual(new Word(0x0000));
     const ebx = new Word(random(Word));
-    registers.set(registers.ebx, ebx);
+    delegate.get = jest.fn(() => ebx);
     expect(registers.get(registers.ebx)).toEqual(ebx);
+    expect(delegate.get).toBeCalledWith(registers.ebx);
+    registers.set(registers.ebx, ebx);
+    expect(delegate.set).toBeCalledWith(registers.ebx, ebx);
 
-    expect(registers.get(registers.ecx)).toEqual(new Word(0x0000));
     const ecx = new Word(random(Word));
-    registers.set(registers.ecx, ecx);
+    delegate.get = jest.fn(() => ecx);
     expect(registers.get(registers.ecx)).toEqual(ecx);
+    expect(delegate.get).toBeCalledWith(registers.ecx);
+    registers.set(registers.ecx, ecx);
+    expect(delegate.set).toBeCalledWith(registers.ecx, ecx);
 
-    expect(registers.get(registers.edx)).toEqual(new Word(0x0000));
     const edx = new Word(random(Word));
-    registers.set(registers.edx, edx);
+    delegate.get = jest.fn(() => edx);
     expect(registers.get(registers.edx)).toEqual(edx);
+    expect(delegate.get).toBeCalledWith(registers.edx);
+    registers.set(registers.edx, edx);
+    expect(delegate.set).toBeCalledWith(registers.edx, edx);
 });
 
 test('Implements instruction registers', () => {
-    expect(registers.getIp()).toEqual(new Word(0x0000));
-
-    registers.incrementIp();
-    expect(registers.getIp()).toEqual(new Word(0x0004));
-    registers.incrementIp();
-    expect(registers.getIp()).toEqual(new Word(0x0008));
-
-    const ip = new Word(random(Word));
-    registers.setIp(ip);
+    let ip = new Word(random(Word));
+    delegate.get = jest.fn(() => ip);
     expect(registers.getIp()).toEqual(ip);
+    expect(delegate.get).toBeCalledWith(delegate.ip);
 
-    const ir = new Double(random(Double));
-    registers.setIr(ir);
+    const value = random(Word);
+    delegate.get = jest.fn(() => new Word(value));
+    registers.incrementIp();
+    expect(delegate.set).toBeCalledWith(delegate.ip, new Word(value + 4));
+
+    ip = new Word(random(Word));
+    registers.setIp(ip);
+    expect(delegate.set).toBeCalledWith(delegate.ip, ip);
+
+    let ir = new Double(random(Double));
+    delegate.get = jest.fn(() => ir);
     expect(registers.getIr()).toEqual(ir);
+    expect(delegate.get).toBeCalledWith(delegate.ir);
+
+    ir = new Double(random(Double));
+    registers.setIr(ir);
+    expect(delegate.set).toBeCalledWith(delegate.ir, ir);
 });
 
 test('implements exit registers', () => {
+    delegate.get = jest.fn(() => new Byte(0x00));
     expect(registers.shouldExit()).toBe(false);
-    registers.setExit();
+    delegate.get = jest.fn(() => new Byte(0x01));
     expect(registers.shouldExit()).toBe(true);
 
-    expect(registers.getEs()).toEqual(new Word(0x00));
-    const es = new Word(random(Word));
-    registers.setEs(es);
+    registers.setExit();
+    expect(delegate.set).toBeCalledWith(delegate.et, new Byte(0x01));
+
+    let es = new Word(random(Word));
+    delegate.get = jest.fn(() => es);
     expect(registers.getEs()).toEqual(es);
+    expect(delegate.get).toBeCalledWith(delegate.es);
+
+    es = new Word(random(Word));
+    registers.setEs(es);
+    expect(delegate.set).toBeCalledWith(delegate.es, es);
 });

@@ -39,6 +39,13 @@ module.exports = class Double extends DataType {
             throw 'Double must be constructed from one value or four bytes';
         }
 
-        return (byte1.get() * 16777216) + (byte2.get() * 65536) + (byte3.get() * 256) + byte4.get();
+        return (byte1.toInt() * 16777216) + (byte2.toInt() * 65536) + (byte3.toInt() * 256) + byte4.toInt();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    toSignedInt() {
+        return super.constructor._toSignedInt(this.constructor.SIZE, this._value);
     }
 };

@@ -24,10 +24,10 @@ module.exports = class Registers {
      * @returns {DataType}
      */
     get(register) {
-        if (this._registers.length <= register.get()) {
-            throw `No register exists at address ${register.get()}`;
+        if (this._registers.length <= register.toInt()) {
+            throw `No register exists at address ${register.toInt()}`;
         }
-        return this._registers[register.get()];
+        return this._registers[register.toInt()];
     }
 
     /**
@@ -35,12 +35,12 @@ module.exports = class Registers {
      * @param {DataType} value
      */
     set(register, value) {
-        if (this._registers.length <= register.get()) {
-            throw `No register exists at address ${register.get()}`;
+        if (this._registers.length <= register.toInt()) {
+            throw `No register exists at address ${register.toInt()}`;
         }
-        if (!(value instanceof this._types[register.get()])) {
+        if (!(value instanceof this._types[register.toInt()])) {
             throw 'Invalid size of register value.';
         }
-        this._registers[register.get()] = value;
+        this._registers[register.toInt()] = value;
     }
 };

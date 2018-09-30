@@ -1,6 +1,5 @@
-/** @interface */
 const ControlRegisters = require('../../src/ProcessorArchitecture/ControlRegisters');
-const Registers = require('../../src/Registers/Registers');
+const RegistersFactory = require('../../src/Registers/RegistersFactory');
 const Byte = require('../DataTypes/Byte');
 const Word = require('../DataTypes/Word');
 const Double = require('../DataTypes/Double');
@@ -9,9 +8,12 @@ const Double = require('../DataTypes/Double');
  * @implements ControlRegisters
  */
 module.exports = class extends ControlRegisters {
-    constructor() {
+    /**
+     * @param {RegistersFactory} factory
+     */
+    constructor(factory) {
         super();
-        this._registers = new Registers({
+        this._registers = factory.create({
             eax: Word,
             ebx: Word,
             ecx: Word,
@@ -61,7 +63,7 @@ module.exports = class extends ControlRegisters {
      * @inheritDoc
      */
     incrementIp() {
-        this._registers.set(this._registers.ip, new Word(this.getIp().get() + this.getIs()));
+        this._registers.set(this._registers.ip, new Word(this.getIp().toInt() + this.getIs()));
     }
 
     setIp(ip) {

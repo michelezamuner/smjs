@@ -29,16 +29,16 @@ module.exports = class Processor {
 
         while (true) {
             if (this._registers.shouldExit()) {
-                exitStatus = this._registers.getEs().get();
+                exitStatus = this._registers.getEs().toInt();
                 break;
             }
-            if (bytes.length <= this._registers.getIp().get()) {
+            if (bytes.length <= this._registers.getIp().toInt()) {
                 exitStatus = 0;
                 break;
             }
 
             if (instruction.length < this._registers.getIs()) {
-                instruction.push(bytes[this._registers.getIp().get() + byteIndex])
+                instruction.push(bytes[this._registers.getIp().toInt() + byteIndex])
                 byteIndex++;
                 continue;
             }

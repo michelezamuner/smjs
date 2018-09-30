@@ -8,7 +8,7 @@ module.exports = class Normalizer {
      */
     normalize(data) {
         const values = [];
-        let value = data.get();
+        let value = data.toInt();
         while (true) {
             if (Math.floor(value / 256) === 0) {
                 values.push(value);

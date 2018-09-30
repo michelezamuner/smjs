@@ -14,4 +14,11 @@ module.exports = class Byte extends DataType {
     constructor(value) {
         super(value);
     }
+
+    /**
+     * @inheritDoc
+     */
+    toSignedInt() {
+        return super.constructor._toSignedInt(this.constructor.SIZE, this._value);
+    }
 };

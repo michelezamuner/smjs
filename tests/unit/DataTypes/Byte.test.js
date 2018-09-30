@@ -10,3 +10,7 @@ test('implements data type', () => {
 test('holds up to 1 byte', () => {
     expect(Byte.SIZE).toBe(1);
 });
+
+test('implements to signed int', () => {
+    expect((new Byte(255)).toSignedInt()).toBe(-1);
+});

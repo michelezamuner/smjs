@@ -12,6 +12,10 @@ test('holds up to 2 bytes', () => {
     expect(Word.SIZE).toBe(2);
 });
 
+test('implements to signed int', () => {
+    expect((new Word(65535)).toSignedInt()).toBe(-1);
+});
+
 test('can be constructed from two bytes', () => {
     const w = new Word(new Byte(0x01), new Byte(0x02));
     expect(w.equals(new Word(0x0102))).toBe(true);
