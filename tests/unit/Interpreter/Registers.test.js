@@ -7,7 +7,7 @@ const random = require('../random');
 /**
  * @type {Object}
  */
-let delegate = {};
+const delegate = {};
 
 /**
  * @type {Registers}

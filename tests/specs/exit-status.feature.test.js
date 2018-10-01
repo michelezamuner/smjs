@@ -8,35 +8,6 @@ const expect = require('./expect');
 */
 
 /**
- * Scenario: run empty program
- *   Given the program is:
- *     """
- *     """
- *   When I run the program
- *   Then the program terminates with exit status 0
- */
-test('run empty program', () => {
-    return expect.exitStatus('', 0);
-});
-
-/**
- * Scenario: let program terminate naturally
- *   Given the program is:
- *     """
- *     mov eax, 1
- *     mov ebx, 2
- *     """
- *   When I run the program
- *   Then the program terminates with exit status 0
- */
-test('let program terminate naturally', () => {
-    return expect.exitStatus(`
-        mov eax, 1
-        mov ebx, 2
-    `, 0);
-});
-
-/**
  * Scenario: terminate program with specific exit status
  *   Given the program is:
  *     """

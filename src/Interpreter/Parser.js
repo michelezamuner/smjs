@@ -1,6 +1,8 @@
+const Memory = require('../ProcessorArchitecture/Memory');
 const Mnemonics = require('./Mnemonics');
 const Registers = require('./Registers');
 const Byte = require('../DataTypes/Byte');
+const Word = require('../DataTypes/Word');
 
 /**
  * Source code parser.
@@ -11,23 +13,28 @@ const Byte = require('../DataTypes/Byte');
 module.exports = class Parser {
     /**
      * @param {Registers} registers
+     * @param {Memory} memory
      */
-    constructor(registers) {
+    constructor(registers, memory) {
         this._registers = registers;
+        this._memory = memory;
     }
     /**
-     * Parse the given source code to produce executable instructions.
+     * Parse the given source code to produce executable instructions, and load them into memory.
      *
      * @param {string} code
-     * @return {array}
      */
     parse(code) {
-        return code.split("\n")
+        const bytes = code.split("\n")
             .map(line => line.trim())
             .filter(this._isNotEmptyLine)
             .filter(this._isNotCommentLine)
             .reduce((bytes, instruction) => [...bytes, ...this._parseInstruction(instruction)], [])
         ;
+
+        for (const address in bytes) {
+            this._memory.write(new Word(parseInt(address)), bytes[address]);
+        }
     }
 
     /**

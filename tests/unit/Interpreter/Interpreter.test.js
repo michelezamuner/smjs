@@ -7,14 +7,14 @@ const Word = require('../../../src/DataTypes/Word');
 const random = require('../random');
 
 /**
+ * @type {Object}
+ */
+const registers = {};
+
+/**
  * @type {null|Interpreter}
  */
 let interpreter = null;
-
-/**
- * @type {Object}
- */
-let registers = {};
 
 beforeEach(() => {
     registers.eax = new Byte(0x00);
