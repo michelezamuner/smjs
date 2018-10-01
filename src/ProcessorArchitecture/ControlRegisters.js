@@ -32,34 +32,4 @@ module.exports = class ControlRegisters {
     incrementIp() {
         throw 'Not implemented';
     }
-
-    /**
-     * Set the current instruction.
-     *
-     * @param {DataType} instruction
-     * @abstract
-     */
-    setIr(instruction) {
-        throw 'Not implemented';
-    }
-
-    /**
-     * Get the current exit trigger, to see if the program should be terminated.
-     *
-     * @return {boolean}
-     * @abstract
-     */
-    shouldExit() {
-        throw 'Not implemented';
-    }
-
-    /**
-     * Get the current exit status.
-     *
-     * @return {DataType}
-     * @abstract
-     */
-    getEs() {
-        throw 'Not implemented';
-    }
 };

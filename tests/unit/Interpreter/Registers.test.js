@@ -2,7 +2,6 @@ const ControlRegisters = require('../../../src/ProcessorArchitecture/ControlRegi
 const Registers = require('../../../src/Interpreter/Registers');
 const Byte = require('../../../src/DataTypes/Byte');
 const Word = require('../../../src/DataTypes/Word');
-const Double = require('../../../src/DataTypes/Double');
 const random = require('../random');
 
 /**
@@ -25,7 +24,6 @@ beforeEach(() => {
     delegate.ecx = new Byte(0x02);
     delegate.edx = new Byte(0x03);
     delegate.ip = new Byte(0x04);
-    delegate.ir = new Byte(0x05);
     delegate.et = new Byte(0x06);
     delegate.es = new Byte(0x07);
     delegate.set = jest.fn();
@@ -78,7 +76,7 @@ test('Implements main registers', () => {
     expect(delegate.set).toBeCalledWith(registers.edx, edx);
 });
 
-test('Implements instruction registers', () => {
+test('Implements instruction pointer', () => {
     let ip = new Word(random(Word));
     delegate.get = jest.fn(() => ip);
     expect(registers.getIp()).toEqual(ip);
@@ -92,32 +90,4 @@ test('Implements instruction registers', () => {
     ip = new Word(random(Word));
     registers.setIp(ip);
     expect(delegate.set).toBeCalledWith(delegate.ip, ip);
-
-    let ir = new Double(random(Double));
-    delegate.get = jest.fn(() => ir);
-    expect(registers.getIr()).toEqual(ir);
-    expect(delegate.get).toBeCalledWith(delegate.ir);
-
-    ir = new Double(random(Double));
-    registers.setIr(ir);
-    expect(delegate.set).toBeCalledWith(delegate.ir, ir);
-});
-
-test('implements exit registers', () => {
-    delegate.get = jest.fn(() => new Byte(0x00));
-    expect(registers.shouldExit()).toBe(false);
-    delegate.get = jest.fn(() => new Byte(0x01));
-    expect(registers.shouldExit()).toBe(true);
-
-    registers.setExit();
-    expect(delegate.set).toBeCalledWith(delegate.et, new Byte(0x01));
-
-    let es = new Word(random(Word));
-    delegate.get = jest.fn(() => es);
-    expect(registers.getEs()).toEqual(es);
-    expect(delegate.get).toBeCalledWith(delegate.es);
-
-    es = new Word(random(Word));
-    registers.setEs(es);
-    expect(delegate.set).toBeCalledWith(delegate.es, es);
 });

@@ -1,7 +1,7 @@
 const InterpreterInterface = require('../ProcessorArchitecture/Interpreter');
+const Exit = require('../ProcessorArchitecture/Exit');
 const Mnemonics = require('./Mnemonics');
 const Registers = require('./Registers');
-const Normalizer = require('../DataTypes/Normalizer');
 const Byte = require('../DataTypes/Byte');
 const Word = require('../DataTypes/Word');
 
@@ -20,19 +20,17 @@ module.exports = class extends InterpreterInterface {
 
     /**
      * @param {Registers} registers
-     * @param {Normalizer} normalizer
      */
-    constructor(registers, normalizer) {
+    constructor(registers) {
         super();
         this._registers = registers;
-        this._normalizer = normalizer;
+        this._exit = new Exit;
     }
 
     /**
      * @inheritDoc
      */
-    exec() {
-        const [byte1, byte2, byte3, byte4] = this._normalizer.normalize(this._registers.getIr());
+    exec([byte1, byte2, byte3, byte4]) {
         if (byte1.equals(Mnemonics.mov)) {
             this._mov(byte2, byte3);
         } else if (byte1.equals(Mnemonics.movi)) {
@@ -40,6 +38,8 @@ module.exports = class extends InterpreterInterface {
         } else if (byte1.equals(Mnemonics.syscall)) {
             this._syscall();
         }
+
+        return this._exit;
     }
 
     /**
@@ -66,8 +66,7 @@ module.exports = class extends InterpreterInterface {
     _syscall() {
         const eax = this._registers.get(this._registers.eax);
         if (eax.equals(this.constructor.SYS_EXIT)) {
-            this._registers.setExit();
-            this._registers.setEs(this._registers.get(this._registers.ebx));
+            this._exit = new Exit(true, this._registers.get(this._registers.ebx));
         }
     }
 };

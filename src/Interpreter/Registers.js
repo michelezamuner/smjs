@@ -2,7 +2,6 @@ const ControlRegisters = require('../../src/ProcessorArchitecture/ControlRegiste
 const RegistersFactory = require('../../src/Registers/RegistersFactory');
 const Byte = require('../DataTypes/Byte');
 const Word = require('../DataTypes/Word');
-const Double = require('../DataTypes/Double');
 
 /**
  * @implements ControlRegisters
@@ -19,9 +18,6 @@ module.exports = class extends ControlRegisters {
             ecx: Word,
             edx: Word,
             ip: Word,
-            ir: Double,
-            et: Byte,
-            es: Word,
         });
         this.eax = this._registers.eax;
         this.ebx = this._registers.ebx;
@@ -66,40 +62,10 @@ module.exports = class extends ControlRegisters {
         this._registers.set(this._registers.ip, new Word(this.getIp().toInt() + this.getIs()));
     }
 
+    /**
+     * @param {Word} ip
+     */
     setIp(ip) {
         this._registers.set(this._registers.ip, ip);
-    }
-
-    getIr() {
-        return this._registers.get(this._registers.ir);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    setIr(ir) {
-        this._registers.set(this._registers.ir, ir);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    shouldExit() {
-        return this._registers.get(this._registers.et).equals(new Byte(0x01));
-    }
-
-    setExit() {
-        this._registers.set(this._registers.et, new Byte(0x01));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    getEs() {
-        return this._registers.get(this._registers.es);
-    }
-
-    setEs(es) {
-        this._registers.set(this._registers.es, es);
     }
 };
