@@ -1,4 +1,5 @@
 const Processor = require('../../../src/Processor/Processor');
+const MissingExitException = require('../../../src/Processor/MissingExitException');
 const Exit = require('../../../src/ProcessorArchitecture/Exit');
 const Byte = require('../../../src/DataTypes/Byte');
 const Word = require('../../../src/DataTypes/Word');
@@ -20,21 +21,26 @@ const registers = {};
 const memory = {};
 
 /**
+ * @type {Word}
+ */
+let ip = new Word(0);
+
+/**
  * @type {null|Processor}
  */
 let processor = null;
 
 beforeEach(() => {
+    interpreter.getInstructionSize = () => new Byte(4);
     interpreter.exec = jest.fn(() => new Exit);
 
-    let ip = new Word(0x00);
-    registers.getIs = () => 4;
     registers.getIp = () => ip;
-    registers.incrementIp = () => ip = new Word(ip.toInt() + registers.getIs());
+    registers.setIp = value => ip = value;
 
+    memory.getMax = () => new Word(0xFFFF);
     memory.readSet = jest.fn((address, size) => {
         const bytes = [];
-        for (let i = 0; i < size; i++) {
+        for (let i = 0; i < size.toInt(); i++) {
             bytes.push(new Byte(address.toInt() + i));
         }
         return bytes;
@@ -58,4 +64,18 @@ test('executes the given instructions in sequence and exits with exit context', 
     expect(interpreter.exec).nthCalledWith(1, [new Byte(0x00), new Byte(0x01), new Byte(0x02), new Byte(0x03)]);
     expect(interpreter.exec).nthCalledWith(2, [new Byte(0x04), new Byte(0x05), new Byte(0x06), new Byte(0x07)]);
     expect(exitStatus).toBe(value);
+});
+
+test('fails with missing exit if read set goes out of memory', () => {
+    ip = new Word(0xFFFF);
+    expect(() => processor.run()).toThrow(MissingExitException);
+    expect(memory.readSet).toBeCalledTimes(0);
+    expect(interpreter.exec).toBeCalledTimes(0);
+});
+
+test('fails with missing exit if next ip goes out of bounds', () => {
+    ip = new Byte(0xFF);
+    expect(() => processor.run()).toThrow(MissingExitException);
+    expect(memory.readSet).toBeCalledTimes(0);
+    expect(interpreter.exec).toBeCalledTimes(0);
 });

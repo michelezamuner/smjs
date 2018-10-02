@@ -24,8 +24,6 @@ beforeEach(() => {
     delegate.ecx = new Byte(0x02);
     delegate.edx = new Byte(0x03);
     delegate.ip = new Byte(0x04);
-    delegate.et = new Byte(0x06);
-    delegate.es = new Byte(0x07);
     delegate.set = jest.fn();
 
     registers = new Registers(factory);
@@ -33,10 +31,6 @@ beforeEach(() => {
 
 test('Implements control registers', () => {
     expect(registers instanceof ControlRegisters).toBe(true);
-});
-
-test('Defines instruction size', () => {
-    expect(registers.getIs()).toBe(4);
 });
 
 test('Defines main registers and exposes their addresses', () => {
@@ -81,11 +75,6 @@ test('Implements instruction pointer', () => {
     delegate.get = jest.fn(() => ip);
     expect(registers.getIp()).toEqual(ip);
     expect(delegate.get).toBeCalledWith(delegate.ip);
-
-    const value = random(Word);
-    delegate.get = jest.fn(() => new Word(value));
-    registers.incrementIp();
-    expect(delegate.set).toBeCalledWith(delegate.ip, new Word(value + 4));
 
     ip = new Word(random(Word));
     registers.setIp(ip);

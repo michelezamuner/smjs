@@ -30,6 +30,13 @@ module.exports = class extends InterpreterInterface {
     /**
      * @inheritDoc
      */
+    getInstructionSize() {
+        return new Byte(4);
+    }
+
+    /**
+     * @inheritDoc
+     */
     exec([byte1, byte2, byte3, byte4]) {
         if (byte1.equals(Mnemonics.mov)) {
             this._mov(byte2, byte3);

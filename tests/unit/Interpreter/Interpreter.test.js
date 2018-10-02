@@ -29,6 +29,10 @@ test('implements interpreter interface', () => {
     expect(interpreter instanceof InterpreterInterface).toBe(true);
 });
 
+test('provides instructions size', () => {
+    expect(interpreter.getInstructionSize()).toEqual(new Byte(4));
+});
+
 test('implements move with register addressing', () => {
     const value = random(Word);
     const instruction = [Mnemonics.mov, registers.eax, registers.ebx, new Byte(0x00)];

@@ -1,4 +1,5 @@
 const MemoryInterface = require('../ProcessorArchitecture/Memory');
+const DataType = require('../DataTypes/DataType');
 const Byte = require('../DataTypes/Byte');
 
 /**
@@ -6,27 +7,34 @@ const Byte = require('../DataTypes/Byte');
  */
 module.exports = class Memory extends MemoryInterface {
     /**
-     * @param {number} size
+     * @param {DataType} max
      */
-    constructor(size) {
+    constructor(max) {
         super();
-        this._size = size;
+        this._max = max;
         this._memory = [];
-        this._maximumAddress = 2**size - 1;
     }
 
     /**
      * @inheritDoc
      */
-    getSize() {
-        return this._size;
+    getMax() {
+        return this._max;
     }
 
     /**
      * @inheritDoc
      */
     read(address) {
-        return this._read(address.toInt());
+        if (address.toInt() > this._max.toInt()) {
+            throw `Address ${address.toInt()} exceeds memory max (${this._max.toInt()})`;
+        }
+
+        if (!(address.toInt() in this._memory)) {
+            return new Byte(0x00);
+        }
+
+        return new Byte(this._memory[address.toInt()]);
     }
 
     /**
@@ -34,8 +42,8 @@ module.exports = class Memory extends MemoryInterface {
      */
     readSet(address, size) {
         const bytes = [];
-        for (let i = 0; i < size; i++) {
-            bytes.push(this._read(address.toInt() + i));
+        for (let i = 0; i < size.toInt(); i++) {
+            bytes.push(this.read(address.add(new size.constructor(i))));
         }
 
         return bytes;
@@ -49,28 +57,10 @@ module.exports = class Memory extends MemoryInterface {
             throw 'Only single bytes can be written to memory';
         }
 
-        const addr = address.toInt();
-        if (addr > this._maximumAddress) {
-            throw `Address ${addr} exceeds memory size (${this._size} Bytes)`;
+        if (address.toInt() > this._max.toInt()) {
+            throw `Address ${address.toInt()} exceeds memory max (${this._max.toInt()})`;
         }
 
-        this._memory[addr] = value.toInt();
-    }
-
-    /**
-     * @param {number} address
-     * @returns {Byte}
-     * @private
-     */
-    _read(address) {
-        if (address > this._maximumAddress) {
-            throw `Address ${address} exceeds memory size (${this._size} Bytes)`;
-        }
-
-        if (!(address in this._memory)) {
-            return new Byte(0x00);
-        }
-
-        return new Byte(this._memory[address]);
+        this._memory[address.toInt()] = value.toInt();
     }
 };

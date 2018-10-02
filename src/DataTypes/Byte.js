@@ -2,10 +2,10 @@ const DataType = require('./DataType');
 
 module.exports = class Byte extends DataType {
     /**
-     * @returns {number}
+     * @inheritDoc
      */
-    static get SIZE() {
-        return 1;
+    static get MAX() {
+        return 0xFF;
     }
 
     /**
@@ -13,12 +13,5 @@ module.exports = class Byte extends DataType {
      */
     constructor(value) {
         super(value);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    toSignedInt() {
-        return super.constructor._toSignedInt(this.constructor.SIZE, this._value);
     }
 };

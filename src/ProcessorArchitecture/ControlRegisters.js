@@ -5,16 +5,6 @@ const DataType = require('../DataTypes/DataType');
  */
 module.exports = class ControlRegisters {
     /**
-     * Get the size of an instruction as a number of Bytes.
-     *
-     * @return {number}
-     * @abstract
-     */
-    getIs() {
-        throw 'Not implemented';
-    }
-
-    /**
      * Get the current instruction pointer.
      *
      * @return {DataType}
@@ -25,11 +15,12 @@ module.exports = class ControlRegisters {
     }
 
     /**
-     * Increment the current instruction pointer.
+     * Set the instruction pointer to the given value.
      *
+     * @param {DataType} ip
      * @abstract
      */
-    incrementIp() {
+    setIp(ip) {
         throw 'Not implemented';
     }
 };

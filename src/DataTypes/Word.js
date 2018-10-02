@@ -3,10 +3,10 @@ const Byte = require('./Byte');
 
 module.exports = class Word extends DataType {
     /**
-     * @returns {number}
+     * @inheritDoc
      */
-    static get SIZE() {
-        return 2;
+    static get MAX() {
+        return 0xFFFF;
     }
 
     /**
@@ -35,13 +35,6 @@ module.exports = class Word extends DataType {
             throw 'Word must be constructed from one value or two bytes';
         }
 
-        return (byte1.toInt() * 256) + byte2.toInt();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    toSignedInt() {
-        return super.constructor._toSignedInt(this.constructor.SIZE, this._value);
+        return (byte1.toInt() * 0x100) + byte2.toInt();
     }
 };

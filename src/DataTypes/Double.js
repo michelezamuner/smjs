@@ -3,10 +3,10 @@ const Byte = require('./Byte');
 
 module.exports = class Double extends DataType {
     /**
-     * @returns {number}
+     * @inheritDoc
      */
-    static get SIZE() {
-        return 4;
+    static get MAX() {
+        return 0xFFFFFFFF;
     }
 
     /**
@@ -39,13 +39,6 @@ module.exports = class Double extends DataType {
             throw 'Double must be constructed from one value or four bytes';
         }
 
-        return (byte1.toInt() * 16777216) + (byte2.toInt() * 65536) + (byte3.toInt() * 256) + byte4.toInt();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    toSignedInt() {
-        return super.constructor._toSignedInt(this.constructor.SIZE, this._value);
+        return (byte1.toInt() * 0x1000000) + (byte2.toInt() * 0x10000) + (byte3.toInt() * 0x100) + byte4.toInt();
     }
 };

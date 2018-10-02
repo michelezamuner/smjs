@@ -26,13 +26,6 @@ module.exports = class extends ControlRegisters {
     }
 
     /**
-     * @inheritDoc
-     */
-    getIs() {
-        return 4;
-    }
-
-    /**
      * @param {Byte} register
      * @returns {DataType}
      */
@@ -57,13 +50,6 @@ module.exports = class extends ControlRegisters {
 
     /**
      * @inheritDoc
-     */
-    incrementIp() {
-        this._registers.set(this._registers.ip, new Word(this.getIp().toInt() + this.getIs()));
-    }
-
-    /**
-     * @param {Word} ip
      */
     setIp(ip) {
         this._registers.set(this._registers.ip, ip);

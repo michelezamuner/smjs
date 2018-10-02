@@ -6,18 +6,18 @@ const Byte = require('../DataTypes/Byte');
  */
 module.exports = class Memory {
     /**
-     * Get the maximum number of Bytes addressable by this memory.
+     * Get the maximum address available in this memory.
      *
-     * @return {number}
+     * @return {DataType}
      */
-    getSize() {
+    getMax() {
         throw 'Not implemented';
     }
 
     /**
      * Read the byte at the given address.
      *
-     * @param {number} address
+     * @param {DataType} address
      * @return {Byte}
      */
     read(address) {
@@ -27,8 +27,8 @@ module.exports = class Memory {
     /**
      * Read a set of bytes of the given size, at the given address.
      *
-     * @param {number} address
-     * @param {number} size
+     * @param {DataType} address
+     * @param {DataType} size
      * @return {Byte[]}
      */
     readSet(address, size) {
@@ -38,7 +38,7 @@ module.exports = class Memory {
     /**
      * Write the given byte at the given address.
      *
-     * @param {number} address
+     * @param {DataType} address
      * @param {Byte} value
      */
     write(address, value) {

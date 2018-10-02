@@ -8,12 +8,8 @@ test('implements data type', () => {
     expect(w instanceof DataType).toBe(true);
 });
 
-test('holds up to 2 bytes', () => {
-    expect(Word.SIZE).toBe(2);
-});
-
-test('implements to signed int', () => {
-    expect((new Word(65535)).toSignedInt()).toBe(-1);
+test('implements max', () => {
+    expect(Word.MAX).toBe(0xFFFF);
 });
 
 test('can be constructed from two bytes', () => {

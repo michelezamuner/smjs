@@ -8,7 +8,7 @@ const expect = require('./expect');
 */
 
 /**
- * Scenario: terminate program with specific exit status
+ * Scenario: program terminates with specific exit status
  *   Given the program is:
  *     """
  *     mov eax, 1   ; system call 1: exit
@@ -24,8 +24,8 @@ const expect = require('./expect');
  *   When I run the program
  *   Then the program terminates with exit status 5
  */
-test('terminate program with specific exit status', () => {
-    return expect.exitStatus(`
+test('program terminates with specific exit status', () => {
+    return expect.exit(`
         mov eax, 1  ; system call 1: exit
         mov ebx, 5  ; exit status
         mov ecx, 3  ; shouldn't affect the system call
@@ -36,4 +36,22 @@ test('terminate program with specific exit status', () => {
         mov eax, 4
         syscall
     `, 5)
+});
+
+/**
+ * Scenario: program is not terminated by an exit instruction
+ *   Given the program is:
+ *     """
+ *     mov eax, 5
+ *     mov ebx, eax
+ *     """
+ *   When I run the program
+ *   Then the program terminates with exit status 1
+ *   And the standard error contains the message "Missing exit instruction"
+ */
+test('terminate program with specific exit status', () => {
+    return expect.exit(`
+        mov eax, 5
+        mov ebx, eax
+    `, 1, '', 'Missing exit instruction');
 });

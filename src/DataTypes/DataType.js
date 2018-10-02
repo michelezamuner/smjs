@@ -6,28 +6,8 @@ module.exports = class DataType {
      * @return {number}
      * @abstract
      */
-    static get SIZE() {
+    static get MAX() {
         throw 'Not implemented';
-    }
-
-    /**
-     * @param {number} size
-     * @returns {number}
-     * @private
-     */
-    static _getMax(size) {
-        return 2 ** (8 * size) - 1;
-    }
-
-    /**
-     * @param {number} size
-     * @param {number} value
-     * @returns {number}
-     * @private
-     */
-    static _toSignedInt(size, value) {
-        const max = DataType._getMax(size);
-        return value <= Math.floor(max / 2) ? value : value - max - 1;
     }
 
     /**
@@ -38,21 +18,7 @@ module.exports = class DataType {
             throw 'Abstract class cannot be instantiated';
         }
 
-        if (value instanceof new.target) {
-            this._value = value._value;
-        }
-
-        if (Number.isInteger(value)) {
-            this._value = value;
-        }
-
-        if (this._value > DataType._getMax(new.target.SIZE)) {
-            throw `Value out of bounds: ${this._value}`;
-        }
-
-        if (this._value === undefined || this._value < 0) {
-            throw `Data types must be constructed from positive integers, got '${value}' instead`;
-        }
+        this._value = this._extractValue(value);
     }
 
     /**
@@ -65,16 +31,86 @@ module.exports = class DataType {
 
     /**
      * @returns {number}
-     * @abstract
      */
-    toSignedInt() {
-        throw 'Not implemented';
+    toInt() {
+        return this._value;
     }
 
     /**
      * @returns {number}
      */
-    toInt() {
-        return this._value;
+    toSignedInt() {
+        return this._value <= Math.floor(this.constructor.MAX / 2)
+            ? this._value
+            : this._value - this.constructor.MAX - 1;
+    }
+
+    /**
+     * @param {DataType} dataType
+     * @returns {DataType}
+     */
+    add(dataType) {
+        return new this.constructor(this._value + dataType._value);
+    }
+
+    /**
+     * @param {DataType} dataType
+     * @returns {DataType}
+     */
+    sub(dataType) {
+        return new this.constructor(this._value - dataType._value);
+    }
+
+    /**
+     * @param {DataType} dataType
+     * @returns {boolean}
+     */
+    lt(dataType) {
+        return this._value < dataType._value;
+    }
+
+    /**
+     * @param {DataType} dataType
+     * @returns {boolean}
+     */
+    ltoe(dataType) {
+        return this._value <= dataType._value;
+    }
+
+    /**
+     * @param {DataType} dataType
+     * @returns {boolean}
+     */
+    gt(dataType) {
+        return this._value > dataType._value;
+    }
+
+    /**
+     * @param {DataType} dataType
+     * @returns {boolean}
+     */
+    gtoe(dataType) {
+        return this._value >= dataType._value;
+    }
+
+    /**
+     * @param {*} value
+     * @returns {number}
+     * @private
+     */
+    _extractValue(value) {
+        if (value instanceof this.constructor) {
+            return value._value;
+        }
+
+        if (!Number.isInteger(value) || value < 0) {
+            throw `Data types must be constructed from positive integers, got '${value}' instead`;
+        }
+
+        if (value > this.constructor.MAX) {
+            throw `Value out of bounds for ${this.constructor.name}: ${value}`;
+        }
+
+        return value;
     }
 };

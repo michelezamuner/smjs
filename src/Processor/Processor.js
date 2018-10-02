@@ -1,6 +1,7 @@
 const Interpreter = require('../ProcessorArchitecture/Interpreter');
 const ControlRegisters = require('../ProcessorArchitecture/ControlRegisters');
 const Memory = require('../ProcessorArchitecture/Memory');
+const MissingExitException = require('./MissingExitException');
 
 /**
  * Processor, interpreting instructions.
@@ -26,7 +27,11 @@ module.exports = class Processor {
         let exitStatus = 0;
 
         while (true) {
-            const instruction = this._memory.readSet(this._registers.getIp(), this._registers.getIs());
+            if (!this._canReadNextInstruction() || !this._canIncrementIp()) {
+                throw new MissingExitException('Missing exit instruction');
+            }
+
+            const instruction = this._memory.readSet(this._registers.getIp(), this._interpreter.getInstructionSize());
             const exit = this._interpreter.exec(instruction);
 
             if (exit.shouldExit()) {
@@ -34,9 +39,30 @@ module.exports = class Processor {
                 break;
             }
 
-            this._registers.incrementIp();
+            this._registers.setIp(this._registers.getIp().add(this._interpreter.getInstructionSize()));
         }
 
         return exitStatus;
+    }
+
+    /**
+     * @returns {boolean}
+     * @private
+     */
+    _canReadNextInstruction() {
+        return this._memory.getMax()
+            .sub(this._registers.getIp())
+            .gtoe(this._interpreter.getInstructionSize())
+    }
+
+    /**
+     * @returns {boolean}
+     * @private
+     */
+    _canIncrementIp() {
+        const max = new (this._registers.getIp().constructor)(this._registers.getIp().constructor.MAX);
+        return max
+            .sub(this._registers.getIp())
+            .gtoe(this._interpreter.getInstructionSize());
     }
 };

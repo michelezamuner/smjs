@@ -11,20 +11,20 @@ const random = require('../random');
 let memory = null;
 
 /**
- * @type {number}
+ * @type {Word}
  */
-const size = 16;
+const max = new Word(0xFFFF);
 
 beforeEach(() => {
-    memory = new Memory(size);
+    memory = new Memory(max);
 });
 
 test('implements memory interface', () => {
     expect(memory).toBeInstanceOf(MemoryInterface);
 });
 
-test('has size', () => {
-    expect(memory.getSize()).toEqual(size);
+test('has max', () => {
+    expect(memory.getMax()).toEqual(max);
 });
 
 test('reads zeros wherever nothing has been written', () => {
@@ -50,26 +50,29 @@ test('reads a set of bytes', () => {
         memory.write(new Word(offset.toInt() + parseInt(address)), bytes[address]);
     }
 
-    expect(memory.readSet(offset, 4)).toEqual(bytes);
+    expect(memory.readSet(offset, new Byte(4))).toEqual(bytes);
 });
 
 test('fails if trying to read address outside of memory size', () => {
     for (const address of [0x10000, 0x124356, 0xFFFFFFFF]) {
         expect(() => memory.read(new Double(address)))
-            .toThrow(`Address ${address} exceeds memory size (${size} Bytes)`);
+            .toThrow(`Address ${address} exceeds memory max (${max.toInt()})`);
     }
 });
 
 test('fails if trying to read a set of bytes going outside of memory size', () => {
-    expect(() => memory.readSet(new Word(0xFFFF), 2)).toThrow(`Address ${0x10000} exceeds memory size (${size} Bytes)`);
-    expect(() => memory.readSet(new Word(0xFFFE), 3)).toThrow(`Address ${0x10000} exceeds memory size (${size} Bytes)`);
-    expect(() => memory.readSet(new Word(0xFFFD), 4)).toThrow(`Address ${0x10000} exceeds memory size (${size} Bytes)`);
+    expect(() => memory.readSet(new Double(0xFFFF), new Byte(2)))
+        .toThrow(`Address ${0x10000} exceeds memory max (${max.toInt()})`);
+    expect(() => memory.readSet(new Double(0xFFFE), new Byte(3)))
+        .toThrow(`Address ${0x10000} exceeds memory max (${max.toInt()})`);
+    expect(() => memory.readSet(new Double(0xFFFD), new Byte(4)))
+        .toThrow(`Address ${0x10000} exceeds memory max (${max.toInt()})`);
 });
 
 test('fails if trying to write to address outside of memory size', () => {
     for (const address of [0x10000, 0x124356, 0xFFFFFFFF]) {
         expect(() => memory.write(new Double(address), new Byte(0x00)))
-            .toThrow(`Address ${address} exceeds memory size (${size} Bytes)`);
+            .toThrow(`Address ${address} exceeds memory max (${max.toInt()})`);
     }
 });
 

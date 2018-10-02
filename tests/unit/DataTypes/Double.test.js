@@ -8,12 +8,8 @@ test('implements data type', () => {
     expect(d instanceof DataType).toBe(true);
 });
 
-test('holds up to 4 bytes', () => {
-    expect(Double.SIZE).toBe(4);
-});
-
-test('implements to signed int', () => {
-    expect((new Double(4294967295)).toSignedInt()).toBe(-1);
+test('implements max', () => {
+    expect(Double.MAX).toBe(0xFFFFFFFF);
 });
 
 test('can be constructed from four bytes', () => {
