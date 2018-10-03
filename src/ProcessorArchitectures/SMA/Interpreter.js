@@ -1,9 +1,9 @@
-const InterpreterInterface = require('../ProcessorArchitecture/Interpreter');
-const Exit = require('../ProcessorArchitecture/Exit');
+const InterpreterInterface = require('../../ProcessorProtocol/Interpreter');
+const Exit = require('../../ProcessorProtocol/Exit');
+const Byte = require('../../DataTypes/Byte');
+const Word = require('../../DataTypes/Word');
 const Mnemonics = require('./Mnemonics');
 const Registers = require('./Registers');
-const Byte = require('../DataTypes/Byte');
-const Word = require('../DataTypes/Word');
 
 /**
  * Interpreter of instructions

@@ -1,7 +1,7 @@
-const ControlRegisters = require('../../src/ProcessorArchitecture/ControlRegisters');
-const RegistersFactory = require('../../src/Registers/RegistersFactory');
-const Byte = require('../DataTypes/Byte');
-const Word = require('../DataTypes/Word');
+const ControlRegisters = require('../../ProcessorProtocol/ControlRegisters');
+const RegistersFactory = require('../../Registers/RegistersFactory');
+const Byte = require('../../DataTypes/Byte');
+const Word = require('../../DataTypes/Word');
 
 /**
  * @implements ControlRegisters

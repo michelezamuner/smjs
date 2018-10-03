@@ -1,4 +1,4 @@
-const Byte = require('../DataTypes/Byte');
+const Byte = require('../../DataTypes/Byte');
 
 module.exports = {
     mov: new Byte(0x00),

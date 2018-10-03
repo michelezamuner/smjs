@@ -1,8 +1,8 @@
-const ControlRegisters = require('../../../src/ProcessorArchitecture/ControlRegisters');
-const Registers = require('../../../src/Interpreter/Registers');
-const Byte = require('../../../src/DataTypes/Byte');
-const Word = require('../../../src/DataTypes/Word');
-const random = require('../random');
+const ControlRegisters = require('../../../../src/ProcessorProtocol/ControlRegisters');
+const Registers = require('../../../../src/ProcessorArchitectures/SMA/Registers');
+const Byte = require('../../../../src/DataTypes/Byte');
+const Word = require('../../../../src/DataTypes/Word');
+const random = require('../../random');
 
 /**
  * @type {Object}

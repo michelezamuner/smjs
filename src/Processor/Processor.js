@@ -1,6 +1,6 @@
-const Interpreter = require('../ProcessorArchitecture/Interpreter');
-const ControlRegisters = require('../ProcessorArchitecture/ControlRegisters');
-const Memory = require('../ProcessorArchitecture/Memory');
+const Interpreter = require('../ProcessorProtocol/Interpreter');
+const ControlRegisters = require('../ProcessorProtocol/ControlRegisters');
+const Memory = require('../ProcessorProtocol/Memory');
 const MissingExitException = require('./MissingExitException');
 
 /**

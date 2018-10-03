@@ -1,10 +1,10 @@
-const Interpreter = require('../../../src/Interpreter/Interpreter');
-const InterpreterInterface = require('../../../src/ProcessorArchitecture/Interpreter');
-const Exit = require('../../../src/ProcessorArchitecture/Exit');
-const Mnemonics = require('../../../src/Interpreter/Mnemonics');
-const Byte = require('../../../src/DataTypes/Byte');
-const Word = require('../../../src/DataTypes/Word');
-const random = require('../random');
+const InterpreterInterface = require('../../../../src/ProcessorProtocol/Interpreter');
+const Exit = require('../../../../src/ProcessorProtocol/Exit');
+const Interpreter = require('../../../../src/ProcessorArchitectures/SMA/Interpreter');
+const Mnemonics = require('../../../../src/ProcessorArchitectures/SMA/Mnemonics');
+const Byte = require('../../../../src/DataTypes/Byte');
+const Word = require('../../../../src/DataTypes/Word');
+const random = require('../../random');
 
 /**
  * @type {Object}

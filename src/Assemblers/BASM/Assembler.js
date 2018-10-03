@@ -1,40 +1,34 @@
-const Memory = require('../ProcessorArchitecture/Memory');
-const Mnemonics = require('./Mnemonics');
-const Registers = require('./Registers');
-const Byte = require('../DataTypes/Byte');
-const Word = require('../DataTypes/Word');
+const Mnemonics = require('../../ProcessorArchitectures/SMA/Mnemonics');
+const Registers = require('../../ProcessorArchitectures/SMA/Registers');
+const Byte = require('../../DataTypes/Byte');
 
 /**
- * Source code parser.
+ * Source code assembler.
  *
  * @todo Should be injected only with an interface providing registers addresses, it doesn't need to have access to all
  * registers functionality.
  */
-module.exports = class Parser {
+module.exports = class Assembler {
     /**
      * @param {Registers} registers
-     * @param {Memory} memory
      */
-    constructor(registers, memory) {
+    constructor(registers) {
         this._registers = registers;
-        this._memory = memory;
     }
+
     /**
-     * Parse the given source code to produce executable instructions, and load them into memory.
+     * Assemble the given source code to produce executable instructions.
      *
      * @param {string} code
+     * @return {Byte[]}
      */
-    parse(code) {
-        const bytes = code.split("\n")
+    assemble(code) {
+        return code.split("\n")
             .map(line => line.trim())
             .filter(this._isNotEmptyLine)
             .filter(this._isNotCommentLine)
             .reduce((bytes, instruction) => [...bytes, ...this._parseInstruction(instruction)], [])
         ;
-
-        for (const address in bytes) {
-            this._memory.write(new Word(parseInt(address)), bytes[address]);
-        }
     }
 
     /**
