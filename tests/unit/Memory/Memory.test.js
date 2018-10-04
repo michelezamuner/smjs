@@ -1,5 +1,5 @@
 const Memory = require('../../../src/Memory/Memory');
-const MemoryInterface = require('../../../src/ProcessorProtocol/Memory');
+const MemoryInterface = require('../../../src/ProcessorInterfaces/Memory');
 const Byte = require('../../../src/DataTypes/Byte');
 const Word = require('../../../src/DataTypes/Word');
 const Double = require('../../../src/DataTypes/Double');

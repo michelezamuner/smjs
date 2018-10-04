@@ -1,6 +1,6 @@
-const InterpreterInterface = require('../../ProcessorProtocol/Interpreter');
-const Memory = require('../../ProcessorProtocol/Memory');
-const Exit = require('../../ProcessorProtocol/Exit');
+const InterpreterInterface = require('../../ProcessorInterfaces/Interpreter');
+const Memory = require('../../ProcessorInterfaces/Memory');
+const Exit = require('../../ProcessorInterfaces/Exit');
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
 const Mnemonics = require('./Mnemonics');
@@ -96,9 +96,9 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _syscall() {
-        const eax = this._registers.get(this._registers.eax);
+        const eax = this._registers.get(Mnemonics.eax);
         if (eax.equals(this.constructor.SYS_EXIT)) {
-            this._exit = new Exit(true, this._registers.get(this._registers.ebx));
+            this._exit = new Exit(true, this._registers.get(Mnemonics.ebx));
         }
     }
 };

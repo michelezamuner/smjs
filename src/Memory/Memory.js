@@ -1,4 +1,4 @@
-const MemoryInterface = require('../ProcessorProtocol/Memory');
+const MemoryInterface = require('../ProcessorInterfaces/Memory');
 const DataType = require('../DataTypes/DataType');
 const Byte = require('../DataTypes/Byte');
 

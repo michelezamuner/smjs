@@ -1,4 +1,4 @@
-const Memory = require('../ProcessorProtocol/Memory');
+const Memory = require('../ProcessorInterfaces/Memory');
 
 module.exports = class Loader {
     /**

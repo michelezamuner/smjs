@@ -3,7 +3,7 @@ const DataType = require('../DataTypes/DataType');
 /**
  * @interface
  */
-module.exports = class ControlRegisters {
+module.exports = class Registers {
     /**
      * Get the current instruction pointer.
      *

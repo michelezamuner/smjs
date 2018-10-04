@@ -1,13 +1,8 @@
 const Assembler = require('../../../../src/Assemblers/BASM/Assembler');
-const Mnemonics = require('../../../../src/ProcessorArchitectures/SMA/Mnemonics');
+const Mnemonics = require('../../../../src/Architectures/SMA/Mnemonics');
 const Byte = require('../../../../src/DataTypes/Byte');
 const Word = require('../../../../src/DataTypes/Word');
 const random = require('../../random');
-
-/**
- * @type {Object}
- */
-const registers = {};
 
 /**
  * @type {null|Assembler}
@@ -15,9 +10,7 @@ const registers = {};
 let assembler = null;
 
 beforeEach(() => {
-    registers.eax = new Byte(0x00);
-    registers.ebx = new Byte(0x01);
-    assembler = new Assembler(registers);
+    assembler = new Assembler();
 });
 
 test('supports move with immediate addressing', () => {
@@ -30,7 +23,7 @@ test('supports move with immediate addressing', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes.length).toBe(4);
-    expect(bytes).toEqual([Mnemonics.movi, registers.eax, new Byte(0x01), new Byte(0x00)]);
+    expect(bytes).toEqual([Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00)]);
 });
 
 test('supports move with register addressing', () => {
@@ -43,7 +36,7 @@ test('supports move with register addressing', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes.length).toBe(4);
-    expect(bytes).toEqual([Mnemonics.mov, registers.eax, registers.ebx, new Byte(0x00)]);
+    expect(bytes).toEqual([Mnemonics.mov, Mnemonics.eax, Mnemonics.ebx, new Byte(0x00)]);
 });
 
 test('supports move with memory addressing from memory into register', () => {
@@ -64,8 +57,8 @@ test('supports move with memory addressing from memory into register', () => {
 
     expect(bytes.length).toBe(11);
     expect(bytes).toEqual([
-        Mnemonics.movmb, registers.eax, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movmw, registers.ebx, new Byte(0x00), new Byte(0x09),
+        Mnemonics.movmb, Mnemonics.eax, new Byte(0x00), new Byte(0x08),
+        Mnemonics.movmw, Mnemonics.ebx, new Byte(0x00), new Byte(0x09),
         new Byte(byte), wordLeft, wordRight
     ]);
 });
@@ -82,7 +75,7 @@ test('supports multiple spaces between tokens', () => {
 
     expect(bytes.length).toBe(5);
     expect(bytes).toEqual([
-        Mnemonics.movmb, registers.eax, new Byte(0x00), new Byte(0x04),
+        Mnemonics.movmb, Mnemonics.eax, new Byte(0x00), new Byte(0x04),
         new Byte(0x01)
     ]);
 });
@@ -110,8 +103,8 @@ test('accepts empty lines', () => {
 
     expect(bytes.length).toBe(12);
     expect(bytes).toEqual([
-        Mnemonics.movi, registers.eax, new Byte(0x01), new Byte(0x00),
-        Mnemonics.mov, registers.ebx, registers.eax, new Byte(0x00),
+        Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00),
+        Mnemonics.mov, Mnemonics.ebx, Mnemonics.eax, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });
@@ -131,8 +124,8 @@ test('accepts comment lines', () => {
 
     expect(bytes.length).toBe(12);
     expect(bytes).toEqual([
-        Mnemonics.movi, registers.eax, new Byte(0x01), new Byte(0x00),
-        Mnemonics.mov, registers.ebx, registers.eax, new Byte(0x00),
+        Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00),
+        Mnemonics.mov, Mnemonics.ebx, Mnemonics.eax, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });
@@ -150,8 +143,8 @@ test('accepts inline comments', () => {
 
     expect(bytes.length).toBe(12);
     expect(bytes).toEqual([
-        Mnemonics.movi, registers.eax, new Byte(0x01), new Byte(0x00),
-        Mnemonics.mov, registers.ebx, registers.eax, new Byte(0x00),
+        Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00),
+        Mnemonics.mov, Mnemonics.ebx, Mnemonics.eax, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });

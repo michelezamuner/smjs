@@ -1,6 +1,6 @@
 const Processor = require('../../../src/Processor/Processor');
 const MissingExitException = require('../../../src/Processor/MissingExitException');
-const Exit = require('../../../src/ProcessorProtocol/Exit');
+const Exit = require('../../../src/ProcessorInterfaces/Exit');
 const Byte = require('../../../src/DataTypes/Byte');
 const Word = require('../../../src/DataTypes/Word');
 const random = require('../random');

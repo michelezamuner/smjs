@@ -1,20 +1,12 @@
-const Mnemonics = require('../../ProcessorArchitectures/SMA/Mnemonics');
-const Registers = require('../../ProcessorArchitectures/SMA/Registers');
+const Mnemonics = require('../../Architectures/SMA/Mnemonics');
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
 
 /**
  * Source code assembler.
- *
- * @todo Should be injected only with an interface providing registers addresses, it doesn't need to have access to all
- * registers functionality.
  */
 module.exports = class Assembler {
-    /**
-     * @param {Registers} registers
-     */
-    constructor(registers) {
-        this._registers = registers;
+    constructor() {
         this._variables = [];
     }
 
@@ -170,11 +162,11 @@ module.exports = class Assembler {
      */
     _parseMov(operands) {
         if (Number.isInteger(parseInt(operands[1]))) {
-            return [Mnemonics.movi, this._registers[operands[0]], new Byte(parseInt(operands[1])), new Byte(0x00)];
+            return [Mnemonics.movi, Mnemonics[operands[0]], new Byte(parseInt(operands[1])), new Byte(0x00)];
         }
 
         if (['eax', 'ebx', 'ecx', 'edx'].includes(operands[1])) {
-            return [Mnemonics.mov, this._registers[operands[0]], this._registers[operands[1]], new Byte(0x00)];
+            return [Mnemonics.mov, Mnemonics[operands[0]], Mnemonics[operands[1]], new Byte(0x00)];
         }
 
         const variable = this._variables.find(variable => variable.name === operands[1]);
@@ -183,6 +175,6 @@ module.exports = class Assembler {
             opcode = Mnemonics.movmw;
         }
         const address = this._variables.findIndex(variable => variable.name === operands[1]);
-        return [opcode, this._registers[operands[0]], ...(new Word(address).toBytes())];
+        return [opcode, Mnemonics[operands[0]], ...(new Word(address).toBytes())];
     }
 };
