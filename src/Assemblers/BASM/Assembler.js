@@ -21,13 +21,13 @@ module.exports = class Assembler {
         lines = this._removeBlanks(lines);
         lines = this._removeComments(lines);
 
-        const dataSegment = this._getSegment('data', lines);
-        const textSegment = this._getSegment('text', lines);
+        const dataSegment = this._parseSegment('data', lines);
+        const textSegment = this._parseSegment('text', lines);
 
-        this._loadVariables(dataSegment);
+        this._variables = this._parseVariables(dataSegment);
 
-        let object = this._getTextBytes(textSegment);
-        object = this._updateVariablesAddresses(object);
+        let object = this._parseTextBytes(textSegment);
+        object = this._updateAddressesInInstructions(object);
         object = this._appendVariablesValues(object);
 
         return object;
@@ -39,7 +39,9 @@ module.exports = class Assembler {
      * @private
      */
     _removeBlanks(lines) {
-        return lines.map(line => line.trim()).filter(line => line !== '');
+        return lines
+            .map(line => line.trim())
+            .filter(line => line !== '');
     }
 
     /**
@@ -48,10 +50,12 @@ module.exports = class Assembler {
      * @private
      */
     _removeComments(lines) {
-        return lines.filter(line => line.indexOf(';') !== 0).map(line => {
-            const commentDelimiter = line.indexOf(';');
-            return commentDelimiter !== -1 ? line.substring(0, commentDelimiter).trim() : line;
-        });
+        return lines
+            .filter(line => !line.startsWith(';'))
+            .map(line => {
+                const commentStart = line.indexOf(';');
+                return commentStart !== -1 ? line.substring(0, commentStart).trim() : line;
+            });
     }
 
     /**
@@ -60,32 +64,36 @@ module.exports = class Assembler {
      * @returns {string[]}
      * @private
      */
-    _getSegment(segment, lines) {
+    _parseSegment(segment, lines) {
         let insideSegment = false;
         return lines.filter(line => {
-            if (line.indexOf('.') === 0) {
+            if (line.startsWith('.')) {
                 insideSegment = false;
             }
-            if (line.indexOf('.' + segment) === 0) {
+            if (line.startsWith('.' + segment)) {
                 insideSegment = true;
             }
-            return insideSegment && line.indexOf('.' + segment) !== 0;
+            return insideSegment && !line.startsWith('.' + segment);
         });
     }
 
     /**
      * @param {string[]} dataSegment
+     * @return {Object[]}
      * @private
      */
-    _loadVariables(dataSegment) {
+    _parseVariables(dataSegment) {
+        const variables = [];
         for (const line of dataSegment) {
             const parts = line.split(/\s+/);
             if (parts[1] === 'db') {
-                this._variables.push({name: parts[0], bytes: [new Byte(parseInt(parts[2]))]});
+                variables.push({name: parts[0], bytes: [new Byte(parseInt(parts[2]))]});
             } else if (parts[1] === 'dw') {
-                this._variables.push({name: parts[0], bytes: (new Word(parseInt(parts[2]))).toBytes()});
+                variables.push({name: parts[0], bytes: (new Word(parseInt(parts[2]))).toBytes()});
             }
         }
+
+        return variables;
     }
 
     /**
@@ -93,8 +101,9 @@ module.exports = class Assembler {
      * @returns {Byte[]}
      * @private
      */
-    _getTextBytes(textSegment) {
-        return textSegment.reduce((bytes, line) => [...bytes, ...this._parseInstruction(line)], []);
+    _parseTextBytes(textSegment) {
+        return textSegment
+            .reduce((bytes, line) => [...bytes, ...this._parseInstruction(line)], []);
     }
 
     /**
@@ -102,7 +111,7 @@ module.exports = class Assembler {
      * @returns {Byte[]}
      * @private
      */
-    _updateVariablesAddresses(object) {
+    _updateAddressesInInstructions(object) {
         const textSize = object.length;
         for (let i = 0; i < textSize; i += 4) {
             if (!object[i].equals(Mnemonics.movmb) && !object[i].equals(Mnemonics.movmw)) {
@@ -142,7 +151,7 @@ module.exports = class Assembler {
     _parseInstruction(line) {
         const opcodeDelimiter = line.indexOf(' ');
         if (opcodeDelimiter === -1) {
-            return [new Byte(Mnemonics[line]), new Byte(0), new Byte(0), new Byte(0)];
+            return [new Byte(Mnemonics[line]), new Byte(0x00), new Byte(0x00), new Byte(0x00)];
         }
 
         const opcode = line.substring(0, opcodeDelimiter);
@@ -170,10 +179,7 @@ module.exports = class Assembler {
         }
 
         const variable = this._variables.find(variable => variable.name === operands[1]);
-        let opcode = Mnemonics.movmb;
-        if (variable.bytes.length === 2) {
-            opcode = Mnemonics.movmw;
-        }
+        const opcode = variable.bytes.length === 2 ? Mnemonics.movmw : Mnemonics.movmb;
         const address = this._variables.findIndex(variable => variable.name === operands[1]);
         return [opcode, Mnemonics[operands[0]], ...(new Word(address).toBytes())];
     }

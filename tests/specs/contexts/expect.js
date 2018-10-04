@@ -3,7 +3,7 @@ const fs = require('fs');
 const exec = require('child_process').exec;
 
 module.exports = {
-    exit: async (code, status, out = '', err = '') => {
+    exit: async (code, status, out = '', err = '', asm = 'basm') => {
         // tests are run in parallel, and we want to avoid them to overwrite the same file
         const file = Math.floor(Math.random() * 1000) + '.sm';
         let exp = null;
@@ -11,7 +11,7 @@ module.exports = {
         await promisify(fs.writeFile)(file, code);
 
         try {
-            const res = await promisify(exec)(`node main.js ${file}`);
+            const res = await promisify(exec)(`node main.js ${file} --asm=${asm}`);
             exp = () => {
                 expect(status).toBe(0);
                 expect(res.stdout.trim()).toBe(out);

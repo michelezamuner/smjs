@@ -1,6 +1,7 @@
 const Registers = require('./src/Architectures/SMA/Registers');
 const Interpreter = require('./src/Architectures/SMA/Interpreter');
-const Assembler = require('./src/Assemblers/BASM/Assembler');
+const BASM = require('./src/Assemblers/BASM/Assembler');
+const RASM = require('./src/Assemblers/RASM/Assembler');
 const Memory = require('./src/Memory/Memory');
 const Loader = require('./src/Processor/Loader');
 const Processor = require('./src/Processor/Processor');
@@ -9,7 +10,7 @@ const Word = require('./src/DataTypes/Word');
 
 require('fs').readFile(process.argv[2], {encoding: 'utf-8'}, (err, data) => {
     const memory = new Memory(new Word(Word.MAX));
-    const assembler = new Assembler();
+    const assembler = process.argv[3] === '--asm=rasm' ? new RASM : new BASM;
     const loader = new Loader(memory);
     const registers = new Registers();
     const interpreter = new Interpreter(registers, memory);
