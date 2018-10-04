@@ -18,6 +18,13 @@ module.exports = class Word extends DataType {
     }
 
     /**
+     * @returns {Byte[]}
+     */
+    toBytes() {
+        return super._toBytes(2).map(value => new Byte(value));
+    }
+
+    /**
      * @param {number|Byte} byte1
      * @param {undefined|Byte} byte2
      * @returns {number}

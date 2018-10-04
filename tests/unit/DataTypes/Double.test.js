@@ -37,3 +37,12 @@ test('fails if constructing with more than one arguments, that are not four byte
     expect(() => new Double(new Byte(10), new Byte(10)))
         .toThrow('Double must be constructed from one value or four bytes');
 });
+
+test('can be cast to list of bytes', () => {
+    const one = new Byte(random(Byte));
+    const two = new Byte(random(Byte));
+    const three = new Byte(random(Byte));
+    const four = new Byte(random(Byte));
+
+    expect(new Double(one, two, three, four).toBytes()).toEqual([one, two, three, four]);
+});

@@ -20,6 +20,13 @@ module.exports = class Double extends DataType {
     }
 
     /**
+     * @returns {Byte[]}
+     */
+    toBytes() {
+        return super._toBytes(4).map(value => new Byte(value));
+    }
+
+    /**
      * @param {Byte} byte1
      * @param {Byte} byte2
      * @param {Byte} byte3

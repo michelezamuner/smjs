@@ -1,4 +1,5 @@
 const InterpreterInterface = require('../../ProcessorProtocol/Interpreter');
+const Memory = require('../../ProcessorProtocol/Memory');
 const Exit = require('../../ProcessorProtocol/Exit');
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
@@ -20,10 +21,12 @@ module.exports = class extends InterpreterInterface {
 
     /**
      * @param {Registers} registers
+     * @param {Memory} memory
      */
-    constructor(registers) {
+    constructor(registers, memory) {
         super();
         this._registers = registers;
+        this._memory = memory;
         this._exit = new Exit;
     }
 
@@ -42,6 +45,10 @@ module.exports = class extends InterpreterInterface {
             this._mov(byte2, byte3);
         } else if (byte1.equals(Mnemonics.movi)) {
             this._movi(byte2, byte3);
+        } else if (byte1.equals(Mnemonics.movmb)) {
+            this._movmb(byte2, new Word(byte3, byte4));
+        } else if (byte1.equals(Mnemonics.movmw)) {
+            this._movmw(byte2, new Word(byte3, byte4));
         } else if (byte1.equals(Mnemonics.syscall)) {
             this._syscall();
         }
@@ -65,6 +72,24 @@ module.exports = class extends InterpreterInterface {
      */
     _movi(register, value) {
         this._registers.set(register, new Word(new Byte(0x00), value));
+    }
+
+    /**
+     * @param {Byte} register
+     * @param {Word} address
+     * @private
+     */
+    _movmb(register, address) {
+        this._registers.set(register, new Word(new Byte(0x00), this._memory.read(address)));
+    }
+
+    /**
+     * @param {Byte} register
+     * @param {Word} address
+     * @private
+     */
+    _movmw(register, address) {
+        this._registers.set(register, new Word(...this._memory.readSet(address, new Byte(0x02))));
     }
 
     /**

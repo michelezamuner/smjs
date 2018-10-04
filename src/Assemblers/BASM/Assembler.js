@@ -1,6 +1,7 @@
 const Mnemonics = require('../../ProcessorArchitectures/SMA/Mnemonics');
 const Registers = require('../../ProcessorArchitectures/SMA/Registers');
 const Byte = require('../../DataTypes/Byte');
+const Word = require('../../DataTypes/Word');
 
 /**
  * Source code assembler.
@@ -14,6 +15,7 @@ module.exports = class Assembler {
      */
     constructor(registers) {
         this._registers = registers;
+        this._variables = [];
     }
 
     /**
@@ -23,30 +25,121 @@ module.exports = class Assembler {
      * @return {Byte[]}
      */
     assemble(code) {
-        return code.split("\n")
-            .map(line => line.trim())
-            .filter(this._isNotEmptyLine)
-            .filter(this._isNotCommentLine)
-            .reduce((bytes, instruction) => [...bytes, ...this._parseInstruction(instruction)], [])
-        ;
+        let lines = code.split("\n");
+        lines = this._removeBlanks(lines);
+        lines = this._removeComments(lines);
+
+        const dataSegment = this._getSegment('data', lines);
+        const textSegment = this._getSegment('text', lines);
+
+        this._loadVariables(dataSegment);
+
+        let object = this._getTextBytes(textSegment);
+        object = this._updateVariablesAddresses(object);
+        object = this._appendVariablesValues(object);
+
+        return object;
     }
 
     /**
-     * @param {string} line
-     * @returns {boolean}
+     * @param {string[]} lines
+     * @returns {string[]}
      * @private
      */
-    _isNotEmptyLine(line) {
-        return line !== '';
+    _removeBlanks(lines) {
+        return lines.map(line => line.trim()).filter(line => line !== '');
     }
 
     /**
-     * @param {string} line
-     * @returns {boolean}
+     * @param {string[]} lines
+     * @returns {string[]}
      * @private
      */
-    _isNotCommentLine(line) {
-        return line.indexOf(';') !== 0;
+    _removeComments(lines) {
+        return lines.filter(line => line.indexOf(';') !== 0).map(line => {
+            const commentDelimiter = line.indexOf(';');
+            return commentDelimiter !== -1 ? line.substring(0, commentDelimiter).trim() : line;
+        });
+    }
+
+    /**
+     * @param {string} segment
+     * @param {string[]} lines
+     * @returns {string[]}
+     * @private
+     */
+    _getSegment(segment, lines) {
+        let insideSegment = false;
+        return lines.filter(line => {
+            if (line.indexOf('.') === 0) {
+                insideSegment = false;
+            }
+            if (line.indexOf('.' + segment) === 0) {
+                insideSegment = true;
+            }
+            return insideSegment && line.indexOf('.' + segment) !== 0;
+        });
+    }
+
+    /**
+     * @param {string[]} dataSegment
+     * @private
+     */
+    _loadVariables(dataSegment) {
+        for (const line of dataSegment) {
+            const parts = line.split(/\s+/);
+            if (parts[1] === 'db') {
+                this._variables.push({name: parts[0], bytes: [new Byte(parseInt(parts[2]))]});
+            } else if (parts[1] === 'dw') {
+                this._variables.push({name: parts[0], bytes: (new Word(parseInt(parts[2]))).toBytes()});
+            }
+        }
+    }
+
+    /**
+     * @param {string[]} textSegment
+     * @returns {Byte[]}
+     * @private
+     */
+    _getTextBytes(textSegment) {
+        return textSegment.reduce((bytes, line) => [...bytes, ...this._parseInstruction(line)], []);
+    }
+
+    /**
+     * @param {Byte[]} object
+     * @returns {Byte[]}
+     * @private
+     */
+    _updateVariablesAddresses(object) {
+        const textSize = object.length;
+        for (let i = 0; i < textSize; i += 4) {
+            if (!object[i].equals(Mnemonics.movmb) && !object[i].equals(Mnemonics.movmw)) {
+                continue;
+            }
+
+            const relativeAddress = (new Word(object[i + 2], object[i + 3]));
+            const absoluteAddress = relativeAddress.add(new Word(textSize));
+            const bytes = absoluteAddress.toBytes();
+            object[i + 2] = bytes[0];
+            object[i + 3] = bytes[1];
+        }
+
+        return object;
+    }
+
+    /**
+     * @param {Byte[]} object
+     * @returns {Byte[]}
+     * @private
+     */
+    _appendVariablesValues(object) {
+        for (const variable of this._variables) {
+            for (const byte of variable.bytes) {
+                object.push(byte);
+            }
+        }
+
+        return object;
     }
 
     /**
@@ -55,57 +148,41 @@ module.exports = class Assembler {
      * @private
      */
     _parseInstruction(line) {
-        const commentDelimiter = line.indexOf(';');
-        if (commentDelimiter !== -1) {
-            line = line.substring(0, commentDelimiter).trim();
-        }
-
         const opcodeDelimiter = line.indexOf(' ');
         if (opcodeDelimiter === -1) {
             return [new Byte(Mnemonics[line]), new Byte(0), new Byte(0), new Byte(0)];
         }
 
-        const operands = line.substring(opcodeDelimiter + 1).split(',').map(operand => operand.trim());
-
-        return [
-            this._parseOpcode(line.substring(0, opcodeDelimiter), operands),
-            this._parseOperand(operands[0]),
-            this._parseOperand(operands[1]),
-            new Byte(0x00),
-        ];
-    }
-
-    /**
-     * @param {string} opcode
-     * @param {[string, string]}operands
-     * @returns {Byte}
-     * @private
-     */
-    _parseOpcode(opcode, operands) {
+        const opcode = line.substring(0, opcodeDelimiter);
+        const operands = line.substring(opcodeDelimiter + 1);
         switch (opcode) {
             case 'mov':
-                if (Number.isInteger(parseInt(operands[1]))) {
-                    return Mnemonics.movi;
-                }
-
-                return Mnemonics.mov;
+                return this._parseMov(operands.split(',').map(operand => operand.trim()));
         }
+
+        return [];
     }
 
     /**
-     * @param {string} operand
-     * @returns {Byte}
+     * @param {[String, String]} operands
+     * @return {Byte[]}
      * @private
      */
-    _parseOperand(operand) {
-        if (Mnemonics[operand]) {
-            return Mnemonics[operand];
+    _parseMov(operands) {
+        if (Number.isInteger(parseInt(operands[1]))) {
+            return [Mnemonics.movi, this._registers[operands[0]], new Byte(parseInt(operands[1])), new Byte(0x00)];
         }
 
-        if (this._registers[operand]) {
-            return this._registers[operand];
+        if (['eax', 'ebx', 'ecx', 'edx'].includes(operands[1])) {
+            return [Mnemonics.mov, this._registers[operands[0]], this._registers[operands[1]], new Byte(0x00)];
         }
 
-        return new Byte(parseInt(operand));
+        const variable = this._variables.find(variable => variable.name === operands[1]);
+        let opcode = Mnemonics.movmb;
+        if (variable.bytes.length === 2) {
+            opcode = Mnemonics.movmw;
+        }
+        const address = this._variables.findIndex(variable => variable.name === operands[1]);
+        return [opcode, this._registers[operands[0]], ...(new Word(address).toBytes())];
     }
 };

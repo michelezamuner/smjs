@@ -113,4 +113,28 @@ module.exports = class DataType {
 
         return value;
     }
+
+    /**
+     * @param {number} size
+     * @returns {number[]}
+     * @private
+     */
+    _toBytes(size) {
+        const values = [];
+        let value = this._value;
+        while (true) {
+            if (Math.floor(value / 0x100) === 0) {
+                values.push(value);
+                break;
+            }
+            let remainder = value % 0x100;
+            values.push(remainder);
+            value = (value - remainder) / 0x100;
+        }
+        const bytes = [];
+        for (let i = 0; i < size; i++) {
+            bytes[i] = values[i] ? values[i] : 0x00;
+        }
+        return bytes.reverse();
+    }
 };

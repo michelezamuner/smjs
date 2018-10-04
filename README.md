@@ -12,6 +12,17 @@ Once a specific architecture has been configured to be used with the processor, 
 - *BASM: (Basic Assembler for Sloth Machine)*: menmonics can group different machine instructions, variables supported, etc.
 
 
+## Architectures
+
+### SMA
+
+Instructions:
+- `mov reg reg` copy value from right register to left register
+- `movi reg imm` copy right immediate value to left register
+- `movmb reg mem` copy byte found at right memory address to left register
+- `movmw reg mem` copy word found at right memory address to left register
+
+
 ## How to run
 
 - `docker build -t smjs .`

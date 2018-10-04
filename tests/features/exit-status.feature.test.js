@@ -11,30 +11,34 @@ const expect = require('./expect');
  * Scenario: program terminates with specific exit status
  *   Given the program is:
  *     """
- *     mov eax, 1   ; system call 1: exit
- *     mov ebx, 5   ; exit status
- *     mov ecx, 3   ; shouldn't affect the system call
- *     syscall      ; execute system call
+ *     .data
+ *     .text
+ *         mov eax, 1   ; system call 1: exit
+ *         mov ebx, 5   ; exit status
+ *         mov ecx, 3   ; shouldn't affect the system call
+ *         syscall      ; execute system call
  *
- *     ; the following lines shouldn't be executed
- *     mov eax, 1
- *     mov eax, 4
- *     syscall
+ *         ; the following lines shouldn't be executed
+ *         mov eax, 1
+ *         mov eax, 4
+ *         syscall
  *     """
  *   When I run the program
  *   Then the program terminates with exit status 5
  */
 test('program terminates with specific exit status', () => {
     return expect.exit(`
-        mov eax, 1  ; system call 1: exit
-        mov ebx, 5  ; exit status
-        mov ecx, 3  ; shouldn't affect the system call
-        syscall     ; execute system call
+        .data
+        .text
+            mov eax, 1  ; system call 1: exit
+            mov ebx, 5  ; exit status
+            mov ecx, 3  ; shouldn't affect the system call
+            syscall     ; execute system call
         
-        ; the following lines shouldn't be executed
-        mov eax, 1
-        mov eax, 4
-        syscall
+            ; the following lines shouldn't be executed
+            mov eax, 1
+            mov eax, 4
+            syscall
     `, 5)
 });
 
@@ -42,8 +46,10 @@ test('program terminates with specific exit status', () => {
  * Scenario: program is not terminated by an exit instruction
  *   Given the program is:
  *     """
- *     mov eax, 5
- *     mov ebx, eax
+ *     .data
+ *     .text
+ *         mov eax, 5
+ *         mov ebx, eax
  *     """
  *   When I run the program
  *   Then the program terminates with exit status 1
@@ -51,7 +57,9 @@ test('program terminates with specific exit status', () => {
  */
 test('terminate program with specific exit status', () => {
     return expect.exit(`
-        mov eax, 5
-        mov ebx, eax
+        .data
+        .text
+            mov eax, 5
+            mov ebx, eax
     `, 1, '', 'Missing exit instruction');
 });
