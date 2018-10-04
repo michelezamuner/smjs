@@ -21,6 +21,7 @@ Instructions:
 - `movi reg imm` copy right immediate value to left register
 - `movmb reg mem` copy byte found at right memory address to left register
 - `movmw reg mem` copy word found at right memory address to left register
+- `movmrb mem reg` copy value from right register to left memory address
 
 
 ## How to run
@@ -33,5 +34,5 @@ Instructions:
 
 ## TODO
 
-- remove generic `Registers/Registers` and only use the implementation ones
+- extended registers can be used to take only one byte of the usual word that is contained in registers, for example if I store a word in eax, I can get the least significant byte referring to ax
 - create an authoritative source of definitions within an interpreter implementation, so that all of its modules can use it instead of duplicating decisions in code

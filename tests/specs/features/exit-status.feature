@@ -6,11 +6,11 @@ Feature: Exit status
   Scenario: program terminates with specific exit status
     Given the program (pseudocode) is:
       """
-      eax := 1
-      ebx := 5
-      exc := 3
-      syscall
-      eax := 1
+      eax := 1        ; assign 1 to eax
+      ebx := 5        ; assign 5 to ebx
+      ecx := 3        ; assign 3 to ecx
+      syscall         ; exit with status 5
+      eax := 1        ; following instructions aren't interpreted
       ebx := 4
       syscall
       """
@@ -20,8 +20,8 @@ Feature: Exit status
   Scenario: program is not terminated by an exit instruction
     Given the program (pseudocode) is:
       """
-      eax := 5
-      ebx := eax
+      eax := 5        ; assign 5 to eax
+      ebx := eax      ; assign the value of eax to ebx
       """
     When I run the program
     Then the program terminates with exit status 1
