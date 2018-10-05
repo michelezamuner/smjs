@@ -37,7 +37,7 @@ test('provides instructions size', () => {
     expect(interpreter.getInstructionSize()).toEqual(new Byte(4));
 });
 
-test('implements move with register addressing', () => {
+test('implements move register to register', () => {
     const value = random(Word);
     const instruction = [Mnemonics.mov, Mnemonics.eax, Mnemonics.ebx, new Byte(0x00)];
 
@@ -53,7 +53,7 @@ test('implements move with register addressing', () => {
     expect(registers.set.mock.calls[0][1]).toEqual(new Word(value));
 });
 
-test('implements move with immediate addressing', () => {
+test('implements move immediate to register', () => {
     const value = random(Byte);
     const instruction = [Mnemonics.movi, Mnemonics.eax, new Byte(value), new Byte(0x00)];
 
@@ -65,7 +65,21 @@ test('implements move with immediate addressing', () => {
     expect(registers.set.mock.calls[0][1]).toEqual(new Word(value));
 });
 
-test('implements move byte with direct memory addressing from memory into register', () => {
+test('implements move immediate to memory', () => {
+    const value = new Byte(random(Byte));
+    const addrLeft = new Byte(random(Byte));
+    const addrRight = new Byte(random(Byte));
+    const instruction = [Mnemonics.movim, addrLeft, addrRight, value];
+
+    interpreter.exec(instruction);
+
+    expect(memory.write.mock.calls[0][0]).toBeInstanceOf(Word);
+    expect(memory.write.mock.calls[0][0]).toEqual(new Word(addrLeft, addrRight));
+    expect(memory.write.mock.calls[0][1]).toBeInstanceOf(Byte);
+    expect(memory.write.mock.calls[0][1]).toEqual(value);
+});
+
+test('implements move memory byte to register', () => {
     const addrLeft = random(Byte);
     const addrRight = random(Byte);
     const value = random(Byte);
@@ -87,7 +101,7 @@ test('implements move byte with direct memory addressing from memory into regist
     expect(registers.set.mock.calls[0][1]).toEqual(new Word(new Byte(0x00), new Byte(value)));
 });
 
-test('implements move word with direct memory addressing from memory into register', () => {
+test('implements move memory word to register', () => {
     const addrLeft = new Byte(random(Byte));
     const addrRight = new Byte(random(Byte));
     const valLeft = new Byte(random(Byte));
@@ -110,12 +124,12 @@ test('implements move word with direct memory addressing from memory into regist
     expect(registers.set.mock.calls[0][1]).toEqual(new Word(valLeft, valRight));
 });
 
-test('implements move byte with direct memory addressing from register into memory', () => {
+test('implements move register byte to memory', () => {
     const valueLeft = new Byte(random(Byte));
     const valueRight = new Byte(random(Byte));
     const addrLeft = new Byte(random(Byte));
     const addrRight = new Byte(random(Byte));
-    const instruction = [Mnemonics.movmr, addrLeft, addrRight, Mnemonics.eax];
+    const instruction = [Mnemonics.movrm, addrLeft, addrRight, Mnemonics.eax];
 
     registers.get = register => register.equals(Mnemonics.eax) ? new Word(valueLeft, valueRight) : new Byte(0x00);
 
@@ -129,20 +143,6 @@ test('implements move byte with direct memory addressing from register into memo
     expect(memory.write.mock.calls[1][0]).toEqual((new Word(addrLeft, addrRight)).add(new Byte(0x01)));
     expect(memory.write.mock.calls[1][1]).toBeInstanceOf(Byte);
     expect(memory.write.mock.calls[1][1]).toEqual(valueRight);
-});
-
-test('implements move to memory with immediate addressing', () => {
-    const value = new Byte(random(Byte));
-    const addrLeft = new Byte(random(Byte));
-    const addrRight = new Byte(random(Byte));
-    const instruction = [Mnemonics.movmi, addrLeft, addrRight, value];
-
-    interpreter.exec(instruction);
-
-    expect(memory.write.mock.calls[0][0]).toBeInstanceOf(Word);
-    expect(memory.write.mock.calls[0][0]).toEqual(new Word(addrLeft, addrRight));
-    expect(memory.write.mock.calls[0][1]).toBeInstanceOf(Byte);
-    expect(memory.write.mock.calls[0][1]).toEqual(value);
 });
 
 test('implements syscall exit', () => {

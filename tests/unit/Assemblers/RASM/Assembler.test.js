@@ -13,7 +13,7 @@ beforeEach(() => {
     assembler = new Assembler;
 });
 
-test('supports move with register addressing', () => {
+test('supports move register to register', () => {
     const code = `
         mov eax, ebx
     `;
@@ -23,7 +23,7 @@ test('supports move with register addressing', () => {
     expect(bytes).toEqual([Mnemonics.mov, Mnemonics.eax, Mnemonics.ebx, new Byte(0x00)]);
 });
 
-test('supports move with immediate addressing', () => {
+test('supports move immediate to register', () => {
     const code = `
         movi eax, 1
     `;
@@ -33,7 +33,22 @@ test('supports move with immediate addressing', () => {
     expect(bytes).toEqual([Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00)])
 });
 
-test('supports move with direct memory addressing from memory into register', () => {
+test('supports move immediate to memory', () => {
+    const byte = random(Byte);
+    const code = `
+        movim 0x08, 0x${byte.toString(16)}
+        movmb eax, 0x08
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toEqual([
+        Mnemonics.movim, new Byte(0x00), new Byte(0x08), new Byte(byte),
+        Mnemonics.movmb, Mnemonics.eax, new Byte(0x00), new Byte(0x08),
+    ]);
+});
+
+test('supports move memory to register', () => {
     const byte = random(Byte);
     const wordLeft = random(Byte);
     const wordRight = random(Byte);
@@ -52,11 +67,11 @@ test('supports move with direct memory addressing from memory into register', ()
     ]);
 });
 
-test('supports move with direct memory addressing from register into memory', () => {
+test('supports move register to memory', () => {
     const byte = random(Byte);
     const code = `
         movmb eax, 0x0C
-        movmr 0x0D, eax
+        movrm 0x0D, eax
         movmb ebx, 0x0D
         0x${byte.toString(16)}
     `;
@@ -65,24 +80,9 @@ test('supports move with direct memory addressing from register into memory', ()
 
     expect(bytes).toEqual([
         Mnemonics.movmb, Mnemonics.eax, new Byte(0x00), new Byte(0x0C),
-        Mnemonics.movmr, new Byte(0x00), new Byte(0x0D), Mnemonics.eax,
+        Mnemonics.movrm, new Byte(0x00), new Byte(0x0D), Mnemonics.eax,
         Mnemonics.movmb, Mnemonics.ebx, new Byte(0x00), new Byte(0x0D),
         new Byte(byte)
-    ]);
-});
-
-test('supports move to memory with immediate addressing', () => {
-    const byte = random(Byte);
-    const code = `
-        movmi 0x08, 0x${byte.toString(16)}
-        movmb eax, 0x08
-    `;
-
-    const bytes = assembler.assemble(code);
-
-    expect(bytes).toEqual([
-        Mnemonics.movmi, new Byte(0x00), new Byte(0x08), new Byte(byte),
-        Mnemonics.movmb, Mnemonics.eax, new Byte(0x00), new Byte(0x08),
     ]);
 });
 

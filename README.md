@@ -16,12 +16,17 @@ Once a specific architecture has been configured to be used with the processor, 
 
 ### SMA
 
-Instructions:
-- `mov reg reg` copy value from right register to left register
-- `movi reg imm` copy right immediate value to left register
-- `movmb reg mem` copy byte found at right memory address to left register
-- `movmw reg mem` copy word found at right memory address to left register
-- `movmrb mem reg` copy value from right register to left memory address
+Move instruction:
+| `mov eax, ebx`   | move register to register          | `mov`    |
+| `mov eax, 1`     | move immediate to register         | `movi`   |
+| `mov var, 1`     | move immediate to memory           | `movim`  |
+| `mov [eax], 1`   | move immediate to register pointer | `movip`  |
+| `mov [var], 1`   | move immediate to memory pointer   | `movipm` |
+| `mov eax, var`   | move memory to register            | `movm`   |
+| `mov eax, [ebx]` | move register pointer to register  | `movp`   |
+| `mov eax, [var]` | move memory pointer to register    | `movpm`  |
+| `mov var, ebx`   | move register to memory            | `movrm`  |
+| `mov [eax], ebx` | move register to register pointer  | `movrp`  |
 
 
 ## How to run

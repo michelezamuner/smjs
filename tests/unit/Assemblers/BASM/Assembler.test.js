@@ -13,7 +13,7 @@ beforeEach(() => {
     assembler = new Assembler;
 });
 
-test('supports move with register addressing', () => {
+test('supports move register to register', () => {
     const code = `
         .data
         .text
@@ -25,7 +25,7 @@ test('supports move with register addressing', () => {
     expect(bytes).toEqual([Mnemonics.mov, Mnemonics.eax, Mnemonics.ebx, new Byte(0x00)]);
 });
 
-test('supports move with immediate addressing', () => {
+test('supports move immediate to register', () => {
     const code = `
         .data
         .text
@@ -37,7 +37,7 @@ test('supports move with immediate addressing', () => {
     expect(bytes).toEqual([Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00)]);
 });
 
-test('supports move with direct memory addressing from memory into register', () => {
+test('supports move memory to register', () => {
     const byte = new Byte(random(Byte));
     const wordLeft = new Byte(random(Byte));
     const wordRight = new Byte(random(Byte));

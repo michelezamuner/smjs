@@ -45,14 +45,14 @@ module.exports = class extends InterpreterInterface {
             this._mov(byte2, byte3);
         } else if (byte1.equals(Mnemonics.movi)) {
             this._movi(byte2, byte3);
+        } else if (byte1.equals(Mnemonics.movim)) {
+            this._movim(new Word(byte2, byte3), byte4);
         } else if (byte1.equals(Mnemonics.movmb)) {
             this._movmb(byte2, new Word(byte3, byte4));
         } else if (byte1.equals(Mnemonics.movmw)) {
             this._movmw(byte2, new Word(byte3, byte4));
-        } else if (byte1.equals(Mnemonics.movmr)) {
-            this._movmr(new Word(byte2, byte3), byte4);
-        } else if (byte1.equals(Mnemonics.movmi)) {
-            this._movmi(new Word(byte2, byte3), byte4);
+        } else if (byte1.equals(Mnemonics.movrm)) {
+            this._movrm(new Word(byte2, byte3), byte4);
         } else if (byte1.equals(Mnemonics.syscall)) {
             this._syscall();
         }
@@ -79,6 +79,15 @@ module.exports = class extends InterpreterInterface {
     }
 
     /**
+     * @param {Word} address
+     * @param {Byte} value
+     * @private
+     */
+    _movim(address, value) {
+        this._memory.write(address, value);
+    }
+
+    /**
      * @param {Byte} register
      * @param {Word} address
      * @private
@@ -98,19 +107,10 @@ module.exports = class extends InterpreterInterface {
 
     /**
      * @param {Word} address
-     * @param {Byte} value
-     * @private
-     */
-    _movmi(address, value) {
-        this._memory.write(address, value);
-    }
-
-    /**
-     * @param {Word} address
      * @param {Byte} register
      * @private
      */
-    _movmr(address, register) {
+    _movrm(address, register) {
         const bytes = this._registers.get(register).toBytes();
         this._memory.write(address, bytes[0]);
         this._memory.write(address.add(new Byte(0x01)), bytes[1]);
