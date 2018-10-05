@@ -40,8 +40,8 @@ beforeEach(() => {
     memory.getMax = () => new Word(0xFFFF);
     memory.readSet = jest.fn((address, size) => {
         const bytes = [];
-        for (let i = 0; i < size.toInt(); i++) {
-            bytes.push(new Byte(address.toInt() + i));
+        for (let i = 0; i < size.uint(); i++) {
+            bytes.push(new Byte(address.uint() + i));
         }
         return bytes;
     });
@@ -52,7 +52,7 @@ beforeEach(() => {
 test('executes the given instructions in sequence and exits with exit context', () => {
     const value = random(Byte);
 
-    interpreter.exec = jest.fn(() => registers.getIp().equals(new Word(0x04))
+    interpreter.exec = jest.fn(() => registers.getIp().eq(new Word(0x04))
         ? new Exit(true, new Word(value))
         : new Exit
     );

@@ -46,6 +46,6 @@ module.exports = class Double extends DataType {
             throw 'Double must be constructed from one value or four bytes';
         }
 
-        return (byte1.toInt() * 0x1000000) + (byte2.toInt() * 0x10000) + (byte3.toInt() * 0x100) + byte4.toInt();
+        return (byte1.uint() * 0x1000000) + (byte2.uint() * 0x10000) + (byte3.uint() * 0x100) + byte4.uint();
     }
 };

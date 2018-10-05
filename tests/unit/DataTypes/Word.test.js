@@ -14,7 +14,7 @@ test('implements max', () => {
 
 test('can be constructed from two bytes', () => {
     const w = new Word(new Byte(0x01), new Byte(0x02));
-    expect(w.equals(new Word(0x0102))).toBe(true);
+    expect(w.eq(new Word(0x0102))).toBe(true);
 });
 
 test('if constructing with one argument, it must be integer or a word', () => {

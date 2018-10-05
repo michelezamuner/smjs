@@ -25,21 +25,21 @@ module.exports = class DataType {
      * @param {DataType} dataType
      * @returns {boolean}
      */
-    equals(dataType) {
+    eq(dataType) {
         return this._value === dataType._value;
     }
 
     /**
      * @returns {number}
      */
-    toInt() {
+    uint() {
         return this._value;
     }
 
     /**
      * @returns {number}
      */
-    toSignedInt() {
+    int() {
         return this._value <= Math.floor(this.constructor.MAX / 2)
             ? this._value
             : this._value - this.constructor.MAX - 1;

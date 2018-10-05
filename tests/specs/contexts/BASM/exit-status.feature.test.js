@@ -4,12 +4,12 @@ test('program terminates with specific exit status', () => {
     return expect.exit(`
         .data
         .text
-            mov eax, 1
-            mov ebx, 5
-            mov ecx, 3
+            mov al, 1
+            mov bl, 5
+            mov cl, 3
             syscall
-            mov eax, 1
-            mov ebx, 4
+            mov al, 1
+            mov bl, 4
             syscall
     `, 5)
 });
@@ -18,7 +18,7 @@ test('terminate program with specific exit status', () => {
     return expect.exit(`
         .data
         .text
-            mov eax, 5
-            mov ebx, eax
+            mov al, 5
+            mov bl, al
     `, 1, '', 'Missing exit instruction');
 });

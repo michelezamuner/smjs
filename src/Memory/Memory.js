@@ -26,15 +26,15 @@ module.exports = class Memory extends MemoryInterface {
      * @inheritDoc
      */
     read(address) {
-        if (address.toInt() > this._max.toInt()) {
-            throw `Address ${address.toInt()} exceeds memory max (${this._max.toInt()})`;
+        if (address.gt(this._max)) {
+            throw `Address ${address.uint()} exceeds memory max (${this._max.uint()})`;
         }
 
-        if (!(address.toInt() in this._memory)) {
+        if (!(address.uint() in this._memory)) {
             return new Byte(0x00);
         }
 
-        return new Byte(this._memory[address.toInt()]);
+        return new Byte(this._memory[address.uint()]);
     }
 
     /**
@@ -42,7 +42,7 @@ module.exports = class Memory extends MemoryInterface {
      */
     readSet(address, size) {
         const bytes = [];
-        for (let i = 0; i < size.toInt(); i++) {
+        for (let i = 0; i < size.uint(); i++) {
             bytes.push(this.read(address.add(new size.constructor(i))));
         }
 
@@ -57,10 +57,10 @@ module.exports = class Memory extends MemoryInterface {
             throw 'Only single bytes can be written to memory';
         }
 
-        if (address.toInt() > this._max.toInt()) {
-            throw `Address ${address.toInt()} exceeds memory max (${this._max.toInt()})`;
+        if (address.gt(this._max)) {
+            throw `Address ${address.uint()} exceeds memory max (${this._max.uint()})`;
         }
 
-        this._memory[address.toInt()] = value.toInt();
+        this._memory[address.uint()] = value.uint();
     }
 };

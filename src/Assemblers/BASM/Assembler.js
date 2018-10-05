@@ -114,7 +114,7 @@ module.exports = class Assembler {
     _updateAddressesInInstructions(object) {
         const textSize = object.length;
         for (let i = 0; i < textSize; i += 4) {
-            if (!object[i].equals(Mnemonics.movmb) && !object[i].equals(Mnemonics.movmw)) {
+            if (!object[i].eq(Mnemonics.movmb) && !object[i].eq(Mnemonics.movmw)) {
                 continue;
             }
 
@@ -174,7 +174,7 @@ module.exports = class Assembler {
             return [Mnemonics.movi, Mnemonics[operands[0]], new Byte(parseInt(operands[1])), new Byte(0x00)];
         }
 
-        if (['eax', 'ebx', 'ecx', 'edx'].includes(operands[1])) {
+        if (Mnemonics[operands[1]] !== undefined) {
             return [Mnemonics.mov, Mnemonics[operands[0]], Mnemonics[operands[1]], new Byte(0x00)];
         }
 

@@ -6,10 +6,10 @@ Feature: Instruction mov
   Scenario: move register to register
     Given the program (pseudocode) is:
         """
-        eax := 1      ; assign 1 to eax
-        exc := 4      ; assign 4 to ecx
-        ebx := ecx    ; assign ecx to ebx
-        syscall       ; exit with status 4
+        al := 1      ; assign 1 to al
+        cl := 4      ; assign 4 to cl
+        bl := cl     ; assign cl to bl
+        syscall      ; exit with status 4
         """
     When I run the program
     Then the program terminates with exit status 4
@@ -17,9 +17,9 @@ Feature: Instruction mov
   Scenario: move immediate to register
     Given the program (pseudocode) is:
       """
-      eax := 1      ; assign 1 to eax
-      ebx := 5      ; assign 5 to ebx
-      syscall       ; exit with status 5
+      al := 1      ; assign 1 to al
+      bl := 5      ; assign 5 to bl
+      syscall      ; exit with status 5
       """
     When I run the program
     Then the program terminates with exit status 5
@@ -28,9 +28,9 @@ Feature: Instruction mov
     Given the program (pseudocode) is:
         """
         status :=         ; define 'status' without initializing it
-        eax := 1          ; assign 1 to eax
+        al := 1           ; assign 1 to al
         status := 0x54    ; assign 0x54 to 'status'
-        ebx := status     ; assign the value of 'status' to ebx
+        bl := status      ; assign the value of 'status' to bl
         syscall           ; exit with status 0x54
         """
     When I run the program
@@ -41,8 +41,8 @@ Feature: Instruction mov
       """
       exit := 1         ; assign 1 to variable 'exit'
       status := 0xA2    ; assign 0xA2 to variable 'status'
-      eax := exit       ; assign value of variable 'exit' to eax
-      ebx := status     ; assign value of variable 'status' to ebx
+      al := exit        ; assign value of variable 'exit' to al
+      bl := status      ; assign value of variable 'status' to bl
       syscall           ; exit with status 0xA2
       """
     When I run the program
@@ -52,10 +52,10 @@ Feature: Instruction mov
     Given the program (pseudocode) is:
       """
       status :=         ; define 'status' without initializing it
-      eax := 1          ; assign 1 to eax
-      ecx := 0xFE       ; assign 0xFE to ecx
-      status := ecx     ; assign the value of ecx to 'status'
-      ebx := status     ; assign the value of 'status' to ebx
+      al := 1           ; assign 1 to al
+      cl := 0xFE        ; assign 0xFE to cl
+      status := cl      ; assign the value of cl to 'status'
+      bl := status      ; assign the value of 'status' to bl
       syscall           ; exit with status 0xFE
       """
     When I run the program

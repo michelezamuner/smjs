@@ -41,19 +41,19 @@ module.exports = class extends InterpreterInterface {
      * @inheritDoc
      */
     exec([byte1, byte2, byte3, byte4]) {
-        if (byte1.equals(Mnemonics.mov)) {
+        if (byte1.eq(Mnemonics.mov)) {
             this._mov(byte2, byte3);
-        } else if (byte1.equals(Mnemonics.movi)) {
+        } else if (byte1.eq(Mnemonics.movi)) {
             this._movi(byte2, byte3);
-        } else if (byte1.equals(Mnemonics.movim)) {
+        } else if (byte1.eq(Mnemonics.movim)) {
             this._movim(new Word(byte2, byte3), byte4);
-        } else if (byte1.equals(Mnemonics.movmb)) {
+        } else if (byte1.eq(Mnemonics.movmb)) {
             this._movmb(byte2, new Word(byte3, byte4));
-        } else if (byte1.equals(Mnemonics.movmw)) {
+        } else if (byte1.eq(Mnemonics.movmw)) {
             this._movmw(byte2, new Word(byte3, byte4));
-        } else if (byte1.equals(Mnemonics.movrm)) {
+        } else if (byte1.eq(Mnemonics.movrm)) {
             this._movrm(new Word(byte2, byte3), byte4);
-        } else if (byte1.equals(Mnemonics.syscall)) {
+        } else if (byte1.eq(Mnemonics.syscall)) {
             this._syscall();
         }
 
@@ -75,7 +75,7 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _movi(register, value) {
-        this._registers.set(register, new Word(new Byte(0x00), value));
+        this._registers.set(register, value);
     }
 
     /**
@@ -93,7 +93,7 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _movmb(register, address) {
-        this._registers.set(register, new Word(new Byte(0x00), this._memory.read(address)));
+        this._registers.set(register, this._memory.read(address));
     }
 
     /**
@@ -111,7 +111,14 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _movrm(address, register) {
-        const bytes = this._registers.get(register).toBytes();
+        const value = this._registers.get(register);
+        if (value.constructor === Byte) {
+            this._memory.write(address, value);
+
+            return;
+        }
+
+        const bytes = value.toBytes();
         this._memory.write(address, bytes[0]);
         this._memory.write(address.add(new Byte(0x01)), bytes[1]);
     }
@@ -120,9 +127,9 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _syscall() {
-        const eax = this._registers.get(Mnemonics.eax);
-        if (eax.equals(this.constructor.SYS_EXIT)) {
-            this._exit = new Exit(true, this._registers.get(Mnemonics.ebx));
+        const call = this._registers.get(Mnemonics.al);
+        if (call.eq(this.constructor.SYS_EXIT)) {
+            this._exit = new Exit(true, this._registers.get(Mnemonics.bl));
         }
     }
 };

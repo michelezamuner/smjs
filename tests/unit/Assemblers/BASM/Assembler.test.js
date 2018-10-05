@@ -29,12 +29,12 @@ test('supports move immediate to register', () => {
     const code = `
         .data
         .text
-            mov eax, 1
+            mov al, 1
     `;
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00)]);
+    expect(bytes).toEqual([Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00)]);
 });
 
 test('supports move memory to register', () => {
@@ -44,18 +44,18 @@ test('supports move memory to register', () => {
     const word = new Word(wordLeft, wordRight);
     const code = `
         .data
-            value1 db 0x${byte.toInt().toString(16)}
-            value2 dw 0x${word.toInt().toString(16)}
+            value1 db 0x${byte.uint().toString(16)}
+            value2 dw 0x${word.uint().toString(16)}
         .text
-            mov eax, value1
-            mov ebx, value2
+            mov ah, value1
+            mov bx, value2
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movmb, Mnemonics.eax, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movmw, Mnemonics.ebx, new Byte(0x00), new Byte(0x09),
+        Mnemonics.movmb, Mnemonics.ah, new Byte(0x00), new Byte(0x08),
+        Mnemonics.movmw, Mnemonics.bx, new Byte(0x00), new Byte(0x09),
         byte, wordLeft, wordRight
     ]);
 });
@@ -66,16 +66,16 @@ test('supports syscall', () => {
         .data
             status db 0x${byte.toString(16)}
         .text
-            mov eax, 1
-            mov ebx, status
+            mov al, 1
+            mov bl, status
             syscall
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00),
-        Mnemonics.movmb, Mnemonics.ebx, new Byte(0x00), new Byte(0x0C),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.movmb, Mnemonics.bl, new Byte(0x00), new Byte(0x0C),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
         new Byte(byte),
     ]);
@@ -86,13 +86,13 @@ test('supports multiple spaces between tokens', () => {
         .data
             value   db  0x01
         .text
-            mov     eax,    value
+            mov     al,    value
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movmb, Mnemonics.eax, new Byte(0x00), new Byte(0x04),
+        Mnemonics.movmb, Mnemonics.al, new Byte(0x00), new Byte(0x04),
         new Byte(0x01)
     ]);
 });
@@ -109,9 +109,9 @@ test('accepts empty lines', () => {
         
         .text
         
-            mov eax, 1
+            mov al, 1
         
-            mov ebx, eax
+            mov bl, al
         
             syscall
     `;
@@ -119,8 +119,8 @@ test('accepts empty lines', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00),
-        Mnemonics.mov, Mnemonics.ebx, Mnemonics.eax, new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });
@@ -129,9 +129,9 @@ test('accepts comment lines', () => {
     const code = `
         .data
         .text
-            mov eax, 1
+            mov al, 1
             ; comment line
-            mov ebx, eax
+            mov bl, al
             ; another comment line
             syscall
     `;
@@ -139,8 +139,8 @@ test('accepts comment lines', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00),
-        Mnemonics.mov, Mnemonics.ebx, Mnemonics.eax, new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });
@@ -149,16 +149,16 @@ test('accepts inline comments', () => {
     const code = `
         .data
         .text
-            mov eax, 1    ; inline comment
-            mov ebx, eax  ; another inline comment
+            mov al, 1    ; inline comment
+            mov bl, al  ; another inline comment
             syscall
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movi, Mnemonics.eax, new Byte(0x01), new Byte(0x00),
-        Mnemonics.mov, Mnemonics.ebx, Mnemonics.eax, new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });
