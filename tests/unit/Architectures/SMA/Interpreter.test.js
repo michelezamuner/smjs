@@ -131,6 +131,20 @@ test('implements move byte with direct memory addressing from register into memo
     expect(memory.write.mock.calls[1][1]).toEqual(valueRight);
 });
 
+test('implements move to memory with immediate addressing', () => {
+    const value = new Byte(random(Byte));
+    const addrLeft = new Byte(random(Byte));
+    const addrRight = new Byte(random(Byte));
+    const instruction = [Mnemonics.movmi, addrLeft, addrRight, value];
+
+    interpreter.exec(instruction);
+
+    expect(memory.write.mock.calls[0][0]).toBeInstanceOf(Word);
+    expect(memory.write.mock.calls[0][0]).toEqual(new Word(addrLeft, addrRight));
+    expect(memory.write.mock.calls[0][1]).toBeInstanceOf(Byte);
+    expect(memory.write.mock.calls[0][1]).toEqual(value);
+});
+
 test('implements syscall exit', () => {
     let instruction = [Mnemonics.mov, Mnemonics.eax, Mnemonics.ebx, new Byte(0x00)];
     let exit = interpreter.exec(instruction);

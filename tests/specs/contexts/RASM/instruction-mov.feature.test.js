@@ -19,12 +19,12 @@ test('move with register addressing', () => {
 
 test('move with direct memory addressing', () => {
     return expect.exit(`
-        movmb eax, 0x14
+        movmi 0x18, 1
+        movmb eax, 0x18
         movi ecx, 0xFE
-        movmr 0x15, ecx
-        movmw ebx, 0x15
+        movmr 0x19, ecx
+        movmw ebx, 0x19
         syscall
-        0x01
     `, 254, '', '', 'rasm');
 });
 

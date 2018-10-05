@@ -71,6 +71,21 @@ test('supports move with direct memory addressing from register into memory', ()
     ]);
 });
 
+test('supports move with direct memory addressing from immediate value', () => {
+    const byte = random(Byte);
+    const code = `
+        movmi 0x08, 0x${byte.toString(16)}
+        movmb eax, 0x08
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toEqual([
+        Mnemonics.movmi, new Byte(0x00), new Byte(0x08), new Byte(byte),
+        Mnemonics.movmb, Mnemonics.eax, new Byte(0x00), new Byte(0x08),
+    ]);
+});
+
 test('supports syscall', () => {
     const word = random(Word);
     const code = `

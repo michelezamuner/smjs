@@ -51,6 +51,8 @@ module.exports = class extends InterpreterInterface {
             this._movmw(byte2, new Word(byte3, byte4));
         } else if (byte1.equals(Mnemonics.movmr)) {
             this._movmr(new Word(byte2, byte3), byte4);
+        } else if (byte1.equals(Mnemonics.movmi)) {
+            this._movmi(new Word(byte2, byte3), byte4);
         } else if (byte1.equals(Mnemonics.syscall)) {
             this._syscall();
         }
@@ -103,6 +105,15 @@ module.exports = class extends InterpreterInterface {
         const bytes = this._registers.get(register).toBytes();
         this._memory.write(address, bytes[0]);
         this._memory.write(address.add(new Byte(0x01)), bytes[1]);
+    }
+
+    /**
+     * @param {Word} address
+     * @param {Byte} value
+     * @private
+     */
+    _movmi(address, value) {
+        this._memory.write(address, value);
     }
 
     /**
