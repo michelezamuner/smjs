@@ -1,6 +1,6 @@
 const expect = require('../expect');
 
-test('move with immediate addressing', () => {
+test('move to register with immediate addressing', () => {
     return expect.exit(`
         .data
         .text
@@ -10,26 +10,26 @@ test('move with immediate addressing', () => {
     `, 5);
 });
 
-test('move with register addressing', () => {
+test('move to register with register addressing', () => {
     return expect.exit(`
         .data
         .text
             mov eax, 1
-            mov ecx, 0
+            mov ecx, 4
             mov ebx, ecx
             syscall
-    `, 0);
+    `, 4);
 });
 
-test('move with direct memory addressing', () => {
+test('move to register with direct memory addressing', () => {
     return expect.exit(`
         .data
             exit    db  0x01
-            status  db  0xFE
+            status  db  0xA2
         .text
             mov eax, exit
             mov ebx, status
             syscall
-    `, 254);
+    `, 0xA2);
 });
 

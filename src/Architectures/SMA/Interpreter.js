@@ -98,6 +98,15 @@ module.exports = class extends InterpreterInterface {
 
     /**
      * @param {Word} address
+     * @param {Byte} value
+     * @private
+     */
+    _movmi(address, value) {
+        this._memory.write(address, value);
+    }
+
+    /**
+     * @param {Word} address
      * @param {Byte} register
      * @private
      */
@@ -105,15 +114,6 @@ module.exports = class extends InterpreterInterface {
         const bytes = this._registers.get(register).toBytes();
         this._memory.write(address, bytes[0]);
         this._memory.write(address.add(new Byte(0x01)), bytes[1]);
-    }
-
-    /**
-     * @param {Word} address
-     * @param {Byte} value
-     * @private
-     */
-    _movmi(address, value) {
-        this._memory.write(address, value);
     }
 
     /**

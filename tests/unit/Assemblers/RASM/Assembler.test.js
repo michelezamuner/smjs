@@ -71,7 +71,7 @@ test('supports move with direct memory addressing from register into memory', ()
     ]);
 });
 
-test('supports move with direct memory addressing from immediate value', () => {
+test('supports move to memory with immediate addressing', () => {
     const byte = random(Byte);
     const code = `
         movmi 0x08, 0x${byte.toString(16)}

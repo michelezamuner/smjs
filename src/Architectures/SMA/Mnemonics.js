@@ -9,7 +9,7 @@ module.exports = {
     movi: new Byte(0x01),
     movmb: new Byte(0x02),
     movmw: new Byte(0x03),
-    movmr: new Byte(0x04),
-    movmi: new Byte(0x05),
+    movmi: new Byte(0x04),
+    movmr: new Byte(0x05),
     syscall: new Byte(0x10),
 };

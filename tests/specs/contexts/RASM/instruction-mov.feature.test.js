@@ -1,6 +1,6 @@
 const expect = require('../expect');
 
-test('move with immediate addressing', () => {
+test('move to register with immediate addressing', () => {
     return expect.exit(`
         movi eax, 1
         movi ebx, 5
@@ -8,23 +8,40 @@ test('move with immediate addressing', () => {
     `, 5, '', '', 'rasm');
 });
 
-test('move with register addressing', () => {
+test('move to register with register addressing', () => {
     return expect.exit(`
         movi eax, 1
-        movi ecx, 0
+        movi ecx, 4
         mov ebx, ecx
         syscall
-    `, 0, '', '', 'rasm');
+    `, 4, '', '', 'rasm');
 });
 
-test('move with direct memory addressing', () => {
+test('move to register with direct memory addressing', () => {
     return expect.exit(`
-        movmi 0x18, 1
-        movmb eax, 0x18
-        movi ecx, 0xFE
-        movmr 0x19, ecx
-        movmw ebx, 0x19
+        movmb eax, 0x0C
+        movmb ebx, 0x0D
         syscall
-    `, 254, '', '', 'rasm');
+        0x01 0xA2
+    `, 0xA2, '', '', 'rasm');
+});
+
+test('move to memory with immediate addressing', () => {
+    return expect.exit(`
+        movi eax, 1
+        movmi 0x10, 0x54
+        movmb ebx, 0x10
+        syscall
+    `, 0x54, '', '', 'rasm');
+});
+
+test('move to memory with direct memory addressing', () => {
+    return expect.exit(`
+        movi eax, 1
+        movi ecx, 0xFE
+        movmr 0x14, ecx
+        movmw ebx, 0x14
+        syscall
+    `, 0xFE, '', '', 'rasm');
 });
 
