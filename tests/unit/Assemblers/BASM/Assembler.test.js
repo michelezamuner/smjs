@@ -54,8 +54,8 @@ test('supports move memory to register', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movmb, Mnemonics.ah, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movmw, Mnemonics.bx, new Byte(0x00), new Byte(0x09),
+        Mnemonics.movm, Mnemonics.ah, new Byte(0x00), new Byte(0x08),
+        Mnemonics.movm, Mnemonics.bx, new Byte(0x00), new Byte(0x09),
         byte, wordLeft, wordRight
     ]);
 });
@@ -75,7 +75,7 @@ test('supports syscall', () => {
 
     expect(bytes).toEqual([
         Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
-        Mnemonics.movmb, Mnemonics.bl, new Byte(0x00), new Byte(0x0C),
+        Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0C),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
         new Byte(byte),
     ]);
@@ -92,7 +92,7 @@ test('supports multiple spaces between tokens', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movmb, Mnemonics.al, new Byte(0x00), new Byte(0x04),
+        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x04),
         new Byte(0x01)
     ]);
 });

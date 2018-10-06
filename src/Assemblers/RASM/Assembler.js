@@ -59,10 +59,8 @@ module.exports = class Assembler {
                 return [Mnemonics.movi, Mnemonics[operands[0]], new Byte(parseInt(operands[1])), new Byte(0x00)];
             case 'movim':
                 return [Mnemonics.movim, ...(new Word(parseInt(operands[0]))).toBytes(), new Byte(parseInt(operands[1]))];
-            case 'movmb':
-                return [Mnemonics.movmb, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).toBytes()];
-            case 'movmw':
-                return [Mnemonics.movmw, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).toBytes()];
+            case 'movm':
+                return [Mnemonics.movm, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).toBytes()];
             case 'movrm':
                 return [Mnemonics.movrm, ...(new Word(parseInt(operands[0]))).toBytes(), Mnemonics[operands[1]]];
         }

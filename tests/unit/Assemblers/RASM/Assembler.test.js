@@ -37,14 +37,14 @@ test('supports move immediate to memory', () => {
     const byte = random(Byte);
     const code = `
         movim 0x08, 0x${byte.toString(16)}
-        movmb al, 0x08
+        movm al, 0x08
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
         Mnemonics.movim, new Byte(0x00), new Byte(0x08), new Byte(byte),
-        Mnemonics.movmb, Mnemonics.al, new Byte(0x00), new Byte(0x08),
+        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
     ]);
 });
 
@@ -53,16 +53,16 @@ test('supports move memory to register', () => {
     const wordLeft = random(Byte);
     const wordRight = random(Byte);
     const code = `
-        movmb al, 0x08
-        movmw bx, 0x09
+        movm al, 0x08
+        movm bx, 0x09
         0x${byte.toString(16)}0x${wordLeft.toString(16)}0x${wordRight.toString(16)}
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movmb, Mnemonics.al, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movmw, Mnemonics.bx, new Byte(0x00), new Byte(0x09),
+        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
+        Mnemonics.movm, Mnemonics.bx, new Byte(0x00), new Byte(0x09),
         new Byte(byte), new Byte(wordLeft), new Byte(wordRight),
     ]);
 });
@@ -70,18 +70,18 @@ test('supports move memory to register', () => {
 test('supports move register to memory', () => {
     const byte = random(Byte);
     const code = `
-        movmb al, 0x0C
+        movm al, 0x0C
         movrm 0x0D, al
-        movmb bl, 0x0D
+        movm bl, 0x0D
         0x${byte.toString(16)}
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movmb, Mnemonics.al, new Byte(0x00), new Byte(0x0C),
+        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x0C),
         Mnemonics.movrm, new Byte(0x00), new Byte(0x0D), Mnemonics.al,
-        Mnemonics.movmb, Mnemonics.bl, new Byte(0x00), new Byte(0x0D),
+        Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0D),
         new Byte(byte)
     ]);
 });
@@ -90,7 +90,7 @@ test('supports syscall', () => {
     const value = random(Byte);
     const code = `
         movi al, 1
-        movmb bl, 0x0C
+        movm bl, 0x0C
         syscall
         0x${value.toString(16)}
     `;
@@ -99,7 +99,7 @@ test('supports syscall', () => {
 
     expect(bytes).toEqual([
         Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
-        Mnemonics.movmb, Mnemonics.bl, new Byte(0x00), new Byte(0x0C),
+        Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0C),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
         new Byte(value),
     ]);
@@ -107,14 +107,14 @@ test('supports syscall', () => {
 
 test('supports multiple spaces between tokens', () => {
     const code = `
-        movmw     ax,    0x04
+        movm     ax,    0x04
           0x02    0x04
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toEqual([
-        Mnemonics.movmw, Mnemonics.ax, new Byte(0x00), new Byte(0x04),
+        Mnemonics.movm, Mnemonics.ax, new Byte(0x00), new Byte(0x04),
         new Byte(0x02), new Byte(0x04)
     ]);
 });

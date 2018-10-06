@@ -54,6 +54,20 @@ test('implements move register to register', () => {
     expect(registers.set.mock.calls[0][1]).toEqual(new Double(value));
 });
 
+test('fails if size mismatch on move register to register', () => {
+    const combinations = [
+        ['al', 'bx'], ['al', 'ebx'], ['ah', 'bx'], ['ah', 'ebx'],
+        ['ax', 'bl'], ['ax', 'bh'], ['ax', 'ebx'], ['eax', 'bl'],
+        ['eax', 'bh'], ['eax', 'bx']
+    ];
+    for (let [first, second] of combinations) {
+        const instruction = [Mnemonics.mov, Mnemonics[first], Mnemonics[second], new Byte(0x00)];
+        const [target, source] = [Mnemonics[first].uint().toString(16), Mnemonics[second].uint().toString(16)];
+
+        expect(() => interpreter.exec(instruction)).toThrow(`Cannot move register 0x${source} to register 0x${target}`);
+    }
+});
+
 test('implements move immediate to register', () => {
     const value = random(Byte);
     const instruction = [Mnemonics.movi, Mnemonics.al, new Byte(value), new Byte(0x00)];
@@ -64,6 +78,16 @@ test('implements move immediate to register', () => {
     expect(registers.set.mock.calls[0][0]).toEqual(Mnemonics.al);
     expect(registers.set.mock.calls[0][1]).toBeInstanceOf(Byte);
     expect(registers.set.mock.calls[0][1]).toEqual(new Byte(value));
+});
+
+test('fails if size mismatch on move immediate to register', () => {
+    const value = new Byte(random(Byte));
+    const forbidden = ['ax', 'eax', 'bx', 'ebx', 'cx', 'ecx', 'dx', 'edx'];
+    for (let register of forbidden) {
+        const instruction = [Mnemonics.movi, Mnemonics[register], value, new Byte(0x00)];
+        expect(() => interpreter.exec(instruction))
+            .toThrow(`Cannot move immediate value to register 0x${Mnemonics[register].uint().toString(16)}`);
+    }
 });
 
 test('implements move immediate to memory', () => {
@@ -80,72 +104,48 @@ test('implements move immediate to memory', () => {
     expect(memory.write.mock.calls[0][1]).toEqual(value);
 });
 
-test('implements move memory byte to register', () => {
-    const addrLeft = new Byte(random(Byte));
-    const addrRight = new Byte(random(Byte));
-    const value = new Byte(random(Byte));
-    const instruction = [Mnemonics.movmb, Mnemonics.ah, addrLeft, addrRight];
+test('implements move memory to register', () => {
+    for (let type of [[Byte, Mnemonics.ah, 1], [Word, Mnemonics.ax, 2], [Double, Mnemonics.eax, 4]]) {
+        registers.set = jest.fn();
+        const mem = new Word(random(Word));
+        const value = new type[0](random(type[0]));
+        const valueb = type[0] === Byte ? [value] : value.toBytes();
+        const instruction = [Mnemonics.movm, type[1], ...mem.toBytes()];
 
-    memory.read = address => address.eq(new Word(addrLeft, addrRight)) ? value : new Byte(0x00);
-
-    interpreter.exec(instruction);
-
-    expect(registers.set.mock.calls[0][0]).toBeInstanceOf(Byte);
-    expect(registers.set.mock.calls[0][0]).toEqual(Mnemonics.ah);
-    expect(registers.set.mock.calls[0][1]).toBeInstanceOf(Byte);
-    expect(registers.set.mock.calls[0][1]).toEqual(value);
-});
-
-test('implements move memory word to register', () => {
-    const addrLeft = new Byte(random(Byte));
-    const addrRight = new Byte(random(Byte));
-    const valLeft = new Byte(random(Byte));
-    const valRight = new Byte(random(Byte));
-    const instruction = [Mnemonics.movmw, Mnemonics.ax, addrLeft, addrRight];
-
-    memory.readSet = (address, size) => {
-        if (address.eq(new Word(addrLeft, addrRight)) && size.eq(new Byte(0x02))) {
-            return [valLeft, valRight];
+        if (type[0] === Byte) {
+            memory.read = addr => addr.eq(mem) ? value : new Byte(0x00);
+        } else {
+            memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type[2])) ? valueb : [];
         }
 
-        return [];
-    };
+        interpreter.exec(instruction);
 
-    interpreter.exec(instruction);
-
-    expect(registers.set.mock.calls[0][0]).toBeInstanceOf(Byte);
-    expect(registers.set.mock.calls[0][0]).toEqual(Mnemonics.ax);
-    expect(registers.set.mock.calls[0][1]).toBeInstanceOf(Word);
-    expect(registers.set.mock.calls[0][1]).toEqual(new Word(valLeft, valRight));
+        expect(registers.set.mock.calls[0][0]).toBeInstanceOf(Byte);
+        expect(registers.set.mock.calls[0][0]).toEqual(type[1]);
+        expect(registers.set.mock.calls[0][1]).toBeInstanceOf(type[0]);
+        expect(registers.set.mock.calls[0][1]).toEqual(value);
+    }
 });
 
 test('implements move register to memory', () => {
-    const valueLeft = new Byte(random(Byte));
-    const valueRight = new Byte(random(Byte));
-    const addrLeft = new Byte(random(Byte));
-    const addrRight = new Byte(random(Byte));
-    let instruction = [Mnemonics.movrm, addrLeft, addrRight, Mnemonics.ax];
+    for (let type of [[Byte, Mnemonics.ah, 1], [Word, Mnemonics.ax, 2], [Double, Mnemonics.eax, 4]]) {
+        memory.write = jest.fn();
+        const mem = new Word(random(Word));
+        const value = new type[0](random(type[0]));
+        const valueb = type[0] === Byte ? [value] : value.toBytes();
+        const instruction = [Mnemonics.movrm, ...mem.toBytes(), type[1]];
 
-    registers.get = register => register.eq(Mnemonics.ax) ? new Word(valueLeft, valueRight) : new Word(0x00);
+        registers.get = reg => reg.eq(type[1]) ? value : new type[0](0x00);
 
-    interpreter.exec(instruction);
+        interpreter.exec(instruction);
 
-    expect(memory.write.mock.calls[0][0]).toBeInstanceOf(Word);
-    expect(memory.write.mock.calls[0][0]).toEqual(new Word(addrLeft, addrRight));
-    expect(memory.write.mock.calls[0][1]).toBeInstanceOf(Byte);
-    expect(memory.write.mock.calls[0][1]).toEqual(valueLeft);
-    expect(memory.write.mock.calls[1][0]).toBeInstanceOf(Word);
-    expect(memory.write.mock.calls[1][0]).toEqual((new Word(addrLeft, addrRight)).add(new Byte(0x01)));
-    expect(memory.write.mock.calls[1][1]).toBeInstanceOf(Byte);
-    expect(memory.write.mock.calls[1][1]).toEqual(valueRight);
-
-    instruction = [Mnemonics.movrm, addrLeft, addrRight, Mnemonics.al];
-
-    registers.get = register => register.eq(Mnemonics.al) ? valueLeft : new Byte(0x00);
-
-    interpreter.exec(instruction);
-
-    expect(memory.write).toBeCalledWith(new Word(addrLeft, addrRight), valueLeft);
+        for (let i = 0; i < type[2]; i++) {
+            expect(memory.write.mock.calls[i][0]).toBeInstanceOf(Word);
+            expect(memory.write.mock.calls[i][0]).toEqual(mem.add(new Byte(i)));
+            expect(memory.write.mock.calls[i][1]).toBeInstanceOf(Byte);
+            expect(memory.write.mock.calls[i][1]).toEqual(valueb[i]);
+        }
+    }
 });
 
 test('implements syscall exit', () => {

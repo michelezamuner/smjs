@@ -114,7 +114,7 @@ module.exports = class Assembler {
     _updateAddressesInInstructions(object) {
         const textSize = object.length;
         for (let i = 0; i < textSize; i += 4) {
-            if (!object[i].eq(Mnemonics.movmb) && !object[i].eq(Mnemonics.movmw)) {
+            if (!object[i].eq(Mnemonics.movm)) {
                 continue;
             }
 
@@ -178,8 +178,7 @@ module.exports = class Assembler {
             return [Mnemonics.mov, Mnemonics[operands[0]], Mnemonics[operands[1]], new Byte(0x00)];
         }
 
-        const variable = this._variables.find(variable => variable.name === operands[1]);
-        const opcode = variable.bytes.length === 2 ? Mnemonics.movmw : Mnemonics.movmb;
+        const opcode = Mnemonics.movm;
         const address = this._variables.findIndex(variable => variable.name === operands[1]);
         return [opcode, Mnemonics[operands[0]], ...(new Word(address).toBytes())];
     }

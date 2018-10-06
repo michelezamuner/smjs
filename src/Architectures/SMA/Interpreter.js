@@ -3,6 +3,7 @@ const Memory = require('../../ProcessorInterfaces/Memory');
 const Exit = require('../../ProcessorInterfaces/Exit');
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
+const Double = require('../../DataTypes/Double');
 const Mnemonics = require('./Mnemonics');
 const Registers = require('./Registers');
 
@@ -47,10 +48,8 @@ module.exports = class extends InterpreterInterface {
             this._movi(byte2, byte3);
         } else if (byte1.eq(Mnemonics.movim)) {
             this._movim(new Word(byte2, byte3), byte4);
-        } else if (byte1.eq(Mnemonics.movmb)) {
-            this._movmb(byte2, new Word(byte3, byte4));
-        } else if (byte1.eq(Mnemonics.movmw)) {
-            this._movmw(byte2, new Word(byte3, byte4));
+        } else if (byte1.eq(Mnemonics.movm)) {
+            this._movm(byte2, new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movrm)) {
             this._movrm(new Word(byte2, byte3), byte4);
         } else if (byte1.eq(Mnemonics.syscall)) {
@@ -66,6 +65,11 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _mov(first, second) {
+        const [dest, src] = [first.uint(), second.uint()];
+        const [dRight, sRight] = [dest & 3, src & 3];
+        if ((dRight > 1 || sRight > 1) && dRight !== sRight) {
+            throw `Cannot move register 0x${src.toString(16)} to register 0x${dest.toString(16)}`;
+        }
         this._registers.set(first, this._registers.get(second));
     }
 
@@ -75,6 +79,9 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _movi(register, value) {
+        if ((register.uint() & 3) > 1) {
+            throw `Cannot move immediate value to register 0x${register.uint().toString(16)}`;
+        }
         this._registers.set(register, value);
     }
 
@@ -92,17 +99,26 @@ module.exports = class extends InterpreterInterface {
      * @param {Word} address
      * @private
      */
-    _movmb(register, address) {
-        this._registers.set(register, this._memory.read(address));
-    }
+    _movm(register, address) {
+        const right = register.uint() & 3;
+        let size = null;
+        let type = null;
+        if (right <= 1) {
+            size = 1;
+            type = Byte;
+        } else if (right === 2) {
+            size = 2;
+            type = Word;
+        } else if (right === 3) {
+            size = 4;
+            type = Double;
+        }
 
-    /**
-     * @param {Byte} register
-     * @param {Word} address
-     * @private
-     */
-    _movmw(register, address) {
-        this._registers.set(register, new Word(...this._memory.readSet(address, new Byte(0x02))));
+        if (type === Byte) {
+            this._registers.set(register, this._memory.read(address));
+            return;
+        }
+        this._registers.set(register, new type(...this._memory.readSet(address, new Byte(size))));
     }
 
     /**
@@ -112,15 +128,22 @@ module.exports = class extends InterpreterInterface {
      */
     _movrm(address, register) {
         const value = this._registers.get(register);
-        if (value.constructor === Byte) {
-            this._memory.write(address, value);
-
-            return;
+        let bytes = null;
+        let size = 2;
+        if (value instanceof Byte) {
+            size = 1;
+            bytes = [value];
+        } else {
+            size = 4;
         }
 
-        const bytes = value.toBytes();
-        this._memory.write(address, bytes[0]);
-        this._memory.write(address.add(new Byte(0x01)), bytes[1]);
+        if (bytes === null) {
+            bytes = value.toBytes();
+        }
+
+        for (let i = 0; i < size; i++) {
+            this._memory.write(address.add(new Byte(i)), bytes[i]);
+        }
     }
 
     /**

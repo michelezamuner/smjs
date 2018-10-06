@@ -39,5 +39,5 @@ Move instruction:
 
 ## TODO
 
-- extended registers can be used to take only one byte of the usual word that is contained in registers, for example if I store a word in eax, I can get the least significant byte referring to ax
+- define a RegisterAddress type that can tell if the register is ex, x, h or l, incapsulating the logic to distinguish them, and reuse them inside Registers and Interpreter. Also add a "size" property to it, returning the number of bytes of the address, and a "type" property returning the data type stored
 - create an authoritative source of definitions within an interpreter implementation, so that all of its modules can use it instead of duplicating decisions in code
