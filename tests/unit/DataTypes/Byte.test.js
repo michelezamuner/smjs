@@ -7,6 +7,10 @@ test('implements data type', () => {
     expect(b instanceof DataType).toBe(true);
 });
 
-test('implements max', () => {
-    expect(Byte.MAX).toBe(0xFF);
+test('implements size', () => {
+    expect(Byte.SIZE).toBe(1);
+});
+
+test('implements unit type', () => {
+    expect(Byte.UNIT_TYPE).toBe(Byte);
 });

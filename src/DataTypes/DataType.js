@@ -4,9 +4,15 @@
 module.exports = class DataType {
     /**
      * @return {number}
-     * @abstract
      */
-    static get MAX() {
+    static get SIZE() {
+        throw 'Not implemented';
+    }
+
+    /**
+     * @return {function}
+     */
+    static get UNIT_TYPE() {
         throw 'Not implemented';
     }
 
@@ -40,9 +46,32 @@ module.exports = class DataType {
      * @returns {number}
      */
     int() {
-        return this._value <= Math.floor(this.constructor.MAX / 2)
+        const max = this._getMax();
+        return this._value <= Math.floor(max / 2)
             ? this._value
-            : this._value - this.constructor.MAX - 1;
+            : this._value - max - 1;
+    }
+
+    /**
+     * @returns {DataType[]}
+     */
+    expand() {
+        const values = [];
+        let value = this._value;
+        while (true) {
+            if (Math.floor(value / 0x100) === 0) {
+                values.push(value);
+                break;
+            }
+            let remainder = value % 0x100;
+            values.push(remainder);
+            value = (value - remainder) / 0x100;
+        }
+        const bytes = [];
+        for (let i = 0; i < this.constructor.SIZE; i++) {
+            bytes[i] = values[i] ? values[i] : 0x00;
+        }
+        return bytes.reverse().map(val => new this.constructor.UNIT_TYPE(val));
     }
 
     /**
@@ -107,7 +136,7 @@ module.exports = class DataType {
             throw `Data types must be constructed from positive integers, got '${value}' instead`;
         }
 
-        if (value > this.constructor.MAX) {
+        if (value > this._getMax()) {
             throw `Value out of bounds for ${this.constructor.name}: ${value}`;
         }
 
@@ -115,26 +144,10 @@ module.exports = class DataType {
     }
 
     /**
-     * @param {number} size
-     * @returns {number[]}
+     * @returns {number}
      * @private
      */
-    _toBytes(size) {
-        const values = [];
-        let value = this._value;
-        while (true) {
-            if (Math.floor(value / 0x100) === 0) {
-                values.push(value);
-                break;
-            }
-            let remainder = value % 0x100;
-            values.push(remainder);
-            value = (value - remainder) / 0x100;
-        }
-        const bytes = [];
-        for (let i = 0; i < size; i++) {
-            bytes[i] = values[i] ? values[i] : 0x00;
-        }
-        return bytes.reverse();
+    _getMax() {
+        return 2 ** (8 * this.constructor.SIZE) - 1;
     }
 };

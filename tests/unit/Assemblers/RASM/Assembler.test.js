@@ -1,7 +1,6 @@
 const Assembler = require('../../../../src/Assemblers/RASM/Assembler');
 const Mnemonics = require('../../../../src/Architectures/SMA/Mnemonics');
 const Byte = require('../../../../src/DataTypes/Byte');
-const Word = require('../../../../src/DataTypes/Word');
 const random = require('../../random');
 
 /**

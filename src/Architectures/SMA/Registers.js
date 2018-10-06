@@ -21,7 +21,7 @@ module.exports = class extends ControlRegisters {
         const left = (address.uint() & 12) >> 2;
         const right = address.uint() & 3;
         const regd = this._data[left];
-        const regb = regd.toBytes();
+        const regb = regd.expand();
         
         switch (right) {
             case 0: return new Byte(regb[3]);
@@ -38,16 +38,16 @@ module.exports = class extends ControlRegisters {
     set(address, value) {
         const left = (address.uint() & 12) >> 2;
         const right = address.uint() & 3;
-        const regb = this._data[left].toBytes();
+        const regb = this._data[left].expand();
 
-        switch (value.constructor.MAX) {
-            case Double.MAX:
+        switch (true) {
+            case value instanceof Double:
                 this._data[left] = value;
                 break;
-            case Word.MAX:
-                this._data[left] = new Double(regb[0], regb[1], ...value.toBytes());
+            case value instanceof Word:
+                this._data[left] = new Double(regb[0], regb[1], ...value.expand());
                 break;
-            case Byte.MAX:
+            case value instanceof Byte:
                 this._data[left] = right === 1
                     ? new Double(regb[0], regb[1], value, regb[3])
                     : new Double(regb[0], regb[1], regb[2], value);

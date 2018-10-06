@@ -5,8 +5,15 @@ module.exports = class Word extends DataType {
     /**
      * @inheritDoc
      */
-    static get MAX() {
-        return 0xFFFF;
+    static get SIZE() {
+        return 2;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    static get UNIT_TYPE() {
+        return Byte;
     }
 
     /**
@@ -15,13 +22,6 @@ module.exports = class Word extends DataType {
      */
     constructor(value, byte2 = undefined) {
         super(new.target._getValue(value, byte2));
-    }
-
-    /**
-     * @returns {Byte[]}
-     */
-    toBytes() {
-        return super._toBytes(2).map(value => new Byte(value));
     }
 
     /**

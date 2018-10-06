@@ -89,7 +89,7 @@ module.exports = class Assembler {
             if (parts[1] === 'db') {
                 variables.push({name: parts[0], bytes: [new Byte(parseInt(parts[2]))]});
             } else if (parts[1] === 'dw') {
-                variables.push({name: parts[0], bytes: (new Word(parseInt(parts[2]))).toBytes()});
+                variables.push({name: parts[0], bytes: (new Word(parseInt(parts[2]))).expand()});
             }
         }
 
@@ -120,7 +120,7 @@ module.exports = class Assembler {
 
             const relativeAddress = (new Word(object[i + 2], object[i + 3]));
             const absoluteAddress = relativeAddress.add(new Word(textSize));
-            const bytes = absoluteAddress.toBytes();
+            const bytes = absoluteAddress.expand();
             object[i + 2] = bytes[0];
             object[i + 3] = bytes[1];
         }
@@ -180,6 +180,6 @@ module.exports = class Assembler {
 
         const opcode = Mnemonics.movm;
         const address = this._variables.findIndex(variable => variable.name === operands[1]);
-        return [opcode, Mnemonics[operands[0]], ...(new Word(address).toBytes())];
+        return [opcode, Mnemonics[operands[0]], ...(new Word(address).expand())];
     }
 };

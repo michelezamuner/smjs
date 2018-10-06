@@ -8,8 +8,12 @@ test('implements data type', () => {
     expect(w instanceof DataType).toBe(true);
 });
 
-test('implements max', () => {
-    expect(Word.MAX).toBe(0xFFFF);
+test('implements size', () => {
+    expect(Word.SIZE).toBe(2);
+});
+
+test('implements unit type', () => {
+    expect(Word.UNIT_TYPE).toBe(Byte);
 });
 
 test('can be constructed from two bytes', () => {
@@ -26,11 +30,4 @@ test('if constructing with two arguments, they must be both Bytes', () => {
     expect(() => new Word(10, new Byte(10))).toThrow('Word must be constructed from one value or two bytes');
     expect(() => new Word(new Byte(10), 10)).toThrow('Word must be constructed from one value or two bytes');
     expect(() => new Word(10, 10)).toThrow('Word must be constructed from one value or two bytes');
-});
-
-test('can be cast to list of bytes', () => {
-    const left = new Byte(random(Byte));
-    const right = new Byte(random(Byte));
-
-    expect((new Word(left, right)).toBytes()).toEqual([left, right]);
 });

@@ -4,8 +4,15 @@ module.exports = class Byte extends DataType {
     /**
      * @inheritDoc
      */
-    static get MAX() {
-        return 0xFF;
+    static get SIZE() {
+        return 1;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    static get UNIT_TYPE() {
+        return Byte;
     }
 
     /**

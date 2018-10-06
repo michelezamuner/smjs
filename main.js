@@ -9,7 +9,7 @@ const MissingExitException = require('./src/Processor/MissingExitException');
 const Word = require('./src/DataTypes/Word');
 
 require('fs').readFile(process.argv[2], {encoding: 'utf-8'}, (err, data) => {
-    const memory = new Memory(new Word(Word.MAX));
+    const memory = new Memory(new Word(65535));
     const assembler = process.argv[3] === '--asm=rasm' ? new RASM : new BASM;
     const loader = new Loader(memory);
     const registers = new Registers();

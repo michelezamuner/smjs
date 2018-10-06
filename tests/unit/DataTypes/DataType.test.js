@@ -2,8 +2,8 @@ const DataType = require('../../../src/DataTypes/DataType');
 const random = require('../random');
 
 const Type = class extends DataType {
-    static get MAX() {
-        return 0xFFFF;
+    static get SIZE() {
+        return 2;
     }
     constructor(value) {
         super(value);
@@ -11,8 +11,8 @@ const Type = class extends DataType {
 };
 
 const OtherType = class extends DataType {
-    static get MAX() {
-        return 0xFF;
+    static get SIZE() {
+        return 2;
     }
     constructor(value) {
         super(value);
@@ -47,7 +47,7 @@ test('accepts only positive integers', () => {
 });
 
 test('fails if value out of bounds', () => {
-    const value = Type.MAX + 1;
+    const value = 2 ** (8 * Type.SIZE);
     expect(() => new Type(value)).toThrow(`Value out of bounds for Type: ${value}`);
 });
 
@@ -68,6 +68,30 @@ test('get integer value in twos complement', () => {
     [[5, 5], [16, 16], [32767, 32767], [32768, -32768], [32769, -32767], [65534, -2], [65535, -1]].forEach(([value, expected]) => {
         expect((new Type(value)).int()).toBe(expected);
     });
+});
+
+test('expand to list of basic data types', () => {
+    const size = 2 ** Math.floor(Math.random() * 3);
+    class TypeToExpand extends DataType {
+        static get SIZE() {
+            return size;
+        }
+        static get UNIT_TYPE() {
+            return TypeToExpand;
+        }
+        constructor(value) {
+            super(value);
+        }
+    }
+
+    const value = new TypeToExpand(random(TypeToExpand));
+    const units = value.expand();
+    let expected = 0;
+    let index = 0;
+    for (let unit of units.reverse()) {
+        expected += unit.uint() << (8 * index++);
+    }
+    expect(value.uint()).toBe(expected);
 });
 
 test('adds another data type', () => {

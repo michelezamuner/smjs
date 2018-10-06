@@ -5,8 +5,15 @@ module.exports = class Double extends DataType {
     /**
      * @inheritDoc
      */
-    static get MAX() {
-        return 0xFFFFFFFF;
+    static get SIZE() {
+        return 4;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    static get UNIT_TYPE() {
+        return Byte;
     }
 
     /**
@@ -17,13 +24,6 @@ module.exports = class Double extends DataType {
      */
     constructor(value, byte2 = undefined, byte3 = undefined, byte4 = undefined) {
         super(new.target._getValue(value, byte2, byte3, byte4));
-    }
-
-    /**
-     * @returns {Byte[]}
-     */
-    toBytes() {
-        return super._toBytes(4).map(value => new Byte(value));
     }
 
     /**

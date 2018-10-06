@@ -101,16 +101,12 @@ module.exports = class extends InterpreterInterface {
      */
     _movm(register, address) {
         const right = register.uint() & 3;
-        let size = null;
         let type = null;
         if (right <= 1) {
-            size = 1;
             type = Byte;
         } else if (right === 2) {
-            size = 2;
             type = Word;
         } else if (right === 3) {
-            size = 4;
             type = Double;
         }
 
@@ -118,7 +114,7 @@ module.exports = class extends InterpreterInterface {
             this._registers.set(register, this._memory.read(address));
             return;
         }
-        this._registers.set(register, new type(...this._memory.readSet(address, new Byte(size))));
+        this._registers.set(register, new type(...this._memory.readSet(address, new Byte(type.SIZE))));
     }
 
     /**
@@ -127,21 +123,9 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _movrm(address, register) {
-        const value = this._registers.get(register);
-        let bytes = null;
-        let size = 2;
-        if (value instanceof Byte) {
-            size = 1;
-            bytes = [value];
-        } else {
-            size = 4;
-        }
+        const bytes = this._registers.get(register).expand();
 
-        if (bytes === null) {
-            bytes = value.toBytes();
-        }
-
-        for (let i = 0; i < size; i++) {
+        for (let i = 0; i < bytes.length; i++) {
             this._memory.write(address.add(new Byte(i)), bytes[i]);
         }
     }

@@ -105,17 +105,16 @@ test('implements move immediate to memory', () => {
 });
 
 test('implements move memory to register', () => {
-    for (let type of [[Byte, Mnemonics.ah, 1], [Word, Mnemonics.ax, 2], [Double, Mnemonics.eax, 4]]) {
+    for (let type of [[Byte, Mnemonics.ah], [Word, Mnemonics.ax], [Double, Mnemonics.eax]]) {
         registers.set = jest.fn();
         const mem = new Word(random(Word));
         const value = new type[0](random(type[0]));
-        const valueb = type[0] === Byte ? [value] : value.toBytes();
-        const instruction = [Mnemonics.movm, type[1], ...mem.toBytes()];
+        const instruction = [Mnemonics.movm, type[1], ...mem.expand()];
 
         if (type[0] === Byte) {
             memory.read = addr => addr.eq(mem) ? value : new Byte(0x00);
         } else {
-            memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type[2])) ? valueb : [];
+            memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type[0].SIZE)) ? value.expand() : [];
         }
 
         interpreter.exec(instruction);
@@ -128,18 +127,18 @@ test('implements move memory to register', () => {
 });
 
 test('implements move register to memory', () => {
-    for (let type of [[Byte, Mnemonics.ah, 1], [Word, Mnemonics.ax, 2], [Double, Mnemonics.eax, 4]]) {
+    for (let type of [[Byte, Mnemonics.ah], [Word, Mnemonics.ax], [Double, Mnemonics.eax]]) {
         memory.write = jest.fn();
         const mem = new Word(random(Word));
         const value = new type[0](random(type[0]));
-        const valueb = type[0] === Byte ? [value] : value.toBytes();
-        const instruction = [Mnemonics.movrm, ...mem.toBytes(), type[1]];
+        const valueb = value.expand();
+        const instruction = [Mnemonics.movrm, ...mem.expand(), type[1]];
 
         registers.get = reg => reg.eq(type[1]) ? value : new type[0](0x00);
 
         interpreter.exec(instruction);
 
-        for (let i = 0; i < type[2]; i++) {
+        for (let i = 0; i < type[0].SIZE; i++) {
             expect(memory.write.mock.calls[i][0]).toBeInstanceOf(Word);
             expect(memory.write.mock.calls[i][0]).toEqual(mem.add(new Byte(i)));
             expect(memory.write.mock.calls[i][1]).toBeInstanceOf(Byte);

@@ -60,9 +60,11 @@ module.exports = class Processor {
      * @private
      */
     _canIncrementIp() {
-        const max = new (this._registers.getIp().constructor)(this._registers.getIp().constructor.MAX);
-        return max
-            .sub(this._registers.getIp())
-            .gtoe(this._interpreter.getInstructionSize());
+        try {
+            this._registers.getIp().add(this._interpreter.getInstructionSize());
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 };

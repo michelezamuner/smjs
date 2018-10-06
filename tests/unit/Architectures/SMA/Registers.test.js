@@ -22,7 +22,7 @@ test('Implements control registers', () => {
 test('Implements data registers', () => {
     for (let t of ['a', 'b', 'c', 'd']) {
         let ex = new Double(random(Double));
-        let exb = ex.toBytes();
+        let exb = ex.expand();
 
         registers.set(Mnemonics[`e${t}x`], ex);
 
@@ -36,7 +36,7 @@ test('Implements data registers', () => {
         expect(registers.get(Mnemonics[`${t}l`])).toEqual(new Byte(exb[3]));
 
         let x = new Word(random(Word));
-        let xb = x.toBytes();
+        let xb = x.expand();
 
         registers.set(Mnemonics[`${t}x`], x);
 
