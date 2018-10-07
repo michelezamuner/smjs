@@ -24,12 +24,12 @@ test('implements memory interface', () => {
 });
 
 test('has max', () => {
-    expect(memory.getMax()).toEqual(max);
+    expect(memory.getMax()).toStrictEqual(max);
 });
 
 test('reads zeros wherever nothing has been written', () => {
     for (const address of [0x0000, 0x1234, 0xFEDC]) {
-        expect(memory.read(new Word(address))).toEqual(new Byte(0x00));
+        expect(memory.read(new Word(address))).toStrictEqual(new Byte(0x00));
     }
 });
 
@@ -38,7 +38,7 @@ test('writes and reads', () => {
     const value = new Byte(random(Byte));
 
     memory.write(address, value);
-    expect(memory.read(address)).toEqual(value);
+    expect(memory.read(address)).toStrictEqual(value);
 });
 
 test('reads a set of bytes', () => {
@@ -50,7 +50,7 @@ test('reads a set of bytes', () => {
         memory.write(new Word(offset.uint() + parseInt(address)), bytes[address]);
     }
 
-    expect(memory.readSet(offset, new Byte(4))).toEqual(bytes);
+    expect(memory.readSet(offset, new Byte(4))).toStrictEqual(bytes);
 });
 
 test('fails if trying to read address outside of memory size', () => {

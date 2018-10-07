@@ -3,9 +3,9 @@ const Memory = require('../../ProcessorInterfaces/Memory');
 const Exit = require('../../ProcessorInterfaces/Exit');
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
-const Double = require('../../DataTypes/Double');
 const Mnemonics = require('./Mnemonics');
 const Registers = require('./Registers');
+const RegisterAddress = require('./RegisterAddress');
 
 /**
  * Interpreter of instructions
@@ -43,15 +43,15 @@ module.exports = class extends InterpreterInterface {
      */
     exec([byte1, byte2, byte3, byte4]) {
         if (byte1.eq(Mnemonics.mov)) {
-            this._mov(byte2, byte3);
+            this._mov(new RegisterAddress(byte2), new RegisterAddress(byte3));
         } else if (byte1.eq(Mnemonics.movi)) {
-            this._movi(byte2, byte3);
+            this._movi(new RegisterAddress(byte2), byte3);
         } else if (byte1.eq(Mnemonics.movim)) {
             this._movim(new Word(byte2, byte3), byte4);
         } else if (byte1.eq(Mnemonics.movm)) {
-            this._movm(byte2, new Word(byte3, byte4));
+            this._movm(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movrm)) {
-            this._movrm(new Word(byte2, byte3), byte4);
+            this._movrm(new Word(byte2, byte3), new RegisterAddress(byte4));
         } else if (byte1.eq(Mnemonics.syscall)) {
             this._syscall();
         }
@@ -60,27 +60,25 @@ module.exports = class extends InterpreterInterface {
     }
 
     /**
-     * @param {Byte} first
-     * @param {Byte} second
+     * @param {RegisterAddress} first
+     * @param {RegisterAddress} second
      * @private
      */
     _mov(first, second) {
-        const [dest, src] = [first.uint(), second.uint()];
-        const [dRight, sRight] = [dest & 3, src & 3];
-        if ((dRight > 1 || sRight > 1) && dRight !== sRight) {
-            throw `Cannot move register 0x${src.toString(16)} to register 0x${dest.toString(16)}`;
+        if (first.getType() !== second.getType()) {
+            throw `Cannot move register ${second.format()} to register ${first.format()}`;
         }
         this._registers.set(first, this._registers.get(second));
     }
 
     /**
-     * @param {Byte} register
+     * @param {RegisterAddress} register
      * @param {Byte} value
      * @private
      */
     _movi(register, value) {
-        if ((register.uint() & 3) > 1) {
-            throw `Cannot move immediate value to register 0x${register.uint().toString(16)}`;
+        if (register.getType() !== value.constructor) {
+            throw `Cannot move immediate value to register ${register.format()}`;
         }
         this._registers.set(register, value);
     }
@@ -95,31 +93,21 @@ module.exports = class extends InterpreterInterface {
     }
 
     /**
-     * @param {Byte} register
+     * @param {RegisterAddress} register
      * @param {Word} address
      * @private
      */
     _movm(register, address) {
-        const right = register.uint() & 3;
-        let type = null;
-        if (right <= 1) {
-            type = Byte;
-        } else if (right === 2) {
-            type = Word;
-        } else if (right === 3) {
-            type = Double;
-        }
-
-        if (type === Byte) {
-            this._registers.set(register, this._memory.read(address));
-            return;
-        }
-        this._registers.set(register, new type(...this._memory.readSet(address, new Byte(type.SIZE))));
+        const type = register.getType();
+        const value = type === Byte
+            ? this._memory.read(address)
+            : new type(...this._memory.readSet(address, new Byte(register.getType().SIZE)));
+        this._registers.set(register, value);
     }
 
     /**
      * @param {Word} address
-     * @param {Byte} register
+     * @param {RegisterAddress} register
      * @private
      */
     _movrm(address, register) {
@@ -134,9 +122,9 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _syscall() {
-        const call = this._registers.get(Mnemonics.al);
+        const call = this._registers.get(new RegisterAddress(Mnemonics.al));
         if (call.eq(this.constructor.SYS_EXIT)) {
-            this._exit = new Exit(true, this._registers.get(Mnemonics.bl));
+            this._exit = new Exit(true, this._registers.get(new RegisterAddress(Mnemonics.bl)));
         }
     }
 };

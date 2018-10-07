@@ -1,7 +1,9 @@
 const ControlRegisters = require('../../ProcessorInterfaces/Registers');
+const DataType = require('../../DataTypes/DataType');
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
 const Double = require('../../DataTypes/Double');
+const RegisterAddress = require('./RegisterAddress');
 
 /**
  * @implements ControlRegisters
@@ -14,45 +16,35 @@ module.exports = class extends ControlRegisters {
     }
 
     /**
-     * @param {Byte} address
+     * @param {RegisterAddress} address
      * @returns {DataType}
      */
     get(address) {
-        const left = (address.uint() & 12) >> 2;
-        const right = address.uint() & 3;
-        const regd = this._data[left];
-        const regb = regd.expand();
-        
-        switch (right) {
-            case 0: return new Byte(regb[3]);
-            case 1: return new Byte(regb[2]);
-            case 2: return new Word(regb[2], regb[3]);
-            case 3: return regd;
+        const value = this._data[address.getIndex()];
+        const bytes = value.expand();
+
+        if (address.isWhole()) {
+            return value;
         }
+
+        if (address.isHalf()) {
+            return new Word(bytes[2], bytes[3]);
+        }
+
+        if (address.isLeftq()) {
+            return bytes[2];
+        }
+
+        return bytes[3];
     }
 
     /**
-     * @param {Byte} address
+     * @param {RegisterAddress} address
      * @param {DataType} value
      */
     set(address, value) {
-        const left = (address.uint() & 12) >> 2;
-        const right = address.uint() & 3;
-        const regb = this._data[left].expand();
-
-        switch (true) {
-            case value instanceof Double:
-                this._data[left] = value;
-                break;
-            case value instanceof Word:
-                this._data[left] = new Double(regb[0], regb[1], ...value.expand());
-                break;
-            case value instanceof Byte:
-                this._data[left] = right === 1
-                    ? new Double(regb[0], regb[1], value, regb[3])
-                    : new Double(regb[0], regb[1], regb[2], value);
-                break;
-        }
+        const index = address.getIndex();
+        this._data[index] = this._getUpdatedValue(address, value, this._data[index].expand());
     }
 
     /**
@@ -67,5 +59,28 @@ module.exports = class extends ControlRegisters {
      */
     setIp(ip) {
         this._ip = ip;
+    }
+
+    /**
+     * @param {RegisterAddress} address
+     * @param {DataType} value
+     * @param {Byte[]} original
+     * @return {Double}
+     * @private
+     */
+    _getUpdatedValue(address, value, original) {
+        if (value instanceof Double) {
+            return value;
+        }
+
+        if (value instanceof Word) {
+            return new Double(original[0], original[1], ...value.expand());
+        }
+
+        if (address.isLeftq()) {
+            return new Double(original[0], original[1], value, original[3]);
+        }
+
+        return new Double(original[0], original[1], original[2], value);
     }
 };

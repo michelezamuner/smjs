@@ -95,32 +95,23 @@ test('expand to list of basic data types', () => {
 });
 
 test('adds another data type', () => {
-        const second = random(OtherType);
-        const first = random(Type, 0, second);
-        const result = (new Type(first)).add(new OtherType(second));
-        expect(result).toBeInstanceOf(Type);
-        expect(result).toEqual(new Type(first + second));
-});
-
-test('subtracts another data type', () => {
-        const second = random(OtherType);
-        const first = random(Type, second);
-        const result = (new Type(first)).sub(new OtherType(second));
-        expect(result).toBeInstanceOf(Type);
-        expect(result).toEqual(new Type(first - second));
+    const second = random(OtherType);
+    const first = random(Type, 0, second);
+    const result = (new Type(first)).add(new OtherType(second));
+    expect(result).toStrictEqual(new Type(first + second));
 });
 
 test('compares data types', () => {
-        const first = random(Type);
-        const second = random(OtherType);
-        const lt = (new Type(first)).lt(new OtherType(second));
-        const ltoe = (new Type(first)).ltoe(new OtherType(second));
-        const gt = (new Type(first)).gt(new OtherType(second));
-        const gtoe = (new Type(first)).gtoe(new OtherType(second));
-        expect(lt).toBe(first < second);
-        expect(ltoe).toBe(first <= second);
-        expect((new Type(first)).ltoe(new Type(first))).toBe(true);
-        expect(gt).toBe(first > second);
-        expect(gtoe).toBe(first >= second);
-        expect((new Type(first)).gtoe(new Type(first))).toBe(true);
+    const first = random(Type);
+    const second = random(OtherType);
+    const lt = (new Type(first)).lt(new OtherType(second));
+    const ltoe = (new Type(first)).ltoe(new OtherType(second));
+    const gt = (new Type(first)).gt(new OtherType(second));
+    const gtoe = (new Type(first)).gtoe(new OtherType(second));
+    expect(lt).toBe(first < second);
+    expect(ltoe).toBe(first <= second);
+    expect((new Type(first)).ltoe(new Type(first))).toBe(true);
+    expect(gt).toBe(first > second);
+    expect(gtoe).toBe(first >= second);
+    expect((new Type(first)).gtoe(new Type(first))).toBe(true);
 });

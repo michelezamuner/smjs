@@ -27,7 +27,7 @@ module.exports = class Processor {
         let exitStatus = 0;
 
         while (true) {
-            if (!this._canReadNextInstruction() || !this._canIncrementIp()) {
+            if (!this._canIncrementIp()) {
                 throw new MissingExitException('Missing exit instruction');
             }
 
@@ -43,16 +43,6 @@ module.exports = class Processor {
         }
 
         return exitStatus;
-    }
-
-    /**
-     * @returns {boolean}
-     * @private
-     */
-    _canReadNextInstruction() {
-        return this._memory.getMax()
-            .sub(this._registers.getIp())
-            .gtoe(this._interpreter.getInstructionSize())
     }
 
     /**

@@ -19,15 +19,15 @@ test('implements unit type', () => {
 test('can be constructed from four bytes', () => {
     let bytes = [new Byte(0x01), new Byte(0x02), new Byte(0x03), new Byte(0x04)];
     let expected = 16909060;
-    expect(new Double(...bytes)).toEqual(new Double(expected));
+    expect(new Double(...bytes)).toStrictEqual(new Double(expected));
 
     bytes = [new Byte(0xFF), new Byte(0xAA), new Byte(0x51), new Byte(0x12)];
     expected = 4289351954;
-    expect(new Double(...bytes)).toEqual(new Double(expected));
+    expect(new Double(...bytes)).toStrictEqual(new Double(expected));
 });
 
 test('if constructing with one argument, it must be integer or a double', () => {
-    expect(new Double(new Double(0x01))).toEqual(new Double(0x01));
+    expect(new Double(new Double(0x01))).toStrictEqual(new Double(0x01));
     expect(() => new Double(new Byte(10))).toThrow('Double must be constructed from one value or four bytes');
 });
 

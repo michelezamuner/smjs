@@ -39,5 +39,6 @@ Move instruction:
 
 ## TODO
 
-- define a RegisterAddress type that can tell if the register is ex, x, h or l, incapsulating the logic to distinguish them, and reuse them inside Registers and Interpreter. Also add a "size" property to it, returning the number of bytes of the address, and a "type" property returning the data type stored
+- ES cannot represent numbers too big, and at a certain point the 2's complement kicks in, so when we manipulate bits we get negative numbers while we want to always store positive numbers instead. Define a number type to store and manipulate numbers in a reliable way.
+- Decide how to handle negative numbers as result of subtract
 - create an authoritative source of definitions within an interpreter implementation, so that all of its modules can use it instead of duplicating decisions in code

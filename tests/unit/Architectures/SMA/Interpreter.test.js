@@ -1,6 +1,7 @@
 const InterpreterInterface = require('../../../../src/ProcessorInterfaces/Interpreter');
 const Exit = require('../../../../src/ProcessorInterfaces/Exit');
 const Interpreter = require('../../../../src/Architectures/SMA/Interpreter');
+const RegisterAddress = require('../../../../src/Architectures/SMA/RegisterAddress');
 const Mnemonics = require('../../../../src/Architectures/SMA/Mnemonics');
 const Byte = require('../../../../src/DataTypes/Byte');
 const Word = require('../../../../src/DataTypes/Word');
@@ -35,7 +36,7 @@ test('implements interpreter interface', () => {
 });
 
 test('provides instructions size', () => {
-    expect(interpreter.getInstructionSize()).toEqual(new Byte(4));
+    expect(interpreter.getInstructionSize()).toStrictEqual(new Byte(4));
 });
 
 test('implements move register to register', () => {
@@ -46,12 +47,9 @@ test('implements move register to register', () => {
 
     interpreter.exec(instruction);
 
-    expect(registers.get.mock.calls[0][0]).toBeInstanceOf(Byte);
-    expect(registers.get.mock.calls[0][0]).toEqual(Mnemonics.ebx);
-    expect(registers.set.mock.calls[0][0]).toBeInstanceOf(Byte);
-    expect(registers.set.mock.calls[0][0]).toEqual(Mnemonics.eax);
-    expect(registers.set.mock.calls[0][1]).toBeInstanceOf(Double);
-    expect(registers.set.mock.calls[0][1]).toEqual(new Double(value));
+    expect(registers.get.mock.calls[0][0]).toStrictEqual(new RegisterAddress(Mnemonics.ebx));
+    expect(registers.set.mock.calls[0][0]).toStrictEqual(new RegisterAddress(Mnemonics.eax));
+    expect(registers.set.mock.calls[0][1]).toStrictEqual(new Double(value));
 });
 
 test('fails if size mismatch on move register to register', () => {
@@ -62,9 +60,10 @@ test('fails if size mismatch on move register to register', () => {
     ];
     for (let [first, second] of combinations) {
         const instruction = [Mnemonics.mov, Mnemonics[first], Mnemonics[second], new Byte(0x00)];
-        const [target, source] = [Mnemonics[first].uint().toString(16), Mnemonics[second].uint().toString(16)];
+        const source = new RegisterAddress(Mnemonics[second]).format();
+        const target = new RegisterAddress(Mnemonics[first]).format();
 
-        expect(() => interpreter.exec(instruction)).toThrow(`Cannot move register 0x${source} to register 0x${target}`);
+        expect(() => interpreter.exec(instruction)).toThrow(`Cannot move register ${source} to register ${target}`);
     }
 });
 
@@ -74,10 +73,8 @@ test('implements move immediate to register', () => {
 
     interpreter.exec(instruction);
 
-    expect(registers.set.mock.calls[0][0]).toBeInstanceOf(Byte);
-    expect(registers.set.mock.calls[0][0]).toEqual(Mnemonics.al);
-    expect(registers.set.mock.calls[0][1]).toBeInstanceOf(Byte);
-    expect(registers.set.mock.calls[0][1]).toEqual(new Byte(value));
+    expect(registers.set.mock.calls[0][0]).toStrictEqual(new RegisterAddress(Mnemonics.al));
+    expect(registers.set.mock.calls[0][1]).toStrictEqual(new Byte(value));
 });
 
 test('fails if size mismatch on move immediate to register', () => {
@@ -86,7 +83,7 @@ test('fails if size mismatch on move immediate to register', () => {
     for (let register of forbidden) {
         const instruction = [Mnemonics.movi, Mnemonics[register], value, new Byte(0x00)];
         expect(() => interpreter.exec(instruction))
-            .toThrow(`Cannot move immediate value to register 0x${Mnemonics[register].uint().toString(16)}`);
+            .toThrow(`Cannot move immediate value to register ${new RegisterAddress(Mnemonics[register]).format()}`);
     }
 });
 
@@ -98,10 +95,8 @@ test('implements move immediate to memory', () => {
 
     interpreter.exec(instruction);
 
-    expect(memory.write.mock.calls[0][0]).toBeInstanceOf(Word);
-    expect(memory.write.mock.calls[0][0]).toEqual(new Word(addrLeft, addrRight));
-    expect(memory.write.mock.calls[0][1]).toBeInstanceOf(Byte);
-    expect(memory.write.mock.calls[0][1]).toEqual(value);
+    expect(memory.write.mock.calls[0][0]).toStrictEqual(new Word(addrLeft, addrRight));
+    expect(memory.write.mock.calls[0][1]).toStrictEqual(value);
 });
 
 test('implements move memory to register', () => {
@@ -119,10 +114,8 @@ test('implements move memory to register', () => {
 
         interpreter.exec(instruction);
 
-        expect(registers.set.mock.calls[0][0]).toBeInstanceOf(Byte);
-        expect(registers.set.mock.calls[0][0]).toEqual(type[1]);
-        expect(registers.set.mock.calls[0][1]).toBeInstanceOf(type[0]);
-        expect(registers.set.mock.calls[0][1]).toEqual(value);
+        expect(registers.set.mock.calls[0][0]).toStrictEqual(new RegisterAddress(type[1]));
+        expect(registers.set.mock.calls[0][1]).toStrictEqual(value);
     }
 });
 
@@ -134,15 +127,13 @@ test('implements move register to memory', () => {
         const valueb = value.expand();
         const instruction = [Mnemonics.movrm, ...mem.expand(), type[1]];
 
-        registers.get = reg => reg.eq(type[1]) ? value : new type[0](0x00);
+        registers.get = reg => reg.eq(new RegisterAddress(type[1])) ? value : new type[0](0x00);
 
         interpreter.exec(instruction);
 
         for (let i = 0; i < type[0].SIZE; i++) {
-            expect(memory.write.mock.calls[i][0]).toBeInstanceOf(Word);
-            expect(memory.write.mock.calls[i][0]).toEqual(mem.add(new Byte(i)));
-            expect(memory.write.mock.calls[i][1]).toBeInstanceOf(Byte);
-            expect(memory.write.mock.calls[i][1]).toEqual(valueb[i]);
+            expect(memory.write.mock.calls[i][0]).toStrictEqual(mem.add(new Byte(i)));
+            expect(memory.write.mock.calls[i][1]).toStrictEqual(valueb[i]);
         }
     }
 });
@@ -157,13 +148,13 @@ test('implements syscall exit', () => {
     const value = new Byte(random(Byte));
     instruction = [Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00)];
 
-    registers.get = jest.fn(register => register.eq(Mnemonics.al) ? Interpreter.SYS_EXIT : value);
+    registers.get = jest.fn(reg => reg.eq(new RegisterAddress(Mnemonics.al)) ? Interpreter.SYS_EXIT : value);
 
     exit = interpreter.exec(instruction);
 
-    expect(registers.get).nthCalledWith(1, Mnemonics.al);
-    expect(registers.get).nthCalledWith(2, Mnemonics.bl);
+    expect(registers.get).nthCalledWith(1, new RegisterAddress(Mnemonics.al));
+    expect(registers.get).nthCalledWith(2, new RegisterAddress(Mnemonics.bl));
     expect(exit).toBeInstanceOf(Exit);
     expect(exit.shouldExit()).toBe(true);
-    expect(exit.getExitStatus()).toEqual(value);
+    expect(exit.getExitStatus()).toStrictEqual(value);
 });

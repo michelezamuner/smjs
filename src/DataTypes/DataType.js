@@ -84,14 +84,6 @@ module.exports = class DataType {
 
     /**
      * @param {DataType} dataType
-     * @returns {DataType}
-     */
-    sub(dataType) {
-        return new this.constructor(this._value - dataType._value);
-    }
-
-    /**
-     * @param {DataType} dataType
      * @returns {boolean}
      */
     lt(dataType) {

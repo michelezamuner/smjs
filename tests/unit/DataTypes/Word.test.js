@@ -22,7 +22,7 @@ test('can be constructed from two bytes', () => {
 });
 
 test('if constructing with one argument, it must be integer or a word', () => {
-    expect(new Word(new Word(0x01))).toEqual(new Word(0x01));
+    expect(new Word(new Word(0x01))).toStrictEqual(new Word(0x01));
     expect(() => new Word(new Byte(10))).toThrow('Word must be constructed from one value or two bytes');
 });
 

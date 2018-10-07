@@ -19,7 +19,7 @@ test('supports move register to register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([Mnemonics.mov, Mnemonics.eax, Mnemonics.ebx, new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Mnemonics.mov, Mnemonics.eax, Mnemonics.ebx, new Byte(0x00)]);
 });
 
 test('supports move immediate to register', () => {
@@ -29,7 +29,7 @@ test('supports move immediate to register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00)])
+    expect(bytes).toStrictEqual([Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00)])
 });
 
 test('supports move immediate to memory', () => {
@@ -41,7 +41,7 @@ test('supports move immediate to memory', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([
+    expect(bytes).toStrictEqual([
         Mnemonics.movim, new Byte(0x00), new Byte(0x08), new Byte(byte),
         Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
     ]);
@@ -59,7 +59,7 @@ test('supports move memory to register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([
+    expect(bytes).toStrictEqual([
         Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
         Mnemonics.movm, Mnemonics.bx, new Byte(0x00), new Byte(0x09),
         new Byte(byte), new Byte(wordLeft), new Byte(wordRight),
@@ -77,7 +77,7 @@ test('supports move register to memory', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([
+    expect(bytes).toStrictEqual([
         Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x0C),
         Mnemonics.movrm, new Byte(0x00), new Byte(0x0D), Mnemonics.al,
         Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0D),
@@ -96,7 +96,7 @@ test('supports syscall', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([
+    expect(bytes).toStrictEqual([
         Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
         Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0C),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
@@ -112,7 +112,7 @@ test('supports multiple spaces between tokens', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([
+    expect(bytes).toStrictEqual([
         Mnemonics.movm, Mnemonics.ax, new Byte(0x00), new Byte(0x04),
         new Byte(0x02), new Byte(0x04)
     ]);
@@ -135,7 +135,7 @@ test('accepts empty lines', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([
+    expect(bytes).toStrictEqual([
         Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
         Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
@@ -153,7 +153,7 @@ test('accepts comment lines', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([
+    expect(bytes).toStrictEqual([
         Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
         Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
@@ -169,7 +169,7 @@ test('accepts inline comments', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toEqual([
+    expect(bytes).toStrictEqual([
         Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
         Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
