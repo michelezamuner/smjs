@@ -20,8 +20,10 @@ module.exports = {
     dl: addresses[3].rightq,
     mov: new Byte(0x00),
     movi: new Byte(0x01),
-    movim: new Byte(0x04),
-    movm: new Byte(0x02),
-    movrm: new Byte(0x05),
+    movim: new Byte(0x02),
+    movipb: new Byte(0x03),
+    movipw: new Byte(0x04),
+    movm: new Byte(0x06),
+    movrm: new Byte(0x09),
     syscall: new Byte(0x10),
 };

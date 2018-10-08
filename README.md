@@ -17,16 +17,16 @@ Once a specific architecture has been configured to be used with the processor, 
 ### SMA
 
 Move instruction:
-| `mov eax, ebx`   | move register to register          | `mov`    |
-| `mov eax, 1`     | move immediate to register         | `movi`   |
-| `mov var, 1`     | move immediate to memory           | `movim`  |
-| `mov [eax], 1`   | move immediate to register pointer | `movip`  |
-| `mov [var], 1`   | move immediate to memory pointer   | `movipm` |
-| `mov eax, var`   | move memory to register            | `movm`   |
-| `mov eax, [ebx]` | move register pointer to register  | `movp`   |
-| `mov eax, [var]` | move memory pointer to register    | `movpm`  |
-| `mov var, ebx`   | move register to memory            | `movrm`  |
-| `mov [eax], ebx` | move register to register pointer  | `movrp`  |
+| `mov eax, ebx`   | move register to register          | `mov`              |
+| `mov eax, 1`     | move immediate to register         | `movi`             |
+| `mov var, 1`     | move immediate to memory           | `movim`            |
+| `mov [eax], 1`   | move immediate to register pointer | `movipb`, `movipw` |
+| `mov [var], 1`   | move immediate to memory pointer   | `movipm`           |
+| `mov eax, var`   | move memory to register            | `movm`             |
+| `mov eax, [ebx]` | move register pointer to register  | `movp`             |
+| `mov eax, [var]` | move memory pointer to register    | `movpm`            |
+| `mov var, ebx`   | move register to memory            | `movrm`            |
+| `mov [eax], ebx` | move register to register pointer  | `movrp`            |
 
 
 ## How to run
@@ -39,6 +39,7 @@ Move instruction:
 
 ## TODO
 
+- Data types should have a `format()` method that directly prints their hex representation
 - ES cannot represent numbers too big, and at a certain point the 2's complement kicks in, so when we manipulate bits we get negative numbers while we want to always store positive numbers instead. Define a number type to store and manipulate numbers in a reliable way.
 - Decide how to handle negative numbers as result of subtract
 - create an authoritative source of definitions within an interpreter implementation, so that all of its modules can use it instead of duplicating decisions in code

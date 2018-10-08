@@ -26,6 +26,26 @@ test('move immediate to memory', () => {
     `, 0x54, '', '', 'rasm');
 });
 
+test('move immediate byte to register pointer', () => {
+    return expect.exit(`
+        movi al, 1
+        movi cx, 0x14
+        movipb cx, 0x54
+        movm bl, 0x14
+        syscall
+    `, 0x54, '', '', 'rasm');
+});
+
+test('move immediate word to register pointer', () => {
+    return expect.exit(`
+        movi al, 1
+        movi cx, 0x14
+        movipw cx, 0x54
+        movm bl, 0x15
+        syscall
+    `, 0x54, '', '', 'rasm');
+});
+
 test('move memory to register', () => {
     return expect.exit(`
         movm al, 0x0C

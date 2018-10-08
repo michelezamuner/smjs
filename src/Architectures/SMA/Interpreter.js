@@ -45,9 +45,13 @@ module.exports = class extends InterpreterInterface {
         if (byte1.eq(Mnemonics.mov)) {
             this._mov(new RegisterAddress(byte2), new RegisterAddress(byte3));
         } else if (byte1.eq(Mnemonics.movi)) {
-            this._movi(new RegisterAddress(byte2), byte3);
+            this._movi(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movim)) {
             this._movim(new Word(byte2, byte3), byte4);
+        } else if (byte1.eq(Mnemonics.movipb)) {
+            this._movipb(new RegisterAddress(byte2), byte3);
+        } else if (byte1.eq(Mnemonics.movipw)) {
+            this._movipw(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movm)) {
             this._movm(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movrm)) {
@@ -73,13 +77,17 @@ module.exports = class extends InterpreterInterface {
 
     /**
      * @param {RegisterAddress} register
-     * @param {Byte} value
+     * @param {Word} value
      * @private
      */
     _movi(register, value) {
-        if (register.getType() !== value.constructor) {
+        if (register.isWhole()) {
             throw `Cannot move immediate value to register ${register.format()}`;
         }
+        if (register.isLeftq() || register.isRightq()) {
+            value = new Byte(value.expand()[1]);
+        }
+
         this._registers.set(register, value);
     }
 
@@ -90,6 +98,34 @@ module.exports = class extends InterpreterInterface {
      */
     _movim(address, value) {
         this._memory.write(address, value);
+    }
+
+    /**
+     * @param {RegisterAddress} register
+     * @param {Byte} value
+     * @private
+     */
+    _movipb(register, value) {
+        if (!register.isHalf()) {
+            throw `Cannot move immediate value to pointer ${register.format()}`;
+        }
+        const address = this._registers.get(register);
+        this._memory.write(address, value);
+    }
+
+    /**
+     * @param {RegisterAddress} register
+     * @param {Word} value
+     * @private
+     */
+    _movipw(register, value) {
+        if (!register.isHalf()) {
+            throw `Cannot move immediate value to pointer ${register.format()}`;
+        }
+        const address = this._registers.get(register);
+        const bytes = value.expand();
+        this._memory.write(address, bytes[0]);
+        this._memory.write(address.add(new Byte(0x01)), bytes[1]);
     }
 
     /**

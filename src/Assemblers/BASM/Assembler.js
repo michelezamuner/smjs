@@ -171,7 +171,7 @@ module.exports = class Assembler {
      */
     _parseMov(operands) {
         if (Number.isInteger(parseInt(operands[1]))) {
-            return [Mnemonics.movi, Mnemonics[operands[0]], new Byte(parseInt(operands[1])), new Byte(0x00)];
+            return [Mnemonics.movi, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
         }
 
         if (Mnemonics[operands[1]] !== undefined) {

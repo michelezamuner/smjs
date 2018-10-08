@@ -34,7 +34,7 @@ test('supports move immediate to register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01)]);
 });
 
 test('supports move memory to register', () => {
@@ -74,7 +74,7 @@ test('supports syscall', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
         Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0C),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
         new Byte(byte),
@@ -119,7 +119,7 @@ test('accepts empty lines', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
         Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
@@ -139,7 +139,7 @@ test('accepts comment lines', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
         Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
@@ -157,7 +157,7 @@ test('accepts inline comments', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
         Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);

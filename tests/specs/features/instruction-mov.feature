@@ -27,14 +27,24 @@ Feature: Instruction mov
   Scenario: move immediate to memory
     Given the program (pseudocode) is:
         """
-        status :=         ; define 'status' without initializing it
         al := 1           ; assign 1 to al
+        status :=         ; define 'status' without initializing it
         status := 0x54    ; assign 0x54 to 'status'
         bl := status      ; assign the value of 'status' to bl
         syscall           ; exit with status 0x54
         """
     When I run the program
     Then the program terminates with exit status 0x54
+
+  Scenario: move immediate to register pointer
+    Given the program (pseudocode) is:
+      """
+      status :=         ; define 'status' without initializing it
+      al := 1           ; assign 1 to al
+      cl := &status     ; assign the address of 'status' to cl
+      *cl := 0x54       ; assign 0x54 to the memory pointed to by cl
+      bl := status      ; assign value of variable 'status' to bl
+      """
 
   Scenario: move memory to register
     Given the program (pseudocode) is:
@@ -51,10 +61,9 @@ Feature: Instruction mov
   Scenario: move register to memory
     Given the program (pseudocode) is:
       """
-      status :=         ; define 'status' without initializing it
       al := 1           ; assign 1 to al
       cl := 0xFE        ; assign 0xFE to cl
-      status := cl      ; assign the value of cl to 'status'
+      status := cl      ; assign the value of cl to variable 'status'
       bl := status      ; assign the value of 'status' to bl
       syscall           ; exit with status 0xFE
       """

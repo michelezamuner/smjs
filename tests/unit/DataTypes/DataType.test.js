@@ -88,7 +88,7 @@ test('expand to list of basic data types', () => {
     const units = value.expand();
     let expected = 0;
     let index = 0;
-    for (let unit of units.reverse()) {
+    for (const unit of units.reverse()) {
         expected += unit.uint() << (8 * index++);
     }
     expect(value.uint()).toBe(expected);

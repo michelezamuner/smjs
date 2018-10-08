@@ -21,7 +21,7 @@ test('Implements control registers', () => {
 });
 
 test('Implements data registers', () => {
-    for (let t of ['a', 'b', 'c', 'd']) {
+    for (const t of ['a', 'b', 'c', 'd']) {
         let ex = new Double(random(Double));
         let exb = ex.expand();
 

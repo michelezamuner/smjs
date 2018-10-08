@@ -58,7 +58,7 @@ test('fails if size mismatch on move register to register', () => {
         ['ax', 'bl'], ['ax', 'bh'], ['ax', 'ebx'], ['eax', 'bl'],
         ['eax', 'bh'], ['eax', 'bx']
     ];
-    for (let [first, second] of combinations) {
+    for (const [first, second] of combinations) {
         const instruction = [Mnemonics.mov, Mnemonics[first], Mnemonics[second], new Byte(0x00)];
         const source = new RegisterAddress(Mnemonics[second]).format();
         const target = new RegisterAddress(Mnemonics[first]).format();
@@ -68,20 +68,27 @@ test('fails if size mismatch on move register to register', () => {
 });
 
 test('implements move immediate to register', () => {
-    const value = random(Byte);
-    const instruction = [Mnemonics.movi, Mnemonics.al, new Byte(value), new Byte(0x00)];
+    const value = new Word(random(Word));
+    const bytes = value.expand();
 
+    let instruction = [Mnemonics.movi, Mnemonics.al, ...bytes];
     interpreter.exec(instruction);
 
     expect(registers.set.mock.calls[0][0]).toStrictEqual(new RegisterAddress(Mnemonics.al));
-    expect(registers.set.mock.calls[0][1]).toStrictEqual(new Byte(value));
+    expect(registers.set.mock.calls[0][1]).toStrictEqual(bytes[1]);
+
+    instruction = [Mnemonics.movi, Mnemonics.ax, ...bytes];
+    interpreter.exec(instruction);
+
+    expect(registers.set.mock.calls[1][0]).toStrictEqual(new RegisterAddress(Mnemonics.ax));
+    expect(registers.set.mock.calls[1][1]).toStrictEqual(value);
 });
 
 test('fails if size mismatch on move immediate to register', () => {
-    const value = new Byte(random(Byte));
-    const forbidden = ['ax', 'eax', 'bx', 'ebx', 'cx', 'ecx', 'dx', 'edx'];
-    for (let register of forbidden) {
-        const instruction = [Mnemonics.movi, Mnemonics[register], value, new Byte(0x00)];
+    const value = new Word(random(Word));
+    const forbidden = ['eax', 'ebx', 'ecx', 'edx'];
+    for (const register of forbidden) {
+        const instruction = [Mnemonics.movi, Mnemonics[register], ...value.expand()];
         expect(() => interpreter.exec(instruction))
             .toThrow(`Cannot move immediate value to register ${new RegisterAddress(Mnemonics[register]).format()}`);
     }
@@ -99,8 +106,53 @@ test('implements move immediate to memory', () => {
     expect(memory.write.mock.calls[0][1]).toStrictEqual(value);
 });
 
+test('implements move immediate byte to register pointer', () => {
+    const value = new Byte(random(Byte));
+    const address = new Word(random(Word));
+    const instruction = [Mnemonics.movipb, Mnemonics.ax, value, new Byte(0x00)];
+
+    registers.get = reg => reg.eq(new RegisterAddress(Mnemonics.ax)) ? address : new Word(0x00);
+
+    interpreter.exec(instruction);
+
+    expect(memory.write.mock.calls[0][0]).toStrictEqual(address);
+    expect(memory.write.mock.calls[0][1]).toStrictEqual(value);
+});
+
+test('implements move immediate word to register pointer', () => {
+    const value = new Word(random(Word));
+    const bytes = value.expand();
+    const address = new Word(random(Word));
+    const instruction = [Mnemonics.movipw, Mnemonics.ax, ...bytes];
+
+    registers.get = reg => reg.eq(new RegisterAddress(Mnemonics.ax)) ? address : new Word(0x00);
+
+    interpreter.exec(instruction);
+
+    expect(memory.write.mock.calls[0][0]).toStrictEqual(address);
+    expect(memory.write.mock.calls[0][1]).toStrictEqual(bytes[0]);
+    expect(memory.write.mock.calls[1][0]).toStrictEqual(address.add(new Byte(0x01)));
+    expect(memory.write.mock.calls[1][1]).toStrictEqual(bytes[1]);
+
+});
+
+test('fails if size mismatch on move immediate to register pointer', () => {
+    const forbidden = ['ah', 'al', 'eax', 'bh', 'bl', 'ebx', 'ch', 'cl', 'ecx', 'dh', 'dl', 'edx'];
+    for (const register of forbidden) {
+        let value = new Byte(random(Byte));
+        let instruction = [Mnemonics.movipb, Mnemonics[register], value, new Byte(0x00)];
+        expect(() => interpreter.exec(instruction))
+            .toThrow(`Cannot move immediate value to pointer ${new RegisterAddress(Mnemonics[register]).format()}`);
+
+        value = new Word(random(Word));
+        instruction = [Mnemonics.movipw, Mnemonics[register], ...value.expand()];
+        expect(() => interpreter.exec(instruction))
+            .toThrow(`Cannot move immediate value to pointer ${new RegisterAddress(Mnemonics[register]).format()}`);
+    }
+});
+
 test('implements move memory to register', () => {
-    for (let type of [[Byte, Mnemonics.ah], [Word, Mnemonics.ax], [Double, Mnemonics.eax]]) {
+    for (const type of [[Byte, Mnemonics.ah], [Word, Mnemonics.ax], [Double, Mnemonics.eax]]) {
         registers.set = jest.fn();
         const mem = new Word(random(Word));
         const value = new type[0](random(type[0]));
@@ -120,7 +172,7 @@ test('implements move memory to register', () => {
 });
 
 test('implements move register to memory', () => {
-    for (let type of [[Byte, Mnemonics.ah], [Word, Mnemonics.ax], [Double, Mnemonics.eax]]) {
+    for (const type of [[Byte, Mnemonics.ah], [Word, Mnemonics.ax], [Double, Mnemonics.eax]]) {
         memory.write = jest.fn();
         const mem = new Word(random(Word));
         const value = new type[0](random(type[0]));

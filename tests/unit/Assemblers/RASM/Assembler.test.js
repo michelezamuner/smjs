@@ -1,6 +1,7 @@
 const Assembler = require('../../../../src/Assemblers/RASM/Assembler');
 const Mnemonics = require('../../../../src/Architectures/SMA/Mnemonics');
 const Byte = require('../../../../src/DataTypes/Byte');
+const Word = require('../../../../src/DataTypes/Word');
 const random = require('../../random');
 
 /**
@@ -23,38 +24,69 @@ test('supports move register to register', () => {
 });
 
 test('supports move immediate to register', () => {
+    const value = random(Word);
     const code = `
-        movi al, 1
+        movi al, ${value}
     `;
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00)])
+    expect(bytes).toStrictEqual([Mnemonics.movi, Mnemonics.al, ...(new Word(value)).expand()]);
 });
 
 test('supports move immediate to memory', () => {
-    const byte = random(Byte);
+    const value = random(Byte);
     const code = `
-        movim 0x08, 0x${byte.toString(16)}
+        movim 0x08, 0x${value.toString(16)}
         movm al, 0x08
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movim, new Byte(0x00), new Byte(0x08), new Byte(byte),
+        Mnemonics.movim, new Byte(0x00), new Byte(0x08), new Byte(value),
         Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
     ]);
 });
 
+test('supports move immediate byte word to register pointer', () => {
+    const value = random(Byte);
+    const code = `
+        movi ax, 0x08
+        movipb ax, ${value}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x08),
+        Mnemonics.movipb, Mnemonics.ax, new Byte(value), new Byte(0x00),
+    ]);
+});
+
+test('supports move immediate word to register pointer', () => {
+    const value = random(Word);
+    const code = `
+        movi ax, 0x08
+        movipw ax, ${value}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x08),
+        Mnemonics.movipw, Mnemonics.ax, ...(new Word(value)).expand(),
+    ]);
+});
+
 test('supports move memory to register', () => {
-    const byte = random(Byte);
+    const value = random(Byte);
     const wordLeft = random(Byte);
     const wordRight = random(Byte);
     const code = `
         movm al, 0x08
         movm bx, 0x09
-        0x${byte.toString(16)}0x${wordLeft.toString(16)}0x${wordRight.toString(16)}
+        0x${value.toString(16)}0x${wordLeft.toString(16)}0x${wordRight.toString(16)}
     `;
 
     const bytes = assembler.assemble(code);
@@ -62,17 +94,17 @@ test('supports move memory to register', () => {
     expect(bytes).toStrictEqual([
         Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
         Mnemonics.movm, Mnemonics.bx, new Byte(0x00), new Byte(0x09),
-        new Byte(byte), new Byte(wordLeft), new Byte(wordRight),
+        new Byte(value), new Byte(wordLeft), new Byte(wordRight),
     ]);
 });
 
 test('supports move register to memory', () => {
-    const byte = random(Byte);
+    const value = random(Byte);
     const code = `
         movm al, 0x0C
         movrm 0x0D, al
         movm bl, 0x0D
-        0x${byte.toString(16)}
+        0x${value.toString(16)}
     `;
 
     const bytes = assembler.assemble(code);
@@ -81,7 +113,7 @@ test('supports move register to memory', () => {
         Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x0C),
         Mnemonics.movrm, new Byte(0x00), new Byte(0x0D), Mnemonics.al,
         Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0D),
-        new Byte(byte)
+        new Byte(value)
     ]);
 });
 
@@ -97,7 +129,7 @@ test('supports syscall', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
         Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0C),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
         new Byte(value),
@@ -136,7 +168,7 @@ test('accepts empty lines', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
         Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
@@ -154,7 +186,7 @@ test('accepts comment lines', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
         Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
@@ -170,7 +202,7 @@ test('accepts inline comments', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x01), new Byte(0x00),
+        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
         Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
