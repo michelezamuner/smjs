@@ -79,6 +79,23 @@ test('supports move immediate word to register pointer', () => {
     ]);
 });
 
+test('supports move immediate to memory pointer', () => {
+    const value = random(Byte);
+    const code = `
+        movi ax, 0x0E
+        movrm 0x0C, ax
+        movipm 0x0C, ${value}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x0E),
+        Mnemonics.movrm, new Byte(0x00), new Byte(0x0C), Mnemonics.ax,
+        Mnemonics.movipm, new Byte(0x00), new Byte(0x0C), new Byte(value),
+    ]);
+});
+
 test('supports move memory to register', () => {
     const value = random(Byte);
     const wordLeft = random(Byte);

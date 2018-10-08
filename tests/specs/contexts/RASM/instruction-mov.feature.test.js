@@ -46,6 +46,17 @@ test('move immediate word to register pointer', () => {
     `, 0x54, '', '', 'rasm');
 });
 
+test('move immediate to memory pointer', () => {
+    return expect.exit(`
+        movi cx, 0x18
+        movrm 0x19, cx
+        movi al, 1
+        movipm 0x19, 0x54
+        movm bl, 0x18
+        syscall
+    `, 0x54, '', '', 'rasm');
+});
+
 test('move memory to register', () => {
     return expect.exit(`
         movm al, 0x0C

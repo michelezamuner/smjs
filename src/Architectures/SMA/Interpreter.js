@@ -52,6 +52,8 @@ module.exports = class extends InterpreterInterface {
             this._movipb(new RegisterAddress(byte2), byte3);
         } else if (byte1.eq(Mnemonics.movipw)) {
             this._movipw(new RegisterAddress(byte2), new Word(byte3, byte4));
+        } else if (byte1.eq(Mnemonics.movipm)) {
+            this._movipm(new Word(byte2, byte3), byte4);
         } else if (byte1.eq(Mnemonics.movm)) {
             this._movm(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movrm)) {
@@ -126,6 +128,16 @@ module.exports = class extends InterpreterInterface {
         const bytes = value.expand();
         this._memory.write(address, bytes[0]);
         this._memory.write(address.add(new Byte(0x01)), bytes[1]);
+    }
+
+    /**
+     * @param {Word} address
+     * @param {Byte} value
+     * @private
+     */
+    _movipm(address, value) {
+        const actual = new Word(...this._memory.readSet(address, new Byte(0x02)));
+        this._memory.write(actual, value);
     }
 
     /**

@@ -96,13 +96,12 @@ test('fails if size mismatch on move immediate to register', () => {
 
 test('implements move immediate to memory', () => {
     const value = new Byte(random(Byte));
-    const addrLeft = new Byte(random(Byte));
-    const addrRight = new Byte(random(Byte));
-    const instruction = [Mnemonics.movim, addrLeft, addrRight, value];
+    const mem = new Word(random(Word));
+    const instruction = [Mnemonics.movim, ...mem.expand(), value];
 
     interpreter.exec(instruction);
 
-    expect(memory.write.mock.calls[0][0]).toStrictEqual(new Word(addrLeft, addrRight));
+    expect(memory.write.mock.calls[0][0]).toStrictEqual(mem);
     expect(memory.write.mock.calls[0][1]).toStrictEqual(value);
 });
 
@@ -149,6 +148,20 @@ test('fails if size mismatch on move immediate to register pointer', () => {
         expect(() => interpreter.exec(instruction))
             .toThrow(`Cannot move immediate value to pointer ${new RegisterAddress(Mnemonics[register]).format()}`);
     }
+});
+
+test('implements move immediate to memory pointer', () => {
+    const value = new Byte(random(Byte));
+    const ptr = new Word(random(Word));
+    const mem = new Word(random(Word));
+    const instruction = [Mnemonics.movipm, ...ptr.expand(), value];
+
+    memory.readSet = (addr, size) => addr.eq(ptr) && size.eq(new Byte(0x02)) ? mem.expand() : new Word(0x00);
+
+    interpreter.exec(instruction);
+
+    expect(memory.write.mock.calls[0][0]).toStrictEqual(mem);
+    expect(memory.write.mock.calls[0][1]).toStrictEqual(value);
 });
 
 test('implements move memory to register', () => {
