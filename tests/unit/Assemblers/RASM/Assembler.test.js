@@ -134,6 +134,18 @@ test('supports move register pointer to register', () => {
     ]);
 });
 
+test('supports move memory pointer to register', () => {
+    const code = `
+        movpm bx, 0x04
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Mnemonics.movpm, Mnemonics.bx, ...(new Word(0x04)).expand(),
+    ]);
+});
+
 test('supports move register to memory', () => {
     const value = random(Byte);
     const code = `

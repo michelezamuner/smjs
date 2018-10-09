@@ -78,13 +78,23 @@ Feature: Instruction mov
     Given the program (pseudocode) is:
       """
       status := 0xA2                  ; assign 0xA2 to variable 'status'
-      al := 1                         ; assign 1 to ax
+      al := 1                         ; assign 1 to al
       cx := &status                   ; assign the address of 'status' to cx
       bl := *cx                       ; assign the value pointed to by cx to bl
-      syscall
+      syscall                         ; exit with status 0xA2
       """
     When I run the program
     Then the program terminates with exit status 0xA2
+
+  Scenario: move memory pointer to register
+    Given the program (pseudocode) is:
+      """
+      status := 0xA2                  ; assign 0xA2 to variable 'status'
+      statusPtr := &status            ; assign the address of 'status' to variable 'statusPtr'
+      al := 1                         ; assign 1 to al
+      bl := *statusPtr                ; assign the value pointed to by statusPtr to bl
+      syscall                         ; exit with status 0xA2
+      """
 
   Scenario: move register to memory
     Given the program (pseudocode) is:

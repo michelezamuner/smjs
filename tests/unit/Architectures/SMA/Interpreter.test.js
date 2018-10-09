@@ -217,6 +217,33 @@ test('fails if size mismatch on move register pointer to register', () => {
     }
 });
 
+test('implements move memory pointer to register', () => {
+    const regs = [Mnemonics.al, Mnemonics.ax, Mnemonics.eax];
+    for (const i in regs) {
+        const reg = regs[i];
+        const type = (new RegisterAddress(reg)).getType();
+        const ptr = new Word(random(Word));
+        const mem = new Word(random(Word));
+        const value = new type(random(type));
+        const instruction = [Mnemonics.movpm, reg, ...ptr.expand()];
+
+        memory.readSet = (addr, size) => {
+            if (addr.eq(ptr) && size.eq(new Byte(0x02))) {
+                return mem.expand();
+            }
+            if (addr.eq(mem) && size.eq(new Byte(type.SIZE))) {
+                return value.expand();
+            }
+            return [];
+        };
+
+        interpreter.exec(instruction);
+
+        expect(registers.set.mock.calls[i][0]).toStrictEqual(new RegisterAddress(reg));
+        expect(registers.set.mock.calls[i][1]).toStrictEqual(value);
+    }
+});
+
 test('implements move register to memory', () => {
     for (const type of [[Byte, Mnemonics.ah], [Word, Mnemonics.ax], [Double, Mnemonics.eax]]) {
         memory.write = jest.fn();

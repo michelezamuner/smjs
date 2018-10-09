@@ -26,6 +26,7 @@ module.exports = {
     movipm: new Byte(0x05),
     movm: new Byte(0x06),
     movp: new Byte(0x07),
+    movpm: new Byte(0x08),
     movrm: new Byte(0x09),
     syscall: new Byte(0x10),
 };

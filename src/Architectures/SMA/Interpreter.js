@@ -58,6 +58,8 @@ module.exports = class extends InterpreterInterface {
             this._movm(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movp)) {
             this._movp(new RegisterAddress(byte2), new RegisterAddress(byte3));
+        } else if (byte1.eq(Mnemonics.movpm)) {
+            this._movpm(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movrm)) {
             this._movrm(new Word(byte2, byte3), new RegisterAddress(byte4));
         } else if (byte1.eq(Mnemonics.syscall)) {
@@ -168,6 +170,18 @@ module.exports = class extends InterpreterInterface {
         const type = dest.getType();
         const value = this._memory.readSet(addr, new Byte(type.SIZE));
         this._registers.set(dest, new type(...value));
+    }
+
+    /**
+     * @param {RegisterAddress} register
+     * @param {Word} address
+     * @private
+     */
+    _movpm(register, address) {
+        const type = register.getType();
+        const effective = new Word(...this._memory.readSet(address, new Byte(0x02)));
+        const value = this._memory.readSet(effective, new Byte(type.SIZE));
+        this._registers.set(register, new type(...value));
     }
 
     /**
