@@ -52,18 +52,20 @@ module.exports = class extends InterpreterInterface {
             this._movipb(new RegisterAddress(byte2), byte3);
         } else if (byte1.eq(Mnemonics.movipw)) {
             this._movipw(new RegisterAddress(byte2), new Word(byte3, byte4));
-        } else if (byte1.eq(Mnemonics.movipm)) {
-            this._movipm(new Word(byte2, byte3), byte4);
+        } else if (byte1.eq(Mnemonics.movimp)) {
+            this._movimp(new Word(byte2, byte3), byte4);
         } else if (byte1.eq(Mnemonics.movm)) {
             this._movm(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movp)) {
             this._movp(new RegisterAddress(byte2), new RegisterAddress(byte3));
-        } else if (byte1.eq(Mnemonics.movpm)) {
-            this._movpm(new RegisterAddress(byte2), new Word(byte3, byte4));
+        } else if (byte1.eq(Mnemonics.movmp)) {
+            this._movmp(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movrm)) {
             this._movrm(new Word(byte2, byte3), new RegisterAddress(byte4));
         } else if (byte1.eq(Mnemonics.movrp)) {
             this._movrp(new RegisterAddress(byte2), new RegisterAddress(byte3));
+        } else if (byte1.eq(Mnemonics.movrmp)) {
+            this._movrmp(new Word(byte2, byte3), new RegisterAddress(byte4));
         } else if (byte1.eq(Mnemonics.syscall)) {
             this._syscall();
         }
@@ -141,7 +143,7 @@ module.exports = class extends InterpreterInterface {
      * @param {Byte} value
      * @private
      */
-    _movipm(address, value) {
+    _movimp(address, value) {
         const actual = new Word(...this._memory.readSet(address, new Byte(0x02)));
         this._memory.write(actual, value);
     }
@@ -177,7 +179,7 @@ module.exports = class extends InterpreterInterface {
      * @param {Word} address
      * @private
      */
-    _movpm(register, address) {
+    _movmp(register, address) {
         const type = register.getType();
         const effective = new Word(...this._memory.readSet(address, new Byte(0x02)));
         const value = this._memory.readSet(effective, new Byte(type.SIZE));
@@ -210,6 +212,19 @@ module.exports = class extends InterpreterInterface {
         const type = source.getType();
         const effective = this._registers.get(target);
         for (let i = 0; i < type.SIZE; i++) {
+            this._memory.write(effective.add(new Byte(i)), bytes[i]);
+        }
+    }
+
+    /**
+     * @param {Word} address
+     * @param {RegisterAddress} register
+     * @private
+     */
+    _movrmp(address, register) {
+        const bytes = this._registers.get(register).expand();
+        const effective = new Word(...this._memory.readSet(address, new Byte(0x02)));
+        for (let i = 0; i < register.getType().SIZE; i++) {
             this._memory.write(effective.add(new Byte(i)), bytes[i]);
         }
     }

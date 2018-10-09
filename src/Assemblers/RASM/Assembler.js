@@ -63,18 +63,20 @@ module.exports = class Assembler {
                 return [Mnemonics.movipb, Mnemonics[operands[0]], new Byte(parseInt(operands[1])), new Byte(0x00)];
             case 'movipw':
                 return [Mnemonics.movipw, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
-            case 'movipm':
-                return [Mnemonics.movipm, ...(new Word(parseInt(operands[0]))).expand(), new Byte(parseInt(operands[1]))];
+            case 'movimp':
+                return [Mnemonics.movimp, ...(new Word(parseInt(operands[0]))).expand(), new Byte(parseInt(operands[1]))];
             case 'movm':
                 return [Mnemonics.movm, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'movp':
                 return [Mnemonics.movp, Mnemonics[operands[0]], Mnemonics[operands[1]], new Byte(0x00)];
-            case 'movpm':
-                return [Mnemonics.movpm, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+            case 'movmp':
+                return [Mnemonics.movmp, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'movrm':
                 return [Mnemonics.movrm, ...(new Word(parseInt(operands[0]))).expand(), Mnemonics[operands[1]]];
             case 'movrp':
                 return [Mnemonics.movrp, Mnemonics[operands[0]], Mnemonics[operands[1]], new Byte(0x00)];
+            case 'movrmp':
+                return [Mnemonics.movrmp, ...(new Word(parseInt(operands[0]))).expand(), Mnemonics[operands[1]]];
         }
 
         return [];

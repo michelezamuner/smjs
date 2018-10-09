@@ -51,7 +51,7 @@ test('move immediate to memory pointer', () => {
         movi cx, 0x18
         movrm 0x19, cx
         movi al, 1
-        movipm 0x19, 0x54
+        movimp 0x19, 0x54
         movm bl, 0x18
         syscall
     `, 0x54, '', '', 'rasm');
@@ -79,7 +79,7 @@ test('move register pointer to register', () => {
 test('move memory pointer to register', () => {
     return expect.exit(`
         movi al, 1
-        movpm bl, 0x0C
+        movmp bl, 0x0C
         syscall
         0x00 0x0E 0xA2
     `, 0xA2, '', '', 'rasm');
@@ -103,5 +103,16 @@ test('move register to register pointer', () => {
         movrp dx, cl
         movm bl, 0x18
         syscall
+    `, 0xFE, '', '', 'rasm');
+});
+
+test('move register to memory pointer', () => {
+    return expect.exit(`
+        movi al, 1
+        movi cl, 0xFE
+        movrmp 0x14, cl
+        movm bl, 0x16
+        syscall
+        0x00 0x16
     `, 0xFE, '', '', 'rasm');
 });

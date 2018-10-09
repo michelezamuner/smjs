@@ -21,13 +21,13 @@ Move instruction:
 | `mov ax, 1`      | move immediate to register         | `movi`             |
 | `mov var, 1`     | move immediate to memory           | `movim`            |
 | `mov [ax], 1`    | move immediate to register pointer | `movipb`, `movipw` |
-| `mov [var], 1`   | move immediate to memory pointer   | `movipm`           |
+| `mov [var], 1`   | move immediate to memory pointer   | `movimp`           |
 | `mov eax, var`   | move memory to register            | `movm`             |
 | `mov eax, [bx]`  | move register pointer to register  | `movp`             |
-| `mov eax, [var]` | move memory pointer to register    | `movpm`            |
+| `mov eax, [var]` | move memory pointer to register    | `movmp`            |
 | `mov var, ebx`   | move register to memory            | `movrm`            |
 | `mov [ax], ebx`  | move register to register pointer  | `movrp`            |
-| `mov [var], ebx` | move register to memory pointer    | `movrpm`           |
+| `mov [var], ebx` | move register to memory pointer    | `movrmp`           |
 
 
 ## How to run
