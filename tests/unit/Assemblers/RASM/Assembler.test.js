@@ -165,6 +165,23 @@ test('supports move register to memory', () => {
     ]);
 });
 
+test('supports move register to register pointer', () => {
+    const value = random(Byte);
+    const code = `
+        movi ax, 0x0C
+        movi bl, ${value}
+        movrp ax, bl
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Mnemonics.movi, Mnemonics.ax, ...(new Word(0x0C)).expand(),
+        Mnemonics.movi, Mnemonics.bl, ...(new Word(value)).expand(),
+        Mnemonics.movrp, Mnemonics.ax, Mnemonics.bl, new Byte(0x00),
+    ]);
+});
+
 test('supports syscall', () => {
     const value = random(Byte);
     const code = `

@@ -62,6 +62,8 @@ module.exports = class extends InterpreterInterface {
             this._movpm(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movrm)) {
             this._movrm(new Word(byte2, byte3), new RegisterAddress(byte4));
+        } else if (byte1.eq(Mnemonics.movrp)) {
+            this._movrp(new RegisterAddress(byte2), new RegisterAddress(byte3));
         } else if (byte1.eq(Mnemonics.syscall)) {
             this._syscall();
         }
@@ -70,15 +72,15 @@ module.exports = class extends InterpreterInterface {
     }
 
     /**
-     * @param {RegisterAddress} dest
+     * @param {RegisterAddress} target
      * @param {RegisterAddress} source
      * @private
      */
-    _mov(dest, source) {
-        if (dest.getType() !== source.getType()) {
-            throw `Cannot move register ${source.format()} to register ${dest.format()}`;
+    _mov(target, source) {
+        if (target.getType() !== source.getType()) {
+            throw `Cannot move register ${source.format()} to register ${target.format()}`;
         }
-        this._registers.set(dest, this._registers.get(source));
+        this._registers.set(target, this._registers.get(source));
     }
 
     /**
@@ -113,7 +115,7 @@ module.exports = class extends InterpreterInterface {
      */
     _movipb(register, value) {
         if (!register.isHalf()) {
-            throw `Cannot move immediate value to pointer ${register.format()}`;
+            throw `Cannot use register ${register.format()} as pointer`;
         }
         const address = this._registers.get(register);
         this._memory.write(address, value);
@@ -126,7 +128,7 @@ module.exports = class extends InterpreterInterface {
      */
     _movipw(register, value) {
         if (!register.isHalf()) {
-            throw `Cannot move immediate value to pointer ${register.format()}`;
+            throw `Cannot use register ${register.format()} as pointer`;
         }
         const address = this._registers.get(register);
         const bytes = value.expand();
@@ -151,10 +153,8 @@ module.exports = class extends InterpreterInterface {
      */
     _movm(register, address) {
         const type = register.getType();
-        const value = type === Byte
-            ? this._memory.read(address)
-            : new type(...this._memory.readSet(address, new Byte(register.getType().SIZE)));
-        this._registers.set(register, value);
+        const value = this._memory.readSet(address, new Byte(type.SIZE));
+        this._registers.set(register, new type(...value));
     }
 
     /**
@@ -164,7 +164,7 @@ module.exports = class extends InterpreterInterface {
      */
     _movp(dest, source) {
         if (!source.isHalf()) {
-            throw `Cannot use non-word register ${source.format()} as pointer`;
+            throw `Cannot use register ${source.format()} as pointer`;
         }
         const addr = this._registers.get(source);
         const type = dest.getType();
@@ -194,6 +194,23 @@ module.exports = class extends InterpreterInterface {
 
         for (let i = 0; i < bytes.length; i++) {
             this._memory.write(address.add(new Byte(i)), bytes[i]);
+        }
+    }
+
+    /**
+     * @param {RegisterAddress} target
+     * @param {RegisterAddress} source
+     * @private
+     */
+    _movrp(target, source) {
+        if (!target.isHalf()) {
+            throw `Cannot use register ${target.format()} as pointer`;
+        }
+        const bytes = this._registers.get(source).expand();
+        const type = source.getType();
+        const effective = this._registers.get(target);
+        for (let i = 0; i < type.SIZE; i++) {
+            this._memory.write(effective.add(new Byte(i)), bytes[i]);
         }
     }
 

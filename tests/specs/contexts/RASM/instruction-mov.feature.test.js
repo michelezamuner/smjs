@@ -95,3 +95,13 @@ test('move register to memory', () => {
     `, 0xFE, '', '', 'rasm');
 });
 
+test('move register to register pointer', () => {
+    return expect.exit(`
+        movi al, 1
+        movi cl, 0xFE
+        movi dx, 0x18
+        movrp dx, cl
+        movm bl, 0x18
+        syscall
+    `, 0xFE, '', '', 'rasm');
+});

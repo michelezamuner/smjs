@@ -28,5 +28,6 @@ module.exports = {
     movp: new Byte(0x07),
     movpm: new Byte(0x08),
     movrm: new Byte(0x09),
+    movrp: new Byte(0x0A),
     syscall: new Byte(0x10),
 };

@@ -27,6 +27,7 @@ Move instruction:
 | `mov eax, [var]` | move memory pointer to register    | `movpm`            |
 | `mov var, ebx`   | move register to memory            | `movrm`            |
 | `mov [ax], ebx`  | move register to register pointer  | `movrp`            |
+| `mov [var], ebx` | move register to memory pointer    | `movrpm`           |
 
 
 ## How to run
@@ -39,6 +40,7 @@ Move instruction:
 
 ## TODO
 
+- Memory should only have `read()` and `write()` taking address and size (default one)
 - Data types should have a `format()` method that directly prints their hex representation
 - ES cannot represent numbers too big, and at a certain point the 2's complement kicks in, so when we manipulate bits we get negative numbers while we want to always store positive numbers instead. Define a number type to store and manipulate numbers in a reliable way.
 - Decide how to handle negative numbers as result of subtract

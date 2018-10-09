@@ -27,7 +27,7 @@ Feature: Instruction mov
   Scenario: move immediate to memory
     Given the program (pseudocode) is:
         """
-        status :=                     ; define 'status' without initializing it
+        status :=                     ; declare variable 'status' without initializing it
         al := 1                       ; assign 1 to al
         status := 0x54                ; assign 0x54 to 'status'
         bl := status                  ; assign the value of 'status' to bl
@@ -39,10 +39,10 @@ Feature: Instruction mov
   Scenario: move immediate to register pointer
     Given the program (pseudocode) is:
       """
-      status :=                       ; define 'status' without initializing it
+      status :=                       ; declare variable 'status' without initializing it
       al := 1                         ; assign 1 to al
-      cl := &status                   ; assign the address of 'status' to cl
-      *cl := 0x54                     ; assign 0x54 to the memory pointed to by cl
+      cl := &status                   ; let cl point to 'status'
+      *cl := 0x54                     ; assign 0x54 to the variable pointed to by cl
       bl := status                    ; assign value of variable 'status' to bl
       syscall                         ; exit with status 0x54
       """
@@ -52,9 +52,9 @@ Feature: Instruction mov
   Scenario: move immediate to memory pointer
     Given the program (pseudocode) is:
       """
-      status :=                       ; define 'status' without initializing it
-      statusPtr := &status            ; assign the address of 'status' to variable 'statusPtr'
-      *statusPtr := 0x54              ; assign the value 0x54 to the memory pointed to by 'statusPtr'
+      status :=                       ; declare variable 'status' without initializing it
+      statusPtr := &status            ; let variable 'statusPtr' point to 'status'
+      *statusPtr := 0x54              ; assign the value 0x54 to the variable pointed to by 'statusPtr'
       al := 1                         ; assign 1 to al
       bl := *statusPtr                ; assign to bl the value in memory pointed to by exitPtr
       syscall                         ; exit with status 0x54
@@ -79,7 +79,7 @@ Feature: Instruction mov
       """
       status := 0xA2                  ; assign 0xA2 to variable 'status'
       al := 1                         ; assign 1 to al
-      cx := &status                   ; assign the address of 'status' to cx
+      cx := &status                   ; let cx point to 'status'
       bl := *cx                       ; assign the value pointed to by cx to bl
       syscall                         ; exit with status 0xA2
       """
@@ -90,7 +90,7 @@ Feature: Instruction mov
     Given the program (pseudocode) is:
       """
       status := 0xA2                  ; assign 0xA2 to variable 'status'
-      statusPtr := &status            ; assign the address of 'status' to variable 'statusPtr'
+      statusPtr := &status            ; let variable 'statusPtr' point to 'status'
       al := 1                         ; assign 1 to al
       bl := *statusPtr                ; assign the value pointed to by statusPtr to bl
       syscall                         ; exit with status 0xA2
@@ -107,3 +107,17 @@ Feature: Instruction mov
       """
     When I run the program
     Then the program terminates with exit status 0xFE
+
+  Scenario: move register to register pointer
+    Given the program (pseudocode) is:
+      """
+      status :=                       ; declare variable  'status' without initializing it
+      al := 1                         ; assign 1 to al
+      cl := 0xFE                      ; assign 0xFE to cl
+      dl := &status                   ; let dl point to 'status'
+      *dl := cl                       ; assign the value of cl to the variable pointed to by dl
+      bl := status                    ; assign the value of 'status' to bl
+      syscall                         ; exit with status 0xFE
+      """
+    When I run the program
+    Then the pgroam terminates with exit status 0xFE
