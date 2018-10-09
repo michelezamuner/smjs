@@ -56,6 +56,8 @@ module.exports = class extends InterpreterInterface {
             this._movipm(new Word(byte2, byte3), byte4);
         } else if (byte1.eq(Mnemonics.movm)) {
             this._movm(new RegisterAddress(byte2), new Word(byte3, byte4));
+        } else if (byte1.eq(Mnemonics.movp)) {
+            this._movp(new RegisterAddress(byte2), new RegisterAddress(byte3));
         } else if (byte1.eq(Mnemonics.movrm)) {
             this._movrm(new Word(byte2, byte3), new RegisterAddress(byte4));
         } else if (byte1.eq(Mnemonics.syscall)) {
@@ -66,15 +68,15 @@ module.exports = class extends InterpreterInterface {
     }
 
     /**
-     * @param {RegisterAddress} first
-     * @param {RegisterAddress} second
+     * @param {RegisterAddress} dest
+     * @param {RegisterAddress} source
      * @private
      */
-    _mov(first, second) {
-        if (first.getType() !== second.getType()) {
-            throw `Cannot move register ${second.format()} to register ${first.format()}`;
+    _mov(dest, source) {
+        if (dest.getType() !== source.getType()) {
+            throw `Cannot move register ${source.format()} to register ${dest.format()}`;
         }
-        this._registers.set(first, this._registers.get(second));
+        this._registers.set(dest, this._registers.get(source));
     }
 
     /**
@@ -151,6 +153,21 @@ module.exports = class extends InterpreterInterface {
             ? this._memory.read(address)
             : new type(...this._memory.readSet(address, new Byte(register.getType().SIZE)));
         this._registers.set(register, value);
+    }
+
+    /**
+     * @param {RegisterAddress} dest
+     * @param {RegisterAddress} source
+     * @private
+     */
+    _movp(dest, source) {
+        if (!source.isHalf()) {
+            throw `Cannot use non-word register ${source.format()} as pointer`;
+        }
+        const addr = this._registers.get(source);
+        const type = dest.getType();
+        const value = this._memory.readSet(addr, new Byte(type.SIZE));
+        this._registers.set(dest, new type(...value));
     }
 
     /**

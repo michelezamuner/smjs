@@ -2,6 +2,7 @@ const Assembler = require('../../../../src/Assemblers/RASM/Assembler');
 const Mnemonics = require('../../../../src/Architectures/SMA/Mnemonics');
 const Byte = require('../../../../src/DataTypes/Byte');
 const Word = require('../../../../src/DataTypes/Word');
+const Double = require('../../../../src/DataTypes/Double');
 const random = require('../../random');
 
 /**
@@ -112,6 +113,24 @@ test('supports move memory to register', () => {
         Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
         Mnemonics.movm, Mnemonics.bx, new Byte(0x00), new Byte(0x09),
         new Byte(value), new Byte(wordLeft), new Byte(wordRight),
+    ]);
+});
+
+test('supports move register pointer to register', () => {
+    const value = new Double(random(Double));
+    const valueb = value.expand();
+    const code = `
+        movi ax, 0x08
+        movp eax, ax
+        ${valueb.map(byte => '0x' + byte.uint().toString(16)).join(' ')}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Mnemonics.movi, Mnemonics.ax, ...(new Word(0x08)).expand(),
+        Mnemonics.movp, Mnemonics.eax, Mnemonics.ax, new Byte(0x00),
+        ...valueb
     ]);
 });
 

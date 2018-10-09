@@ -18,15 +18,15 @@ Once a specific architecture has been configured to be used with the processor, 
 
 Move instruction:
 | `mov eax, ebx`   | move register to register          | `mov`              |
-| `mov eax, 1`     | move immediate to register         | `movi`             |
+| `mov ax, 1`      | move immediate to register         | `movi`             |
 | `mov var, 1`     | move immediate to memory           | `movim`            |
-| `mov [eax], 1`   | move immediate to register pointer | `movipb`, `movipw` |
+| `mov [ax], 1`    | move immediate to register pointer | `movipb`, `movipw` |
 | `mov [var], 1`   | move immediate to memory pointer   | `movipm`           |
 | `mov eax, var`   | move memory to register            | `movm`             |
-| `mov eax, [ebx]` | move register pointer to register  | `movp`             |
+| `mov eax, [bx]`  | move register pointer to register  | `movp`             |
 | `mov eax, [var]` | move memory pointer to register    | `movpm`            |
 | `mov var, ebx`   | move register to memory            | `movrm`            |
-| `mov [eax], ebx` | move register to register pointer  | `movrp`            |
+| `mov [ax], ebx`  | move register to register pointer  | `movrp`            |
 
 
 ## How to run

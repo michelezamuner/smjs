@@ -74,6 +74,18 @@ Feature: Instruction mov
     When I run the program
     Then the program terminates with exit status 0xA2
 
+  Scenario: move register pointer to register
+    Given the program (pseudocode) is:
+      """
+      status := 0xA2                  ; assign 0xA2 to variable 'status'
+      al := 1                         ; assign 1 to ax
+      cx := &status                   ; assign the address of 'status' to cx
+      bl := *cx                       ; assign the value pointed to by cx to bl
+      syscall
+      """
+    When I run the program
+    Then the program terminates with exit status 0xA2
+
   Scenario: move register to memory
     Given the program (pseudocode) is:
       """
