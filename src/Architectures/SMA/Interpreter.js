@@ -3,9 +3,11 @@ const Memory = require('../../ProcessorInterfaces/Memory');
 const Exit = require('../../ProcessorInterfaces/Exit');
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
+const Double = require('../../DataTypes/Double');
 const Mnemonics = require('./Mnemonics');
 const Registers = require('./Registers');
 const RegisterAddress = require('./RegisterAddress');
+const System = require('./System');
 
 /**
  * Interpreter of instructions
@@ -17,17 +19,26 @@ module.exports = class extends InterpreterInterface {
      * @returns {Byte}
      */
     static get SYS_EXIT() {
-        return new Word(0x01);
+        return new Byte(0x01);
+    }
+
+    /**
+     * @return {Byte}
+     */
+    static get SYS_WRITE() {
+        return new Byte(0x04);
     }
 
     /**
      * @param {Registers} registers
      * @param {Memory} memory
+     * @param {System} system
      */
-    constructor(registers, memory) {
+    constructor(registers, memory, system) {
         super();
         this._registers = registers;
         this._memory = memory;
+        this._system = system;
         this._exit = new Exit;
     }
 
@@ -91,11 +102,10 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _movi(register, value) {
-        if (register.isWhole()) {
-            throw `Cannot move immediate value to register ${register.format()}`;
-        }
         if (register.isLeftq() || register.isRightq()) {
             value = new Byte(value.expand()[1]);
+        } else if (register.isWhole()) {
+            value = new Double(new Byte(0x00), new Byte(0x00), ...value.expand());
         }
 
         this._registers.set(register, value);
@@ -233,9 +243,15 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _syscall() {
-        const call = this._registers.get(new RegisterAddress(Mnemonics.al));
+        const call = this._registers.get(new RegisterAddress(Mnemonics.eax));
         if (call.eq(this.constructor.SYS_EXIT)) {
-            this._exit = new Exit(true, this._registers.get(new RegisterAddress(Mnemonics.bl)));
+            this._exit = new Exit(true, this._registers.get(new RegisterAddress(Mnemonics.ebx)));
+        } else if (call.eq(this.constructor.SYS_WRITE)) {
+            const fd = this._registers.get(new RegisterAddress(Mnemonics.ebx));
+            const count = this._registers.get(new RegisterAddress(Mnemonics.edx));
+            const buf = this._memory.readSet(this._registers.get(new RegisterAddress(Mnemonics.ecx)), count);
+            const written = this._system.write(fd.uint(), buf.map(byte => byte.uint()), count.uint());
+            this._registers.set(new RegisterAddress(Mnemonics.eax), new Double(written));
         }
     }
 };

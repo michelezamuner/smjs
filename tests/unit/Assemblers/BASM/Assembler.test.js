@@ -2,6 +2,7 @@ const Assembler = require('../../../../src/Assemblers/BASM/Assembler');
 const Mnemonics = require('../../../../src/Architectures/SMA/Mnemonics');
 const Byte = require('../../../../src/DataTypes/Byte');
 const Word = require('../../../../src/DataTypes/Word');
+const Double = require('../../../../src/DataTypes/Double');
 const random = require('../../random');
 
 /**
@@ -38,25 +39,28 @@ test('supports move immediate to register', () => {
 });
 
 test('supports move memory to register', () => {
-    const byte = new Byte(random(Byte));
-    const wordLeft = new Byte(random(Byte));
-    const wordRight = new Byte(random(Byte));
-    const word = new Word(wordLeft, wordRight);
+    const value1 = new Word(random(Word));
+    const value2 = new Byte(random(Byte));
+    const value3 = new Double(0x01020304);
     const code = `
         .data
-            value1 db 0x${byte.uint().toString(16)}
-            value2 dw 0x${word.uint().toString(16)}
+            valueA dw 0x${value1.uint().toString(16)}
+            valueB db 0x${value2.uint().toString(16)}
+            valueC dd 0x${value3.uint().toString(16)}
         .text
-            mov ah, value1
-            mov bx, value2
+            mov eax, valueA
+            mov ebx, valueB
+            mov ecx, valueC
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movm, Mnemonics.ah, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movm, Mnemonics.bx, new Byte(0x00), new Byte(0x09),
-        byte, wordLeft, wordRight
+        Mnemonics.movm, Mnemonics.eax, new Byte(0x00), new Byte(0x0C),
+        Mnemonics.movm, Mnemonics.ebx, new Byte(0x00), new Byte(0x0E),
+        Mnemonics.movm, Mnemonics.ecx, new Byte(0x00), new Byte(0x0F),
+        ...value1.expand(), value2,
+        ...value3.expand(),
     ]);
 });
 

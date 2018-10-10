@@ -19,16 +19,21 @@ const registers = {};
 const memory = {};
 
 /**
+ * @type {Object}
+ */
+const system = {};
+
+/**
  * @type {null|Interpreter}
  */
 let interpreter = null;
 
 beforeEach(() => {
-    memory.write = jest.fn();
     registers.set = jest.fn();
     registers.setExit = jest.fn();
     registers.setEs = jest.fn();
-    interpreter = new Interpreter(registers, memory);
+    memory.write = jest.fn();
+    interpreter = new Interpreter(registers, memory, system);
 });
 
 test('implements interpreter interface', () => {
@@ -82,16 +87,12 @@ test('implements move immediate to register', () => {
 
     expect(registers.set.mock.calls[1][0]).toStrictEqual(new RegisterAddress(Mnemonics.ax));
     expect(registers.set.mock.calls[1][1]).toStrictEqual(value);
-});
 
-test('fails if size mismatch on move immediate to register', () => {
-    const value = new Word(random(Word));
-    const forbidden = ['eax', 'ebx', 'ecx', 'edx'];
-    for (const register of forbidden) {
-        const instruction = [Mnemonics.movi, Mnemonics[register], ...value.expand()];
-        expect(() => interpreter.exec(instruction))
-            .toThrow(`Cannot move immediate value to register ${new RegisterAddress(Mnemonics[register]).format()}`);
-    }
+    instruction = [Mnemonics.movi, Mnemonics.eax, ...bytes];
+    interpreter.exec(instruction);
+
+    expect(registers.set.mock.calls[2][0]).toStrictEqual(new RegisterAddress(Mnemonics.eax));
+    expect(registers.set.mock.calls[2][1]).toStrictEqual(new Double(new Byte(0x00), new Byte(0x00), ...bytes));
 });
 
 test('implements move immediate to memory', () => {
@@ -332,13 +333,49 @@ test('implements syscall exit', () => {
     const value = new Byte(random(Byte));
     instruction = [Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00)];
 
-    registers.get = jest.fn(reg => reg.eq(new RegisterAddress(Mnemonics.al)) ? Interpreter.SYS_EXIT : value);
+    registers.get = jest.fn(reg => reg.eq(new RegisterAddress(Mnemonics.eax)) ? Interpreter.SYS_EXIT : value);
 
     exit = interpreter.exec(instruction);
 
-    expect(registers.get).nthCalledWith(1, new RegisterAddress(Mnemonics.al));
-    expect(registers.get).nthCalledWith(2, new RegisterAddress(Mnemonics.bl));
+    expect(registers.get).nthCalledWith(1, new RegisterAddress(Mnemonics.eax));
+    expect(registers.get).nthCalledWith(2, new RegisterAddress(Mnemonics.ebx));
     expect(exit).toBeInstanceOf(Exit);
     expect(exit.shouldExit()).toBe(true);
     expect(exit.getExitStatus()).toStrictEqual(value);
+});
+
+test('implement syscall write', () => {
+    const fd = new Byte(random(Byte));
+    const buf = new Word(random(Word));
+    const count = new Word(random(Word));
+    const bytes = new Double(random(Double)).expand();
+    const written = random(Byte);
+    const instruction = [Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00)];
+
+    registers.get = reg => {
+        if (reg.eq(new RegisterAddress(Mnemonics.eax))) {
+            return Interpreter.SYS_WRITE;
+        } else if (reg.eq(new RegisterAddress(Mnemonics.ebx))) {
+            return fd;
+        } else if (reg.eq(new RegisterAddress(Mnemonics.ecx))) {
+            return buf;
+        } else if (reg.eq(new RegisterAddress(Mnemonics.edx))) {
+            return count;
+        }
+    };
+
+    memory.readSet = (addr, size) => addr.eq(buf) && size.eq(count) ? bytes : [];
+    system.write = (fdParam, bufParam, countParam) => {
+        const expectedBuf = new Double(...bytes);
+        const actualBuf = new Double(...bufParam.map(value => new Byte(value)));
+        if (fdParam === fd.uint() && actualBuf.eq(expectedBuf) && countParam === count.uint()) {
+            return written;
+        }
+        return 0;
+    };
+
+    interpreter.exec(instruction);
+
+    expect(registers.set.mock.calls[0][0]).toStrictEqual(new RegisterAddress(Mnemonics.eax));
+    expect(registers.set.mock.calls[0][1]).toStrictEqual(new Double(written));
 });

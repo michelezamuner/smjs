@@ -13,7 +13,7 @@ module.exports = {
         try {
             const res = await promisify(exec)(`node main.js ${file} --asm=${asm}`);
             exp = () => {
-                expect(status).toBe(0);
+                expect(0).toBe(status);
                 expect(res.stdout.trim()).toBe(out);
             }
         } catch (e) {

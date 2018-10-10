@@ -1,11 +1,20 @@
 const Mnemonics = require('../../Architectures/SMA/Mnemonics');
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
+const Double = require('../../DataTypes/Double');
 
 /**
  * Source code assembler.
  */
 module.exports = class Assembler {
+    /**
+     * @return {{db: Byte, dw: Word, dd: Double}}
+     * @private
+     */
+    static get _SYMBOL_DEFINES() {
+        return {db: Byte, dw: Word, dd: Double};
+    }
+
     constructor() {
         this._variables = [];
     }
@@ -86,11 +95,8 @@ module.exports = class Assembler {
         const variables = [];
         for (const line of dataSegment) {
             const parts = line.split(/\s+/);
-            if (parts[1] === 'db') {
-                variables.push({name: parts[0], bytes: [new Byte(parseInt(parts[2]))]});
-            } else if (parts[1] === 'dw') {
-                variables.push({name: parts[0], bytes: (new Word(parseInt(parts[2]))).expand()});
-            }
+            const type = this.constructor._SYMBOL_DEFINES[parts[1]];
+            variables.push({name: parts[0], bytes: (new type(parseInt(parts[2]))).expand()});
         }
 
         return variables;
@@ -179,7 +185,14 @@ module.exports = class Assembler {
         }
 
         const opcode = Mnemonics.movm;
-        const address = this._variables.findIndex(variable => variable.name === operands[1]);
-        return [opcode, Mnemonics[operands[0]], ...(new Word(address).expand())];
+        let address = new Word(0x00);
+        for (const variable of this._variables) {
+            if (variable.name === operands[1]) {
+                break;
+            }
+            address = address.add(new Byte(variable.bytes.length));
+        }
+
+        return [opcode, Mnemonics[operands[0]], ...address.expand()];
     }
 };
