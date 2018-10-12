@@ -29,7 +29,7 @@ test('move immediate to memory', () => {
     `, 0x54, '', '', 'rasm');
 });
 
-test('move immediate byte to register pointer', () => {
+test('move immediate to byte register pointer', () => {
     return expect.exit(`
         movi eax, 1
         movi cx, 0x17       ; assume first three bytes from 0x14 are zero
@@ -39,11 +39,21 @@ test('move immediate byte to register pointer', () => {
     `, 0x54, '', '', 'rasm');
 });
 
-test('move immediate word to register pointer', () => {
+test('move immediate to word register pointer', () => {
     return expect.exit(`
         movi eax, 1
         movi cx, 0x16       ; assume first two bytes from 0x14 are zero
         movipw cx, 0x54     ; write two bytes to 0x16
+        movm ebx, 0x14      ; read four bytes (ebx)
+        syscall
+    `, 0x54, '', '', 'rasm');
+});
+
+test('move immediate to double register pointer', () => {
+    return expect.exit(`
+        movi eax, 1
+        movi cx, 0x14
+        movipd cx, 0x54     ; write four bytes (last two are 0x54) to 0x14
         movm ebx, 0x14      ; read four bytes (ebx)
         syscall
     `, 0x54, '', '', 'rasm');
@@ -76,15 +86,6 @@ test('move register pointer to register', () => {
         movp ebx, cx
         syscall
         0x00 0x00 0x00 0xA2
-    `, 0xA2, '', '', 'rasm');
-});
-
-test('move memory pointer to register', () => {
-    return expect.exit(`
-        movi eax, 1
-        movmp ebx, 0x0C
-        syscall
-        0x00 0x0E 0x00 0x00 0x00 0xA2
     `, 0xA2, '', '', 'rasm');
 });
 

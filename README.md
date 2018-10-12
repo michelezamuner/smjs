@@ -17,29 +17,67 @@ Once a specific architecture has been configured to be used with the processor, 
 ### SMA
 
 Move instruction:
-| `mov eax, ebx`   | move register to register          | `mov`              |
-| `mov ax, 1`      | move immediate to register         | `movi`             |
-| `mov var, 1`     | move immediate to memory           | `movim`            |
-| `mov [ax], 1`    | move immediate to register pointer | `movipb`, `movipw` |
-| `mov [var], 1`   | move immediate to memory pointer   | `movimp`           |
-| `mov eax, var`   | move memory to register            | `movm`             |
-| `mov eax, [bx]`  | move register pointer to register  | `movp`             |
-| `mov eax, [var]` | move memory pointer to register    | `movmp`            |
-| `mov var, ebx`   | move register to memory            | `movrm`            |
-| `mov [ax], ebx`  | move register to register pointer  | `movrp`            |
-| `mov [var], ebx` | move register to memory pointer    | `movrmp`           |
+| `mov eax, ebx`   | move register to register          | `mov`                        |
+| `mov ax, 1`      | move immediate to register         | `movi`                       |
+| `mov var, 1`     | move immediate to memory           | `movim`                      |
+| `mov [ax], 1`    | move immediate to register pointer | `movipb`, `movipw`, `movipd` |
+| `mov [var], 1`   | move immediate to memory pointer   | `movimp`                     |
+| `mov eax, var`   | move memory to register            | `movm`                       |
+| `mov eax, [bx]`  | move register pointer to register  | `movp`                       |
+| `mov var, ebx`   | move register to memory            | `movrm`                      |
+| `mov [ax], ebx`  | move register to register pointer  | `movrp`                      |
+| `mov [var], ebx` | move register to memory pointer    | `movrmp`                     |
+
+
+## References
+
+### Architectures
+
+- https://en.wikipedia.org/wiki/Instruction_set_architecture
+- https://en.wikipedia.org/wiki/Minimal_instruction_set_computer
+- https://www.tutorialspoint.com/assembly_programming/assembly_addressing_modes.htm
+- https://www.tutorialspoint.com/assembly_programming/assembly_registers.htm
+- http://web.stanford.edu/class/cs107/guide/x86-64.html
+- https://www3.nd.edu/~dthain/courses/cse40243/fall2015/intel-intro.html
+- https://www.tutorialspoint.com/assembly_programming/assembly_system_calls.htm
+- http://man7.org/linux/man-pages/man2/write.2.html
+- https://en.wikipedia.org/wiki/File_descriptor
+- https://en.wikipedia.org/wiki/Addressing_mode
+
+### Assemblers
+
+- http://www.keil.com/support/man/docs/armasm/armasm_dom1359731122720.htm
+- http://nickdesaulniers.github.io/blog/2016/08/13/object-files-and-symbols/
+- https://stackoverflow.com/questions/31227153/size-and-objdump-report-different-sizes-for-the-text-segment
+- https://en.wikipedia.org/wiki/Data_segment
+- https://en.wikipedia.org/wiki/.bss
+
+### Processor
+
+- https://reverseengineering.stackexchange.com/questions/2006/how-are-the-segment-registers-fs-gs-cs-ss-ds-es-used-in-linux
 
 
 ## How to run
 
-- `docker build -t smjs .`
-- `./run.sh jarn test`
-- `./run.sh jarn test Processor/Registers`
-- ...
+Build the Docker image:
+```
+$ docker build -t smjs .
+```
+
+Run tests:
+```
+$ ./run.sh jarn test
+```
+
+Run the application (you can choose which assembler to use with `--asm`):
+```
+$ ./run.sh node main.js test.sm --asm=rasm
+```
 
 
 ## TODO
 
+- Either add instructions movimpb, movimpw, movimpd (because different sizes cannot be supported from the assembler using movimp), or remove movimp altogether and let the assembler do the trick of writing in the correct place of memory (also if using RASM pointers are pretty pointless since we know all memory addresses explicitly). If going for the second, consider removing all pointer instructions from SMA, and implement them only on BASM. BASM code should not rely on defining _low variables because of these types problems.
 - Memory should only have `read()` and `write()` taking address and size (default one)
 - Data types should have a `format()` method that directly prints their hex representation
 - ES cannot represent numbers too big, and at a certain point the 2's complement kicks in, so when we manipulate bits we get negative numbers while we want to always store positive numbers instead. Define a number type to store and manipulate numbers in a reliable way.

@@ -8,6 +8,14 @@ const Double = require('../../DataTypes/Double');
  */
 module.exports = class Assembler {
     /**
+     * @return {number}
+     * @private
+     */
+    static get _INSTRUCTION_SIZE() {
+        return 4;
+    }
+
+    /**
      * @return {{db: Byte, dw: Word, dd: Double}}
      * @private
      */
@@ -16,7 +24,8 @@ module.exports = class Assembler {
     }
 
     constructor() {
-        this._variables = [];
+        this._symbols = [];
+        this._pointers = [];
     }
 
     /**
@@ -26,18 +35,113 @@ module.exports = class Assembler {
      * @return {Byte[]}
      */
     assemble(code) {
+        const lines = this._parseLines(code);
+        const dataSegment = this._parseSegment('data', lines);
+        const bssSegment = this._parseSegment('bss', lines);
+        const textSegment = this._parseSegment('text', lines);
+        const textSize = textSegment.length * this.constructor._INSTRUCTION_SIZE;
+
+        this._loadSymbols(textSize, dataSegment, bssSegment);
+
+        let object = this._parseTextBytes(textSegment);
+        object = this._appendStaticData(object);
+
+        return object;
+    }
+
+    /**
+     * @param {string} code
+     * @return {string[]}
+     * @private
+     */
+    _parseLines(code) {
         let lines = code.split("\n");
         lines = this._removeBlanks(lines);
         lines = this._removeComments(lines);
 
-        const dataSegment = this._parseSegment('data', lines);
-        const textSegment = this._parseSegment('text', lines);
+        return lines;
+    }
 
-        this._variables = this._parseVariables(dataSegment);
+    /**
+     * @param {string} segment
+     * @param {string[]} lines
+     * @returns {string[]}
+     * @private
+     */
+    _parseSegment(segment, lines) {
+        let insideSegment = false;
+        return lines.filter(line => {
+            if (line.startsWith('.')) {
+                insideSegment = false;
+            }
+            if (line.startsWith('.' + segment)) {
+                insideSegment = true;
+            }
+            return insideSegment && !line.startsWith('.' + segment);
+        });
+    }
 
-        let object = this._parseTextBytes(textSegment);
-        object = this._updateAddressesInInstructions(object);
-        object = this._appendVariablesValues(object);
+    /**
+     * @param {number} textSize
+     * @param {string[]} dataSegment
+     * @param {string[]} bssSegment
+     * @private
+     */
+    _loadSymbols(textSize, dataSegment, bssSegment) {
+        let address = new Word(textSize);
+        for (const line of dataSegment) {
+            const parts = this._parseDefinition(line);
+            const type = this.constructor._SYMBOL_DEFINES[parts[1]];
+            const size = parts.length - 2;
+            let bytes = [];
+            for (let i = 0; i < size; i++) {
+                bytes = [...bytes, ...(new type(this._parseImmediate(parts[i + 2]))).expand()];
+            }
+            this._symbols.push({
+                name: parts[0],
+                address: address,
+                type: type,
+                bytes: bytes,
+            });
+            address = address.add(new Byte(type.SIZE * size));
+        }
+        for (const line of bssSegment) {
+            const parts = line.split(/\s+/);
+            const type = this.constructor._SYMBOL_DEFINES[parts[1]];
+            const size = parts[2] === 'times' ? parseInt(parts[3]) : 1;
+            this._symbols.push({
+                name: parts[0],
+                address: address,
+                type: type,
+            });
+            address = address.add(new Byte(type.SIZE * size));
+        }
+    }
+
+    /**
+     * @param {string[]} textSegment
+     * @returns {Byte[]}
+     * @private
+     */
+    _parseTextBytes(textSegment) {
+        return textSegment
+            .reduce((bytes, line) => [...bytes, ...this._parseInstruction(line)], []);
+    }
+
+    /**
+     * @param {Byte[]} object
+     * @returns {Byte[]}
+     * @private
+     */
+    _appendStaticData(object) {
+        for (const symbol of this._symbols) {
+            if (symbol.bytes === undefined) {
+                continue;
+            }
+            for (const byte of symbol.bytes) {
+                object.push(byte);
+            }
+        }
 
         return object;
     }
@@ -68,85 +172,24 @@ module.exports = class Assembler {
     }
 
     /**
-     * @param {string} segment
-     * @param {string[]} lines
-     * @returns {string[]}
+     * @param {string} line
+     * @return {string[]}
      * @private
      */
-    _parseSegment(segment, lines) {
-        let insideSegment = false;
-        return lines.filter(line => {
-            if (line.startsWith('.')) {
-                insideSegment = false;
-            }
-            if (line.startsWith('.' + segment)) {
-                insideSegment = true;
-            }
-            return insideSegment && !line.startsWith('.' + segment);
-        });
-    }
-
-    /**
-     * @param {string[]} dataSegment
-     * @return {Object[]}
-     * @private
-     */
-    _parseVariables(dataSegment) {
-        const variables = [];
-        for (const line of dataSegment) {
-            const parts = line.split(/\s+/);
-            const type = this.constructor._SYMBOL_DEFINES[parts[1]];
-            variables.push({name: parts[0], bytes: (new type(parseInt(parts[2]))).expand()});
+    _parseDefinition(line) {
+        const stringStart = line.indexOf('"');
+        let parts = null;
+        if (stringStart !== -1) {
+            parts = line.substring(0, stringStart).trim().split(/\s+/);
+            parts.push(line.substring(stringStart));
+        } else {
+            parts = line.split(/\s+/);
         }
 
-        return variables;
-    }
-
-    /**
-     * @param {string[]} textSegment
-     * @returns {Byte[]}
-     * @private
-     */
-    _parseTextBytes(textSegment) {
-        return textSegment
-            .reduce((bytes, line) => [...bytes, ...this._parseInstruction(line)], []);
-    }
-
-    /**
-     * @param {Byte[]} object
-     * @returns {Byte[]}
-     * @private
-     */
-    _updateAddressesInInstructions(object) {
-        const textSize = object.length;
-        for (let i = 0; i < textSize; i += 4) {
-            if (!object[i].eq(Mnemonics.movm)) {
-                continue;
-            }
-
-            const relativeAddress = (new Word(object[i + 2], object[i + 3]));
-            const absoluteAddress = relativeAddress.add(new Word(textSize));
-            const bytes = absoluteAddress.expand();
-            object[i + 2] = bytes[0];
-            object[i + 3] = bytes[1];
+        if (parts[2].startsWith('"') && parts[2].endsWith('"')) {
+            return [parts[0], parts[1], ...parts[2].substring(1, parts[2].length - 1).split('').map(c => `'${c}'`)];
         }
-
-        return object;
-    }
-
-    /**
-     * @param {Byte[]} object
-     * @returns {Byte[]}
-     * @private
-     */
-    _appendVariablesValues(object) {
-        for (const variable of this._variables) {
-            for (const byte of variable.bytes) {
-                object.push(byte);
-            }
-        }
-
-        return object;
+        return parts;
     }
 
     /**
@@ -176,23 +219,147 @@ module.exports = class Assembler {
      * @private
      */
     _parseMov(operands) {
-        if (Number.isInteger(parseInt(operands[1]))) {
-            return [Mnemonics.movi, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+        const registerFirst = Mnemonics[operands[0]];
+        const registerSecond = Mnemonics[operands[1]];
+        const immediate = this._parseImmediate(operands[1]);
+        const symbolFirst = this._parseSymbol(operands[0]);
+        const symbolSecond = this._parseSymbol(operands[1]);
+        const pointerFirst = this._parsePointer(operands[0]);
+        const pointerSecond = this._parsePointer(operands[1]);
+        const registerPointerFirst = Mnemonics[pointerFirst];
+        const registerPointerSecond = Mnemonics[pointerSecond];
+        const symbolPointerFirst = this._parseSymbol(pointerFirst);
+        const symbolPointerSecond = this._parseSymbol(pointerSecond);
+        const tableFirst = this._parseTable(operands[0]);
+        const tableSecond = this._parseTable(operands[1]);
+
+        if (registerFirst && registerSecond) {
+            return [Mnemonics.mov, registerFirst, registerSecond, new Byte(0x00)];
         }
 
-        if (Mnemonics[operands[1]] !== undefined) {
-            return [Mnemonics.mov, Mnemonics[operands[0]], Mnemonics[operands[1]], new Byte(0x00)];
+        if (registerFirst && immediate !== undefined) {
+            return [Mnemonics.movi, registerFirst, ...new Word(immediate).expand()];
         }
 
-        const opcode = Mnemonics.movm;
-        let address = new Word(0x00);
-        for (const variable of this._variables) {
-            if (variable.name === operands[1]) {
-                break;
+        if (registerFirst && symbolPointerSecond) {
+            this._pointers[registerFirst.uint()] = symbolPointerSecond;
+            return [Mnemonics.movi, registerFirst, ...symbolPointerSecond.address.expand()];
+        }
+
+        if (symbolFirst && immediate !== undefined) {
+            const address = symbolFirst.address.add(new Byte(symbolFirst.type.SIZE - 1));
+            return [Mnemonics.movim, ...address.expand(), new Byte(immediate)];
+        }
+
+        if (registerPointerFirst && immediate !== undefined) {
+            const type = this._pointers[registerPointerFirst.uint()].type;
+            if (type === Byte) {
+                return [Mnemonics.movipb, registerPointerFirst, ...(new Word(immediate)).expand()];
+            } else if (type === Word) {
+                return [Mnemonics.movipw, registerPointerFirst, ...(new Word(immediate)).expand()];
+            } else if (type === Double) {
+                return [Mnemonics.movipd, registerPointerFirst, ...(new Word(immediate)).expand()];
             }
-            address = address.add(new Byte(variable.bytes.length));
         }
 
-        return [opcode, Mnemonics[operands[0]], ...address.expand()];
+        if (symbolPointerFirst && immediate !== undefined) {
+            return [Mnemonics.movimp, ...symbolPointerFirst.address.expand(), new Byte(immediate)];
+        }
+
+        if (symbolFirst && registerSecond) {
+            return [Mnemonics.movrm, ...symbolFirst.address.expand(), registerSecond];
+        }
+
+        if (registerFirst && symbolSecond) {
+            return [Mnemonics.movm, registerFirst, ...symbolSecond.address.expand()];
+        }
+
+        if (registerFirst && registerPointerSecond) {
+            return [Mnemonics.movp, registerFirst, registerPointerSecond, new Byte(0x00)];
+        }
+
+        if (registerPointerFirst && registerSecond) {
+            return [Mnemonics.movrp, registerPointerFirst, registerSecond, new Byte(0x00)];
+        }
+
+        if (symbolPointerFirst && registerSecond) {
+            return [Mnemonics.movrmp, ...symbolPointerFirst.address.expand(), registerSecond];
+        }
+
+        if (registerFirst && tableSecond) {
+            return [Mnemonics.movm, registerFirst, ...this._getTableItemAddress(tableSecond).expand()];
+        }
+
+        if (tableFirst && immediate) {
+            const address = this._getTableItemAddress(tableFirst).add(new Byte(tableFirst.symbol.type.SIZE - 1));
+            return [Mnemonics.movim, ...address.expand(), new Byte(immediate)];
+        }
+
+        if (tableFirst && registerSecond) {
+            return [Mnemonics.movrm, ...this._getTableItemAddress(tableFirst).expand(), registerSecond];
+        }
+    }
+
+    /**
+     * @param {string} operand
+     * @return {number|undefined}
+     * @private
+     */
+    _parseImmediate(operand) {
+        const value = parseInt(operand);
+        if (Number.isInteger(value)) {
+            return value;
+        }
+
+        if (operand.startsWith('\'') && operand.endsWith('\'')) {
+            return operand.substring(1, 2).charCodeAt(0);
+        }
+
+        return undefined;
+    }
+
+    /**
+     * @param {string} operand
+     * @return {object|undefined}
+     * @private
+     */
+    _parseSymbol(operand) {
+        return this._symbols.find(symbol => symbol.name === operand);
+    }
+
+    /**
+     * @param {string} operand
+     * @return {string|undefined}
+     * @private
+     */
+    _parsePointer(operand) {
+        if (!operand.startsWith('[') || !operand.endsWith(']')) {
+            return undefined;
+        }
+
+        return operand.substring(1, operand.length - 1);
+    }
+
+    /**
+     * @param {string} operand
+     * @return {{symbol: {name: string, address: Word, type: Function}, index: number}|undefined}
+     * @private
+     */
+    _parseTable(operand) {
+        const match = /([\w_-]+)\[(\d+)]/.exec(operand);
+        if (match === null) {
+            return undefined;
+        }
+
+        return {symbol: this._parseSymbol(match[1]), index: parseInt(match[2])};
+    }
+
+    /**
+     * @param {{symbol: {name: string, address: Word, type: Function}, index: number}} tableOperand
+     * @return {Word}
+     * @private
+     */
+    _getTableItemAddress(tableOperand) {
+        return tableOperand.symbol.address.add(new Byte(tableOperand.symbol.type.SIZE * tableOperand.index));
     }
 };

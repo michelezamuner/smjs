@@ -32,6 +32,7 @@ beforeEach(() => {
     registers.set = jest.fn();
     registers.setExit = jest.fn();
     registers.setEs = jest.fn();
+    registers.get = jest.fn();
     memory.write = jest.fn();
     interpreter = new Interpreter(registers, memory, system);
 });
@@ -106,20 +107,21 @@ test('implements move immediate to memory', () => {
     expect(memory.write.mock.calls[0][1]).toStrictEqual(value);
 });
 
-test('implements move immediate byte to register pointer', () => {
-    const value = new Byte(random(Byte));
+test('implements move immediate to byte register pointer', () => {
+    const value = new Word(random(Word));
+    const bytes = value.expand();
     const address = new Word(random(Word));
-    const instruction = [Mnemonics.movipb, Mnemonics.ax, value, new Byte(0x00)];
+    const instruction = [Mnemonics.movipb, Mnemonics.ax, ...bytes];
 
     registers.get = reg => reg.eq(new RegisterAddress(Mnemonics.ax)) ? address : new Word(0x00);
 
     interpreter.exec(instruction);
 
     expect(memory.write.mock.calls[0][0]).toStrictEqual(address);
-    expect(memory.write.mock.calls[0][1]).toStrictEqual(value);
+    expect(memory.write.mock.calls[0][1]).toStrictEqual(bytes[1]);
 });
 
-test('implements move immediate word to register pointer', () => {
+test('implements move immediate to word register pointer', () => {
     const value = new Word(random(Word));
     const bytes = value.expand();
     const address = new Word(random(Word));
@@ -136,16 +138,39 @@ test('implements move immediate word to register pointer', () => {
 
 });
 
+test('implements move immediate to double register pointer', () => {
+    const value = new Word(random(Word));
+    const bytes = value.expand();
+    const address = new Word(random(Word));
+    const instruction = [Mnemonics.movipd, Mnemonics.ax, ...bytes];
+
+    registers.get = reg => reg.eq(new RegisterAddress(Mnemonics.ax)) ? address : new Word(0x00);
+
+    interpreter.exec(instruction);
+
+    expect(memory.write.mock.calls[0][0]).toStrictEqual(address);
+    expect(memory.write.mock.calls[0][1]).toStrictEqual(new Byte(0x00));
+    expect(memory.write.mock.calls[1][0]).toStrictEqual(address.add(new Byte(0x01)));
+    expect(memory.write.mock.calls[1][1]).toStrictEqual(new Byte(0x00));
+    expect(memory.write.mock.calls[2][0]).toStrictEqual(address.add(new Byte(0x02)));
+    expect(memory.write.mock.calls[2][1]).toStrictEqual(bytes[0]);
+    expect(memory.write.mock.calls[3][0]).toStrictEqual(address.add(new Byte(0x03)));
+    expect(memory.write.mock.calls[3][1]).toStrictEqual(bytes[1]);
+});
+
 test('fails if size mismatch on move immediate to register pointer', () => {
     const forbidden = ['ah', 'al', 'eax', 'bh', 'bl', 'ebx', 'ch', 'cl', 'ecx', 'dh', 'dl', 'edx'];
     for (const register of forbidden) {
-        let value = new Byte(random(Byte));
-        let instruction = [Mnemonics.movipb, Mnemonics[register], value, new Byte(0x00)];
+        const value = new Word(random(Word));
+        let instruction = [Mnemonics.movipb, Mnemonics[register], ...value.expand()];
         expect(() => interpreter.exec(instruction))
             .toThrow(`Cannot use register ${new RegisterAddress(Mnemonics[register]).format()} as pointer`);
 
-        value = new Word(random(Word));
         instruction = [Mnemonics.movipw, Mnemonics[register], ...value.expand()];
+        expect(() => interpreter.exec(instruction))
+            .toThrow(`Cannot use register ${new RegisterAddress(Mnemonics[register]).format()} as pointer`);
+
+        instruction = [Mnemonics.movipd, Mnemonics[register], ...value.expand()];
         expect(() => interpreter.exec(instruction))
             .toThrow(`Cannot use register ${new RegisterAddress(Mnemonics[register]).format()} as pointer`);
     }
@@ -211,32 +236,6 @@ test('fails if size mismatch on move register pointer to register', () => {
         const instruction = [Mnemonics.movp, Mnemonics.eax, register, new Byte(0x00)];
         expect(() => interpreter.exec(instruction))
             .toThrow(`Cannot use register ${new RegisterAddress(register).format()} as pointer`);
-    }
-});
-
-test('implements move memory pointer to register', () => {
-    for (const reg in [Mnemonics.al, Mnemonics.ax, Mnemonics.eax]) {
-        registers.set = jest.fn();
-        const type = new RegisterAddress(reg).getType();
-        const ptr = new Word(random(Word));
-        const mem = new Word(random(Word));
-        const value = new type(random(type));
-        const instruction = [Mnemonics.movmp, reg, ...ptr.expand()];
-
-        memory.readSet = (addr, size) => {
-            if (addr.eq(ptr) && size.eq(new Byte(0x02))) {
-                return mem.expand();
-            }
-            if (addr.eq(mem) && size.eq(new Byte(type.SIZE))) {
-                return value.expand();
-            }
-            return [];
-        };
-
-        interpreter.exec(instruction);
-
-        expect(registers.set.mock.calls[0][0]).toStrictEqual(new RegisterAddress(reg));
-        expect(registers.set.mock.calls[0][1]).toStrictEqual(value);
     }
 });
 
@@ -330,7 +329,7 @@ test('implements syscall exit', () => {
     expect(exit).toBeInstanceOf(Exit);
     expect(exit.shouldExit()).toBe(false);
 
-    const value = new Byte(random(Byte));
+    const value = new Double(new Byte(0x00), new Byte(0x00), new Byte(random(Byte)), new Byte(random(Byte)));
     instruction = [Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00)];
 
     registers.get = jest.fn(reg => reg.eq(new RegisterAddress(Mnemonics.eax)) ? Interpreter.SYS_EXIT : value);
@@ -341,7 +340,7 @@ test('implements syscall exit', () => {
     expect(registers.get).nthCalledWith(2, new RegisterAddress(Mnemonics.ebx));
     expect(exit).toBeInstanceOf(Exit);
     expect(exit.shouldExit()).toBe(true);
-    expect(exit.getExitStatus()).toStrictEqual(value);
+    expect(exit.getExitStatus()).toStrictEqual(value.expand()[3]);
 });
 
 test('implement syscall write', () => {

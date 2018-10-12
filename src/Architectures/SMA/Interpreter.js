@@ -60,17 +60,17 @@ module.exports = class extends InterpreterInterface {
         } else if (byte1.eq(Mnemonics.movim)) {
             this._movim(new Word(byte2, byte3), byte4);
         } else if (byte1.eq(Mnemonics.movipb)) {
-            this._movipb(new RegisterAddress(byte2), byte3);
+            this._movipb(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movipw)) {
             this._movipw(new RegisterAddress(byte2), new Word(byte3, byte4));
+        } else if (byte1.eq(Mnemonics.movipd)) {
+            this._movipd(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movimp)) {
             this._movimp(new Word(byte2, byte3), byte4);
         } else if (byte1.eq(Mnemonics.movm)) {
             this._movm(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movp)) {
             this._movp(new RegisterAddress(byte2), new RegisterAddress(byte3));
-        } else if (byte1.eq(Mnemonics.movmp)) {
-            this._movmp(new RegisterAddress(byte2), new Word(byte3, byte4));
         } else if (byte1.eq(Mnemonics.movrm)) {
             this._movrm(new Word(byte2, byte3), new RegisterAddress(byte4));
         } else if (byte1.eq(Mnemonics.movrp)) {
@@ -122,7 +122,7 @@ module.exports = class extends InterpreterInterface {
 
     /**
      * @param {RegisterAddress} register
-     * @param {Byte} value
+     * @param {Word} value
      * @private
      */
     _movipb(register, value) {
@@ -130,7 +130,8 @@ module.exports = class extends InterpreterInterface {
             throw `Cannot use register ${register.format()} as pointer`;
         }
         const address = this._registers.get(register);
-        this._memory.write(address, value);
+        const bytes = value.expand();
+        this._memory.write(address, bytes[1]);
     }
 
     /**
@@ -146,6 +147,23 @@ module.exports = class extends InterpreterInterface {
         const bytes = value.expand();
         this._memory.write(address, bytes[0]);
         this._memory.write(address.add(new Byte(0x01)), bytes[1]);
+    }
+
+    /**
+     * @param {RegisterAddress} register
+     * @param {Word} value
+     * @private
+     */
+    _movipd(register, value) {
+        if (!register.isHalf()) {
+            throw `Cannot use register ${register.format()} as pointer`;
+        }
+        const address = this._registers.get(register);
+        const bytes = value.expand();
+        this._memory.write(address, new Byte(0x00));
+        this._memory.write(address.add(new Byte(0x01)), new Byte(0x00));
+        this._memory.write(address.add(new Byte(0x02)), bytes[0]);
+        this._memory.write(address.add(new Byte(0x03)), bytes[1]);
     }
 
     /**
@@ -182,18 +200,6 @@ module.exports = class extends InterpreterInterface {
         const type = dest.getType();
         const value = this._memory.readSet(addr, new Byte(type.SIZE));
         this._registers.set(dest, new type(...value));
-    }
-
-    /**
-     * @param {RegisterAddress} register
-     * @param {Word} address
-     * @private
-     */
-    _movmp(register, address) {
-        const type = register.getType();
-        const effective = new Word(...this._memory.readSet(address, new Byte(0x02)));
-        const value = this._memory.readSet(effective, new Byte(type.SIZE));
-        this._registers.set(register, new type(...value));
     }
 
     /**
@@ -245,7 +251,8 @@ module.exports = class extends InterpreterInterface {
     _syscall() {
         const call = this._registers.get(new RegisterAddress(Mnemonics.eax));
         if (call.eq(this.constructor.SYS_EXIT)) {
-            this._exit = new Exit(true, this._registers.get(new RegisterAddress(Mnemonics.ebx)));
+            const value = this._registers.get(new RegisterAddress(Mnemonics.ebx));
+            this._exit = new Exit(true, value.expand()[3]);
         } else if (call.eq(this.constructor.SYS_WRITE)) {
             const fd = this._registers.get(new RegisterAddress(Mnemonics.ebx));
             const count = this._registers.get(new RegisterAddress(Mnemonics.edx));

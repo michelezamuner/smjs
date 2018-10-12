@@ -35,10 +35,10 @@ test('supports move immediate to register', () => {
     expect(bytes).toStrictEqual([Mnemonics.movi, Mnemonics.al, ...(new Word(value)).expand()]);
 });
 
-test('supports move immediate to memory', () => {
+test('supports move immediate to byte memory', () => {
     const value = random(Byte);
     const code = `
-        movim 0x08, 0x${value.toString(16)}
+        movim 0x08, ${value}
         movm al, 0x08
     `;
 
@@ -50,8 +50,8 @@ test('supports move immediate to memory', () => {
     ]);
 });
 
-test('supports move immediate byte word to register pointer', () => {
-    const value = random(Byte);
+test('supports move immediate to byte register pointer', () => {
+    const value = random(Word);
     const code = `
         movi ax, 0x08
         movipb ax, ${value}
@@ -61,11 +61,11 @@ test('supports move immediate byte word to register pointer', () => {
 
     expect(bytes).toStrictEqual([
         Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movipb, Mnemonics.ax, new Byte(value), new Byte(0x00),
+        Mnemonics.movipb, Mnemonics.ax, ...(new Word(value)).expand(),
     ]);
 });
 
-test('supports move immediate word to register pointer', () => {
+test('supports move immediate to word register pointer', () => {
     const value = random(Word);
     const code = `
         movi ax, 0x08
@@ -77,6 +77,21 @@ test('supports move immediate word to register pointer', () => {
     expect(bytes).toStrictEqual([
         Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x08),
         Mnemonics.movipw, Mnemonics.ax, ...(new Word(value)).expand(),
+    ]);
+});
+
+test('supports move immediate to double register pointer', () => {
+    const value = random(Word);
+    const code = `
+        movi ax, 0x08
+        movipd ax, ${value}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x08),
+        Mnemonics.movipd, Mnemonics.ax, ...(new Word(value)).expand(),
     ]);
 });
 
@@ -131,18 +146,6 @@ test('supports move register pointer to register', () => {
         Mnemonics.movi, Mnemonics.ax, ...(new Word(0x08)).expand(),
         Mnemonics.movp, Mnemonics.eax, Mnemonics.ax, new Byte(0x00),
         ...valueb
-    ]);
-});
-
-test('supports move memory pointer to register', () => {
-    const code = `
-        movmp bx, 0x04
-    `;
-
-    const bytes = assembler.assemble(code);
-
-    expect(bytes).toStrictEqual([
-        Mnemonics.movmp, Mnemonics.bx, ...(new Word(0x04)).expand(),
     ]);
 });
 
