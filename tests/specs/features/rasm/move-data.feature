@@ -1,4 +1,4 @@
-Feature: Instruction mov
+Feature: Move data
   As a programmer
   I want to move data from one storage to another
   In order to be able to work with data in a program
@@ -89,6 +89,7 @@ Feature: Instruction mov
   Scenario: move register to memory
     Given the program is:
       """
+      status :=                        ; declare variable 'status' without initializing it
       eax := 1                         ; assign 1 to eax
       ecx := 0xFE                      ; assign 0xFE to ecx
       status := ecx                    ; assign the value of ecx to variable 'status'
@@ -125,42 +126,4 @@ Feature: Instruction mov
       """
     When I run the program
     Then the program terminates with exit status 0xFE
-
-  Scenario: move from table
-    Given the program is:
-      """
-      table := [1, 2, 3, 4]            ; assign a table of values to the variable 'table'
-      eax := table[0]                  ; assign the first value of 'table' to eax
-      ebx := table[1]                  ; assign the second value of 'table' to ebx
-      ecx := table[2]                  ; assign the third value of 'table' to ecx
-      edx := table[3]                  ; assign the fourth value of 'table' to edx
-      syscall                          ; exit with status 2
-
-      """
-    When I run the program
-    Then the program terminates with exit status 2
-
-  Scenario: move to table
-    Given the program is:
-      """
-      table := [](3)                   ; declare table of 3 elements 'table', without initializing it
-      table[0] := 1                    ; assign 1 to the first element of 'table'
-      table[1] := 2                    ; assign 2 to the second element of 'table'
-      table[2] := 0x93                 ; assign 0x93 to the third element of 'table'
-      eax := table[0]                  ; assign the first element of 'table' to eax
-      ebx := table[2]                  ; assign the third element of 'table' to ebx
-      syscall                          ; exit with status 0x93
-      """
-    When I run the program
-    Then the program terminates with exit status 0x93
-
-  Scenario: move immediate characters
-    Given the program is:
-      """
-      eax := 1                         ; assign 1 to eax
-      ebx := '?'                       ; assign the character '?' to ebx
-      syscall                          ; exit with status 63
-      """
-    When I run the program
-    Then the program terminates with exit status 63
 

@@ -1,26 +1,26 @@
-const expect = require('../expect');
+const expect = require('./expect');
 
 test('move register to register', () => {
-    return expect.exit(`
+    return expect.program(`
         .text
             mov eax, 1
             mov ecx, 4
             mov ebx, ecx
             syscall
-    `, 4);
+    `).toExitWith(4);
 });
 
 test('move immediate to register', () => {
-    return expect.exit(`
+    return expect.program(`
         .text
             mov eax, 1
             mov ebx, 5
             syscall
-    `, 5);
+    `).toExitWith(5);
 });
 
 test('move immediate to memory', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             status      dd
         .text
@@ -28,11 +28,11 @@ test('move immediate to memory', () => {
             mov status, 0x54
             mov ebx, status
             syscall
-    `, 0x54);
+    `).toExitWith(0x54);
 });
 
 test('move immediate to byte register pointer', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             status      db  times 3
             statusLow   db
@@ -42,11 +42,11 @@ test('move immediate to byte register pointer', () => {
             mov [cx], 0x54
             mov ebx, status
             syscall
-    `, 0x54);
+    `).toExitWith(0x54);
 });
 
 test('move immediate to word register pointer', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             status      dw
             statusLow   dw
@@ -56,11 +56,11 @@ test('move immediate to word register pointer', () => {
             mov [cx], 0x1254
             mov ebx, status
             syscall
-    `, 0x54);
+    `).toExitWith(0x54);
 });
 
 test('move immediate to double register pointer', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             status  dd
         .text
@@ -69,11 +69,11 @@ test('move immediate to double register pointer', () => {
             mov [cx], 0x1254
             mov ebx, status
             syscall
-    `, 0x54);
+    `).toExitWith(0x54);
 });
 
 test('move immediate to memory pointer', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             status       db  times 3
             statusLow    db
@@ -85,11 +85,11 @@ test('move immediate to memory pointer', () => {
             mov eax, 1
             mov ebx, status
             syscall
-    `, 0x54);
+    `).toExitWith(0x54);
 });
 
 test('move memory to register', () => {
-    return expect.exit(`
+    return expect.program(`
         .data
             exit    dd  0x01
             status  dd  0xA2
@@ -97,11 +97,11 @@ test('move memory to register', () => {
             mov eax, exit
             mov ebx, status
             syscall
-    `, 0xA2);
+    `).toExitWith(0xA2);
 });
 
 test('move register pointer to register', () => {
-    return expect.exit(`
+    return expect.program(`
         .data
             status   dd  0xA2
         .text
@@ -109,11 +109,11 @@ test('move register pointer to register', () => {
             mov cx, [status]
             mov ebx, [cx]
             syscall
-    `, 0xA2);
+    `).toExitWith(0xA2);
 });
 
 test('move register to memory', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             status  dd
         .text
@@ -122,11 +122,11 @@ test('move register to memory', () => {
             mov status, ecx
             mov ebx, status
             syscall
-    `, 0xFE);
+    `).toExitWith(0xFE);
 });
 
 test('move register to register pointer', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             status  dd
         .text
@@ -136,11 +136,11 @@ test('move register to register pointer', () => {
             mov [dx], ecx
             mov ebx, status
             syscall
-    `, 0xFE);
+    `).toExitWith(0xFE);
 });
 
 test('move register to memory pointer', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             status      dd
             statusPtr   dw
@@ -152,11 +152,11 @@ test('move register to memory pointer', () => {
             mov [statusPtr], ecx
             mov ebx, status
             syscall
-    `, 0xFE);
+    `).toExitWith(0xFE);
 });
 
 test('move from table of bytes', () => {
-    return expect.exit(`
+    return expect.program(`
         .data
             table   db  1 2 3 4
         .text
@@ -165,11 +165,11 @@ test('move from table of bytes', () => {
             mov cl, table[2]
             mov dl, table[3]
             syscall
-    `, 2);
+    `).toExitWith(2);
 });
 
 test('move from table of words', () => {
-    return expect.exit(`
+    return expect.program(`
         .data
             table   dw  1 2 3 4
         .text
@@ -178,11 +178,11 @@ test('move from table of words', () => {
             mov cx, table[2]
             mov dx, table[3]
             syscall
-    `, 2);
+    `).toExitWith(2);
 });
 
 test('move from table of doubles', () => {
-    return expect.exit(`
+    return expect.program(`
         .data
             table   dd  1 2 3 4
         .text
@@ -191,11 +191,11 @@ test('move from table of doubles', () => {
             mov ecx, table[2]
             mov edx, table[3]
             syscall
-    `, 2);
+    `).toExitWith(2);
 });
 
 test('move immediate to table of bytes', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             table   db  times 3
         .text
@@ -205,11 +205,11 @@ test('move immediate to table of bytes', () => {
             mov al, table[0]
             mov bl, table[2]
             syscall
-    `, 0x93);
+    `).toExitWith(0x93);
 });
 
 test('move immediate to table of words', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             table   dw  times 3
         .text
@@ -219,11 +219,11 @@ test('move immediate to table of words', () => {
             mov ax, table[0]
             mov bx, table[2]
             syscall
-    `, 0x93);
+    `).toExitWith(0x93);
 });
 
 test('move immediate to table of doubles', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             table   dd  times 3
         .text
@@ -233,11 +233,11 @@ test('move immediate to table of doubles', () => {
             mov eax, table[0]
             mov ebx, table[2]
             syscall
-    `, 0x93);
+    `).toExitWith(0x93);
 });
 
 test('move register to table of bytes', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             table   db  3
         .text
@@ -250,11 +250,11 @@ test('move register to table of bytes', () => {
             mov al, table[0]
             mov bl, table[2]
             syscall
-    `, 0x93);
+    `).toExitWith(0x93);
 });
 
 test('move register to table of words', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             table   dw  3
         .text
@@ -267,11 +267,11 @@ test('move register to table of words', () => {
             mov ax, table[0]
             mov bx, table[2]
             syscall
-    `, 0x93);
+    `).toExitWith(0x93);
 });
 
 test('move register to table of doubles', () => {
-    return expect.exit(`
+    return expect.program(`
         .bss
             table   dd  3
         .text
@@ -284,14 +284,15 @@ test('move register to table of doubles', () => {
             mov eax, table[0]
             mov ebx, table[2]
             syscall
-    `, 0x93);
+    `).toExitWith(0x93);
 });
 
 test('move immediate characters', () => {
-    return expect.exit(`
+    return expect.program(`
         .text
             mov eax, 1
             mov ebx, '?'
             syscall
-    `, 63);
+    `).toExitWith(63);
 });
+

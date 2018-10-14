@@ -20,9 +20,9 @@ beforeEach(() => {
 });
 
 test('loads bytes into memory', () => {
-    const bytes = [];
+    let bytes = '';
     for (let i = 0x00; i < 0xFF; i++) {
-        bytes.push(new Byte(0xFF - i));
+        bytes += String.fromCharCode(0xFF - i);
     }
     loader.load(bytes);
 

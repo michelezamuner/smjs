@@ -1,14 +1,40 @@
 # Sloth Machine (JS)
 
-The `Processor` package has only to do with the main instruction fetch/execution cycle, independently from actual processor architecture choices, like which kind of main registers to use, what's their size, how much memory can be addressed, etc. Everything needed by `Processor` to function is specified in `ProcessorProtocol`, defining how it's possible to communicate with the `Processor`.
 
-The `Processor` can thus support several processor architectures, i.e. any that respects the processor protocol. Currently only one architecture has been defined, `ProcessorArchitectures/SMA`, standing for Sloth Machine Architecture. Ideas for possible architectures are:
+## How to use
+
+Build the Docker image:
+```
+$ docker build -t smjs .
+```
+
+Run tests:
+```
+$ ./run jarn test
+```
+
+Create executables from assembly code:
+```
+$ ./run bin/basm mycode.basm --out=myprogram.sm
+```
+
+Run executables in the virtual machine:
+```
+$ ./run bin/smm myprogram.sm
+```
+
+
+## Description
+
+The `Processor` package has only to do with the main instruction fetch/execution cycle, independently from actual processor architecture choices, like which kind of main registers to use, what's their size, how much memory can be addressed, etc. Everything needed by `Processor` to function is specified in `ProcessorInterface`, defining how it's possible to communicate with the `Processor`.
+
+The `Processor` can thus support several processor architectures, i.e. any that respects the processor interface. Currently only one architecture has been defined, `Architectures/SMA`, standing for Sloth Machine Architecture. Ideas for possible architectures are:
 - *SMA (Sloth Machine Architecture)*: using registers, fixed sized 4-bytes instructions, max 2 operands, etc.
 - *SMA-ACC (Sloth Machine Architecture with ACCumulator)*: accumulator register, max 1 operand using implicit accumulator, etc.
 - *SMA-STK (Sloth Machine Architecture with STacK)*: zero operands, uses stack
 
 Once a specific architecture has been configured to be used with the processor, we can write assembly code with a specific assembly language. Of course we can have different assembly languages to be converted to the same architecture's machine code, we just need the right assembler for that. Ideas for different assemblers for the SMA architecture:
-- *RASM (Raw Assembler for Sloth Machine)*: all mnemonics point to different machine instructions, no support for variables, etc.
+- *RASM (Reduced Assembler for Sloth Machine)*: all mnemonics point to different machine instructions, no support for variables, etc.
 - *BASM: (Basic Assembler for Sloth Machine)*: menmonics can group different machine instructions, variables supported, etc.
 
 
@@ -40,9 +66,13 @@ Move instruction:
 - http://web.stanford.edu/class/cs107/guide/x86-64.html
 - https://www3.nd.edu/~dthain/courses/cse40243/fall2015/intel-intro.html
 - https://www.tutorialspoint.com/assembly_programming/assembly_system_calls.htm
+- http://man7.org/linux/man-pages/man2/syscalls.2.html
+- http://man7.org/linux/man-pages/man2/syscall.2.html
+- https://blog.packagecloud.io/eng/2016/04/05/the-definitive-guide-to-linux-system-calls/
 - http://man7.org/linux/man-pages/man2/write.2.html
 - https://en.wikipedia.org/wiki/File_descriptor
 - https://en.wikipedia.org/wiki/Addressing_mode
+- https://stackoverflow.com/questions/2782010/how-to-dynamically-allocate-memory-using-assembly-and-system-calls-under-linux
 
 ### Assemblers
 
@@ -50,29 +80,14 @@ Move instruction:
 - http://nickdesaulniers.github.io/blog/2016/08/13/object-files-and-symbols/
 - https://stackoverflow.com/questions/31227153/size-and-objdump-report-different-sizes-for-the-text-segment
 - https://en.wikipedia.org/wiki/Data_segment
+- https://stackoverflow.com/questions/42612724/8086-what-is-the-default-adress-of-data-segment
 - https://en.wikipedia.org/wiki/.bss
+- https://stackoverflow.com/questions/10168743/which-variable-size-to-use-db-dw-dd-with-x86-assembly
+- https://www.linuxjournal.com/article/6463
 
 ### Processor
 
 - https://reverseengineering.stackexchange.com/questions/2006/how-are-the-segment-registers-fs-gs-cs-ss-ds-es-used-in-linux
-
-
-## How to run
-
-Build the Docker image:
-```
-$ docker build -t smjs .
-```
-
-Run tests:
-```
-$ ./run.sh jarn test
-```
-
-Run the application (you can choose which assembler to use with `--asm`):
-```
-$ ./run.sh node main.js test.sm --asm=rasm
-```
 
 
 ## TODO

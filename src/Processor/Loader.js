@@ -1,4 +1,5 @@
 const Memory = require('../ProcessorInterfaces/Memory');
+const Byte = require('../DataTypes/Byte');
 
 module.exports = class Loader {
     /**
@@ -10,12 +11,12 @@ module.exports = class Loader {
     }
 
     /**
-     * @param {Byte[]} bytes
+     * @param {string} data
      */
-    load(bytes) {
-        const size = bytes.length;
-        for (let address = 0; address < size; address++) {
-            this._memory.write(new this._addressType(address), bytes[address]);
+    load(data) {
+        const bytes = data.split('').map(char => new Byte(char.charCodeAt(0)));
+        for (const address in bytes) {
+            this._memory.write(new this._addressType(parseInt(address)), bytes[address]);
         }
     }
 };

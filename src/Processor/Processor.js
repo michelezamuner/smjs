@@ -26,7 +26,9 @@ module.exports = class Processor {
     run() {
         let exitStatus = 0;
 
+        // let max = 5;
         while (true) {
+            // if (max-- < 0) break;
             if (!this._canIncrementIp()) {
                 throw new MissingExitException('Missing exit instruction');
             }
