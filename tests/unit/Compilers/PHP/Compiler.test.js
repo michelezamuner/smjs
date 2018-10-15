@@ -9,7 +9,7 @@ beforeEach(() => {
     compiler = new Compiler();
 });
 
-test('text outside PHP block tags is printed to standard output', () => {
+test('prints text outside PHP block tags to standard output', () => {
     const code = `<!doctype html>
 <html>
     <head>
@@ -36,8 +36,52 @@ test('text outside PHP block tags is printed to standard output', () => {
     expect(asm.trim()).toBe(expected.trim());
 });
 
-test('PHP blocks are evaluated', () => {
+test('evaluates PHP blocks', () => {
     const code = `Some <?php echo 'code' ?> in <?php echo 'PHP' ?>`;
+
+    const asm = compiler.compile(code);
+
+    const expected = `
+.data
+    text db "Some code in PHP"
+.text
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, [text]
+    mov edx, 16
+    syscall
+    mov eax, 1
+    mov ebx, 0
+    syscall
+    `;
+
+    expect(asm.trim()).toBe(expected.trim());
+});
+
+test('supports echo tag', () => {
+    const code = `Some <?= 'code' ?> in <?= 'PHP' ?>`;
+
+    const asm = compiler.compile(code);
+
+    const expected = `
+.data
+    text db "Some code in PHP"
+.text
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, [text]
+    mov edx, 16
+    syscall
+    mov eax, 1
+    mov ebx, 0
+    syscall
+    `;
+
+    expect(asm.trim()).toBe(expected.trim());
+});
+
+test('supports unclosed last block', () => {
+    const code = `Some code <?php echo 'in PHP'`;
 
     const asm = compiler.compile(code);
 

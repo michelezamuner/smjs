@@ -5,7 +5,9 @@ module.exports = class Compiler {
      */
     compile(code) {
         code = this._normalize(code);
-        code = this._evaluateBlocks(code);
+        code = this._evaluateBlockTags(code);
+        code = this._evaluateEchoTags(code);
+        code = this._evaluateLastBlockTag(code);
 
         return `
 .data
@@ -36,10 +38,32 @@ module.exports = class Compiler {
      * @return {string}
      * @private
      */
-    _evaluateBlocks(code) {
+    _evaluateBlockTags(code) {
         const regex = /<\?php\s+(.*?)\s+\?>/g;
 
-        return code.replace(regex, (match, block) => this._evaluateBlock(block));
+        return code.replace(regex, (match, block) => this._evaluateBlockTag(block));
+    }
+
+    /**
+     * @param {string} code
+     * @return {string}
+     * @private
+     */
+    _evaluateLastBlockTag(code) {
+        const regex = /<\?php\s+(.*?)$/;
+
+        return code.replace(regex, (match, block) => this._evaluateBlockTag(block));
+    }
+
+    /**
+     * @param {string} code
+     * @return {string}
+     * @private
+     */
+    _evaluateEchoTags(code) {
+        const regex = /<\?=\s+(.*?)\s+\?>/g;
+
+        return code.replace(regex, (match, echo) => this._evaluateEchoTag(echo));
     }
 
     /**
@@ -47,9 +71,18 @@ module.exports = class Compiler {
      * @return {string}
      * @private
      */
-    _evaluateBlock(block) {
+    _evaluateBlockTag(block) {
         const match = /echo ['"](.*)['"]/.exec(block);
 
         return match[1];
+    }
+
+    /**
+     * @param {string} echo
+     * @return {string}
+     * @private
+     */
+    _evaluateEchoTag(echo) {
+        return echo.replace(/['"]/g, '');
     }
 };
