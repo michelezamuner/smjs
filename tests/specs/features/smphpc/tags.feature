@@ -6,10 +6,25 @@ Feature: Tags
   Scenario: text with no PHP block tag is printed to the standard output
     Given the code is:
       """
-      Some text with no PHP tag
+      <!doctype html>
+      <html>
+          <head>
+              <title>Sloth Machine</title>
+          </head>
+      </html>
+
       """
     When I compile and run the program
-    Then the text 'Some text with no PHP tag' is printed
+    Then the following test is printed:
+      """
+      <!doctype html>
+      <html>
+          <head>
+              <title>Sloth Machine</title>
+          </head>
+      </html>
+
+      """
 
   Scenario: print PHP output from multiple block tags
     Given the code is:

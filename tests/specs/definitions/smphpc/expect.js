@@ -30,7 +30,11 @@ class ExpectProgram {
         try {
             const result = await promisify(exec)(`bin/smm ${obj}`);
             doExpect = () => {
-                expect(result.stdout.trim()).toBe(stdout);
+                const output = result.stdout
+                    .split('')
+                    .filter(char => char.charCodeAt(0) !== 0)
+                    .join('');
+                expect(output).toBe(stdout);
                 expect(0).toBe(status);
             };
         } catch (e) {
