@@ -18,11 +18,13 @@ class ExpectProgram {
      */
     async toExitWith(status = 0, stdout = '', stderr = '') {
         const fileName = unique();
+        const php = `/tmp/${fileName}.php`;
         const asm = `/tmp/${fileName}.basm`;
         const obj = `/tmp/${fileName}.sm`;
         let doExpect = null;
 
-        await promisify(fs.writeFile)(asm, this._program);
+        await promisify(fs.writeFile)(php, this._program);
+        await promisify(exec)(`bin/smphpc ${php} --out=${asm}`);
         await promisify(exec)(`bin/basm ${asm} --out=${obj}`);
 
         try {

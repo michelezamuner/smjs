@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+readonly current="$( cd "$(dirname "$0")" ; pwd -P )"
+readonly root="$(dirname "current")"
+readonly fileName="$(echo "$1" | cut -d'.' -f 1)"
+
+$root/bin/smphpc "$fileName.php" --out="/tmp/$fileName.basm"
+$root/bin/basm "/tmp/$fileName.basm" --out="/tmp/$fileName.sm"
+$root/bin/smm "/tmp/$fileName.sm"

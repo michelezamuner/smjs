@@ -612,3 +612,23 @@ test('accepts inline comments', () => {
         Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });
+
+test('converts back escaped newline characters', () => {
+    const code = `
+        .data
+            string db "String\\nwith\\nnewlines"
+        .text
+            mov eax, 1
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Mnemonics.movi, Mnemonics.eax, new Byte(0x00), new Byte(0x01),
+        new Byte(83), new Byte(116), new Byte(114), new Byte(105),
+        new Byte(110), new Byte(103), new Byte(10), new Byte(119),
+        new Byte(105), new Byte(116), new Byte(104), new Byte(10),
+        new Byte(110), new Byte(101), new Byte(119), new Byte(108),
+        new Byte(105), new Byte(110), new Byte(101), new Byte(115),
+    ]);
+});

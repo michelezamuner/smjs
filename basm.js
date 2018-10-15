@@ -5,6 +5,6 @@ fs.readFile(process.argv[2], {encoding: 'utf-8'}, (err, data) => {
     const assembler = new Assembler();
     const bytes = assembler.assemble(data);
 
-    const obj = /--out=(.*)/.exec(process.argv[3])[1];
-    fs.writeFileSync(obj, Buffer.from(bytes.map(byte => byte.uint())), 'binary');
+    const file = /--out=(.*)/.exec(process.argv[3])[1];
+    fs.writeFileSync(file, Buffer.from(bytes.map(byte => byte.uint())), 'binary');
 });

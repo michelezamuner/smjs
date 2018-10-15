@@ -187,7 +187,11 @@ module.exports = class Assembler {
         }
 
         if (parts[2].startsWith('"') && parts[2].endsWith('"')) {
-            return [parts[0], parts[1], ...parts[2].substring(1, parts[2].length - 1).split('').map(c => `'${c}'`)];
+            const stringWithoutQuotes = parts[2].substring(1, parts[2].length - 1);
+            const stringWithRealNewlines = stringWithoutQuotes.replace(/\\n/g, '\n');
+            const charList = stringWithRealNewlines.split('').map(char => `'${char}'`);
+
+            return [parts[0], parts[1], ...charList];
         }
         return parts;
     }

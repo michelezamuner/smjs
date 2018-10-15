@@ -23,9 +23,9 @@ class ExpectProgram {
         let doExpect = null;
 
         await promisify(fs.writeFile)(asm, this._program);
+        await promisify(exec)(`bin/rasm ${asm} --out=${obj}`);
 
         try {
-            await promisify(exec)(`bin/rasm ${asm} --out=${obj}`);
             const result = await promisify(exec)(`bin/smm ${obj}`);
             doExpect = () => {
                 expect(result.stdout.trim()).toBe(stdout);
