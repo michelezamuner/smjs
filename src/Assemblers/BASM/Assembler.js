@@ -177,22 +177,46 @@ module.exports = class Assembler {
      * @private
      */
     _parseDefinition(line) {
-        const stringStart = line.indexOf('"');
-        let parts = null;
-        if (stringStart !== -1) {
-            parts = line.substring(0, stringStart).trim().split(/\s+/);
-            parts.push(line.substring(stringStart));
-        } else {
-            parts = line.split(/\s+/);
+        const parts = [];
+
+        const matches = /^([^\s]+)\s+([^\s]+)\s*(.*)/.exec(line);
+        parts.push(matches[1]);
+        parts.push(matches[2]);
+
+        if (matches.length === 3) {
+            return parts;
         }
 
-        if (parts[2].startsWith('"') && parts[2].endsWith('"')) {
-            const stringWithoutQuotes = parts[2].substring(1, parts[2].length - 1);
-            const stringWithRealNewlines = stringWithoutQuotes.replace(/\\n/g, '\n');
-            const charList = stringWithRealNewlines.split('').map(char => `'${char}'`);
-
-            return [parts[0], parts[1], ...charList];
+        let insideString = false;
+        let insideChar = false;
+        let part = [];
+        for (const char of matches[3]) {
+            if (char === '"' && !insideChar) {
+                insideString = !insideString;
+                continue;
+            }
+            if (char === "'" && !insideString) {
+                insideChar = !insideChar;
+                continue;
+            }
+            if (insideString || insideChar) {
+                parts.push(`'${char}'`);
+                continue;
+            }
+            if (char.match(/\s/) && !insideString && !insideChar) {
+                if (part.length !== 0) {
+                    parts.push(part.join(''));
+                    part = [];
+                }
+                continue;
+            }
+            part.push(char);
         }
+
+        if (part.length !== 0) {
+            parts.push(part.join(''));
+        }
+
         return parts;
     }
 
@@ -305,7 +329,7 @@ module.exports = class Assembler {
     }
 
     /**
-     * @param {string} operand
+     * @param {string|number} operand
      * @return {number|undefined}
      * @private
      */

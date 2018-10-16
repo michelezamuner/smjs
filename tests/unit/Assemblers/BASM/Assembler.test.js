@@ -512,6 +512,27 @@ test('supports strings definitions', () => {
     ]);
 });
 
+test('supports mixed strings, characters and bytes', () => {
+    const code = `
+        .data
+            msg     db "Hello" ',' 0x20 "World" 0x21
+        .text
+            mov al, msg[0]
+            mov bl, msg[5]
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
+        Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0D),
+        new Byte(0x48), new Byte(0x65), new Byte(0x6C), new Byte(0x6C),
+        new Byte(0x6F), new Byte(0x2C), new Byte(0x20), new Byte(0x57),
+        new Byte(0x6F), new Byte(0x72), new Byte(0x6C), new Byte(0x64),
+        new Byte(0x21),
+    ]);
+});
+
 test('supports syscall', () => {
     const byte = random(Byte);
     const code = `
@@ -616,7 +637,7 @@ test('accepts inline comments', () => {
 test('converts back escaped newline characters', () => {
     const code = `
         .data
-            string db "String\\nwith\\nnewlines"
+            string db "String" 0x0A "with" 0x0A "newlines"
         .text
             mov eax, 1
     `;
