@@ -110,6 +110,5 @@ Move instruction:
 - Either add instructions movimpb, movimpw, movimpd (because different sizes cannot be supported from the assembler using movimp), or remove movimp altogether and let the assembler do the trick of writing in the correct place of memory (also if using RASM pointers are pretty pointless since we know all memory addresses explicitly). If going for the second, consider removing all pointer instructions from SMA, and implement them only on BASM. BASM code should not rely on defining _low variables because of these types problems.
 - Memory should only have `read()` and `write()` taking address and size (default one)
 - Data types should have a `format()` method that directly prints their hex representation
-- ES cannot represent numbers too big, and at a certain point the 2's complement kicks in, so when we manipulate bits we get negative numbers while we want to always store positive numbers instead. Define a number type to store and manipulate numbers in a reliable way.
 - Decide how to handle negative numbers as result of subtract
 - create an authoritative source of definitions within an interpreter implementation, so that all of its modules can use it instead of duplicating decisions in code
