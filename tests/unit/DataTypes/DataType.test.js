@@ -70,7 +70,7 @@ test('get integer value in twos complement', () => {
     });
 });
 
-test('expand to list of basic data types', () => {
+test('expand to list of unit data types', () => {
     const size = 2 ** Math.floor(Math.random() * 3);
     class TypeToExpand extends DataType {
         static get SIZE() {
@@ -89,7 +89,7 @@ test('expand to list of basic data types', () => {
     let expected = 0;
     let index = 0;
     for (const unit of units.reverse()) {
-        expected += unit.uint() << (8 * index++);
+        expected += unit.uint() * (2 ** (8 * index++));
     }
     expect(value.uint()).toBe(expected);
 });
