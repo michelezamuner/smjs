@@ -1,9 +1,19 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-readonly current="$( cd "$(dirname "$0")" ; pwd -P )"
-readonly root="$(dirname "current")"
-readonly fileName="$(echo "$1" | cut -d'.' -f 1)"
+readonly bin="$( cd "$(dirname "$0")" ; pwd -P )"
+readonly fileNameWithExt="$(basename "$1")"
+readonly fileName="${fileNameWithExt%.*}"
+readonly firstLine="$(head -n 1 "$1")"
+readonly begin="${firstLine:0:2}"
 
-$root/bin/smphpc "$fileName.php" --out="/tmp/$fileName.basm"
-$root/bin/basm "/tmp/$fileName.basm" --out="/tmp/$fileName.sm"
-$root/bin/smm "/tmp/$fileName.sm"
+# If this script is called from a shabang line, we want to remove the shabang from the file first
+if [ "$begin" == "#!" ]; then
+    readonly file="/tmp/$fileName.script"
+    echo "$(tail -n +2 "$1")" > "$file"
+else
+    readonly file="$1"
+fi
+
+$bin/smphpc "$file" --out="/tmp/$fileName.basm"
+$bin/basm "/tmp/$fileName.basm" --out="/tmp/$fileName.sm"
+$bin/smm "/tmp/$fileName.sm"

@@ -47,6 +47,15 @@ test('supports unclosed last block', () => {
     expectData(asm, '"Some code" 10 "in PHP"', 16);
 });
 
+test('escapes double quotes in strings', () => {
+    const code = `Some title
+    Text is: "<?= 'some text' ?>"
+    `;
+    const asm = compiler.compile(code);
+
+    expectData(asm, '"Some title" 10 "    Text is: " 34 "some text" 34 10 "    "', 40);
+});
+
 /**
  * @param {string} asm
  * @param {string} data

@@ -10,7 +10,17 @@ $ docker build -t smjs .
 
 Run tests:
 ```
-$ ./run jarn test
+$ ./run
+```
+
+which is equivalent to:
+```
+$ ./run yarn test
+```
+
+Compile high-level code to assembly code (still very limited!):
+```
+$ ./run bin/smphpc mycode.php --out=mycode.basm
 ```
 
 Create executables from assembly code:
@@ -21,6 +31,11 @@ $ ./run bin/basm mycode.basm --out=myprogram.sm
 Run executables in the virtual machine:
 ```
 $ ./run bin/smm myprogram.sm
+```
+
+Or, do all these steps at once:
+```
+$ ./run sm mycode.php
 ```
 
 

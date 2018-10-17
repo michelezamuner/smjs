@@ -72,19 +72,40 @@ module.exports = class Compiler {
      * @private
      */
     _parseText(code) {
-        const text = [];
-        const parts = code.split('\n');
+        const textWithEncodedNewlines = this._encodeChar([code], '\n');
+        const textWithEncodedQuotes = this._encodeChar(textWithEncodedNewlines, '"');
 
-        for (const i in parts) {
-            if (parts[i] !== '') {
-                text.push(`"${parts[i]}"`);
+        return textWithEncodedQuotes.map(part => typeof part === 'string' ? `"${part}"` : part);
+    }
+
+    /**
+     * @param {Array} text
+     * @param {string} char
+     * @return {Array}
+     * @private
+     */
+    _encodeChar(text, char) {
+        const encoded = [];
+        for (const item of text) {
+            if (typeof item !== 'string') {
+                encoded.push(item);
+                continue;
             }
-            if (parseInt(i) !== parts.length - 1) {
-                text.push(10);
+
+            const parts = item.split(char);
+            for (const i in parts) {
+                // If char is at the beginning or end, split adds empty items
+                if (parts[i] !== '') {
+                    encoded.push(`${parts[i]}`);
+                }
+                // If char is at the end, we don't want to add an additional code after the last empty item
+                if (parseInt(i) !== parts.length - 1) {
+                    encoded.push(char.charCodeAt(0));
+                }
             }
         }
 
-        return text;
+        return encoded;
     }
 
     /**

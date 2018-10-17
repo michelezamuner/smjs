@@ -2,6 +2,6 @@
 
 readonly node="$(which node)"
 readonly current="$( cd "$(dirname "$0")" ; pwd -P )"
-readonly root="$(dirname "current")"
+readonly root="$(realpath "$(dirname "$current")")"
 
 $node "$root/smphpc.js" "$@"
