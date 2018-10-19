@@ -1,4 +1,5 @@
-const Mnemonics = require('../../Architectures/SMA/Mnemonics');
+const Register = require('../../Architectures/SMA/Mnemonics').register;
+const Instruction = require('../../Architectures/SMA/Mnemonics').instruction;
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
 const Double = require('../../DataTypes/Double');
@@ -228,7 +229,7 @@ module.exports = class Assembler {
     _parseInstruction(line) {
         const opcodeDelimiter = line.indexOf(' ');
         if (opcodeDelimiter === -1) {
-            return [new Byte(Mnemonics[line]), new Byte(0x00), new Byte(0x00), new Byte(0x00)];
+            return [new Byte(Instruction[line]), new Byte(0x00), new Byte(0x00), new Byte(0x00)];
         }
 
         const opcode = line.substring(0, opcodeDelimiter);
@@ -247,84 +248,84 @@ module.exports = class Assembler {
      * @private
      */
     _parseMov(operands) {
-        const registerFirst = Mnemonics[operands[0]];
-        const registerSecond = Mnemonics[operands[1]];
+        const registerFirst = Register[operands[0]];
+        const registerSecond = Register[operands[1]];
         const immediate = this._parseImmediate(operands[1]);
         const symbolFirst = this._parseSymbol(operands[0]);
         const symbolSecond = this._parseSymbol(operands[1]);
         const pointerFirst = this._parsePointer(operands[0]);
         const pointerSecond = this._parsePointer(operands[1]);
-        const registerPointerFirst = Mnemonics[pointerFirst];
-        const registerPointerSecond = Mnemonics[pointerSecond];
+        const registerPointerFirst = Register[pointerFirst];
+        const registerPointerSecond = Register[pointerSecond];
         const symbolPointerFirst = this._parseSymbol(pointerFirst);
         const symbolPointerSecond = this._parseSymbol(pointerSecond);
         const tableFirst = this._parseTable(operands[0]);
         const tableSecond = this._parseTable(operands[1]);
 
         if (registerFirst && registerSecond) {
-            return [Mnemonics.mov, registerFirst, registerSecond, new Byte(0x00)];
+            return [Instruction.mov, registerFirst, registerSecond, new Byte(0x00)];
         }
 
         if (registerFirst && immediate !== undefined) {
-            return [Mnemonics.movi, registerFirst, ...new Word(immediate).expand()];
+            return [Instruction.movi, registerFirst, ...new Word(immediate).expand()];
         }
 
         if (registerFirst && symbolPointerSecond) {
             this._pointers[registerFirst.uint()] = symbolPointerSecond;
-            return [Mnemonics.movi, registerFirst, ...symbolPointerSecond.address.expand()];
+            return [Instruction.movi, registerFirst, ...symbolPointerSecond.address.expand()];
         }
 
         if (symbolFirst && immediate !== undefined) {
             const address = symbolFirst.address.add(new Byte(symbolFirst.type.SIZE - 1));
-            return [Mnemonics.movim, ...address.expand(), new Byte(immediate)];
+            return [Instruction.movim, ...address.expand(), new Byte(immediate)];
         }
 
         if (registerPointerFirst && immediate !== undefined) {
             const type = this._pointers[registerPointerFirst.uint()].type;
             if (type === Byte) {
-                return [Mnemonics.movipb, registerPointerFirst, ...(new Word(immediate)).expand()];
+                return [Instruction.movipb, registerPointerFirst, ...(new Word(immediate)).expand()];
             } else if (type === Word) {
-                return [Mnemonics.movipw, registerPointerFirst, ...(new Word(immediate)).expand()];
+                return [Instruction.movipw, registerPointerFirst, ...(new Word(immediate)).expand()];
             } else if (type === Double) {
-                return [Mnemonics.movipd, registerPointerFirst, ...(new Word(immediate)).expand()];
+                return [Instruction.movipd, registerPointerFirst, ...(new Word(immediate)).expand()];
             }
         }
 
         if (symbolPointerFirst && immediate !== undefined) {
-            return [Mnemonics.movimp, ...symbolPointerFirst.address.expand(), new Byte(immediate)];
+            return [Instruction.movimp, ...symbolPointerFirst.address.expand(), new Byte(immediate)];
         }
 
         if (symbolFirst && registerSecond) {
-            return [Mnemonics.movrm, ...symbolFirst.address.expand(), registerSecond];
+            return [Instruction.movrm, ...symbolFirst.address.expand(), registerSecond];
         }
 
         if (registerFirst && symbolSecond) {
-            return [Mnemonics.movm, registerFirst, ...symbolSecond.address.expand()];
+            return [Instruction.movm, registerFirst, ...symbolSecond.address.expand()];
         }
 
         if (registerFirst && registerPointerSecond) {
-            return [Mnemonics.movp, registerFirst, registerPointerSecond, new Byte(0x00)];
+            return [Instruction.movp, registerFirst, registerPointerSecond, new Byte(0x00)];
         }
 
         if (registerPointerFirst && registerSecond) {
-            return [Mnemonics.movrp, registerPointerFirst, registerSecond, new Byte(0x00)];
+            return [Instruction.movrp, registerPointerFirst, registerSecond, new Byte(0x00)];
         }
 
         if (symbolPointerFirst && registerSecond) {
-            return [Mnemonics.movrmp, ...symbolPointerFirst.address.expand(), registerSecond];
+            return [Instruction.movrmp, ...symbolPointerFirst.address.expand(), registerSecond];
         }
 
         if (registerFirst && tableSecond) {
-            return [Mnemonics.movm, registerFirst, ...this._getTableItemAddress(tableSecond).expand()];
+            return [Instruction.movm, registerFirst, ...this._getTableItemAddress(tableSecond).expand()];
         }
 
         if (tableFirst && immediate) {
             const address = this._getTableItemAddress(tableFirst).add(new Byte(tableFirst.symbol.type.SIZE - 1));
-            return [Mnemonics.movim, ...address.expand(), new Byte(immediate)];
+            return [Instruction.movim, ...address.expand(), new Byte(immediate)];
         }
 
         if (tableFirst && registerSecond) {
-            return [Mnemonics.movrm, ...this._getTableItemAddress(tableFirst).expand(), registerSecond];
+            return [Instruction.movrm, ...this._getTableItemAddress(tableFirst).expand(), registerSecond];
         }
     }
 

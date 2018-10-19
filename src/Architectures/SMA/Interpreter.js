@@ -4,7 +4,8 @@ const Exit = require('../../ProcessorInterfaces/Exit');
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
 const Double = require('../../DataTypes/Double');
-const Mnemonics = require('./Mnemonics');
+const Register = require('./Mnemonics').register;
+const Instruction = require('./Mnemonics').instruction;
 const Registers = require('./Registers');
 const RegisterAddress = require('./RegisterAddress');
 const System = require('./System');
@@ -53,31 +54,31 @@ module.exports = class extends InterpreterInterface {
      * @inheritDoc
      */
     exec([byte1, byte2, byte3, byte4]) {
-        if (byte1.eq(Mnemonics.mov)) {
+        if (byte1.eq(Instruction.mov)) {
             this._mov(new RegisterAddress(byte2), new RegisterAddress(byte3));
-        } else if (byte1.eq(Mnemonics.movi)) {
+        } else if (byte1.eq(Instruction.movi)) {
             this._movi(new RegisterAddress(byte2), new Word(byte3, byte4));
-        } else if (byte1.eq(Mnemonics.movim)) {
+        } else if (byte1.eq(Instruction.movim)) {
             this._movim(new Word(byte2, byte3), byte4);
-        } else if (byte1.eq(Mnemonics.movipb)) {
+        } else if (byte1.eq(Instruction.movipb)) {
             this._movipb(new RegisterAddress(byte2), new Word(byte3, byte4));
-        } else if (byte1.eq(Mnemonics.movipw)) {
+        } else if (byte1.eq(Instruction.movipw)) {
             this._movipw(new RegisterAddress(byte2), new Word(byte3, byte4));
-        } else if (byte1.eq(Mnemonics.movipd)) {
+        } else if (byte1.eq(Instruction.movipd)) {
             this._movipd(new RegisterAddress(byte2), new Word(byte3, byte4));
-        } else if (byte1.eq(Mnemonics.movimp)) {
+        } else if (byte1.eq(Instruction.movimp)) {
             this._movimp(new Word(byte2, byte3), byte4);
-        } else if (byte1.eq(Mnemonics.movm)) {
+        } else if (byte1.eq(Instruction.movm)) {
             this._movm(new RegisterAddress(byte2), new Word(byte3, byte4));
-        } else if (byte1.eq(Mnemonics.movp)) {
+        } else if (byte1.eq(Instruction.movp)) {
             this._movp(new RegisterAddress(byte2), new RegisterAddress(byte3));
-        } else if (byte1.eq(Mnemonics.movrm)) {
+        } else if (byte1.eq(Instruction.movrm)) {
             this._movrm(new Word(byte2, byte3), new RegisterAddress(byte4));
-        } else if (byte1.eq(Mnemonics.movrp)) {
+        } else if (byte1.eq(Instruction.movrp)) {
             this._movrp(new RegisterAddress(byte2), new RegisterAddress(byte3));
-        } else if (byte1.eq(Mnemonics.movrmp)) {
+        } else if (byte1.eq(Instruction.movrmp)) {
             this._movrmp(new Word(byte2, byte3), new RegisterAddress(byte4));
-        } else if (byte1.eq(Mnemonics.syscall)) {
+        } else if (byte1.eq(Instruction.syscall)) {
             this._syscall();
         }
 
@@ -249,16 +250,16 @@ module.exports = class extends InterpreterInterface {
      * @private
      */
     _syscall() {
-        const call = this._registers.get(new RegisterAddress(Mnemonics.eax));
+        const call = this._registers.get(new RegisterAddress(Register.eax));
         if (call.eq(this.constructor.SYS_EXIT)) {
-            const value = this._registers.get(new RegisterAddress(Mnemonics.ebx));
+            const value = this._registers.get(new RegisterAddress(Register.ebx));
             this._exit = new Exit(true, value.expand()[3]);
         } else if (call.eq(this.constructor.SYS_WRITE)) {
-            const fd = this._registers.get(new RegisterAddress(Mnemonics.ebx));
-            const count = this._registers.get(new RegisterAddress(Mnemonics.edx));
-            const buf = this._memory.readSet(this._registers.get(new RegisterAddress(Mnemonics.ecx)), count);
+            const fd = this._registers.get(new RegisterAddress(Register.ebx));
+            const count = this._registers.get(new RegisterAddress(Register.edx));
+            const buf = this._memory.readSet(this._registers.get(new RegisterAddress(Register.ecx)), count);
             const written = this._system.write(fd.uint(), buf.map(byte => byte.uint()), count.uint());
-            this._registers.set(new RegisterAddress(Mnemonics.eax), new Double(written));
+            this._registers.set(new RegisterAddress(Register.eax), new Double(written));
         }
     }
 };
