@@ -88,6 +88,8 @@ Move instruction:
 - https://en.wikipedia.org/wiki/File_descriptor
 - https://en.wikipedia.org/wiki/Addressing_mode
 - https://stackoverflow.com/questions/2782010/how-to-dynamically-allocate-memory-using-assembly-and-system-calls-under-linux
+- https://www.swansontec.com/sregisters.html
+- https://en.wikipedia.org/wiki/Intel_80386
 
 ### Assemblers
 
@@ -99,6 +101,10 @@ Move instruction:
 - https://en.wikipedia.org/wiki/.bss
 - https://stackoverflow.com/questions/10168743/which-variable-size-to-use-db-dw-dd-with-x86-assembly
 - https://www.linuxjournal.com/article/6463
+- https://www.ibm.com/developerworks/library/l-gas-nasm/index.html
+- https://en.wikipedia.org/wiki/Object_file
+- http://www.tortall.net/projects/yasm/manual/html/nasm-pseudop.html
+- https://www.tutorialspoint.com/assembly_programming/assembly_variables.htm
 
 ### Processor
 

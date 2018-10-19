@@ -1,5 +1,6 @@
 const Assembler = require('../../../../src/Assemblers/BASM/Assembler');
-const Mnemonics = require('../../../../src/Architectures/SMA/Mnemonics');
+const Register = require('../../../../src/Architectures/SMA/Mnemonics').register;
+const Instruction = require('../../../../src/Architectures/SMA/Mnemonics').instruction;
 const Byte = require('../../../../src/DataTypes/Byte');
 const Word = require('../../../../src/DataTypes/Word');
 const Double = require('../../../../src/DataTypes/Double');
@@ -22,7 +23,7 @@ test('supports move register to register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Mnemonics.mov, Mnemonics.eax, Mnemonics.ebx, new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.mov, Register.eax, Register.ebx, new Byte(0x00)]);
 });
 
 test('supports move immediate to register', () => {
@@ -34,7 +35,7 @@ test('supports move immediate to register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Mnemonics.movi, Mnemonics.al, ...(new Word(value)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.movi, Register.al, ...(new Word(value)).expand()]);
 });
 
 test('supports move immediate to byte memory', () => {
@@ -50,8 +51,8 @@ test('supports move immediate to byte memory', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movim, new Byte(0x00), new Byte(0x08), new Byte(value),
-        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
+        Instruction.movim, new Byte(0x00), new Byte(0x08), new Byte(value),
+        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
     ]);
 });
 
@@ -68,8 +69,8 @@ test('supports move immediate to word memory', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movim, new Byte(0x00), new Byte(0x09), new Byte(value),
-        Mnemonics.movm, Mnemonics.ax, new Byte(0x00), new Byte(0x08),
+        Instruction.movim, new Byte(0x00), new Byte(0x09), new Byte(value),
+        Instruction.movm, Register.ax, new Byte(0x00), new Byte(0x08),
     ]);
 });
 
@@ -86,8 +87,8 @@ test('supports move immediate to double memory', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movim, new Byte(0x00), new Byte(0x0B), new Byte(value),
-        Mnemonics.movm, Mnemonics.eax, new Byte(0x00), new Byte(0x08),
+        Instruction.movim, new Byte(0x00), new Byte(0x0B), new Byte(value),
+        Instruction.movm, Register.eax, new Byte(0x00), new Byte(0x08),
     ]);
 });
 
@@ -104,8 +105,8 @@ test('supports move immediate to byte register pointer', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movipb, Mnemonics.ax, ...(new Word(value)).expand(),
+        Instruction.movi, Register.ax, new Byte(0x00), new Byte(0x08),
+        Instruction.movipb, Register.ax, ...(new Word(value)).expand(),
     ]);
 });
 
@@ -122,8 +123,8 @@ test('supports move immediate to word register pointer', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movipw, Mnemonics.ax, ...(new Word(value)).expand(),
+        Instruction.movi, Register.ax, new Byte(0x00), new Byte(0x08),
+        Instruction.movipw, Register.ax, ...(new Word(value)).expand(),
     ]);
 });
 
@@ -140,8 +141,8 @@ test('supports move immediate to double register pointer', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movipd, Mnemonics.ax, ...(new Word(value)).expand(),
+        Instruction.movi, Register.ax, new Byte(0x00), new Byte(0x08),
+        Instruction.movipd, Register.ax, ...(new Word(value)).expand(),
     ]);
 });
 
@@ -160,9 +161,9 @@ test('supports move immediate to memory pointer', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x0C),
-        Mnemonics.movrm, new Byte(0x00), new Byte(0x0D), Mnemonics.ax,
-        Mnemonics.movimp, new Byte(0x00), new Byte(0x0D), new Byte(value),
+        Instruction.movi, Register.ax, new Byte(0x00), new Byte(0x0C),
+        Instruction.movrm, new Byte(0x00), new Byte(0x0D), Register.ax,
+        Instruction.movimp, new Byte(0x00), new Byte(0x0D), new Byte(value),
     ]);
 });
 
@@ -184,9 +185,9 @@ test('supports move memory to register', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movm, Mnemonics.eax, new Byte(0x00), new Byte(0x0C),
-        Mnemonics.movm, Mnemonics.ebx, new Byte(0x00), new Byte(0x0E),
-        Mnemonics.movm, Mnemonics.ecx, new Byte(0x00), new Byte(0x0F),
+        Instruction.movm, Register.eax, new Byte(0x00), new Byte(0x0C),
+        Instruction.movm, Register.ebx, new Byte(0x00), new Byte(0x0E),
+        Instruction.movm, Register.ecx, new Byte(0x00), new Byte(0x0F),
         ...value1.expand(), value2,
         ...value3.expand(),
     ]);
@@ -206,8 +207,8 @@ test('supports move register pointer to register', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movp, Mnemonics.eax, Mnemonics.ax, new Byte(0x00),
+        Instruction.movi, Register.ax, new Byte(0x00), new Byte(0x08),
+        Instruction.movp, Register.eax, Register.ax, new Byte(0x00),
         ...valueb
     ]);
 });
@@ -225,8 +226,8 @@ test('supports move register to memory', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(value),
-        Mnemonics.movrm, new Byte(0x00), new Byte(0x08), Mnemonics.al,
+        Instruction.movi, Register.al, new Byte(0x00), new Byte(value),
+        Instruction.movrm, new Byte(0x00), new Byte(0x08), Register.al,
     ]);
 });
 
@@ -244,9 +245,9 @@ test('supports move register to register pointer', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(value),
-        Mnemonics.movi, Mnemonics.bx, new Byte(0x00), new Byte(0x0C),
-        Mnemonics.movrp, Mnemonics.bx, Mnemonics.al, new Byte(0x00),
+        Instruction.movi, Register.al, new Byte(0x00), new Byte(value),
+        Instruction.movi, Register.bx, new Byte(0x00), new Byte(0x0C),
+        Instruction.movrp, Register.bx, Register.al, new Byte(0x00),
     ]);
 });
 
@@ -266,10 +267,10 @@ test('supports move register to memory pointer', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.ax, new Byte(0x00), new Byte(0x10),
-        Mnemonics.movrm, new Byte(0x00), new Byte(0x12), Mnemonics.ax,
-        Mnemonics.movi, Mnemonics.bx, ...(new Word(value)).expand(),
-        Mnemonics.movrmp, new Byte(0x00), new Byte(0x12), Mnemonics.bx,
+        Instruction.movi, Register.ax, new Byte(0x00), new Byte(0x10),
+        Instruction.movrm, new Byte(0x00), new Byte(0x12), Register.ax,
+        Instruction.movi, Register.bx, ...(new Word(value)).expand(),
+        Instruction.movrmp, new Byte(0x00), new Byte(0x12), Register.bx,
     ]);
 });
 
@@ -294,11 +295,11 @@ test('supports move from table of bytes', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x14),
-        Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x15),
-        Mnemonics.movm, Mnemonics.cl, new Byte(0x00), new Byte(0x16),
-        Mnemonics.movm, Mnemonics.dl, new Byte(0x00), new Byte(0x17),
-        Mnemonics.movm, Mnemonics.ax, new Byte(0x00), new Byte(0x18),
+        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x14),
+        Instruction.movm, Register.bl, new Byte(0x00), new Byte(0x15),
+        Instruction.movm, Register.cl, new Byte(0x00), new Byte(0x16),
+        Instruction.movm, Register.dl, new Byte(0x00), new Byte(0x17),
+        Instruction.movm, Register.ax, new Byte(0x00), new Byte(0x18),
         new Byte(value1), new Byte(value2), new Byte(value3), new Byte(value4),
         ...(new Word(value)).expand()
     ]);
@@ -325,11 +326,11 @@ test('supports move from table of words', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movm, Mnemonics.ax, new Byte(0x00), new Byte(0x14),
-        Mnemonics.movm, Mnemonics.bx, new Byte(0x00), new Byte(0x16),
-        Mnemonics.movm, Mnemonics.cx, new Byte(0x00), new Byte(0x18),
-        Mnemonics.movm, Mnemonics.dx, new Byte(0x00), new Byte(0x1A),
-        Mnemonics.movm, Mnemonics.ax, new Byte(0x00), new Byte(0x1C),
+        Instruction.movm, Register.ax, new Byte(0x00), new Byte(0x14),
+        Instruction.movm, Register.bx, new Byte(0x00), new Byte(0x16),
+        Instruction.movm, Register.cx, new Byte(0x00), new Byte(0x18),
+        Instruction.movm, Register.dx, new Byte(0x00), new Byte(0x1A),
+        Instruction.movm, Register.ax, new Byte(0x00), new Byte(0x1C),
         ...(new Word(value1)).expand(), ...(new Word(value2)).expand(),
         ...(new Word(value3)).expand(), ...(new Word(value4)).expand(),
         ...(new Word(value)).expand()
@@ -358,11 +359,11 @@ test('supports move immediate to table of bytes', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movim, new Byte(0x00), new Byte(0x14), new Byte(value),
-        Mnemonics.movim, new Byte(0x00), new Byte(0x15), new Byte(value1),
-        Mnemonics.movim, new Byte(0x00), new Byte(0x16), new Byte(value2),
-        Mnemonics.movim, new Byte(0x00), new Byte(0x17), new Byte(value3),
-        Mnemonics.movim, new Byte(0x00), new Byte(0x19), new Byte(other),
+        Instruction.movim, new Byte(0x00), new Byte(0x14), new Byte(value),
+        Instruction.movim, new Byte(0x00), new Byte(0x15), new Byte(value1),
+        Instruction.movim, new Byte(0x00), new Byte(0x16), new Byte(value2),
+        Instruction.movim, new Byte(0x00), new Byte(0x17), new Byte(value3),
+        Instruction.movim, new Byte(0x00), new Byte(0x19), new Byte(other),
     ]);
 });
 
@@ -388,11 +389,11 @@ test('supports move immediate to table of words', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movim, new Byte(0x00), new Byte(0x14), new Byte(value),
-        Mnemonics.movim, new Byte(0x00), new Byte(0x16), new Byte(value1),
-        Mnemonics.movim, new Byte(0x00), new Byte(0x18), new Byte(value2),
-        Mnemonics.movim, new Byte(0x00), new Byte(0x1A), new Byte(value3),
-        Mnemonics.movim, new Byte(0x00), new Byte(0x1C), new Byte(other),
+        Instruction.movim, new Byte(0x00), new Byte(0x14), new Byte(value),
+        Instruction.movim, new Byte(0x00), new Byte(0x16), new Byte(value1),
+        Instruction.movim, new Byte(0x00), new Byte(0x18), new Byte(value2),
+        Instruction.movim, new Byte(0x00), new Byte(0x1A), new Byte(value3),
+        Instruction.movim, new Byte(0x00), new Byte(0x1C), new Byte(other),
     ]);
 });
 
@@ -412,10 +413,10 @@ test('supports move register to table of bytes', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, ...(new Word(value1)).expand(),
-        Mnemonics.movi, Mnemonics.bl, ...(new Word(value2)).expand(),
-        Mnemonics.movrm, new Byte(0x00), new Byte(0x10), Mnemonics.al,
-        Mnemonics.movrm, new Byte(0x00), new Byte(0x11), Mnemonics.bl,
+        Instruction.movi, Register.al, ...(new Word(value1)).expand(),
+        Instruction.movi, Register.bl, ...(new Word(value2)).expand(),
+        Instruction.movrm, new Byte(0x00), new Byte(0x10), Register.al,
+        Instruction.movrm, new Byte(0x00), new Byte(0x11), Register.bl,
     ]);
 });
 
@@ -438,11 +439,11 @@ test('supports move register to table of words', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.ax, ...(new Word(value1)).expand(),
-        Mnemonics.movi, Mnemonics.bx, ...(new Word(value2)).expand(),
-        Mnemonics.movrm, new Byte(0x00), new Byte(0x14), Mnemonics.ax,
-        Mnemonics.movrm, new Byte(0x00), new Byte(0x16), Mnemonics.bx,
-        Mnemonics.movim, new Byte(0x00), new Byte(0x18), new Byte(value),
+        Instruction.movi, Register.ax, ...(new Word(value1)).expand(),
+        Instruction.movi, Register.bx, ...(new Word(value2)).expand(),
+        Instruction.movrm, new Byte(0x00), new Byte(0x14), Register.ax,
+        Instruction.movrm, new Byte(0x00), new Byte(0x16), Register.bx,
+        Instruction.movim, new Byte(0x00), new Byte(0x18), new Byte(value),
     ]);
 });
 
@@ -465,11 +466,11 @@ test('supports move register to table of doubles', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.eax, ...(new Word(value1)).expand(),
-        Mnemonics.movi, Mnemonics.ebx, ...(new Word(value2)).expand(),
-        Mnemonics.movrm, new Byte(0x00), new Byte(0x14), Mnemonics.eax,
-        Mnemonics.movrm, new Byte(0x00), new Byte(0x18), Mnemonics.ebx,
-        Mnemonics.movim, new Byte(0x00), new Byte(0x1C), new Byte(value),
+        Instruction.movi, Register.eax, ...(new Word(value1)).expand(),
+        Instruction.movi, Register.ebx, ...(new Word(value2)).expand(),
+        Instruction.movrm, new Byte(0x00), new Byte(0x14), Register.eax,
+        Instruction.movrm, new Byte(0x00), new Byte(0x18), Register.ebx,
+        Instruction.movim, new Byte(0x00), new Byte(0x1C), new Byte(value),
     ]);
 });
 
@@ -485,8 +486,8 @@ test('supports characters as immediate values', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movi, Mnemonics.bl, new Byte(0x00), new Byte(0x2A),
+        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
+        Instruction.movi, Register.bl, new Byte(0x00), new Byte(0x2A),
         new Byte(0x21),
     ]);
 });
@@ -503,8 +504,8 @@ test('supports strings definitions', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0D),
+        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
+        Instruction.movm, Register.bl, new Byte(0x00), new Byte(0x0D),
         new Byte(0x48), new Byte(0x65), new Byte(0x6C), new Byte(0x6C),
         new Byte(0x6F), new Byte(0x2C), new Byte(0x20), new Byte(0x57),
         new Byte(0x6F), new Byte(0x72), new Byte(0x6C), new Byte(0x64),
@@ -524,8 +525,8 @@ test('supports mixed strings, characters and bytes', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x08),
-        Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0D),
+        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
+        Instruction.movm, Register.bl, new Byte(0x00), new Byte(0x0D),
         new Byte(0x48), new Byte(0x65), new Byte(0x6C), new Byte(0x6C),
         new Byte(0x6F), new Byte(0x2C), new Byte(0x20), new Byte(0x57),
         new Byte(0x6F), new Byte(0x72), new Byte(0x6C), new Byte(0x64),
@@ -547,9 +548,9 @@ test('supports syscall', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
-        Mnemonics.movm, Mnemonics.bl, new Byte(0x00), new Byte(0x0C),
-        Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
+        Instruction.movm, Register.bl, new Byte(0x00), new Byte(0x0C),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
         new Byte(byte),
     ]);
 });
@@ -565,7 +566,7 @@ test('supports multiple spaces between tokens', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movm, Mnemonics.al, new Byte(0x00), new Byte(0x04),
+        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x04),
         new Byte(0x01)
     ]);
 });
@@ -592,9 +593,9 @@ test('accepts empty lines', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
-        Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
-        Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
+        Instruction.mov, Register.bl, Register.al, new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });
 
@@ -611,9 +612,9 @@ test('accepts comment lines', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
-        Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
-        Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
+        Instruction.mov, Register.bl, Register.al, new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });
 
@@ -628,9 +629,9 @@ test('accepts inline comments', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.al, new Byte(0x00), new Byte(0x01),
-        Mnemonics.mov, Mnemonics.bl, Mnemonics.al, new Byte(0x00),
-        Mnemonics.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
+        Instruction.mov, Register.bl, Register.al, new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });
 
@@ -645,7 +646,7 @@ test('converts back escaped newline characters', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Mnemonics.movi, Mnemonics.eax, new Byte(0x00), new Byte(0x01),
+        Instruction.movi, Register.eax, new Byte(0x00), new Byte(0x01),
         new Byte(83), new Byte(116), new Byte(114), new Byte(105),
         new Byte(110), new Byte(103), new Byte(10), new Byte(119),
         new Byte(105), new Byte(116), new Byte(104), new Byte(10),

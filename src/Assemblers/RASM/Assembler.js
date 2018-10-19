@@ -1,4 +1,5 @@
-const Mnemonics = require('../../Architectures/SMA/Mnemonics');
+const Register = require('../../Architectures/SMA/Mnemonics').register;
+const Instruction = require('../../Architectures/SMA/Mnemonics').instruction;
 const Byte = require('../../DataTypes/Byte');
 const Word = require('../../DataTypes/Word');
 
@@ -47,38 +48,38 @@ module.exports = class Assembler {
 
         const opcodeEnd = line.indexOf(' ');
         if (opcodeEnd === -1) {
-            return [new Byte(Mnemonics[line]), new Byte(0x00), new Byte(0x00), new Byte(0x00)];
+            return [new Byte(Instruction[line]), new Byte(0x00), new Byte(0x00), new Byte(0x00)];
         }
 
         const opcode = line.substring(0, opcodeEnd);
         const operands = line.substring(opcodeEnd + 1).split(',').map(operand => operand.trim());
         switch (opcode) {
             case 'mov':
-                return [Mnemonics.mov, Mnemonics[operands[0]], Mnemonics[operands[1]], new Byte(0x00)];
+                return [Instruction.mov, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
             case 'movi':
-                return [Mnemonics.movi, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+                return [Instruction.movi, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'movim':
-                return [Mnemonics.movim, ...(new Word(parseInt(operands[0]))).expand(), new Byte(parseInt(operands[1]))];
+                return [Instruction.movim, ...(new Word(parseInt(operands[0]))).expand(), new Byte(parseInt(operands[1]))];
             case 'movipb':
-                return [Mnemonics.movipb, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+                return [Instruction.movipb, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'movipw':
-                return [Mnemonics.movipw, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+                return [Instruction.movipw, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'movipd':
-                return [Mnemonics.movipd, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+                return [Instruction.movipd, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'movimp':
-                return [Mnemonics.movimp, ...(new Word(parseInt(operands[0]))).expand(), new Byte(parseInt(operands[1]))];
+                return [Instruction.movimp, ...(new Word(parseInt(operands[0]))).expand(), new Byte(parseInt(operands[1]))];
             case 'movm':
-                return [Mnemonics.movm, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+                return [Instruction.movm, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'movp':
-                return [Mnemonics.movp, Mnemonics[operands[0]], Mnemonics[operands[1]], new Byte(0x00)];
+                return [Instruction.movp, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
             case 'movmp':
-                return [Mnemonics.movmp, Mnemonics[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+                return [Instruction.movmp, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'movrm':
-                return [Mnemonics.movrm, ...(new Word(parseInt(operands[0]))).expand(), Mnemonics[operands[1]]];
+                return [Instruction.movrm, ...(new Word(parseInt(operands[0]))).expand(), Register[operands[1]]];
             case 'movrp':
-                return [Mnemonics.movrp, Mnemonics[operands[0]], Mnemonics[operands[1]], new Byte(0x00)];
+                return [Instruction.movrp, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
             case 'movrmp':
-                return [Mnemonics.movrmp, ...(new Word(parseInt(operands[0]))).expand(), Mnemonics[operands[1]]];
+                return [Instruction.movrmp, ...(new Word(parseInt(operands[0]))).expand(), Register[operands[1]]];
         }
 
         return [];
