@@ -13,6 +13,7 @@ module.exports = class extends ControlRegisters {
         super();
         this._data = [new Double(0x00), new Double(0x00), new Double(0x00), new Double(0x00)];
         this._ip = new Word(0x00);
+        this._exit = null;
     }
 
     /**
@@ -59,6 +60,27 @@ module.exports = class extends ControlRegisters {
      */
     setIp(ip) {
         this._ip = ip;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    shouldExit() {
+        return this._exit !== null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    getExitStatus() {
+        return this._exit
+    }
+
+    /**
+     * @param {Byte} status
+     */
+    setExit(status) {
+        this._exit = status;
     }
 
     /**

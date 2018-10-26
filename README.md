@@ -118,3 +118,4 @@ Move instruction:
 - Data types should have a `format()` method that directly prints their hex representation
 - Decide how to handle negative numbers as result of subtract
 - create an authoritative source of definitions within an interpreter implementation, so that all of its modules can use it instead of duplicating decisions in code
+- remove interface classes, which are unnecessary, and replace them with docblocs

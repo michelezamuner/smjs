@@ -36,6 +36,7 @@ beforeEach(() => {
 
     registers.getIp = () => ip;
     registers.setIp = value => ip = value;
+    registers.shouldExit = () => false;
 
     memory.getMax = () => new Word(0xFFFF);
     memory.readSet = jest.fn((address, size) => {
@@ -53,8 +54,8 @@ test('executes the given instructions in sequence and exits with exit context', 
     const value = random(Byte);
 
     interpreter.exec = jest.fn(() => registers.getIp().eq(new Word(0x04))
-        ? new Exit(true, new Word(value))
-        : new Exit
+        ? registers.shouldExit = () => true
+        : registers.getExitStatus = () => new Byte(value)
     );
 
     const exitStatus = processor.run();
