@@ -10,6 +10,7 @@ const System = require('../System');
 module.exports = class SystemProvider {
     /**
      * @return System
+     * @abstract
      */
     getSystem() {
         throw 'Not implemented';

@@ -6,6 +6,7 @@ const Registers = require('../Registers');
 module.exports = class RegistersProvider {
     /**
      * @return {Registers}
+     * @abstract
      */
     getRegisters() {
         throw 'Not implemented';

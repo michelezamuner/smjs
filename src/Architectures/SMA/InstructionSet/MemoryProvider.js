@@ -6,6 +6,7 @@ const Memory = require('../../../ProcessorInterfaces/Memory');
 module.exports = class MemoryProvider {
     /**
      * @return Memory
+     * @abstract
      */
     getMemory() {
         throw 'Not implemented';
