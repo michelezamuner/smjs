@@ -27,7 +27,17 @@ module.exports = class Interpreter extends InterpreterInterface {
      */
     exec([byte1, byte2, byte3, byte4]) {
         const opcode = Object.keys(this._opcodeMap).find(opcode => this._opcodeMap[opcode].eq(byte1));
-        const instruction = this._instructionSet.get(opcode);
+        const instruction = this._instructionSet.get(this._capitalize(opcode));
         instruction.exec(byte2, byte3, byte4);
+    }
+
+    /**
+     * @param {string} string
+     * @return {string}
+     * @private
+     */
+    _capitalize(string) {
+        const first = string[0];
+        return first.toUpperCase() + string.slice(1);
     }
 };
