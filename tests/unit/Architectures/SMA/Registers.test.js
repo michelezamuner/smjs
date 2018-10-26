@@ -8,7 +8,7 @@ const Byte = require('../../../../src/DataTypes/Byte');
 const random = require('../../random');
 
 /**
- * @type {Registers}
+ * @type {null|Registers}
  */
 let registers = null;
 
@@ -16,14 +16,14 @@ beforeEach(() => {
     registers = new Registers();
 });
 
-test('Implements control registers', () => {
+test('implements control registers', () => {
     expect(registers instanceof ControlRegisters).toBe(true);
 });
 
-test('Implements data registers', () => {
+test('implements data registers', () => {
     for (const t of ['a', 'b', 'c', 'd']) {
-        let ex = new Double(random(Double));
-        let exb = ex.expand();
+        const ex = new Double(random(Double));
+        const exb = ex.expand();
 
         registers.set(new RegisterAddress(Register[`e${t}x`]), ex);
 
@@ -32,8 +32,8 @@ test('Implements data registers', () => {
         expect(registers.get(new RegisterAddress(Register[`${t}h`]))).toStrictEqual(new Byte(exb[2]));
         expect(registers.get(new RegisterAddress(Register[`${t}l`]))).toStrictEqual(new Byte(exb[3]));
 
-        let x = new Word(random(Word));
-        let xb = x.expand();
+        const x = new Word(random(Word));
+        const xb = x.expand();
 
         registers.set(new RegisterAddress(Register[`${t}x`]), x);
 
@@ -42,8 +42,8 @@ test('Implements data registers', () => {
         expect(registers.get(new RegisterAddress(Register[`${t}h`]))).toStrictEqual(xb[0]);
         expect(registers.get(new RegisterAddress(Register[`${t}l`]))).toStrictEqual(xb[1]);
 
-        let h = new Byte(random(Byte));
-        let l = new Byte(random(Byte));
+        const h = new Byte(random(Byte));
+        const l = new Byte(random(Byte));
 
         registers.set(new RegisterAddress(Register[`${t}h`]), h);
         registers.set(new RegisterAddress(Register[`${t}l`]), l);
@@ -55,8 +55,19 @@ test('Implements data registers', () => {
     }
 });
 
-test('Implements instruction pointer', () => {
-    let ip = new Word(random(Word));
+test('implements instruction pointer', () => {
+    const ip = new Word(random(Word));
     registers.setIp(ip);
     expect(registers.getIp()).toStrictEqual(ip);
+});
+
+test('implements exit registers', () => {
+    expect(registers.shouldExit()).toBe(false);
+
+    const status = new Byte(random(Byte));
+
+    registers.setExit(status);
+
+    expect(registers.shouldExit()).toBe(true);
+    expect(registers.getExitStatus()).toBe(status);
 });

@@ -26,18 +26,16 @@ module.exports = class Processor {
     run() {
         let exitStatus = 0;
 
-        // let max = 5;
         while (true) {
-            // if (max-- < 0) break;
             if (!this._canIncrementIp()) {
                 throw new MissingExitException('Missing exit instruction');
             }
 
             const instruction = this._memory.readSet(this._registers.getIp(), this._interpreter.getInstructionSize());
-            const exit = this._interpreter.exec(instruction);
+            this._interpreter.exec(instruction);
 
-            if (exit.shouldExit()) {
-                exitStatus = exit.getExitStatus().uint();
+            if (this._registers.shouldExit()) {
+                exitStatus = this._registers.getExitStatus().uint();
                 break;
             }
 
