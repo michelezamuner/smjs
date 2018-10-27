@@ -1,15 +1,7 @@
-const RegistersProvider = require('./RegistersProvider');
-const MemoryProvider = require('./MemoryProvider');
-const SystemProvider = require('./SystemProvider');
 const Registers = require('../Registers');
 const Memory = require('../../../ProcessorInterfaces/Memory');
 const System = require('../System');
 
-/**
- * @implements RegistersProvider
- * @implements MemoryProvider
- * @implements SystemProvider
- */
 module.exports = class InstructionDependencies {
     /**
      * @param {Registers} registers

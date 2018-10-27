@@ -5,6 +5,14 @@ const Byte = require('../../../DataTypes/Byte');
  */
 module.exports = class Definition {
     /**
+     * @return {function[]}
+     * @abstract
+     */
+    static getDependencies() {
+        throw 'Not implemented';
+    }
+
+    /**
      * @param {Byte} byte1
      * @param {Byte} byte2
      * @param {Byte} byte3

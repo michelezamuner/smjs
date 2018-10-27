@@ -1,10 +1,10 @@
-const InstructionDefinitionLoader = require('./InstructionDefinitionLoader');
+const DefinitionLoader = require('./DefinitionLoader');
 const InstructionDependencies = require('./InstructionDependencies');
 const Definition = require('./Definition');
 
 module.exports = class InstructionSet {
     /**
-     * @param {InstructionDefinitionLoader} loader
+     * @param {DefinitionLoader} loader
      * @param {InstructionDependencies} dependencies
      */
     constructor(loader, dependencies) {
@@ -19,6 +19,9 @@ module.exports = class InstructionSet {
     get(opcode) {
         const definition = this._loader.load(opcode);
 
-        return new definition(this._dependencies);
+        const dependencies = definition.getDependencies()
+            .map(dependency => this._dependencies[`get${dependency.name}`]());
+
+        return new definition(...dependencies);
     }
 };

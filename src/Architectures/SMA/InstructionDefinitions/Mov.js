@@ -1,5 +1,5 @@
 const Definition = require('../InstructionSet/Definition');
-const RegistersProvider = require('../InstructionSet/RegistersProvider');
+const Registers = require('../Registers');
 const RegisterAddress = require('../RegisterAddress');
 
 /**
@@ -7,11 +7,18 @@ const RegisterAddress = require('../RegisterAddress');
  */
 module.exports = class Mov extends Definition {
     /**
-     * @param {RegistersProvider} provider
+     * @inheritDoc
      */
-    constructor(provider) {
+    static getDependencies() {
+        return [Registers];
+    }
+
+    /**
+     * @param {Registers} registers
+     */
+    constructor(registers) {
         super();
-        this._registers = provider.getRegisters();
+        this._registers = registers;
     }
 
     /**

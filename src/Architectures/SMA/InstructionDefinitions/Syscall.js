@@ -1,5 +1,7 @@
 const Definition = require('../InstructionSet/Definition');
-const SystemProvider = require('../InstructionSet/SystemProvider');
+const Registers = require('../Registers');
+const Memory = require('../../../ProcessorInterfaces/Memory');
+const System = require('../System');
 const Register = require('../Mnemonics').register;
 const RegisterAddress = require('../RegisterAddress');
 const Byte = require('../../../DataTypes/Byte');
@@ -24,13 +26,22 @@ module.exports = class Syscall extends Definition {
     }
 
     /**
-     * @param {SystemProvider} provider
+     * @inheritDoc
      */
-    constructor(provider) {
+    static getDependencies() {
+        return [Registers, Memory, System];
+    }
+
+    /**
+     * @param {Registers} registers
+     * @param {Memory} memory
+     * @param {System} system
+     */
+    constructor(registers, memory, system) {
         super();
-        this._registers = provider.getRegisters();
-        this._memory = provider.getMemory();
-        this._system = provider.getSystem();
+        this._registers = registers;
+        this._memory = memory;
+        this._system = system;
     }
 
     /**

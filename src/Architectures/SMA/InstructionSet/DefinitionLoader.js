@@ -1,4 +1,4 @@
-module.exports = class InstructionDefinitionLoader {
+module.exports = class DefinitionLoader {
     /**
      * @param {string} path
      */

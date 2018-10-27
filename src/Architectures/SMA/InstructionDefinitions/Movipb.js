@@ -1,19 +1,27 @@
 const Definition = require('../InstructionSet/Definition');
-const PointerProvider = require('../InstructionSet/PointerProvider');
+const Registers = require('../Registers');
+const Memory = require('../../../ProcessorInterfaces/Memory');
 const RegisterAddress = require('../RegisterAddress');
-const Word = require('../../../DataTypes/Word');
 
 /**
  * @implements Definition
  */
 module.exports = class Movipb extends Definition {
     /**
-     * @param {PointerProvider} provider
+     * @inheritDoc
      */
-    constructor(provider) {
+    static getDependencies() {
+        return [Registers, Memory];
+    }
+
+    /**
+     * @param {Registers} registers
+     * @param {Memory} memory
+     */
+    constructor(registers, memory) {
         super();
-        this._registers = provider.getRegisters();
-        this._memory = provider.getMemory();
+        this._registers = registers;
+        this._memory = memory;
     }
 
     /**
