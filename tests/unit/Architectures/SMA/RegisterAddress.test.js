@@ -88,3 +88,21 @@ test('tells the data type of the part of the register it refers to', () => {
         expect(address.rightq.getType()).toBe(Byte);
     }
 });
+
+test('can be cast to half', () => {
+    for (const address of addresses) {
+        expect(address.rightq.toHalf()).toStrictEqual(address.half);
+        expect(address.leftq.toHalf()).toStrictEqual(address.half);
+        expect(address.half.toHalf()).toStrictEqual(address.half);
+        expect(address.whole.toHalf()).toStrictEqual(address.half);
+    }
+});
+
+test('can be cast to whole', () => {
+    for (const address of addresses) {
+        expect(address.rightq.toWhole()).toStrictEqual(address.whole);
+        expect(address.leftq.toWhole()).toStrictEqual(address.whole);
+        expect(address.half.toWhole()).toStrictEqual(address.whole);
+        expect(address.whole.toWhole()).toStrictEqual(address.whole);
+    }
+});
