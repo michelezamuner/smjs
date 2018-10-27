@@ -1,4 +1,7 @@
 const Movrp = require('../../../../../src/Architectures/SMA/InstructionDefinitions/Movrp');
+const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/Definition');
+const Registers = require('../../../../../src/Architectures/SMA/Registers');
+const Memory = require('../../../../../src/ProcessorInterfaces/Memory');
 const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const random = require('../../../random');
@@ -16,19 +19,20 @@ const registers = {};
 const memory = {};
 
 /**
- * @type {Object}
- */
-const provider = {};
-
-/**
  * @type {null|Movrp}
  */
 let definition = null;
 
 beforeEach(() => {
-    provider.getRegisters = () => registers;
-    provider.getMemory = () => memory;
-    definition = new Movrp(provider);
+    definition = new Movrp(registers, memory);
+});
+
+test('implements definition', () => {
+    expect(definition).toBeInstanceOf(Definition);
+});
+
+test('implements get dependencies', () => {
+    expect(Movrp.getDependencies()).toStrictEqual([Registers, Memory]);
 });
 
 test('implements move register to register pointer', () => {

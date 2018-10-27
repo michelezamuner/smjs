@@ -1,5 +1,5 @@
 const Definition = require('../InstructionSet/Definition');
-const MemoryProvider = require('../InstructionSet/MemoryProvider');
+const Memory = require('../../../ProcessorInterfaces/Memory');
 const Word = require('../../../DataTypes/Word');
 
 /**
@@ -7,11 +7,18 @@ const Word = require('../../../DataTypes/Word');
  */
 module.exports = class Movim extends Definition {
     /**
-     * @param {MemoryProvider} provider
+     * @inheritDoc
      */
-    constructor(provider) {
+    static getDependencies() {
+        return [Memory];
+    }
+
+    /**
+     * @param {Memory} memory
+     */
+    constructor(memory) {
         super();
-        this._memory = provider.getMemory();
+        this._memory = memory;
     }
 
     /**

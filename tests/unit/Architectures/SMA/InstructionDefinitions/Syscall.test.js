@@ -1,4 +1,8 @@
 const Syscall = require('../../../../../src/Architectures/SMA/InstructionDefinitions/Syscall');
+const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/Definition');
+const Registers = require('../../../../../src/Architectures/SMA/Registers');
+const Memory = require('../../../../../src/ProcessorInterfaces/Memory');
+const System = require('../../../../../src/Architectures/SMA/System');
 const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const Double = require('../../../../../src/DataTypes/Double');
@@ -22,11 +26,6 @@ const memory = {};
 const system = {};
 
 /**
- * @type {Object}
- */
-const provider = {};
-
-/**
  * @type {null|Syscall}
  */
 let definition = null;
@@ -34,10 +33,15 @@ let definition = null;
 beforeEach(() => {
     registers.set = jest.fn();
     registers.setExit = jest.fn();
-    provider.getRegisters = () => registers;
-    provider.getMemory = () => memory;
-    provider.getSystem = () => system;
-    definition = new Syscall(provider);
+    definition = new Syscall(registers, memory, system);
+});
+
+test('implements definition', () => {
+    expect(definition).toBeInstanceOf(Definition);
+});
+
+test('implements get dependencies', () => {
+    expect(Syscall.getDependencies()).toStrictEqual([Registers, Memory, System]);
 });
 
 test('implements syscall exit', () => {

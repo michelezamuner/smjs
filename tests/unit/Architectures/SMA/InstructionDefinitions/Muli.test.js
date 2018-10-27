@@ -1,4 +1,6 @@
 const Muli = require('../../../../../src/Architectures/SMA/InstructionDefinitions/Muli');
+const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/Definition');
+const Registers = require('../../../../../src/Architectures/SMA/Registers');
 const Register = require('../../../../../src/Architectures/SMA/Mnemonics').register;
 const RegisterAddress = require('../../../../../src/Architectures/SMA/RegisterAddress');
 const Byte = require('../../../../../src/DataTypes/Byte');
@@ -12,19 +14,21 @@ const random = require('../../../random');
 const registers = {};
 
 /**
- * @type {Object}
- */
-const provider = {};
-
-/**
  * @type {null|Muli}
  */
 let definition = null;
 
 beforeEach(() => {
     registers.set = jest.fn();
-    provider.getRegisters = () => registers;
-    definition = new Muli(provider);
+    definition = new Muli(registers);
+});
+
+test('implements definition', () => {
+    expect(definition).toBeInstanceOf(Definition);
+});
+
+test('implements get dependencies', () => {
+    expect(Muli.getDependencies()).toStrictEqual([Registers]);
 });
 
 test('implements multiply immediate byte to register byte', () => {

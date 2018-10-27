@@ -1,4 +1,7 @@
 const Movipd = require('../../../../../src/Architectures/SMA/InstructionDefinitions/Movipd');
+const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/Definition');
+const Registers = require('../../../../../src/Architectures/SMA/Registers');
+const Memory = require('../../../../../src/ProcessorInterfaces/Memory');
 const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const random = require('../../../random');
@@ -16,20 +19,21 @@ const registers = {};
 const memory = {};
 
 /**
- * @type {Object}
- */
-const provider = {};
-
-/**
  * @type {null|Movipd}
  */
 let definition = null;
 
 beforeEach(() => {
     memory.write = jest.fn();
-    provider.getRegisters = () => registers;
-    provider.getMemory = () => memory;
-    definition = new Movipd(provider);
+    definition = new Movipd(registers, memory);
+});
+
+test('implements definition', () => {
+    expect(definition).toBeInstanceOf(Definition);
+});
+
+test('implements get dependencies', () => {
+    expect(Movipd.getDependencies()).toStrictEqual([Registers, Memory]);
 });
 
 test('implements move immediate to byte register pointer', () => {

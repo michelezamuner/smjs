@@ -1,4 +1,6 @@
 const Movi = require('../../../../../src/Architectures/SMA/InstructionDefinitions/Movi');
+const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/Definition');
+const Registers = require('../../../../../src/Architectures/SMA/Registers');
 const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const Double = require('../../../../../src/DataTypes/Double');
@@ -12,19 +14,21 @@ const RegisterAddress = require('../../../../../src/Architectures/SMA/RegisterAd
 const registers = {};
 
 /**
- * @type {Object}
- */
-const provider = {};
-
-/**
  * @type {null|Movi}
  */
 let definition = null;
 
 beforeEach(() => {
     registers.set = jest.fn();
-    provider.getRegisters = () => registers;
-    definition = new Movi(provider);
+    definition = new Movi(registers);
+});
+
+test('implements definition', () => {
+    expect(definition).toBeInstanceOf(Definition);
+});
+
+test('implements get dependencies', () => {
+    expect(Movi.getDependencies()).toStrictEqual([Registers]);
 });
 
 test('implements move immediate to register', () => {

@@ -1,4 +1,6 @@
 const Movimp = require('../../../../../src/Architectures/SMA/InstructionDefinitions/Movimp');
+const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/Definition');
+const Memory = require('../../../../../src/ProcessorInterfaces/Memory');
 const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const random = require('../../../random');
@@ -9,19 +11,21 @@ const random = require('../../../random');
 const memory = {};
 
 /**
- * @type {Object}
- */
-const provider = {};
-
-/**
  * @type {null|Movimp}
  */
 let definition = null;
 
 beforeEach(() => {
     memory.write = jest.fn();
-    provider.getMemory = () => memory;
-    definition = new Movimp(provider);
+    definition = new Movimp(memory);
+});
+
+test('implements definition', () => {
+    expect(definition).toBeInstanceOf(Definition);
+});
+
+test('implements get dependencies', () => {
+    expect(Movimp.getDependencies()).toStrictEqual([Memory]);
 });
 
 test('implements move immediate to memory pointer', () => {
