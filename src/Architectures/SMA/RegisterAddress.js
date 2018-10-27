@@ -93,4 +93,18 @@ module.exports = class RegisterAddress {
     isRightq() {
         return (this._address & 0b0011) === 0b00;
     }
+
+    /**
+     * @return {RegisterAddress}
+     */
+    toHalf() {
+        return new this.constructor((this.getIndex() << 2) + 0b10);
+    }
+
+    /**
+     * @return {RegisterAddress}
+     */
+    toWhole() {
+        return new this.constructor((this.getIndex() << 2) + 0b11);
+    }
 };
