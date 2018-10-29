@@ -8,6 +8,10 @@ test('implements data type', () => {
     expect(w instanceof DataType).toBe(true);
 });
 
+test('defaults to zero', () => {
+    expect(new Word()).toStrictEqual(new Word(0x00));
+});
+
 test('implements size', () => {
     expect(Word.SIZE).toBe(2);
 });

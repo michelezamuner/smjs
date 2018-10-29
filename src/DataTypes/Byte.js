@@ -18,7 +18,7 @@ module.exports = class Byte extends DataType {
     /**
      * @param {number|Byte} value
      */
-    constructor(value) {
+    constructor(value = 0x00) {
         super(value);
     }
 };

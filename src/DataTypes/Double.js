@@ -22,7 +22,7 @@ module.exports = class Double extends DataType {
      * @param {Byte=} byte3
      * @param {Byte=} byte4
      */
-    constructor(value, byte2 = undefined, byte3 = undefined, byte4 = undefined) {
+    constructor(value = 0x00, byte2 = undefined, byte3 = undefined, byte4 = undefined) {
         super(new.target._getValue(value, byte2, byte3, byte4));
     }
 
@@ -37,15 +37,15 @@ module.exports = class Double extends DataType {
     static _getValue(byte1, byte2, byte3, byte4) {
         if (byte2 === undefined && byte3 === undefined && byte4 === undefined) {
             if (!Number.isInteger(byte1) && !(byte1 instanceof Double)) {
-                throw 'Double must be constructed from one value or four bytes';
+                throw new Error('Double must be constructed from one value or four bytes');
             }
             return byte1;
         }
 
         if (!(byte1 instanceof Byte) || !(byte2 instanceof Byte) || !(byte3 instanceof Byte) || !(byte4 instanceof Byte)) {
-            throw 'Double must be constructed from one value or four bytes';
+            throw new Error('Double must be constructed from one value or four bytes');
         }
 
-        return (byte1.uint() * 0x1000000) + (byte2.uint() * 0x10000) + (byte3.uint() * 0x100) + byte4.uint();
+        return (parseInt(byte1) * 0x1000000) + (parseInt(byte2) * 0x10000) + (parseInt(byte3) * 0x100) + parseInt(byte4);
     }
 };

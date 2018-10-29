@@ -35,7 +35,7 @@ module.exports = class Processor {
             this._interpreter.exec(instruction);
 
             if (this._registers.shouldExit()) {
-                exitStatus = this._registers.getExitStatus().uint();
+                exitStatus = parseInt(this._registers.getExitStatus());
                 break;
             }
 

@@ -26,7 +26,7 @@ module.exports = class RegisterAddress {
      * @param {number|Byte} address
      */
     constructor(address) {
-        this._address = address instanceof Byte ? address.uint() : address;
+        this._address = address instanceof Byte ? parseInt(address) : address;
     }
 
     /**

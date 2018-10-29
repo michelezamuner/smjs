@@ -173,9 +173,9 @@ test('supports move memory to register', () => {
     const value3 = new Double(0x01020304);
     const code = `
         .data
-            valueA dw 0x${value1.uint().toString(16)}
-            valueB db 0x${value2.uint().toString(16)}
-            valueC dd 0x${value3.uint().toString(16)}
+            valueA dw ${value1}
+            valueB db ${value2}
+            valueC dd ${value3}
         .text
             mov eax, valueA
             mov ebx, valueB
@@ -198,7 +198,7 @@ test('supports move register pointer to register', () => {
     const valueb = value.expand();
     const code = `
         .data
-            value   dd  0x${value.uint().toString(16)}
+            value   dd  ${value}
         .text
             mov ax, [value]
             mov eax, [ax]

@@ -271,7 +271,7 @@ module.exports = class Assembler {
         }
 
         if (registerFirst && symbolPointerSecond) {
-            this._pointers[registerFirst.uint()] = symbolPointerSecond;
+            this._pointers[parseInt(registerFirst)] = symbolPointerSecond;
             return [Instruction.movi, registerFirst, ...symbolPointerSecond.address.expand()];
         }
 
@@ -281,7 +281,7 @@ module.exports = class Assembler {
         }
 
         if (registerPointerFirst && immediate !== undefined) {
-            const type = this._pointers[registerPointerFirst.uint()].type;
+            const type = this._pointers[parseInt(registerPointerFirst)].type;
             if (type === Byte) {
                 return [Instruction.movipb, registerPointerFirst, ...(new Word(immediate)).expand()];
             } else if (type === Word) {

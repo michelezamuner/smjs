@@ -20,7 +20,7 @@ module.exports = class Word extends DataType {
      * @param {number|Word|Byte} value
      * @param {Byte=} byte2
      */
-    constructor(value, byte2 = undefined) {
+    constructor(value = 0x00, byte2 = undefined) {
         super(new.target._getValue(value, byte2));
     }
 
@@ -42,6 +42,6 @@ module.exports = class Word extends DataType {
             throw 'Word must be constructed from one value or two bytes';
         }
 
-        return (byte1.uint() * 0x100) + byte2.uint();
+        return (parseInt(byte1) * 0x100) + parseInt(byte2);
     }
 };

@@ -47,7 +47,7 @@ test('implements multiply immediate byte to register byte', () => {
         definition.exec(multiplicandRegister, ...bytes);
 
         expect(registers.set.mock.calls[i][0]).toStrictEqual(new RegisterAddress(resultRegister));
-        expect(registers.set.mock.calls[i][1]).toStrictEqual(new Word(multiplicand.uint() * bytes[1].uint()));
+        expect(registers.set.mock.calls[i][1]).toStrictEqual(new Word(parseInt(multiplicand) * parseInt(bytes[1])));
     }
 });
 
@@ -66,6 +66,6 @@ test('implements multiply immediate word to register word', () => {
         definition.exec(multiplicandRegister, ...multiplier.expand());
 
         expect(registers.set.mock.calls[i][0]).toStrictEqual(new RegisterAddress(resultRegister));
-        expect(registers.set.mock.calls[i][1]).toStrictEqual(new Double(multiplicand.uint() * multiplier.uint()));
+        expect(registers.set.mock.calls[i][1]).toStrictEqual(new Double(parseInt(multiplicand) * parseInt(multiplier)));
     }
 });

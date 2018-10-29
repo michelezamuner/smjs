@@ -27,14 +27,15 @@ module.exports = class Memory extends MemoryInterface {
      */
     read(address) {
         if (address.gt(this._max)) {
-            throw `Address ${address.uint()} exceeds memory max (${this._max.uint()})`;
+            throw `Address ${address} exceeds memory max (${this._max})`;
         }
 
-        if (!(address.uint() in this._memory)) {
+        const index = parseInt(address);
+        if (!(index in this._memory)) {
             return new Byte(0x00);
         }
 
-        return new Byte(this._memory[address.uint()]);
+        return new Byte(this._memory[index]);
     }
 
     /**
@@ -42,7 +43,7 @@ module.exports = class Memory extends MemoryInterface {
      */
     readSet(address, size) {
         const bytes = [];
-        for (let i = 0; i < size.uint(); i++) {
+        for (let i = new size.constructor(); i.lt(size); i = i.incr()) {
             bytes.push(this.read(address.add(new size.constructor(i))));
         }
 
@@ -58,9 +59,9 @@ module.exports = class Memory extends MemoryInterface {
         }
 
         if (address.gt(this._max)) {
-            throw `Address ${address.uint()} exceeds memory max (${this._max.uint()})`;
+            throw `Address ${address} exceeds memory max (${this._max})`;
         }
 
-        this._memory[address.uint()] = value.uint();
+        this._memory[parseInt(address)] = parseInt(value);
     }
 };

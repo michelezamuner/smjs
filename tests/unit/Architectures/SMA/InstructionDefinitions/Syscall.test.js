@@ -86,7 +86,7 @@ test('implements syscall write', () => {
     system.write = (fdArg, bufArg, countArg) => {
         const expectedBuf = new Double(...bytes);
         const actualBuf = new Double(...bufArg.map(value => new Byte(value)));
-        if (fdArg === fd.uint() && actualBuf.eq(expectedBuf) && countArg === count.uint()) {
+        if (fdArg === parseInt(fd) && actualBuf.eq(expectedBuf) && countArg === parseInt(count)) {
             return written;
         }
 

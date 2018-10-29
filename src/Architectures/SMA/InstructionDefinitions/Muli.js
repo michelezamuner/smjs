@@ -48,14 +48,14 @@ module.exports = class Muli extends Definition {
     _multiplyBytes(multiplicandRegister, multiplier) {
         const resultRegister = multiplicandRegister.toHalf();
         const multiplicand = this._registers.get(multiplicandRegister);
-        const result = new Word(multiplicand.uint() * multiplier.uint());
+        const result = new Word(parseInt(multiplicand) * parseInt(multiplier));
         this._registers.set(resultRegister, result);
     }
 
     _multiplyWords(multiplicandRegister, multiplier) {
         const resultRegister = multiplicandRegister.toWhole();
         const multiplicand = this._registers.get(multiplicandRegister);
-        const result = new Double(multiplicand.uint() * multiplier.uint());
+        const result = new Double(parseInt(multiplicand) * parseInt(multiplier));
         this._registers.set(resultRegister, result);
     }
 };

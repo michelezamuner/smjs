@@ -72,7 +72,7 @@ test('can be created from bytes', () => {
     const value = new Byte(random(Byte));
     const address = new RegisterAddress(value);
     expect(address.eq(new RegisterAddress(value))).toBe(true);
-    expect(address.format()).toBe(`0x${value.uint().toString(16)}`);
+    expect(address.format()).toBe(value.toString());
     expect(typeof(address.getIndex())).toBe('number');
     expect(typeof(address.isWhole())).toBe('boolean');
     expect(typeof(address.isHalf())).toBe('boolean');

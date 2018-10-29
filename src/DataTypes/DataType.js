@@ -36,20 +36,10 @@ module.exports = class DataType {
     }
 
     /**
-     * @returns {number}
+     * @inheritDoc
      */
-    uint() {
-        return this._value;
-    }
-
-    /**
-     * @returns {number}
-     */
-    int() {
-        const max = this._getMax();
-        return this._value <= Math.floor(max / 2)
-            ? this._value
-            : this._value - max - 1;
+    toString() {
+        return '0x' + this._value.toString(16);
     }
 
     /**
@@ -72,6 +62,13 @@ module.exports = class DataType {
             bytes[i] = values[i] ? values[i] : 0x00;
         }
         return bytes.reverse().map(val => new this.constructor.UNIT_TYPE(val));
+    }
+
+    /**
+     * @return {DataType}
+     */
+    incr() {
+        return new this.constructor(this._value + 1);
     }
 
     /**

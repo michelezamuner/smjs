@@ -7,6 +7,10 @@ test('implements data type', () => {
     expect(b instanceof DataType).toBe(true);
 });
 
+test('defaults to zero', () => {
+    expect(new Byte()).toStrictEqual(new Byte(0x00));
+});
+
 test('implements size', () => {
     expect(Byte.SIZE).toBe(1);
 });

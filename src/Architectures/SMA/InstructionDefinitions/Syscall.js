@@ -68,7 +68,7 @@ module.exports = class Syscall extends Definition {
         const fd = this._registers.get(new RegisterAddress(Register.ebx));
         const count = this._registers.get(new RegisterAddress(Register.edx));
         const buf = this._memory.readSet(this._registers.get(new RegisterAddress(Register.ecx)), count);
-        const written = this._system.write(fd.uint(), buf.map(byte => byte.uint()), count.uint());
+        const written = this._system.write(parseInt(fd), buf.map(byte => parseInt(byte)), parseInt(count));
         this._registers.set(new RegisterAddress(Register.eax), new Double(written));
     }
 };
