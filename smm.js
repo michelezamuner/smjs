@@ -27,7 +27,7 @@ require('fs').readFile(process.argv[2], {encoding: 'binary'}, (err, data) => {
         const status = processor.run();
         process.exit(status);
     } catch (e) {
-        console.error(e instanceof MissingExitException ? e.getMessage() : e);
+        console.error(e.getMessage !== undefined ? e.getMessage() : e);
         process.exit(127);
     }
 });

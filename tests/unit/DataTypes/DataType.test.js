@@ -58,16 +58,10 @@ test('support copy constructor', () => {
     expect(t1.eq(t2)).toBe(true);
 });
 
-test('get integer value unsigned', () => {
+test('implements to string', () => {
     const value = random(Type);
-    const t = new Type(value);
-    expect(t.uint()).toBe(value);
-});
-
-test('get integer value in twos complement', () => {
-    [[5, 5], [16, 16], [32767, 32767], [32768, -32768], [32769, -32767], [65534, -2], [65535, -1]].forEach(([value, expected]) => {
-        expect((new Type(value)).int()).toBe(expected);
-    });
+    const type = new Type(value);
+    expect(`${type}`).toBe('0x' + value.toString(16));
 });
 
 test('expand to list of unit data types', () => {
@@ -89,9 +83,15 @@ test('expand to list of unit data types', () => {
     let expected = 0;
     let index = 0;
     for (const unit of units.reverse()) {
-        expected += unit.uint() * (2 ** (8 * index++));
+        expected += parseInt(unit) * (2 ** (8 * index++));
     }
-    expect(value.uint()).toBe(expected);
+    expect(parseInt(value)).toBe(expected);
+});
+
+test('can be incremented', () => {
+    const value = random(Type, 0, 1);
+    const result = (new Type(value)).incr();
+    expect(result).toStrictEqual(new Type(value + 1));
 });
 
 test('adds another data type', () => {

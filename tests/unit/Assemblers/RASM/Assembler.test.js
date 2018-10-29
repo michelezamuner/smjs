@@ -138,7 +138,7 @@ test('supports move register pointer to register', () => {
     const code = `
         movi ax, 0x08
         movp eax, ax
-        ${valueb.map(byte => '0x' + byte.uint().toString(16)).join(' ')}
+        ${valueb.map(byte => byte.toString()).join(' ')}
     `;
 
     const bytes = assembler.assemble(code);

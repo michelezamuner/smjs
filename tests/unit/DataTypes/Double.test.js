@@ -8,6 +8,10 @@ test('implements data type', () => {
     expect(d instanceof DataType).toBe(true);
 });
 
+test('defaults to zero', () => {
+    expect(new Double()).toStrictEqual(new Double(0x00));
+});
+
 test('implements size', () => {
     expect(Double.SIZE).toBe(4);
 });
@@ -28,16 +32,16 @@ test('can be constructed from four bytes', () => {
 
 test('if constructing with one argument, it must be integer or a double', () => {
     expect(new Double(new Double(0x01))).toStrictEqual(new Double(0x01));
-    expect(() => new Double(new Byte(10))).toThrow('Double must be constructed from one value or four bytes');
+    expect(() => new Double(new Byte(10))).toThrow(new Error('Double must be constructed from one value or four bytes'));
 });
 
 test('fails if constructing with more than one arguments, that are not four bytes', () => {
     expect(() => new Double(new Byte(10), 10, 10, 10))
-        .toThrow('Double must be constructed from one value or four bytes');
+        .toThrow(new Error('Double must be constructed from one value or four bytes'));
     expect(() => new Double(10, new Byte(10), new Byte(10), new Byte(10)))
-        .toThrow('Double must be constructed from one value or four bytes');
+        .toThrow(new Error('Double must be constructed from one value or four bytes'));
     expect(() => new Double(10, 10, 10, 10))
-        .toThrow('Double must be constructed from one value or four bytes');
+        .toThrow(new Error('Double must be constructed from one value or four bytes'));
     expect(() => new Double(new Byte(10), new Byte(10)))
-        .toThrow('Double must be constructed from one value or four bytes');
+        .toThrow(new Error('Double must be constructed from one value or four bytes'));
 });
