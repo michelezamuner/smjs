@@ -31,7 +31,7 @@ test('implements get dependencies', () => {
     expect(Muli.getDependencies()).toStrictEqual([Registers]);
 });
 
-test('implements multiply immediate byte to register byte', () => {
+test('implements multiply register byte by immediate byte', () => {
     const multiplicand = new Byte(random(Byte));
     const multiplier = new Word(random(Word));
     const bytes = multiplier.expand();
@@ -51,7 +51,7 @@ test('implements multiply immediate byte to register byte', () => {
     }
 });
 
-test('implements multiply immediate word to register word', () => {
+test('implements multiply register word by immediate word', () => {
     const multiplicand = new Word(random(Word));
     const multiplier = new Word(random(Word));
     const names = ['a', 'b', 'c', 'd'];
@@ -67,5 +67,33 @@ test('implements multiply immediate word to register word', () => {
 
         expect(registers.set.mock.calls[i][0]).toStrictEqual(new RegisterAddress(resultRegister));
         expect(registers.set.mock.calls[i][1]).toStrictEqual(new Double(parseInt(multiplicand) * parseInt(multiplier)));
+    }
+});
+
+test('implements multiply register double by immediate word', () => {
+    const multiplicand = new Double(random(Double));
+    const multiplier = new Word(random(Word));
+    const result = parseInt(multiplicand) * parseInt(multiplier);
+    const modulo = 2 ** 32;
+    const resultHigh = Math.floor(result / modulo);
+    const resultLow = result % modulo;
+    const names = ['a', 'b', 'c', 'd'];
+
+    for (const i in names) {
+        const x = names[i];
+        const multiplicandRegister = Register[`e${x}x`];
+        const resultLowRegister = x === 'd' ? Register.eax : Register.edx;
+        const resultHighRegister = multiplicandRegister;
+
+        registers.get = reg => reg.eq(new RegisterAddress(multiplicandRegister)) ? multiplicand : null;
+        registers.getResultLowRegister = () => Register.edx;
+        registers.getResultLowRegisterAlternate = () => Register.eax;
+
+        definition.exec(multiplicandRegister, ...multiplier.expand());
+
+        expect(registers.set.mock.calls[i * 2][0]).toStrictEqual(new RegisterAddress(resultHighRegister));
+        expect(registers.set.mock.calls[i * 2][1]).toStrictEqual(new Double(resultHigh));
+        expect(registers.set.mock.calls[i * 2 + 1][0]).toStrictEqual(new RegisterAddress(resultLowRegister));
+        expect(registers.set.mock.calls[i * 2 + 1][1]).toStrictEqual(new Double(resultLow));
     }
 });

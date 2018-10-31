@@ -71,6 +71,6 @@ test('fails if type mismatch on move register to register pointer', () => {
     ];
     for (const register of forbidden) {
         expect(() => definition.exec(register, Register.ah, new Byte(0x00)))
-            .toThrow(`Cannot use register ${new RegisterAddress(register).format()} as pointer`)
+            .toThrow(`Cannot use register ${new RegisterAddress(register)} as pointer`)
     }
 });

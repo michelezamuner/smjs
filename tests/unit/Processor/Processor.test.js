@@ -23,7 +23,7 @@ const memory = {};
 /**
  * @type {Word}
  */
-let ip = new Word(0);
+let ip = new Word();
 
 /**
  * @type {null|Processor}

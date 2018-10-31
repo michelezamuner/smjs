@@ -8,12 +8,11 @@ const System = require('./src/Architectures/SMA/System');
 const Memory = require('./src/Memory/Memory');
 const Processor = require('./src/Processor/Processor');
 const Loader = require('./src/Processor/Loader');
-const MissingExitException = require('./src/Processor/MissingExitException');
 const Word = require('./src/DataTypes/Word');
 
 require('fs').readFile(process.argv[2], {encoding: 'binary'}, (err, data) => {
     const memory = new Memory(new Word(65535));
-    const registers = new Registers();
+    const registers = new Registers(Mnemonics.register);
     const dependencies = new InstructionDependencies(registers, memory, new System());
     const loader = new DefinitionLoader(__dirname + '/src/Architectures/SMA/InstructionDefinitions');
     const instructionSet = new InstructionSet(loader, dependencies);

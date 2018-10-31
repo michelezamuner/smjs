@@ -33,7 +33,7 @@ module.exports = class Movp extends Definition {
         const source = new RegisterAddress(byte3);
 
         if (!source.isHalf()) {
-            throw `Cannot use register ${source.format()} as pointer`;
+            throw `Cannot use register ${source} as pointer`;
         }
 
         const addr = this._registers.get(source);

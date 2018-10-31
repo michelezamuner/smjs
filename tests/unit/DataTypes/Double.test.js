@@ -9,7 +9,7 @@ test('implements data type', () => {
 });
 
 test('defaults to zero', () => {
-    expect(new Double()).toStrictEqual(new Double(0x00));
+    expect(new Double()).toStrictEqual(new Double());
 });
 
 test('implements size', () => {

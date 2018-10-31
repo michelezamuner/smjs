@@ -9,7 +9,7 @@ test('implements data type', () => {
 });
 
 test('defaults to zero', () => {
-    expect(new Word()).toStrictEqual(new Word(0x00));
+    expect(new Word()).toStrictEqual(new Word());
 });
 
 test('implements size', () => {

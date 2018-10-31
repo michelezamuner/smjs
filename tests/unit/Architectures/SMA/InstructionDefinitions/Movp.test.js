@@ -61,6 +61,6 @@ test('fails if size mismatch on move register pointer to register', () => {
     ];
     for (const register of forbidden) {
         expect(() => definition.exec(Register.eax, register, new Byte(0x00)))
-            .toThrow(`Cannot use register ${new RegisterAddress(register).format()} as pointer`);
+            .toThrow(`Cannot use register ${new RegisterAddress(register)} as pointer`);
     }
 });

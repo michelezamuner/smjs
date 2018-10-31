@@ -38,9 +38,9 @@ module.exports = class RegisterAddress {
     }
 
     /**
-     * @return {string}
+     * @inheritDoc
      */
-    format() {
+    toString() {
         return '0x' + this._address.toString(16);
     }
 

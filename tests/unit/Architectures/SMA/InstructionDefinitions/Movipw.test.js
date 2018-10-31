@@ -56,7 +56,7 @@ test('fails if size mismatch on move immediate to byte register pointer', () => 
     for (const register of forbidden) {
         const value = new Word(random(Word));
         expect(() => definition.exec(Register[register], ...value.expand()))
-            .toThrow(`Cannot use register ${new RegisterAddress(Register[register]).format()} as pointer`);
+            .toThrow(`Cannot use register ${new RegisterAddress(Register[register])} as pointer`);
     }
 });
 
@@ -65,6 +65,6 @@ test('fails if size mismatch on move immediate to byte register pointer', () => 
     for (const register of forbidden) {
         const value = new Word(random(Word));
         expect(() => definition.exec(Register[register], ...value.expand()))
-            .toThrow(`Cannot use register ${new RegisterAddress(Register[register]).format()} as pointer`);
+            .toThrow(`Cannot use register ${new RegisterAddress(Register[register])} as pointer`);
     }
 });

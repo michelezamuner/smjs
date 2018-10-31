@@ -31,7 +31,7 @@ module.exports = class Movipb extends Definition {
         const register = new RegisterAddress(byte2);
 
         if (!register.isHalf()) {
-            throw `Cannot use register ${register.format()} as pointer`;
+            throw `Cannot use register ${register} as pointer`;
         }
         const address = this._registers.get(register);
         this._memory.write(address, byte4);

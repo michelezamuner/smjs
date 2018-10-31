@@ -39,12 +39,12 @@ test('compares to other addresses', () => {
     }
 });
 
-test('can print the address as hex string', () => {
+test('implements to string', () => {
     for (const i in addresses) {
-        expect(addresses[i].whole.format()).toBe('0x' + (i * 4 + 3).toString(16));
-        expect(addresses[i].half.format()).toBe('0x' + (i * 4 + 2).toString(16));
-        expect(addresses[i].leftq.format()).toBe('0x' + (i * 4 + 1).toString(16));
-        expect(addresses[i].rightq.format()).toBe('0x' + (i * 4).toString(16));
+        expect(addresses[i].whole.toString()).toBe('0x' + (i * 4 + 3).toString(16));
+        expect(addresses[i].half.toString()).toBe('0x' + (i * 4 + 2).toString(16));
+        expect(addresses[i].leftq.toString()).toBe('0x' + (i * 4 + 1).toString(16));
+        expect(addresses[i].rightq.toString()).toBe('0x' + (i * 4).toString(16));
     }
 });
 
@@ -72,7 +72,7 @@ test('can be created from bytes', () => {
     const value = new Byte(random(Byte));
     const address = new RegisterAddress(value);
     expect(address.eq(new RegisterAddress(value))).toBe(true);
-    expect(address.format()).toBe(value.toString());
+    expect(address.toString()).toBe(value.toString());
     expect(typeof(address.getIndex())).toBe('number');
     expect(typeof(address.isWhole())).toBe('boolean');
     expect(typeof(address.isHalf())).toBe('boolean');
