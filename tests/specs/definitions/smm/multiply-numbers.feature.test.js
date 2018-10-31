@@ -40,3 +40,46 @@ test('multiply register double by immediate word with alternate register', () =>
         ${Instruction.syscall}
     `).toExitWith(0xa0);
 });
+
+test('multiply register byte by register byte', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.al} 0x00 0x12
+        ${Instruction.movi} ${Register.bl} 0x00 0x34
+        ${Instruction.mul} ${Register.bl} ${Register.al} 0x00
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.syscall} 0x00 0x00 0x00
+    `).toExitWith(0xa8);
+});
+
+test('multiply register word by register word', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.ax} 0x12 0x34
+        ${Instruction.movi} ${Register.bx} 0x56 0x78
+        ${Instruction.mul} ${Register.bx} ${Register.ax} 0x00
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.syscall} 0x00 0x00 0x00
+    `).toExitWith(0x60);
+});
+
+test('multiply register double by register double', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.eax} 0xFE 0xDC
+        ${Instruction.movi} ${Register.ebx} 0xBA 0x98
+        ${Instruction.mul} ${Register.ebx} ${Register.eax} 0x00
+        ${Instruction.mov} ${Register.ebx} ${Register.edx} 0x00
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.syscall} 0x00 0x00 0x00
+    `).toExitWith(0xa0);
+});
+
+test('multiply register double by register double with alternate register', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.eax} 0xFE 0xDC
+        ${Instruction.movi} ${Register.edx} 0xBA 0x98
+        ${Instruction.mul} ${Register.edx} ${Register.eax} 0x00
+        ${Instruction.mov} ${Register.ebx} ${Register.eax} 0x00
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.syscall} 0x00 0x00 0x00
+    `).toExitWith(0xa0);
+});
+

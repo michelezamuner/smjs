@@ -5,10 +5,7 @@ const Byte = require('../../../DataTypes/Byte');
 const Word = require('../../../DataTypes/Word');
 const Double = require('../../../DataTypes/Double');
 
-/**
- * @implements Definition
- */
-module.exports = class Muli extends Definition {
+module.exports = class Mul extends Definition {
     /**
      * @inheritDoc
      */
@@ -29,50 +26,54 @@ module.exports = class Muli extends Definition {
      */
     exec(byte2, byte3, byte4) {
         const multiplicandRegister = new RegisterAddress(byte2);
+        const multiplierRegister = new RegisterAddress(byte3);
+        if (multiplicandRegister.getType() !== multiplierRegister.getType()) {
+            throw new Error(
+                `Type mismatch: cannot multiply register ${multiplicandRegister} by register ${multiplierRegister}`
+            );
+        }
         const type = multiplicandRegister.getType().name;
-        this[`_multiply${type}s`](multiplicandRegister, byte3, byte4);
+        this[`_multiply${type}s`](multiplicandRegister, multiplierRegister);
     }
 
     /**
      * @param {RegisterAddress} multiplicandRegister
-     * @param {Byte} byte3
-     * @param {Byte} byte4
+     * @param {RegisterAddress} multiplierRegister
      * @private
      */
-    _multiplyBytes(multiplicandRegister, byte3, byte4) {
+    _multiplyBytes(multiplicandRegister, multiplierRegister) {
         const resultRegister = multiplicandRegister.toHalf();
         const multiplicand = this._registers.get(multiplicandRegister);
-        const result = multiplicand.mul(byte4);
+        const multiplier = this._registers.get(multiplierRegister);
+        const result = multiplicand.mul(multiplier);
         this._registers.set(resultRegister, new Word(...result));
     }
 
     /**
      * @param {RegisterAddress} multiplicandRegister
-     * @param {Byte} byte3
-     * @param {Byte} byte4
+     * @param {RegisterAddress} multiplierRegister
      * @private
      */
-    _multiplyWords(multiplicandRegister, byte3, byte4) {
+    _multiplyWords(multiplicandRegister, multiplierRegister) {
         const resultRegister = multiplicandRegister.toWhole();
         const multiplicand = this._registers.get(multiplicandRegister);
-        const multiplier = new Word(byte3, byte4);
+        const multiplier = this._registers.get(multiplierRegister);
         const result = multiplicand.mul(multiplier);
         this._registers.set(resultRegister, new Double(...result[0].expand(), ...result[1].expand()));
     }
 
     /**
      * @param {RegisterAddress} multiplicandRegister
-     * @param {Byte} byte3
-     * @param {Byte} byte4
+     * @param {RegisterAddress} multiplierRegister
      * @private
      */
-    _multiplyDoubles(multiplicandRegister, byte3, byte4) {
+    _multiplyDoubles(multiplicandRegister, multiplierRegister) {
+        const resultHighRegister = multiplicandRegister;
         const resultLowRegister = multiplicandRegister.eq(new RegisterAddress(this._registers.getResultLowRegister()))
             ? new RegisterAddress(this._registers.getResultLowRegisterAlternate())
             : new RegisterAddress(this._registers.getResultLowRegister());
-        const resultHighRegister = multiplicandRegister;
         const multiplicand = this._registers.get(multiplicandRegister);
-        const multiplier = new Double(new Byte(), new Byte(), byte3, byte4);
+        const multiplier = this._registers.get(multiplierRegister);
         const result = multiplicand.mul(multiplier);
         this._registers.set(resultHighRegister, result[0]);
         this._registers.set(resultLowRegister, result[1]);

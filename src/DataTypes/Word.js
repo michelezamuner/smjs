@@ -33,13 +33,13 @@ module.exports = class Word extends DataType {
     static _getValue(byte1, byte2) {
         if (byte2 === undefined) {
             if (!Number.isInteger(byte1) && !(byte1 instanceof Word)) {
-                throw 'Word must be constructed from one value or two bytes';
+                throw new Error('Word must be constructed from one value or two bytes');
             }
             return byte1;
         }
 
         if (!(byte1 instanceof Byte) || !(byte2 instanceof Byte)) {
-            throw 'Word must be constructed from one value or two bytes';
+            throw new Error('Word must be constructed from one value or two bytes');
         }
 
         return (parseInt(byte1) * 0x100) + parseInt(byte2);

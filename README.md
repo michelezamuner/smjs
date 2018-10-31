@@ -90,6 +90,7 @@ Move instruction:
 - https://stackoverflow.com/questions/2782010/how-to-dynamically-allocate-memory-using-assembly-and-system-calls-under-linux
 - https://www.swansontec.com/sregisters.html
 - https://en.wikipedia.org/wiki/Intel_80386
+- https://www.tutorialspoint.com/assembly_programming/assembly_arithmetic_instructions.htm
 
 ### Assemblers
 

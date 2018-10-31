@@ -678,3 +678,20 @@ test('supports multiply register by immediate', () => {
         Instruction.muli, Register.al, new Byte(0x00), new Byte(value),
     ]);
 });
+
+test('supports multiply register by register', () => {
+    const couples = [['al', 'bh'], ['eax', 'edx'], ['cx', 'ax']];
+
+    for (const couple of couples) {
+        const code = `
+            .text
+                mul ${couple[0]}, ${couple[1]}
+        `;
+
+        const bytes = assembler.assemble(code);
+
+        expect(bytes).toStrictEqual([
+            Instruction.mul, Register[couple[0]], Register[couple[1]], new Byte(0x00),
+        ]);
+    }
+});

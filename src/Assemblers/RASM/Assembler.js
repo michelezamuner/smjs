@@ -41,6 +41,11 @@ module.exports = class Assembler {
             });
     }
 
+    /**
+     * @param {string} line
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
     _parseLine(line) {
         if (line.startsWith('0x')) {
             return this._parseBytes(line);
@@ -72,8 +77,6 @@ module.exports = class Assembler {
                 return [Instruction.movm, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'movp':
                 return [Instruction.movp, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
-            case 'movmp':
-                return [Instruction.movmp, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'movrm':
                 return [Instruction.movrm, ...(new Word(parseInt(operands[0]))).expand(), Register[operands[1]]];
             case 'movrp':
@@ -82,6 +85,8 @@ module.exports = class Assembler {
                 return [Instruction.movrmp, ...(new Word(parseInt(operands[0]))).expand(), Register[operands[1]]];
             case 'muli':
                 return [Instruction.muli, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+            case 'mul':
+                return [Instruction.mul, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
         }
 
         throw new Error(`Invalid opcode: ${opcode}`);
