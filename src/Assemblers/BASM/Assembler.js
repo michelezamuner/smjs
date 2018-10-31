@@ -233,13 +233,15 @@ module.exports = class Assembler {
         }
 
         const opcode = line.substring(0, opcodeDelimiter);
-        const operands = line.substring(opcodeDelimiter + 1);
+        const operands = line.substring(opcodeDelimiter + 1).split(',').map(operand => operand.trim());
         switch (opcode) {
             case 'mov':
-                return this._parseMov(operands.split(',').map(operand => operand.trim()));
+                return this._parseMov(operands);
+            case 'mul':
+                return this._parseMul(operands);
         }
 
-        throw new Error(`Instruction ${line} cannot be parsed`);
+        throw new Error(`Invalid opcode: ${opcode}`);
     }
 
     /**
@@ -327,6 +329,15 @@ module.exports = class Assembler {
         if (tableFirst && registerSecond) {
             return [Instruction.movrm, ...this._getTableItemAddress(tableFirst).expand(), registerSecond];
         }
+    }
+
+    /**
+     * @param {[String, String]} operands
+     * @return {Byte[]}
+     * @private
+     */
+    _parseMul(operands) {
+        return [Instruction.muli, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
     }
 
     /**

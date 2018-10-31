@@ -15,6 +15,116 @@ beforeEach(() => {
     assembler = new Assembler;
 });
 
+test('supports multiple spaces between tokens', () => {
+    const code = `
+        .data
+            value   db  0x01
+        .text
+            mov     al,    value
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x04),
+        new Byte(0x01)
+    ]);
+});
+
+test('accepts empty code', () => {
+    const bytes = assembler.assemble('');
+
+    expect(bytes).toStrictEqual([]);
+});
+
+test('accepts empty lines', () => {
+    const code = `
+        .data
+        
+        .text
+        
+            mov al, 1
+        
+            mov bl, al
+        
+            syscall
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
+        Instruction.mov, Register.bl, Register.al, new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('accepts comment lines', () => {
+    const code = `
+        .text
+            mov al, 1
+            ; comment line
+            mov bl, al
+            ; another comment line
+            syscall
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
+        Instruction.mov, Register.bl, Register.al, new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('accepts inline comments', () => {
+    const code = `
+        .text
+            mov al, 1    ; inline comment
+            mov bl, al  ; another inline comment
+            syscall
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
+        Instruction.mov, Register.bl, Register.al, new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('converts back escaped newline characters', () => {
+    const code = `
+        .data
+            string db "String" 0x0A "with" 0x0A "newlines"
+        .text
+            mov eax, 1
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.movi, Register.eax, new Byte(0x00), new Byte(0x01),
+        new Byte(83), new Byte(116), new Byte(114), new Byte(105),
+        new Byte(110), new Byte(103), new Byte(10), new Byte(119),
+        new Byte(105), new Byte(116), new Byte(104), new Byte(10),
+        new Byte(110), new Byte(101), new Byte(119), new Byte(108),
+        new Byte(105), new Byte(110), new Byte(101), new Byte(115),
+    ]);
+});
+
+test('fails if invalid opcode is used', () => {
+    const opcode = 'invalid';
+    const code = `
+        .text
+            ${opcode} eax, 1
+    `;
+
+    expect(() => assembler.assemble(code)).toThrow(new Error(`Invalid opcode: ${opcode}`));
+});
+
 test('supports move register to register', () => {
     const code = `
         .text
@@ -555,102 +665,16 @@ test('supports syscall', () => {
     ]);
 });
 
-test('supports multiple spaces between tokens', () => {
+test('supports multiply register by immediate', () => {
+    const value = random(Byte);
     const code = `
-        .data
-            value   db  0x01
         .text
-            mov     al,    value
+            mul al, ${value}
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x04),
-        new Byte(0x01)
-    ]);
-});
-
-test('accepts empty code', () => {
-    const bytes = assembler.assemble('');
-
-    expect(bytes).toStrictEqual([]);
-});
-
-test('accepts empty lines', () => {
-    const code = `
-        .data
-        
-        .text
-        
-            mov al, 1
-        
-            mov bl, al
-        
-            syscall
-    `;
-
-    const bytes = assembler.assemble(code);
-
-    expect(bytes).toStrictEqual([
-        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
-        Instruction.mov, Register.bl, Register.al, new Byte(0x00),
-        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
-    ]);
-});
-
-test('accepts comment lines', () => {
-    const code = `
-        .text
-            mov al, 1
-            ; comment line
-            mov bl, al
-            ; another comment line
-            syscall
-    `;
-
-    const bytes = assembler.assemble(code);
-
-    expect(bytes).toStrictEqual([
-        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
-        Instruction.mov, Register.bl, Register.al, new Byte(0x00),
-        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
-    ]);
-});
-
-test('accepts inline comments', () => {
-    const code = `
-        .text
-            mov al, 1    ; inline comment
-            mov bl, al  ; another inline comment
-            syscall
-    `;
-
-    const bytes = assembler.assemble(code);
-
-    expect(bytes).toStrictEqual([
-        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
-        Instruction.mov, Register.bl, Register.al, new Byte(0x00),
-        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
-    ]);
-});
-
-test('converts back escaped newline characters', () => {
-    const code = `
-        .data
-            string db "String" 0x0A "with" 0x0A "newlines"
-        .text
-            mov eax, 1
-    `;
-
-    const bytes = assembler.assemble(code);
-
-    expect(bytes).toStrictEqual([
-        Instruction.movi, Register.eax, new Byte(0x00), new Byte(0x01),
-        new Byte(83), new Byte(116), new Byte(114), new Byte(105),
-        new Byte(110), new Byte(103), new Byte(10), new Byte(119),
-        new Byte(105), new Byte(116), new Byte(104), new Byte(10),
-        new Byte(110), new Byte(101), new Byte(119), new Byte(108),
-        new Byte(105), new Byte(110), new Byte(101), new Byte(115),
+        Instruction.muli, Register.al, new Byte(0x00), new Byte(value),
     ]);
 });
