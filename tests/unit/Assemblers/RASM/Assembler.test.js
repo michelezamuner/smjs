@@ -88,7 +88,7 @@ test('accepts inline comments', () => {
 });
 
 test('fails if invalid mnemonic is used', () => {
-    const opcode = `invalid`;
+    const opcode = 'invalid';
     const code = `
         ${opcode} eax, 0x1234
     `;
@@ -301,7 +301,7 @@ test('supports syscall', () => {
     ]);
 });
 
-test('supports multiply register byte by immediate byte', () => {
+test('supports multiply register by immediate', () => {
     const value = random(Byte);
     const code = `
         muli al, ${value}
