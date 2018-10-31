@@ -14,7 +14,7 @@ test('multiply register byte by immediate byte', () => {
 
 test('multiply register word by immediate word', () => {
     return expect.program(`
-        ${Instruction.movi} ${Register.ebx} 0x12 0x34
+        ${Instruction.movi} ${Register.bx} 0x12 0x34
         ${Instruction.muli} ${Register.bx} 0x56 0x78
         ${Instruction.movi} ${Register.eax} 0x00 0x01
         ${Instruction.syscall}
