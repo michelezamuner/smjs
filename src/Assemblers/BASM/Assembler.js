@@ -246,7 +246,7 @@ module.exports = class Assembler {
 
     /**
      * @param {[String, String]} operands
-     * @return {Byte[]}
+     * @return {[Byte, Byte, Byte, Byte]}
      * @private
      */
     _parseMov(operands) {
@@ -333,11 +333,17 @@ module.exports = class Assembler {
 
     /**
      * @param {[String, String]} operands
-     * @return {Byte[]}
+     * @return {[Byte, Byte, Byte, Byte]}
      * @private
      */
     _parseMul(operands) {
-        return [Instruction.muli, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+        const immediate = this._parseImmediate(operands[1]);
+
+        if (immediate !== undefined) {
+            return [Instruction.muli, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+        }
+
+        return [Instruction.mul, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
     }
 
     /**

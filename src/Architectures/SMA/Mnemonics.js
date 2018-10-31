@@ -33,7 +33,8 @@ module.exports = {
         movrm: new Byte(0x09),
         movrp: new Byte(0x0A),
         movrmp: new Byte(0x0B),
-        muli: new Byte(0x10),
+        mul: new Byte(0x10),
+        muli: new Byte(0x11),
         syscall: new Byte(0x20),
     },
 };

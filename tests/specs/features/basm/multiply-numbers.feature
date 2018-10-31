@@ -49,3 +49,53 @@ Feature: Multiply numbers
       """
     When I run the program
     Then the program terminates with exit status 0xa0
+
+  Scenario: multiply register byte by register byte
+    Given the program is:
+      """
+      al := 0x12                   ; assign 0x12 to al
+      bl := 0x34                   ; assign 0x34 to bl
+      bx := bl * al                ; multiply bl by al and assign result to bx
+      eax := 1                     ; assign 1 to eax
+      syscall                      ; exit with status 0xa8
+      """
+    When I run the program
+    Then the program terminates with exit status 0xa8
+
+  Scenario: multiply register word by register word
+    Given the program is:
+      """
+      ax := 0x1234                 ; assign 0x1234 to ax
+      bx := 0x5678                 ; assign 0x5678 to bx
+      ebx := bx * ax               ; multiply bx by ax and assign result to ebx
+      eax := 1                     ; assign 1 to eax
+      syscall                      ; exit with status 0x60
+      """
+    When I run the program
+    Then the program terminates with exit status 0x60
+
+  Scenario: multiply register double by register double
+    Given the program is:
+      """
+      eax := 0xFEDC                ; assign 0xFEDC to eax
+      ebx := 0xBA98                ; assign 0xBA98 to ebx
+      ebx:edx := ebx * eax         ; multiply ebx by eax and assign result to ebx:edx
+      ebx := edx                   ; assign the value of edx to ebx
+      eax := 1                     ; assign 1 to eax
+      syscall                      ; exit with status 0xa0
+      """
+    When I run the program
+    Then the program terminates with exit status 0xa0
+
+  Scenario: multiply register double by register double with alternate register
+    Given the program is:
+      """
+      eax := 0xFEDC                ; assign 0xFEDC to eax
+      edx := 0xBA98                ; assign 0xBA98 to edx
+      edx:eax := edx * eax         ; multiply edx by eax and assign result to edx:eax
+      ebx := eax                   ; assign the value of eax to ebx
+      eax := 1                     ; assign 1 to eax
+      syscall                      ; exit with status 0xa0
+      """
+    When I run the program
+    Then the program terminates with exit status 0xa0
