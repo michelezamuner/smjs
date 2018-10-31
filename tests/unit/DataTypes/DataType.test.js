@@ -115,3 +115,21 @@ test('compares data types', () => {
     expect(gtoe).toBe(first >= second);
     expect((new Type(first)).gtoe(new Type(first))).toBe(true);
 });
+
+test('multiplies to same type', () => {
+    const couples = [
+        [0x4E03, 0xA166, 0x312E, 0xF832],
+        [0x03A3, 0xFE91, 0x039D, 0xC953],
+        [0x56B4, 0xAA27, 0x39A0, 0xBD6C],
+        [0xB612, 0x21C8, 0x1806, 0x9010],
+    ];
+    for (const couple of couples) {
+        const result = (new Type(couple[0])).mul(new Type(couple[1]));
+        expect(result).toStrictEqual([new Type(couple[2]), new Type(couple[3])]);
+    }
+});
+
+test('fails if not multiplying for same type', () => {
+    expect(() => (new Type(random(Type))).mul(new OtherType(random(OtherType))))
+        .toThrow(new Error('Type mismatch: cannot multiply Type by OtherType'));
+});

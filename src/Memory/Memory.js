@@ -32,7 +32,7 @@ module.exports = class Memory extends MemoryInterface {
 
         const index = parseInt(address);
         if (!(index in this._memory)) {
-            return new Byte(0x00);
+            return new Byte();
         }
 
         return new Byte(this._memory[index]);

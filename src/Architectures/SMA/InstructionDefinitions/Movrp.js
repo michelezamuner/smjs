@@ -33,7 +33,7 @@ module.exports = class Movrp extends Definition {
         const source = new RegisterAddress(byte3);
 
         if (!target.isHalf()) {
-            throw `Cannot use register ${target.format()} as pointer`;
+            throw `Cannot use register ${target} as pointer`;
         }
 
         const bytes = this._registers.get(source).expand();

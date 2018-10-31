@@ -13,7 +13,7 @@ const random = require('../../random');
 let registers = null;
 
 beforeEach(() => {
-    registers = new Registers();
+    registers = new Registers(Register);
 });
 
 test('implements control registers', () => {
@@ -70,4 +70,9 @@ test('implements exit registers', () => {
 
     expect(registers.shouldExit()).toBe(true);
     expect(registers.getExitStatus()).toBe(status);
+});
+
+test('implements result low registers', () => {
+    expect(registers.getResultLowRegister()).toBe(Register.edx);
+    expect(registers.getResultLowRegisterAlternate()).toBe(Register.eax);
 });

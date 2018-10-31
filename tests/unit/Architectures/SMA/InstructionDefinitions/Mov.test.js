@@ -48,8 +48,8 @@ test('fails if size mismatch on move register to register', () => {
         ['eax', 'bh'], ['eax', 'bx']
     ];
     for (const [first, second] of combinations) {
-        const source = new RegisterAddress(Register[second]).format();
-        const target = new RegisterAddress(Register[first]).format();
+        const source = new RegisterAddress(Register[second]).toString();
+        const target = new RegisterAddress(Register[first]).toString();
 
         expect(() => definition.exec(Register[first], Register[second], new Byte(0x00)))
             .toThrow(`Cannot move register ${source} to register ${target}`);

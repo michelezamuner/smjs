@@ -79,6 +79,16 @@ module.exports = class DataType {
         return new this.constructor(this._value + dataType._value);
     }
 
+    mul(dataType) {
+        if (dataType.constructor.name !== this.constructor.name) {
+            throw new Error(`Type mismatch: cannot multiply ${this.constructor.name} by ${dataType.constructor.name}`);
+        }
+
+        const result = this._value * dataType._value;
+        const modulo = this._getMax() + 1;
+        return [new this.constructor(Math.floor(result / modulo)), new this.constructor(result % modulo)];
+    }
+
     /**
      * @param {DataType} dataType
      * @returns {boolean}

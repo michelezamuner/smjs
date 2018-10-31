@@ -9,10 +9,14 @@ const RegisterAddress = require('./RegisterAddress');
  * @implements ControlRegisters
  */
 module.exports = class extends ControlRegisters {
-    constructor() {
+    /**
+     * @param {Object} addresses
+     */
+    constructor(addresses) {
         super();
-        this._data = [new Double(0x00), new Double(0x00), new Double(0x00), new Double(0x00)];
-        this._ip = new Word(0x00);
+        this._addresses = addresses;
+        this._data = [new Double(), new Double(), new Double(), new Double()];
+        this._ip = new Word();
         this._exit = null;
     }
 
@@ -81,6 +85,24 @@ module.exports = class extends ControlRegisters {
      */
     setExit(status) {
         this._exit = status;
+    }
+
+    /**
+     * Get the register that must be used to store the low-double of multi-double arithmetic operations
+     *
+     * @return {Byte}
+     */
+    getResultLowRegister() {
+        return this._addresses.edx;
+    }
+
+    /**
+     * Get the alternative register to be used as low-double register, when the default one is used for the high-double
+     *
+     * @return {Byte}
+     */
+    getResultLowRegisterAlternate() {
+        return this._addresses.eax;
     }
 
     /**

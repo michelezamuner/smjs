@@ -14,7 +14,7 @@ let loader = null;
 
 beforeEach(() => {
     memory.write = jest.fn();
-    memory.getMax = () => new Word(0);
+    memory.getMax = () => new Word();
 
     loader = new Loader(memory);
 });

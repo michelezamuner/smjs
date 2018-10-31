@@ -37,6 +37,9 @@ module.exports = class Muli extends Definition {
             case Word:
                 this._multiplyWords(multiplicandRegister, new Word(byte3, byte4));
                 break;
+            case Double:
+                this._multiplyDoubles(multiplicandRegister, new Double(new Byte(), new Byte(), byte3, byte4));
+                break;
         }
     }
 
@@ -48,14 +51,35 @@ module.exports = class Muli extends Definition {
     _multiplyBytes(multiplicandRegister, multiplier) {
         const resultRegister = multiplicandRegister.toHalf();
         const multiplicand = this._registers.get(multiplicandRegister);
-        const result = new Word(parseInt(multiplicand) * parseInt(multiplier));
+        const result = new Word(...multiplicand.mul(multiplier));
         this._registers.set(resultRegister, result);
     }
 
+    /**
+     * @param {RegisterAddress} multiplicandRegister
+     * @param {Word} multiplier
+     * @private
+     */
     _multiplyWords(multiplicandRegister, multiplier) {
         const resultRegister = multiplicandRegister.toWhole();
         const multiplicand = this._registers.get(multiplicandRegister);
-        const result = new Double(parseInt(multiplicand) * parseInt(multiplier));
-        this._registers.set(resultRegister, result);
+        const result = multiplicand.mul(multiplier);
+        this._registers.set(resultRegister, new Double(...result[0].expand(), ...result[1].expand()));
+    }
+
+    /**
+     * @param {RegisterAddress} multiplicandRegister
+     * @param {Double} multiplier
+     * @private
+     */
+    _multiplyDoubles(multiplicandRegister, multiplier) {
+        const resultLowRegister = multiplicandRegister.eq(new RegisterAddress(this._registers.getResultLowRegister()))
+            ? new RegisterAddress(this._registers.getResultLowRegisterAlternate())
+            : new RegisterAddress(this._registers.getResultLowRegister());
+        const resultHighRegister = multiplicandRegister;
+        const multiplicand = this._registers.get(multiplicandRegister);
+        const result = multiplicand.mul(multiplier);
+        this._registers.set(resultHighRegister, result[0]);
+        this._registers.set(resultLowRegister, result[1]);
     }
 };

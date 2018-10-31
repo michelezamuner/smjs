@@ -29,7 +29,7 @@ module.exports = class Mov extends Definition {
         const source = new RegisterAddress(byte3);
 
         if (target.getType() !== source.getType()) {
-            throw `Cannot move register ${source.format()} to register ${target.format()}`;
+            throw `Cannot move register ${source} to register ${target}`;
         }
         this._registers.set(target, this._registers.get(source));
     }

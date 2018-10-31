@@ -34,7 +34,7 @@ module.exports = class Movipw extends Definition {
         const value = new Word(byte3, byte4);
 
         if (!register.isHalf()) {
-            throw `Cannot use register ${register.format()} as pointer`;
+            throw `Cannot use register ${register} as pointer`;
         }
         const address = this._registers.get(register);
         const bytes = value.expand();

@@ -239,7 +239,7 @@ module.exports = class Assembler {
                 return this._parseMov(operands.split(',').map(operand => operand.trim()));
         }
 
-        return [];
+        throw new Error(`Instruction ${line} cannot be parsed`);
     }
 
     /**

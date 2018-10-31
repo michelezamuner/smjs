@@ -29,7 +29,7 @@ test('has max', () => {
 
 test('reads zeros wherever nothing has been written', () => {
     for (const address of [0x0000, 0x1234, 0xFEDC]) {
-        expect(memory.read(new Word(address))).toStrictEqual(new Byte(0x00));
+        expect(memory.read(new Word(address))).toStrictEqual(new Byte());
     }
 });
 
@@ -73,14 +73,14 @@ test('fails if trying to read a set of bytes going outside of memory size', () =
 test('fails if trying to write to address outside of memory size', () => {
     for (const address of [0x10000, 0x124356, 0xFFFFFFFF]) {
         const formattedAddress = '0x' + address.toString(16);
-        expect(() => memory.write(new Double(address), new Byte(0x00)))
+        expect(() => memory.write(new Double(address), new Byte()))
             .toThrow(`Address ${formattedAddress} exceeds memory max (${max})`);
     }
 });
 
 test('fails if trying to write non bytes', () => {
-    expect(() => memory.write(new Word(0x00), new Word(random(Word))))
+    expect(() => memory.write(new Word(), new Word(random(Word))))
         .toThrow('Only single bytes can be written to memory');
-    expect(() => memory.write(new Word(0x00), new Double(random(Word))))
+    expect(() => memory.write(new Word(), new Double(random(Word))))
         .toThrow('Only single bytes can be written to memory');
 });
