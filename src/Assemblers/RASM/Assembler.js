@@ -80,9 +80,11 @@ module.exports = class Assembler {
                 return [Instruction.movrp, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
             case 'movrmp':
                 return [Instruction.movrmp, ...(new Word(parseInt(operands[0]))).expand(), Register[operands[1]]];
+            case 'muli':
+                return [Instruction.muli, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
         }
 
-        return [];
+        throw new Error(`Invalid opcode: ${opcode}`);
     }
 
     /**
