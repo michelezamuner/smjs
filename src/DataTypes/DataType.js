@@ -21,7 +21,7 @@ module.exports = class DataType {
      */
     constructor(value) {
         if (new.target === DataType) {
-            throw 'Abstract class cannot be instantiated';
+            throw new Error('Abstract class cannot be instantiated');
         }
 
         this._value = this._extractValue(value);
@@ -132,11 +132,11 @@ module.exports = class DataType {
         }
 
         if (!Number.isInteger(value) || value < 0) {
-            throw `Data types must be constructed from positive integers, got '${value}' instead`;
+            throw new Error(`Data types must be constructed from positive integers, got '${value}' instead`);
         }
 
         if (value > this._getMax()) {
-            throw `Value out of bounds for ${this.constructor.name}: ${value}`;
+            throw new Error(`Value out of bounds for ${this.constructor.name}: ${value}`);
         }
 
         return value;

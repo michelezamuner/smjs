@@ -125,6 +125,15 @@ test('fails if invalid opcode is used', () => {
     expect(() => assembler.assemble(code)).toThrow(new Error(`Invalid opcode: ${opcode}`));
 });
 
+test('fails if invalid operands to move instruction', () => {
+    const code = `
+        .text
+            mov 0xFF, 0x12
+    `;
+
+    expect(() => assembler.assemble(code)).toThrow(new Error(`Invalid operands to mov instruction`));
+});
+
 test('supports move register to register', () => {
     const code = `
         .text
@@ -665,6 +674,15 @@ test('supports syscall', () => {
     ]);
 });
 
+test('fails if invalid operands to multiply instruction', () => {
+    const code = `
+        .text
+            mul 0xFF, 0x12
+    `;
+
+    expect(() => assembler.assemble(code)).toThrow(new Error(`Invalid operands to mul instruction`));
+});
+
 test('supports multiply register by immediate', () => {
     const value = random(Byte);
     const code = `
@@ -694,4 +712,21 @@ test('supports multiply register by register', () => {
             Instruction.mul, Register[couple[0]], Register[couple[1]], new Byte(0x00),
         ]);
     }
+});
+
+test('supports multiply register by memory', () => {
+    const value = random(Word);
+    const code = `
+        .data
+            x   dw  ${value}
+        .text
+            mul ax, x
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.mulm, Register.ax, new Byte(0x00), new Byte(0x04),
+        ...(new Word(value)).expand(),
+    ]);
 });

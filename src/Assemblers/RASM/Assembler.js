@@ -87,6 +87,8 @@ module.exports = class Assembler {
                 return [Instruction.muli, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'mul':
                 return [Instruction.mul, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
+            case 'mulm':
+                return [Instruction.mulm, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
         }
 
         throw new Error(`Invalid opcode: ${opcode}`);

@@ -20,7 +20,7 @@ const OtherType = class extends DataType {
 };
 
 test('cannot be instantiated', () => {
-    expect(() => new DataType(random)).toThrow('Abstract class cannot be instantiated');
+    expect(() => new DataType(random)).toThrow(new Error('Abstract class cannot be instantiated'));
 });
 
 test('implements equals', () => {
@@ -37,18 +37,18 @@ test('implements equals', () => {
 
 test('accepts only integers', () => {
     ['some string', 1.234, {}].forEach(value => {
-        expect(() => new Type(value)).toThrow(`Data types must be constructed from positive integers, got '${value}' instead`);
+        expect(() => new Type(value)).toThrow(new Error(`Data types must be constructed from positive integers, got '${value}' instead`));
     });
 });
 
 test('accepts only positive integers', () => {
     const value = -random(Type, 1);
-    expect(() => new Type(value)).toThrow(`Data types must be constructed from positive integers, got '${value}' instead`);
+    expect(() => new Type(value)).toThrow(new Error(`Data types must be constructed from positive integers, got '${value}' instead`));
 });
 
 test('fails if value out of bounds', () => {
     const value = 2 ** (8 * Type.SIZE);
-    expect(() => new Type(value)).toThrow(`Value out of bounds for Type: ${value}`);
+    expect(() => new Type(value)).toThrow(new Error(`Value out of bounds for Type: ${value}`));
 });
 
 test('support copy constructor', () => {

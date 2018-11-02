@@ -234,14 +234,12 @@ module.exports = class Assembler {
 
         const opcode = line.substring(0, opcodeDelimiter);
         const operands = line.substring(opcodeDelimiter + 1).split(',').map(operand => operand.trim());
-        switch (opcode) {
-            case 'mov':
-                return this._parseMov(operands);
-            case 'mul':
-                return this._parseMul(operands);
+        const method = `_parse${opcode.charAt(0).toUpperCase() + opcode.slice(1)}`;
+        if (this[method] === undefined) {
+            throw new Error(`Invalid opcode: ${opcode}`);
         }
 
-        throw new Error(`Invalid opcode: ${opcode}`);
+        return this[method](operands);
     }
 
     /**
@@ -329,6 +327,8 @@ module.exports = class Assembler {
         if (tableFirst && registerSecond) {
             return [Instruction.movrm, ...this._getTableItemAddress(tableFirst).expand(), registerSecond];
         }
+
+        throw new Error(`Invalid operands to mov instruction`);
     }
 
     /**
@@ -337,13 +337,24 @@ module.exports = class Assembler {
      * @private
      */
     _parseMul(operands) {
+        const multiplicand = Register[operands[0]];
         const immediate = this._parseImmediate(operands[1]);
+        const register = Register[operands[1]];
+        const symbol = this._parseSymbol(operands[1]);
 
-        if (immediate !== undefined) {
+        if (multiplicand && immediate !== undefined) {
             return [Instruction.muli, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
         }
 
-        return [Instruction.mul, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
+        if (multiplicand && register) {
+            return [Instruction.mul, Register[operands[0]], register, new Byte(0x00)];
+        }
+
+        if (multiplicand && symbol) {
+            return [Instruction.mulm, Register[operands[0]], ...symbol.address.expand()];
+        }
+
+        throw new Error(`Invalid operands to mul instruction`);
     }
 
     /**
