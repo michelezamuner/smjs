@@ -329,3 +329,16 @@ test('supports multiply register by register', () => {
         ]);
     }
 });
+
+test('supports multiply register by memory', () => {
+    const addr = random(Word);
+    const code = `
+        mulm al, ${addr}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.mulm, Register.al, ...(new Word(addr)).expand(),
+    ]);
+});

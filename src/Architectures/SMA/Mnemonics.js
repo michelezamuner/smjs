@@ -35,6 +35,7 @@ module.exports = {
         movrmp: new Byte(0x0B),
         mul: new Byte(0x10),
         muli: new Byte(0x11),
+        mulm: new Byte(0x12),
         syscall: new Byte(0x20),
     },
 };

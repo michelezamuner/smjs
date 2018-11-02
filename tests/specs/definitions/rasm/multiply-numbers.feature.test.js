@@ -80,3 +80,45 @@ test('multiply register double by register double with alternate register', () =
         syscall
     `).toExitWith(0xa0);
 });
+
+test('multiply register byte by memory', () => {
+    return expect.program(`
+        movi bl, 0x34
+        mulm bl, 0x10
+        movi eax, 1
+        syscall
+        0x12
+    `).toExitWith(0xa8);
+});
+
+test('multiply register byte by memory', () => {
+    return expect.program(`
+        movi bx, 0x5678
+        mulm bx, 0x10
+        movi eax, 1
+        syscall
+        0x12 0x34
+    `).toExitWith(0x60);
+});
+
+test('multiply register double by memory', () => {
+    return expect.program(`
+        movi ebx, 0x7654
+        mulm ebx, 0x14
+        mov ebx, edx
+        movi eax, 1
+        syscall
+        0xFE 0xDC 0xBA 0x98
+    `).toExitWith(0xe0);
+});
+
+test('multiply register double by memory', () => {
+    return expect.program(`
+        movi edx, 0x7654
+        mulm edx, 0x14
+        mov ebx, eax
+        movi eax, 1
+        syscall
+        0xFE 0xDC 0xBA 0x98
+    `).toExitWith(0xe0);
+});
