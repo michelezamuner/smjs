@@ -76,3 +76,23 @@ test('implements result low registers', () => {
     expect(registers.getResultLowRegister()).toBe(Register.edx);
     expect(registers.getResultLowRegisterAlternate()).toBe(Register.eax);
 });
+
+test('implements register equal flag', () => {
+    const flags = [Registers.FLAG_EQ, Registers.FLAG_LT, Registers.FLAG_GT];
+
+    for (const flag of flags) {
+        registers.setFlag(flag, true);
+        expect(registers.getFlag(flag)).toStrictEqual(true);
+
+        registers.setFlag(flag, false);
+        expect(registers.getFlag(flag)).toStrictEqual(false);
+    }
+});
+
+test('fails if trying to get non-set flag', () => {
+    const flags = [Registers.FLAG_EQ, Registers.FLAG_LT, Registers.FLAG_GT];
+
+    for (const flag of flags) {
+        expect(() => registers.getFlag(flag)).toThrow(new Error(`Flag ${flag} has not been set`));
+    }
+});

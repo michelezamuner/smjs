@@ -89,6 +89,26 @@ module.exports = class Assembler {
                 return [Instruction.mul, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
             case 'mulm':
                 return [Instruction.mulm, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+            case 'cmpi':
+                return [Instruction.cmpi, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+            case 'cmp':
+                return [Instruction.cmp, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
+            case 'cmpm':
+                return [Instruction.cmpm, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+            case 'jmp':
+                return [Instruction.jmp, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'je':
+                return [Instruction.je, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'jne':
+                return [Instruction.jne, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'jg':
+                return [Instruction.jg, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'jge':
+                return [Instruction.jge, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'jl':
+                return [Instruction.jl, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'jle':
+                return [Instruction.jle, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
         }
 
         throw new Error(`Invalid opcode: ${opcode}`);

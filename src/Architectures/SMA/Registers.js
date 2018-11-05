@@ -10,6 +10,27 @@ const RegisterAddress = require('./RegisterAddress');
  */
 module.exports = class extends ControlRegisters {
     /**
+     * @return {string}
+     */
+    static get FLAG_EQ() {
+        return 'eq';
+    }
+
+    /**
+     * @return {string}
+     */
+    static get FLAG_LT() {
+        return 'lt';
+    }
+
+    /**
+     * @return {string}
+     */
+    static get FLAG_GT() {
+        return 'gt';
+    }
+
+    /**
      * @param {Object} addresses
      */
     constructor(addresses) {
@@ -18,6 +39,7 @@ module.exports = class extends ControlRegisters {
         this._data = [new Double(), new Double(), new Double(), new Double()];
         this._ip = new Word();
         this._exit = null;
+        this._flags = {};
     }
 
     /**
@@ -103,6 +125,26 @@ module.exports = class extends ControlRegisters {
      */
     getResultLowRegisterAlternate() {
         return this._addresses.eax;
+    }
+
+    /**
+     * @param {string} flag
+     * @return {boolean}
+     */
+    getFlag(flag) {
+        if (this._flags[flag] === undefined) {
+            throw new Error(`Flag ${flag} has not been set`);
+        }
+
+        return this._flags[flag];
+    }
+
+    /**
+     * @param {string} flag
+     * @param {boolean} value
+     */
+    setFlag(flag, value) {
+        this._flags[flag] = value;
     }
 
     /**

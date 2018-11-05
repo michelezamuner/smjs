@@ -53,7 +53,7 @@ beforeEach(() => {
 test('executes the given instructions in sequence and exits with exit context', () => {
     const value = random(Byte);
 
-    interpreter.exec = jest.fn(() => registers.getIp().eq(new Word(0x04))
+    interpreter.exec = jest.fn(() => registers.getIp().eq(new Word(0x08))
         ? registers.shouldExit = () => true
         : registers.getExitStatus = () => new Byte(value)
     );
