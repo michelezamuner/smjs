@@ -342,3 +342,132 @@ test('supports multiply register by memory', () => {
         Instruction.mulm, Register.al, ...(new Word(addr)).expand(),
     ]);
 });
+
+test('supports compare to immediate', () => {
+    const value = random(Word);
+    const code = `
+        cmpi ecx, ${value}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.cmpi, Register.ecx, ...(new Word(value)).expand(),
+    ]);
+});
+
+test('supports compare to register', () => {
+    const code = `
+        cmp ecx, eax
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.cmp, Register.ecx, Register.eax, new Byte(0x00),
+    ]);
+});
+
+test('supports compare to memory', () => {
+    const addr = random(Word);
+    const code = `
+        cmpm ecx, ${addr}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.cmpm, Register.ecx, ...(new Word(addr)).expand(),
+    ]);
+});
+
+test('supports unconditional jump', () => {
+    const addr = random(Word);
+    const code = `
+        jmp ${addr}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jmp, ...(new Word(addr)).expand(), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if equal', () => {
+    const addr = random(Word);
+    const code = `
+        je ${addr}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.je, ...(new Word(addr)).expand(), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if not equal', () => {
+    const addr = random(Word);
+    const code = `
+        jne ${addr}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jne, ...(new Word(addr)).expand(), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if greater', () => {
+    const addr = random(Word);
+    const code = `
+        jg ${addr}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jg, ...(new Word(addr)).expand(), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if greater or equal', () => {
+    const addr = random(Word);
+    const code = `
+        jge ${addr}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jge, ...(new Word(addr)).expand(), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if less', () => {
+    const addr = random(Word);
+    const code = `
+        jl ${addr}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jl, ...(new Word(addr)).expand(), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if less or equal', () => {
+    const addr = random(Word);
+    const code = `
+        jle ${addr}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jle, ...(new Word(addr)).expand(), new Byte(0x00),
+    ]);
+});

@@ -32,14 +32,14 @@ module.exports = class Processor {
             }
 
             const instruction = this._memory.readSet(this._registers.getIp(), this._interpreter.getInstructionSize());
-            this._interpreter.exec(instruction);
+            this._registers.setIp(this._registers.getIp().add(this._interpreter.getInstructionSize()));
 
+            this._interpreter.exec(instruction);
             if (this._registers.shouldExit()) {
                 exitStatus = parseInt(this._registers.getExitStatus());
                 break;
-            }
 
-            this._registers.setIp(this._registers.getIp().add(this._interpreter.getInstructionSize()));
+            }
         }
 
         return exitStatus;

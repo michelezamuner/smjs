@@ -27,6 +27,7 @@ module.exports = class Assembler {
     constructor() {
         this._symbols = [];
         this._pointers = [];
+        this._labels = {};
     }
 
     /**
@@ -40,11 +41,12 @@ module.exports = class Assembler {
         const dataSegment = this._parseSegment('data', lines);
         const bssSegment = this._parseSegment('bss', lines);
         const textSegment = this._parseSegment('text', lines);
-        const textSize = textSegment.length * this.constructor._INSTRUCTION_SIZE;
+        const textWithoutLabels = this._parseLabels(textSegment);
+        const textSize = textWithoutLabels.length * this.constructor._INSTRUCTION_SIZE;
 
         this._loadSymbols(textSize, dataSegment, bssSegment);
 
-        let object = this._parseTextBytes(textSegment);
+        let object = this._parseTextBytes(textWithoutLabels);
         object = this._appendStaticData(object);
 
         return object;
@@ -79,6 +81,27 @@ module.exports = class Assembler {
                 insideSegment = true;
             }
             return insideSegment && !line.startsWith('.' + segment);
+        });
+    }
+
+    /**
+     * @param {string[]} text
+     * @return {string[]}
+     * @private
+     */
+    _parseLabels(text) {
+        let address = 0;
+
+        return text.filter(line => {
+            if (line.endsWith(':')) {
+                this._labels[line.substring(0, line.length - 1)] = address;
+
+                return false;
+            }
+
+            address += this.constructor._INSTRUCTION_SIZE;
+
+            return true;
         });
     }
 
@@ -234,6 +257,12 @@ module.exports = class Assembler {
 
         const opcode = line.substring(0, opcodeDelimiter);
         const operands = line.substring(opcodeDelimiter + 1).split(',').map(operand => operand.trim());
+
+        const jumps = ['jmp', 'je', 'jne', 'jg', 'jge', 'jl', 'jle'];
+        if (jumps.includes(opcode)) {
+            return this._parseJump(opcode, operands);
+        }
+
         const method = `_parse${opcode.charAt(0).toUpperCase() + opcode.slice(1)}`;
         if (this[method] === undefined) {
             throw new Error(`Invalid opcode: ${opcode}`);
@@ -243,7 +272,7 @@ module.exports = class Assembler {
     }
 
     /**
-     * @param {[String, String]} operands
+     * @param {[string, string]} operands
      * @return {[Byte, Byte, Byte, Byte]}
      * @private
      */
@@ -332,7 +361,7 @@ module.exports = class Assembler {
     }
 
     /**
-     * @param {[String, String]} operands
+     * @param {[string, string]} operands
      * @return {[Byte, Byte, Byte, Byte]}
      * @private
      */
@@ -343,18 +372,52 @@ module.exports = class Assembler {
         const symbol = this._parseSymbol(operands[1]);
 
         if (multiplicand && immediate !== undefined) {
-            return [Instruction.muli, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+            return [Instruction.muli, multiplicand, ...(new Word(immediate)).expand()];
         }
 
         if (multiplicand && register) {
-            return [Instruction.mul, Register[operands[0]], register, new Byte(0x00)];
+            return [Instruction.mul, multiplicand, register, new Byte(0x00)];
         }
 
         if (multiplicand && symbol) {
-            return [Instruction.mulm, Register[operands[0]], ...symbol.address.expand()];
+            return [Instruction.mulm, multiplicand, ...symbol.address.expand()];
         }
 
-        throw new Error(`Invalid operands to mul instruction`);
+        throw new Error('Invalid operands to mul instruction');
+    }
+
+    /**
+     * @param {[String, String]} operands
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
+    _parseCmp(operands) {
+        const left = Register[operands[0]];
+        const immediate = this._parseImmediate(operands[1]);
+        const register = Register[operands[1]];
+        const symbol = this._parseSymbol(operands[1]);
+
+        if (left && immediate !== undefined) {
+            return [Instruction.cmpi, left, ...(new Word(immediate)).expand()];
+        }
+
+        if (left && register) {
+            return [Instruction.cmp, left, register, new Byte(0x00)];
+        }
+
+        if (left && symbol) {
+            return [Instruction.cmpm, left, ...symbol.address.expand()];
+        }
+    }
+
+    /**
+     * @param {string} opcode
+     * @param {[string, string]}operands
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
+    _parseJump(opcode, operands) {
+        return [Instruction[opcode], ...(new Word(this._labels[operands[0]])).expand(), new Byte(0x00)];
     }
 
     /**

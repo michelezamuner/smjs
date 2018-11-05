@@ -730,3 +730,159 @@ test('supports multiply register by memory', () => {
         ...(new Word(value)).expand(),
     ]);
 });
+
+test('supports compare to immediate', () => {
+    const value = random(Word);
+    const code = `
+        .text
+            cmp eax, ${value}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.cmpi, Register.eax, ...(new Word(value)).expand(),
+    ]);
+});
+
+test('supports compare to register', () => {
+    const code = `
+        .text
+            cmp eax, ebx
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.cmp, Register.eax, Register.ebx, new Byte(0x00),
+    ]);
+});
+
+test('supports compare to memory', () => {
+    const value = random(Double);
+    const code = `
+        .data
+            x   dd  ${value}
+        .text
+            cmp eax, x
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.cmpm, Register.eax, new Byte(0x00), new Byte(0x04),
+        ...(new Double(value)).expand(),
+    ]);
+});
+
+test('supports unconditional jump', () => {
+    const code = `
+        .text
+            jmp exit
+            exit:
+            syscall
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jmp, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if equal', () => {
+    const code = `
+        .text
+            je exit
+            exit:
+            syscall
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.je, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if not equal', () => {
+    const code = `
+        .text
+            jne exit
+            exit:
+            syscall
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jne, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if greater', () => {
+    const code = `
+        .text
+            jg exit
+            exit:
+            syscall
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jg, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if greater or equal', () => {
+    const code = `
+        .text
+            jge exit
+            exit:
+            syscall
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jge, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if less', () => {
+    const code = `
+        .text
+            jl exit
+            exit:
+            syscall
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jl, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('supports jump if less or equal', () => {
+    const code = `
+        .text
+            jle exit
+            exit:
+            syscall
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.jle, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
+    ]);
+});
