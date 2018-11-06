@@ -94,11 +94,24 @@ test('can be incremented', () => {
     expect(result).toStrictEqual(new Type(value + 1));
 });
 
+test('can be decremented', () => {
+    const value = random(Type, 1);
+    const result = (new Type(value)).dec();
+    expect(result).toStrictEqual(new Type(value - 1));
+});
+
 test('adds another data type', () => {
     const second = random(OtherType);
     const first = random(Type, 0, second);
     const result = (new Type(first)).add(new OtherType(second));
     expect(result).toStrictEqual(new Type(first + second));
+});
+
+test('subtracts another data type', () => {
+    const second = random(OtherType);
+    const first = random(Type, second);
+    const result = (new Type(first)).sub(new OtherType(second));
+    expect(result).toStrictEqual(new Type(first - second));
 });
 
 test('compares data types', () => {

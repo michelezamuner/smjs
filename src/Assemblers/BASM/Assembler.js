@@ -365,6 +365,76 @@ module.exports = class Assembler {
      * @return {[Byte, Byte, Byte, Byte]}
      * @private
      */
+    _parseInc(operands) {
+        return [Instruction.inc, Register[operands[0]], new Byte(0x00), new Byte(0x00)];
+    }
+
+    /**
+     * @param {[string, string]} operands
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
+    _parseDec(operands) {
+        return [Instruction.dec, Register[operands[0]], new Byte(0x00), new Byte(0x00)];
+    }
+
+    /**
+     * @param {[string, string]} operands
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
+    _parseAdd(operands) {
+        const left = Register[operands[0]];
+        const immediate = this._parseImmediate(operands[1]);
+        const register = Register[operands[1]];
+        const symbol = this._parseSymbol(operands[1]);
+
+        if (left && immediate !== undefined) {
+            return [Instruction.addi, left, ...(new Word(immediate)).expand()];
+        }
+
+        if (left && register) {
+            return [Instruction.add, left, register, new Byte(0x00)];
+        }
+
+        if (left && symbol) {
+            return [Instruction.addm, left, ...symbol.address.expand()];
+        }
+
+        throw new Error('Invalid operands to add instruction');
+    }
+
+    /**
+     * @param {[string, string]} operands
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
+    _parseSub(operands) {
+        const left = Register[operands[0]];
+        const immediate = this._parseImmediate(operands[1]);
+        const register = Register[operands[1]];
+        const symbol = this._parseSymbol(operands[1]);
+
+        if (left && immediate !== undefined) {
+            return [Instruction.subi, left, ...(new Word(immediate)).expand()];
+        }
+
+        if (left && register) {
+            return [Instruction.sub, left, register, new Byte(0x00)];
+        }
+
+        if (left && symbol) {
+            return [Instruction.subm, left, ...symbol.address.expand()];
+        }
+
+        throw new Error('Invalid operands to sub instruction');
+    }
+
+    /**
+     * @param {[string, string]} operands
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
     _parseMul(operands) {
         const multiplicand = Register[operands[0]];
         const immediate = this._parseImmediate(operands[1]);

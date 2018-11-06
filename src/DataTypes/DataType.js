@@ -72,6 +72,13 @@ module.exports = class DataType {
     }
 
     /**
+     * @return {DataType}
+     */
+    dec() {
+        return new this.constructor(this._value - 1);
+    }
+
+    /**
      * @param {DataType} dataType
      * @returns {DataType}
      */
@@ -79,6 +86,18 @@ module.exports = class DataType {
         return new this.constructor(this._value + dataType._value);
     }
 
+    /**
+     * @param {DataType} dataType
+     * @return {DataType}
+     */
+    sub(dataType) {
+        return new this.constructor(this._value - dataType._value);
+    }
+
+    /**
+     * @param {DataType} dataType
+     * @return {DataType}
+     */
     mul(dataType) {
         if (dataType.constructor.name !== this.constructor.name) {
             throw new Error(`Type mismatch: cannot multiply ${this.constructor.name} by ${dataType.constructor.name}`);

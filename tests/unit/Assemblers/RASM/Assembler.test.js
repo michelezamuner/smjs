@@ -301,6 +301,106 @@ test('supports syscall', () => {
     ]);
 });
 
+test('supports increment', () => {
+    const code = `
+        inc al
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.inc, Register.al, new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('supports decrement', () => {
+    const code = `
+        dec al
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.dec, Register.al, new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('supports add immediate to register', () => {
+    const value = random(Word);
+    const code = `
+        addi eax, ${value}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.addi, Register.eax, ...(new Word(value)).expand(),
+    ]);
+});
+
+test('supports add register to register', () => {
+    const code = `
+        add eax, ebx
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.add, Register.eax, Register.ebx, new Byte(0x00),
+    ]);
+});
+
+test('supports add memory to register', () => {
+    const mem = random(Word);
+    const code = `
+        addm eax, ${mem}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.addm, Register.eax, ...(new Word(mem)).expand(),
+    ]);
+});
+
+test('supports subtract immediate from register', () => {
+    const value = random(Word);
+    const code = `
+        subi eax, ${value}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.subi, Register.eax, ...(new Word(value)).expand(),
+    ]);
+});
+
+test('supports subtract register from register', () => {
+    const code = `
+        sub eax, ebx
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.sub, Register.eax, Register.ebx, new Byte(0x00),
+    ]);
+});
+
+test('supports subtract memory from register', () => {
+    const mem = random(Word);
+    const code = `
+        subm eax, ${mem}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.subm, Register.eax, ...(new Word(mem)).expand(),
+    ]);
+});
+
 test('supports multiply register by immediate', () => {
     const value = random(Byte);
     const code = `

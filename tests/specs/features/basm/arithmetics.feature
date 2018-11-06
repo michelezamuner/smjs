@@ -1,7 +1,99 @@
-Feature: Multiply numbers
+Feature: Arithmetics
   As a programmer
-  I want to be able to multiply numbers
-  In order to be able to perform calculations
+  I want to use arithmetic instructions
+  In order to perform arithmetic calculations
+
+  Scenario: Increment register
+    Given the program is:
+      """
+      eax := 1                    ; assign 1 to eax
+      ebx := 0                    ; assign 0 to ebx
+      ebx++                       ; increment ebx
+      syscall                     ; exit with status 0x01
+      """
+    When I run the program
+    Then the program terminates with exit status 0x01
+
+  Scenario: Decrement register
+    Given the program is:
+      """
+      eax := 1                    ; assign 1 to eax
+      ebx := 2                    ; assign 2 to ebx
+      ebx--                       ; decrement ebx
+      syscall                     ; exit with status 0x01
+      """
+    When I run the program
+    Then the program terminates with exit status 0x01
+
+  Scenario: Add immediate to register
+    Given the program is:
+      """
+      eax := 1                    ; assign 1 to eax
+      ebx := 0                    ; assign 0 to ebx
+      ebx += 1                    ; add 1 to ebx
+      syscall                     ; exit with status 0x01
+      """
+    When I run the program
+    Then the program terminates with exit status 0x01
+
+  Scenario: Add register to register
+    Given the program is:
+      """
+      eax := 1                    ; assign 1 to eax
+      ebx := 0                    ; assign 0 to ebx
+      ecx := 1                    ; assign 1 to ecx
+      ebx += ecx                  ; add ecx to ebx
+      syscall                     ; exit with status 0x01
+      """
+    When I run the program
+    Then the program terminates with exit status 0x01
+
+  Scenario: Add memory to register
+    Given the program is:
+      """
+      x := 1                      ; assign 1 to x
+      eax := 1                    ; assign 1 to eax
+      ebx := 0                    ; assign 0 to ebx
+      ebx += x                    ; add x to ebx
+      syscall                     : exit with status 0x01
+      """
+    When I run the program
+    Then the program terminates with exit status 0x01
+
+  Scenario: Subtract immediate from register
+    Given the program is:
+      """
+      eax := 1                    ; assign 1 to eax
+      ebx := 2                    ; assign 2 to ebx
+      ebx -= 1                    ; subtract 1 from ebx
+      syscall                     ; exit with status 0x01
+      """
+    When I run the program
+    Then the program terminates with exit status 0x01
+
+  Scenario: Subtract register from register
+    Given the program is:
+      """
+      eax := 1                    ; assign 1 to eax
+      ebx := 2                    ; assign 2 to ebx
+      ecx := 1                    ; assign 1 to ecx
+      ebx -= ecx                  ; subtract ecx from ebx
+      syscall                     ; exit with status 0x01
+      """
+    When I run the program
+    Then the program terminates with exit status 0x01
+
+  Scenario: Subtract memory from register
+    Given the program is:
+      """
+      x := 1                      ; assign 1 to x
+      eax := 1                    ; assign 1 to eax
+      ebx := 2                    ; assign 2 to ebx
+      ebx -= x                    ; subtract x from ebx
+      syscall                     : exit with status 0x01
+      """
+    When I run the program
+    Then the program terminates with exit status 0x01
 
   Scenario: multiply register byte by immediate byte
     Given the program is:

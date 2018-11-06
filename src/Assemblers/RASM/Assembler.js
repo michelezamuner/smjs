@@ -83,6 +83,22 @@ module.exports = class Assembler {
                 return [Instruction.movrp, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
             case 'movrmp':
                 return [Instruction.movrmp, ...(new Word(parseInt(operands[0]))).expand(), Register[operands[1]]];
+            case 'inc':
+                return [Instruction.inc, Register[operands[0]], new Byte(0x00), new Byte(0x00)];
+            case 'dec':
+                return [Instruction.dec, Register[operands[0]], new Byte(0x00), new Byte(0x00)];
+            case 'addi':
+                return [Instruction.addi, Register[operands[0]], ...(new Word(parseInt(operands[1])).expand())];
+            case 'add':
+                return [Instruction.add, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
+            case 'addm':
+                return [Instruction.addm, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
+            case 'subi':
+                return [Instruction.subi, Register[operands[0]], ...(new Word(parseInt(operands[1])).expand())];
+            case 'sub':
+                return [Instruction.sub, Register[operands[0]], Register[operands[1]], new Byte(0x00)];
+            case 'subm':
+                return [Instruction.subm, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'muli':
                 return [Instruction.muli, Register[operands[0]], ...(new Word(parseInt(operands[1]))).expand()];
             case 'mul':
