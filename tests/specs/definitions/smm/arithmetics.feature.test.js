@@ -1,6 +1,82 @@
-const Register = require('../../../../src/Architectures/SMA/Mnemonics').register;
 const Instruction = require('../../../../src/Architectures/SMA/Mnemonics').instruction;
+const Register = require('../../../../src/Architectures/SMA/Mnemonics').register;
 const expect = require('./expect');
+
+test('increment register', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.movi} ${Register.ebx} 0x00 0x00
+        ${Instruction.inc} ${Register.ebx} 0x00 0x00
+        ${Instruction.syscall} 0x00 0x00 0x00
+    `).toExitWith(1);
+});
+
+test('decrement regiser', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.movi} ${Register.ebx} 0x00 0x02
+        ${Instruction.dec} ${Register.ebx} 0x00 0x00
+        ${Instruction.syscall} 0x00 0x00 0x00
+    `).toExitWith(1);
+});
+
+test('add immediate to register', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.movi} ${Register.ebx} 0x00 0x00
+        ${Instruction.addi} ${Register.ebx} 0x00 0x01
+        ${Instruction.syscall} 0x00 0x00 0x00
+    `).toExitWith(1);
+});
+
+test('add register to register', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.movi} ${Register.ebx} 0x00 0x00
+        ${Instruction.movi} ${Register.ecx} 0x00 0x01
+        ${Instruction.add} ${Register.ebx} ${Register.ecx} 0x00
+        ${Instruction.syscall} 0x00 0x00 0x00
+    `).toExitWith(1);
+});
+
+test('add memory to register', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.movi} ${Register.ebx} 0x00 0x00
+        ${Instruction.addm} ${Register.ebx} 0x00 0x10
+        ${Instruction.syscall} 0x00 0x00 0x00
+        0x00 0x00 0x00 0x01
+    `).toExitWith(1);
+});
+
+test('subtract immediate from register', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.movi} ${Register.ebx} 0x00 0x02
+        ${Instruction.subi} ${Register.ebx} 0x00 0x01
+        ${Instruction.syscall} 0x00 0x00 0x00
+    `).toExitWith(1);
+});
+
+test('subtract register from register', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.movi} ${Register.ebx} 0x00 0x02
+        ${Instruction.movi} ${Register.ebx} 0x00 0x01
+        ${Instruction.sub} ${Register.ebx} ${Register.ecx} 0x00
+        ${Instruction.syscall} 0x00 0x00 0x00
+    `).toExitWith(1);
+});
+
+test('subtract memory from register', () => {
+    return expect.program(`
+        ${Instruction.movi} ${Register.eax} 0x00 0x01
+        ${Instruction.movi} ${Register.ebx} 0x00 0x02
+        ${Instruction.subm} ${Register.ebx} 0x00 0x10
+        ${Instruction.syscall} 0x00 0x00 0x00
+        0x00 0x00 0x00 0x01
+    `).toExitWith(1);
+});
 
 test('multiply register byte by immediate byte', () => {
     return expect.program(`

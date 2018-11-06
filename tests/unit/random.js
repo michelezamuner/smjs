@@ -9,7 +9,7 @@ const DataType = require('../../src/DataTypes/DataType');
 module.exports = (dataType, min = 0, maxOffsetFromTop = 0) => {
     const maxValue = 2 ** (8 * dataType.SIZE) - 1 - min;
     const value = Math.floor(Math.random() * maxValue) + min;
-    const cap = maxValue - maxOffsetFromTop;
+    const cap = (maxValue + min) - maxOffsetFromTop;
 
     return value < cap ? value : cap;
 };

@@ -1,5 +1,81 @@
 const expect = require('./expect');
 
+test('increment register', () => {
+    return expect.program(`
+        movi eax, 1
+        movi ebx, 0
+        inc ebx
+        syscall
+    `).toExitWith(1);
+});
+
+test('decrement register', () => {
+    return expect.program(`
+        movi eax, 1
+        movi ebx, 2
+        dec ebx
+        syscall
+    `).toExitWith(1);
+});
+
+test('add immediate to register', () => {
+    return expect.program(`
+        movi eax, 1
+        movi ebx, 0
+        addi ebx, 1
+        syscall
+    `).toExitWith(1);
+});
+
+test('add register to register', () => {
+    return expect.program(`
+        movi eax, 1
+        movi ebx, 0
+        movi ecx, 1
+        add ebx, ecx
+        syscall
+    `).toExitWith(1);
+});
+
+test('add memory to register', () => {
+    return expect.program(`
+        movi eax, 1
+        movi ebx, 0
+        addm ebx, 0x10
+        syscall
+        0x00 0x00 0x00 0x01
+    `).toExitWith(1);
+});
+
+test('subtract immediate from register', () => {
+    return expect.program(`
+        movi eax, 1
+        movi ebx, 2
+        subi ebx, 1
+        syscall
+    `).toExitWith(1);
+});
+
+test('subtract register from register', () => {
+    return expect.program(`
+        movi eax, 1
+        movi ebx, 2
+        movi ecx, 1
+        sub ebx, ecx
+        syscall
+    `).toExitWith(1);
+});
+
+test('subtract memory from register', () => {
+    return expect.program(`
+        movi eax, 1
+        movi ebx, 2
+        subm ebx, 0x10
+        syscall
+        0x00 0x00 0x00 0x01
+    `).toExitWith(1);
+});
+
 test('multiply register byte by immediate byte', () => {
     return expect.program(`
         movi al, 0x12

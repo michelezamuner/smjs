@@ -674,7 +674,139 @@ test('supports syscall', () => {
     ]);
 });
 
-test('fails if invalid operands to multiply instruction', () => {
+test('supports increment', () => {
+    const code = `
+        .text
+            inc eax
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.inc, Register.eax, new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('supports decrement', () => {
+    const code = `
+        .text
+            dec eax
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.dec, Register.eax, new Byte(0x00), new Byte(0x00),
+    ]);
+});
+
+test('fails if invalid operands to add', () => {
+    const code = `
+        .text
+            add 0xFF, 0xFF
+    `;
+
+    expect(() => assembler.assemble(code)).toThrow(new Error('Invalid operands to add instruction'));
+});
+
+test('supports add immediate to register', () => {
+    const value = random(Word);
+    const code = `
+        .text
+            add eax, ${value}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.addi, Register.eax, ...(new Word(value)).expand(),
+    ]);
+});
+
+test('supports add register to register', () => {
+    const code = `
+        .text
+            add eax, ebx
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.add, Register.eax, Register.ebx, new Byte(0x00),
+    ]);
+});
+
+test('supports add memory to register', () => {
+    const value = random(Double);
+    const code = `
+        .data
+            value   dd  ${value}
+        .text
+            add eax, value
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.addm, Register.eax, new Byte(0x00), new Byte(0x04),
+        ...(new Double(value)).expand(),
+    ]);
+});
+
+test('fails if invalid operands to subtract', () => {
+    const code = `
+        .text
+            sub 0xFF, 0xFF
+    `;
+
+    expect(() => assembler.assemble(code)).toThrow(new Error('Invalid operands to sub instruction'));
+});
+
+test('supports subtract immediate from register', () => {
+    const value = random(Word);
+    const code = `
+        .text
+            sub eax, ${value}
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.subi, Register.eax, ...(new Word(value)).expand(),
+    ]);
+});
+
+test('supports subtract register from register', () => {
+    const code = `
+        .text
+            sub eax, ebx
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.sub, Register.eax, Register.ebx, new Byte(0x00),
+    ]);
+});
+
+test('supports subtract memory from register', () => {
+    const value = random(Double);
+    const code = `
+        .data
+            value   dd  ${value}
+        .text
+            sub eax, value
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.subm, Register.eax, new Byte(0x00), new Byte(0x04),
+        ...(new Double(value)).expand(),
+    ]);
+});
+
+test('fails if invalid operands to multiply', () => {
     const code = `
         .text
             mul 0xFF, 0x12
