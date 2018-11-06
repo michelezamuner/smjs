@@ -67,7 +67,7 @@ module.exports = class DataType {
     /**
      * @return {DataType}
      */
-    incr() {
+    inc() {
         return new this.constructor(this._value + 1);
     }
 

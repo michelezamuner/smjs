@@ -1,6 +1,6 @@
 Feature: Write to file
   As a programmer
-  I need to be able to write to files
+  I want to be able to write to files
   In order to use the OS features related to files
 
   Scenario: print message to the standard output
