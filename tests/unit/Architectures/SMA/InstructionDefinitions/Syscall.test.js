@@ -62,12 +62,58 @@ test('implements syscall exit', () => {
     expect(registers.setExit.mock.calls[0][0]).toStrictEqual(value.expand()[3]);
 });
 
+test('implements syscall read', () => {
+    const fd = new Byte(random(Byte));
+    const mem = new Word(random(Word));
+    const count = new Word(random(Word));
+    const read = random(Byte);
+    const bytes = [];
+    for (let i = 0; i < read; i++) {
+        bytes.push(new Byte(random(Byte)));
+    }
+
+    memory.write = jest.fn();
+
+    registers.get = reg => {
+        if (reg.eq(new RegisterAddress(Register.eax))) {
+            return Syscall.SYS_READ;
+        } else if (reg.eq(new RegisterAddress(Register.ebx))) {
+            return fd;
+        } else if (reg.eq(new RegisterAddress(Register.ecx))) {
+            return mem;
+        } else if (reg.eq(new RegisterAddress(Register.edx))) {
+            return count;
+        }
+    };
+
+    system.read = (fdArg, bufArg, countArg) => {
+        if (fdArg === parseInt(fd) && bufArg instanceof Buffer && countArg === parseInt(count)) {
+            for (let i = 0; i < read; i++) {
+                bufArg.writeUInt8(parseInt(bytes[i]), i);
+            }
+
+            return read;
+        }
+
+        return null;
+    };
+
+    definition.exec();
+
+    for (let i = 0; i < read; i++) {
+        expect(memory.write.mock.calls[i][0]).toStrictEqual(new Word(parseInt(mem) + i));
+        expect(memory.write.mock.calls[i][1]).toStrictEqual(bytes[i]);
+    }
+    expect(registers.set.mock.calls[0][0]).toStrictEqual(new RegisterAddress(Register.eax));
+    expect(registers.set.mock.calls[0][1]).toStrictEqual(new Double(read));
+});
+
 test('implements syscall write', () => {
     const fd = new Byte(random(Byte));
-    const buf = new Word(random(Word));
+    const mem = new Word(random(Word));
     const count = new Word(random(Word));
     const bytes = new Double(random(Double)).expand();
-    const written = random(Byte);
+    const written = random(Double);
 
     registers.get = reg => {
         if (reg.eq(new RegisterAddress(Register.eax))) {
@@ -75,13 +121,13 @@ test('implements syscall write', () => {
         } else if (reg.eq(new RegisterAddress(Register.ebx))) {
             return fd;
         } else if (reg.eq(new RegisterAddress(Register.ecx))) {
-            return buf;
+            return mem;
         } else if (reg.eq(new RegisterAddress(Register.edx))) {
             return count;
         }
     };
 
-    memory.readSet = (addr, size) => addr.eq(buf) && size.eq(count) ? bytes : [];
+    memory.readSet = (addr, size) => addr.eq(mem) && size.eq(count) ? bytes : [];
 
     system.write = (fdArg, bufArg, countArg) => {
         const expectedBuf = new Double(...bytes);

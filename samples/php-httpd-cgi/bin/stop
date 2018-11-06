@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
-docker kill sm-apache
-docker rm sm-apache
+docker kill sm-httpd
+docker rm sm-httpd

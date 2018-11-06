@@ -8,6 +8,16 @@ class ExpectProgram {
      */
     constructor(program) {
         this._bytes = program.trim().split(/\s+/).map(byte => parseInt(byte));
+        this._input = null;
+    }
+
+    /**
+     * @param {string} input
+     */
+    withInput(input) {
+        this._input = input;
+
+        return this;
     }
 
     /**
@@ -23,7 +33,7 @@ class ExpectProgram {
         await promisify(fs.writeFile)(obj, Buffer.from(this._bytes), 'binary');
 
         try {
-            const result = await promisify(exec)(`bin/smm ${obj}`);
+            const result = await promisify(exec)(`echo "${this._input}" | bin/smm ${obj} >>smm.log`);
             doExpect = () => {
                 expect(result.stdout.trim()).toBe(stdout);
                 expect(0).toBe(status);

@@ -90,7 +90,7 @@ test('expand to list of unit data types', () => {
 
 test('can be incremented', () => {
     const value = random(Type, 0, 1);
-    const result = (new Type(value)).incr();
+    const result = (new Type(value)).inc();
     expect(result).toStrictEqual(new Type(value + 1));
 });
 

@@ -8,6 +8,17 @@ class ExpectProgram {
      */
     constructor(program) {
         this._program = program;
+        this._input = null;
+    }
+
+    /**
+     * @param {string} input
+     * @return {ExpectProgram}
+     */
+    withInput(input) {
+        this._input = input;
+
+        return this;
     }
 
     /**
@@ -26,7 +37,7 @@ class ExpectProgram {
         await promisify(exec)(`bin/rasm ${asm} --out=${obj}`);
 
         try {
-            const result = await promisify(exec)(`bin/smm ${obj}`);
+            const result = await promisify(exec)(`echo "${this._input}" | bin/smm ${obj} >>rasm.log`);
             doExpect = () => {
                 expect(result.stdout.trim()).toBe(stdout);
                 expect(0).toBe(status);

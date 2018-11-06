@@ -41,7 +41,7 @@ beforeEach(() => {
     memory.getMax = () => new Word(0xFFFF);
     memory.readSet = jest.fn((address, size) => {
         const bytes = [];
-        for (let i = new Byte(); i.lt(size); i = i.incr()) {
+        for (let i = new Byte(); i.lt(size); i = i.inc()) {
             bytes.push(address.add(new Byte(i)));
         }
         return bytes;

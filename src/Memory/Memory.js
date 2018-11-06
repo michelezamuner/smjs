@@ -43,7 +43,7 @@ module.exports = class Memory extends MemoryInterface {
      */
     readSet(address, size) {
         const bytes = [];
-        for (let i = new size.constructor(); i.lt(size); i = i.incr()) {
+        for (let i = new size.constructor(); i.lt(size); i = i.inc()) {
             bytes.push(this.read(address.add(new size.constructor(i))));
         }
 
