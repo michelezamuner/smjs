@@ -2,4 +2,4 @@
 
 readonly current="$( cd "$(dirname "$0")" ; pwd -P )"
 readonly root="$(realpath "$current/../../../")"
-docker run -dit --tmpfs /tmp --name sm-httpd -p 8080:80 -v ${root}:/usr/local/apache2/cgi-bin/smjs sm-httpd
+docker run -dit --tmpfs /tmp --name sm-httpd -p 8080:80 sm-httpd

@@ -10,6 +10,6 @@ cp $root/*.js ./tmp/
 cp $root/package.json ./tmp/
 cp $root/yarn.lock ./tmp/
 
-docker build -t sm-httpd .
+docker build -t sm-factorial .
 
 rm -rf tmp

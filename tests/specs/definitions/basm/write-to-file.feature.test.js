@@ -1,4 +1,4 @@
-const expect = require('./expect');
+const expect = require('../expect').for('basm');
 
 test('print message to the standard output', () => {
     return expect.program(`

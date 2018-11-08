@@ -1,6 +1,6 @@
 const Instruction = require('../../../../src/Architectures/SMA/Mnemonics').instruction;
 const Register = require('../../../../src/Architectures/SMA/Mnemonics').register;
-const expect = require('./expect');
+const expect = require('../expect').for('smm').binary();
 
 test('increment register', () => {
     return expect.program(`

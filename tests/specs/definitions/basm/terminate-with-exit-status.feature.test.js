@@ -1,4 +1,4 @@
-const expect = require('./expect');
+const expect = require('../expect').for('basm');
 
 test('program is terminated with specific exit status', () => {
     return expect.program(`

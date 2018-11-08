@@ -1,4 +1,4 @@
-const expect = require('./expect');
+const expect = require('../expect').for('rasm');
 
 test('move register to register', () => {
     return expect.program(`

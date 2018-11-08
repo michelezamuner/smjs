@@ -3,17 +3,34 @@
 readonly bin="$( cd "$(dirname "$0")" ; pwd -P )"
 readonly fileNameWithExt="$(basename "$1")"
 readonly fileName="${fileNameWithExt%.*}"
-readonly firstLine="$(head -n 1 "$1")"
-readonly begin="${firstLine:0:2}"
+extension="${fileNameWithExt##*.}"
+file="/tmp/$fileNameWithExt"
 
-# If this script is called from a shabang line, we want to remove the shabang from the file first
-if [ "$begin" == "#!" ]; then
-    readonly file="/tmp/$fileName.script"
-    echo "$(tail -n +2 "$1")" > "$file"
-else
-    readonly file="$1"
+if [ "$1" != "$file" ]; then
+    cp "$1" "$file"
 fi
 
-$bin/smphpc "$file" --out="/tmp/$fileName.basm"
-$bin/basm "/tmp/$fileName.basm" --out="/tmp/$fileName.sm"
-$bin/smm "/tmp/$fileName.sm"
+# If this script is called from a shabang line, we want to remove the shabang from the file first
+readonly firstLine="$(head -n 1 "$file")"
+readonly begin="${firstLine:0:2}"
+if [ "$begin" == "#!" ]; then
+    echo "$(tail -n +2 "$file")" > "$file"
+fi
+
+if [ "$extension" == "php" ]; then
+    $bin/smphpc "$file" --out="/tmp/$fileName.basm"
+    file="/tmp/$fileName.basm"
+    extension="basm"
+fi
+
+if [ "$extension" == "basm" ]; then
+    $bin/basm "$file" --out="/tmp/$fileName.smm"
+    file="/tmp/$fileName.smm"
+fi
+
+if [ "$extension" == "rasm" ]; then
+    $bin/rasm "$file" --out="/tmp/$fileName.smm"
+    file="/tmp/$fileName.smm"
+fi
+
+$bin/smm "/tmp/$fileName.smm"

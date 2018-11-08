@@ -1,6 +1,6 @@
 const Register = require('../../../../src/Architectures/SMA/Mnemonics').register;
 const Instruction = require('../../../../src/Architectures/SMA/Mnemonics').instruction;
-const expect = require('./expect');
+const expect = require('../expect').for('smm').binary();
 
 test('read value from the standard input', () => {
     return expect.program(`
