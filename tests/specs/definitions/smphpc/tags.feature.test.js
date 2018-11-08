@@ -1,4 +1,4 @@
-const expect = require('./expect');
+const expect = require('../expect').for('php');
 
 test('text with no PHP block tag is printed to the standard output', () => {
     return expect.program(`

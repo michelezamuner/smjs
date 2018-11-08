@@ -1,0 +1,39 @@
+.bss
+    input   db
+.text
+    ;;;;;;;;;; read input from STDIN ;;;;;;;;;;
+    mov eax, 3                          ; sys_read
+    mov ebx, 0                          ; fd: STDIN
+    mov ecx, [input]                    ; write to input
+    mov edx, 1                          ; read 1 byte
+    syscall
+
+    ;;;;;;;;;; calculate factorial ;;;;;;;;;;
+    ; eax will contain input
+    ; ebx will contain result
+    ; ecx will contain loop counter i
+    mov al, input
+    sub eax, 48                         ; string to number
+    mov ebx, eax                        ; initialize result to input
+
+    cmp eax, 0
+    je return                           ; return if input = 0
+
+    cmp eax, 1
+    je return                           ; return if input = 1
+
+    mov ebx, 1                          ; initialize result to 1
+    mov ecx, 2                          ; initialize loop counter i to 2
+    begin:
+        cmp ecx, eax
+        jg return                       ; if i > input, break
+        mul ebx, ecx                    ; result = result * i
+        mov ebx, edx                    ; move low part of result to ebx
+        inc ecx                         ; i++
+        jmp begin
+
+    ;;;;;;;;;; return result as exit status ;;;;;;;;;;
+    return:
+    mov eax, 1                          ; sys_exit
+    syscall
+

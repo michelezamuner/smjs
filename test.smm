@@ -1,0 +1,7 @@
+movi eax, 1
+movi ebx, 5
+movi ecx, 3
+syscall
+movi eax, 1
+movi ebx, 4
+syscall

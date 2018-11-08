@@ -1,4 +1,4 @@
-# PHP with Apache sample
+# PHP with Apache httpd sample
 
 Build the image:
 ```
@@ -10,7 +10,9 @@ Start the container:
 $ bin/start
 ```
 
-No browse to `0.0.0.0:8080/cgi_bin/test.php` to see a Web page rendered using PHP running over Sloth Machine (compiled from PHP and running over SM).
+Now browse to `0.0.0.0:8080/cgi_bin/test.php` to see a Web page rendered using PHP running over Sloth Machine (compiled from PHP and running over SM).
+
+You can use `$ docker logs -f sm-httpd` to see the Web server logs.
 
 To stop and remove the container:
 ```

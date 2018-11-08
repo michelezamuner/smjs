@@ -1,4 +1,4 @@
-const expect = require('./expect');
+const expect = require('../expect').for('rasm');
 
 test('read value from the standard input', () => {
     return expect.program(`

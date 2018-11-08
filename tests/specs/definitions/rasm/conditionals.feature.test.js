@@ -1,4 +1,4 @@
-const expect = require('./expect');
+const expect = require('../expect').for('rasm');
 
 test('jump unconditionally', () => {
     return expect.program(`
