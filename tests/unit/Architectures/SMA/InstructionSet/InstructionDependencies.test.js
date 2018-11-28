@@ -13,6 +13,11 @@ const memory = {};
 /**
  * @type {Object}
  */
+const stack = {};
+
+/**
+ * @type {Object}
+ */
 const system = {};
 
 /**
@@ -21,11 +26,12 @@ const system = {};
 let dependencies = null;
 
 beforeEach(() => {
-    dependencies = new InstructionDependencies(registers, memory, system);
+    dependencies = new InstructionDependencies(registers, memory, stack, system);
 });
 
 test('provides dependencies', () => {
     expect(dependencies.getRegisters()).toBe(registers);
     expect(dependencies.getMemory()).toBe(memory);
+    expect(dependencies.getStack()).toBe(stack);
     expect(dependencies.getSystem()).toBe(system);
 });

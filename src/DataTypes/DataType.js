@@ -28,8 +28,15 @@ module.exports = class DataType {
     }
 
     /**
+     * @return {DataType}
+     */
+    clone() {
+        return new this.constructor(this._value);
+    }
+
+    /**
      * @param {DataType} dataType
-     * @returns {boolean}
+     * @return {boolean}
      */
     eq(dataType) {
         return this._value === dataType._value;
@@ -43,7 +50,7 @@ module.exports = class DataType {
     }
 
     /**
-     * @returns {DataType[]}
+     * @return {DataType[]}
      */
     expand() {
         const values = [];
@@ -65,6 +72,18 @@ module.exports = class DataType {
     }
 
     /**
+     * @param {function} type
+     * @return {DataType}
+     */
+    cast(type) {
+        if (type.SIZE < this.constructor.SIZE) {
+            throw new Error(`Cannot cast data type of size ${this.constructor.SIZE} to data type of size ${type.SIZE}`);
+        }
+
+        return new type(this._value);
+    }
+
+    /**
      * @return {DataType}
      */
     inc() {
@@ -80,7 +99,7 @@ module.exports = class DataType {
 
     /**
      * @param {DataType} dataType
-     * @returns {DataType}
+     * @return {DataType}
      */
     add(dataType) {
         return new this.constructor(this._value + dataType._value);
@@ -99,8 +118,8 @@ module.exports = class DataType {
      * @return {DataType}
      */
     mul(dataType) {
-        if (dataType.constructor.name !== this.constructor.name) {
-            throw new Error(`Type mismatch: cannot multiply ${this.constructor.name} by ${dataType.constructor.name}`);
+        if (dataType.constructor.SIZE !== this.constructor.SIZE) {
+            throw new Error(`Type mismatch: cannot multiply types of different sizes`);
         }
 
         const result = this._value * dataType._value;
@@ -110,7 +129,7 @@ module.exports = class DataType {
 
     /**
      * @param {DataType} dataType
-     * @returns {boolean}
+     * @return {boolean}
      */
     lt(dataType) {
         return this._value < dataType._value;
@@ -118,7 +137,7 @@ module.exports = class DataType {
 
     /**
      * @param {DataType} dataType
-     * @returns {boolean}
+     * @return {boolean}
      */
     ltoe(dataType) {
         return this._value <= dataType._value;
@@ -126,7 +145,7 @@ module.exports = class DataType {
 
     /**
      * @param {DataType} dataType
-     * @returns {boolean}
+     * @return {boolean}
      */
     gt(dataType) {
         return this._value > dataType._value;
@@ -134,7 +153,7 @@ module.exports = class DataType {
 
     /**
      * @param {DataType} dataType
-     * @returns {boolean}
+     * @return {boolean}
      */
     gtoe(dataType) {
         return this._value >= dataType._value;
@@ -142,7 +161,7 @@ module.exports = class DataType {
 
     /**
      * @param {*} value
-     * @returns {number}
+     * @return {number}
      * @private
      */
     _extractValue(value) {
@@ -155,14 +174,14 @@ module.exports = class DataType {
         }
 
         if (value > this._getMax()) {
-            throw new Error(`Value out of bounds for ${this.constructor.name}: ${value}`);
+            throw new Error(`Value out of bounds for type of size ${this.constructor.SIZE}: ${value}`);
         }
 
         return value;
     }
 
     /**
-     * @returns {number}
+     * @return {number}
      * @private
      */
     _getMax() {

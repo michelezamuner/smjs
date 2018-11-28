@@ -1,23 +1,7 @@
 const DataType = require('../../../src/DataTypes/DataType');
 const random = require('../random');
 
-const Type = class extends DataType {
-    static get SIZE() {
-        return 2;
-    }
-    constructor(value) {
-        super(value);
-    }
-};
-
-const OtherType = class extends DataType {
-    static get SIZE() {
-        return 2;
-    }
-    constructor(value) {
-        super(value);
-    }
-};
+const Type = createDataType(2);
 
 test('cannot be instantiated', () => {
     expect(() => new DataType(random)).toThrow(new Error('Abstract class cannot be instantiated'));
@@ -48,7 +32,7 @@ test('accepts only positive integers', () => {
 
 test('fails if value out of bounds', () => {
     const value = 2 ** (8 * Type.SIZE);
-    expect(() => new Type(value)).toThrow(new Error(`Value out of bounds for Type: ${value}`));
+    expect(() => new Type(value)).toThrow(new Error(`Value out of bounds for type of size ${Type.SIZE}: ${value}`));
 });
 
 test('support copy constructor', () => {
@@ -56,6 +40,13 @@ test('support copy constructor', () => {
     const t2 = new Type(t1);
 
     expect(t1.eq(t2)).toBe(true);
+});
+
+test('supports clone', () => {
+    const value = new Type(random(Type));
+
+    expect(value.clone()).toStrictEqual(value);
+    expect(value.clone()).not.toBe(value);
 });
 
 test('implements to string', () => {
@@ -88,6 +79,36 @@ test('expand to list of unit data types', () => {
     expect(parseInt(value)).toBe(expected);
 });
 
+test('cast to a equal or bigger data type', () => {
+    const Smaller = createDataType(1);
+    const Bigger = createDataType(2);
+
+    const value = new Smaller(random(Smaller));
+
+    expect(value.cast(Smaller)).toBeInstanceOf(Smaller);
+    expect(value.cast(Smaller).eq(value)).toBe(true);
+    expect(value.cast(Bigger)).toBeInstanceOf(Bigger);
+    expect(value.cast(Bigger).eq(value)).toBe(true);
+});
+
+test('cannot cast to a smaller data type', () => {
+    const Smaller = createDataType(1);
+    const Bigger = createDataType(2);
+
+    const value = new Bigger(random(Bigger));
+
+    expect(() => value.cast(Smaller))
+        .toThrow(new Error(`Cannot cast data type of size ${Bigger.SIZE} to data type of size ${Smaller.SIZE}`));
+});
+
+test('cast to a bigger data type', () => {
+    const Smaller = createDataType(1);
+    const Bigger = createDataType(2);
+    const smallerValue = new Smaller(random(Smaller));
+    const biggerValue = smallerValue.cast(Bigger);
+    expect(smallerValue.eq(biggerValue)).toBe(true);
+});
+
 test('can be incremented', () => {
     const value = random(Type, 0, 1);
     const result = (new Type(value)).inc();
@@ -101,6 +122,7 @@ test('can be decremented', () => {
 });
 
 test('adds another data type', () => {
+    const OtherType = createDataType(2);
     const second = random(OtherType);
     const first = random(Type, 0, second);
     const result = (new Type(first)).add(new OtherType(second));
@@ -108,6 +130,7 @@ test('adds another data type', () => {
 });
 
 test('subtracts another data type', () => {
+    const OtherType = createDataType(2);
     const second = random(OtherType);
     const first = random(Type, second);
     const result = (new Type(first)).sub(new OtherType(second));
@@ -115,6 +138,7 @@ test('subtracts another data type', () => {
 });
 
 test('compares data types', () => {
+    const OtherType = createDataType(2);
     const first = random(Type);
     const second = random(OtherType);
     const lt = (new Type(first)).lt(new OtherType(second));
@@ -142,7 +166,24 @@ test('multiplies to same type', () => {
     }
 });
 
-test('fails if not multiplying for same type', () => {
-    expect(() => (new Type(random(Type))).mul(new OtherType(random(OtherType))))
-        .toThrow(new Error('Type mismatch: cannot multiply Type by OtherType'));
+test('fails if not multiplying for same sized type', () => {
+    const Smaller = createDataType(1);
+    const Larger = createDataType(2);
+    expect(() => (new Smaller(random(Smaller))).mul(new Larger(random(Larger))))
+        .toThrow(new Error('Type mismatch: cannot multiply types of different sizes'));
 });
+
+/**
+ * @param {number} size
+ * @return {function}
+ */
+function createDataType(size) {
+    return class extends DataType {
+        static get SIZE() {
+            return size;
+        }
+        constructor(value) {
+            super(value);
+        }
+    };
+}

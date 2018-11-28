@@ -55,5 +55,12 @@ module.exports = {
         jl: new Byte(0x35),
         jle: new Byte(0x36),
         syscall: new Byte(0xF0),
+        call: new Byte(0xF1),
+        ret: new Byte(0xF2),
+        reti: new Byte(0xF3),
+        retr: new Byte(0xF4),
+        retmb: new Byte(0xF5),
+        retmw: new Byte(0xF6),
+        retmd: new Byte(0xF7),
     },
 };
