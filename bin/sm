@@ -10,11 +10,13 @@ if [ "$1" != "$file" ]; then
     cp "$1" "$file"
 fi
 
-# If this script is called from a shabang line, we want to remove the shabang from the file first
-readonly firstLine="$(head -n 1 "$file")"
-readonly begin="${firstLine:0:2}"
-if [ "$begin" == "#!" ]; then
-    echo "$(tail -n +2 "$file")" > "$file"
+if [ "$extension" != "smm" ]; then
+    # If this script is called from a shabang line, we want to remove the shabang from the file first
+    readonly firstLine="$(head -n 1 "$file")"
+    readonly begin="${firstLine:0:2}"
+    if [ "$begin" == "#!" ]; then
+        echo "$(tail -n +2 "$file")" > "$file"
+    fi
 fi
 
 if [ "$extension" == "php" ]; then
