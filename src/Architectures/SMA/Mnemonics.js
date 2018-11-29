@@ -54,6 +54,7 @@ module.exports = {
         jge: new Byte(0x34),
         jl: new Byte(0x35),
         jle: new Byte(0x36),
+        pop: new Byte(0x40),
         syscall: new Byte(0xF0),
         call: new Byte(0xF1),
         ret: new Byte(0xF2),
