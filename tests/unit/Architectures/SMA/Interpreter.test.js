@@ -36,11 +36,10 @@ test('executes the correct instruction', () => {
     const instruction = {
         exec: jest.fn(),
     };
-    const opcode = 'opcode';
-    const definition = 'Opcode';
+    const instructionName = 'instruction';
 
-    opcodeMap[opcode] = new Byte(byte1);
-    instructionSet.get = opc => opc === definition ? instruction : null;
+    opcodeMap[instructionName] = new Byte(byte1);
+    instructionSet.get = name => name === instructionName ? instruction : null;
 
     interpreter.exec([byte1, byte2, byte3, byte4]);
 

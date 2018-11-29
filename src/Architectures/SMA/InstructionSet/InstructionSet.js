@@ -13,15 +13,24 @@ module.exports = class InstructionSet {
     }
 
     /**
-     * @param {string} opcode
+     * @param {string} instructionName
      * @return {Definition}
      */
-    get(opcode) {
-        const definition = this._loader.load(opcode);
-
+    get(instructionName) {
+        const definition = this._loader.load(this._capitalize(instructionName));
         const dependencies = definition.getDependencies()
             .map(dependency => this._dependencies[`get${dependency.name}`]());
 
         return new definition(...dependencies);
+    }
+
+    /**
+     * @param {string} string
+     * @return {string}
+     * @private
+     */
+    _capitalize(string) {
+        const first = string[0];
+        return first.toUpperCase() + string.slice(1);
     }
 };

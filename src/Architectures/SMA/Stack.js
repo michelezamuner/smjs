@@ -46,7 +46,7 @@ module.exports = class Stack {
      * @throws {Error}
      */
     push(value) {
-        const newStackPointer = this._stackPointer.sub(new Word(value.constructor.SIZE));
+        const newStackPointer = this._advanceStackPointer(value.constructor.SIZE);
         if (this._stackPointer.eq(this._stackTop) || newStackPointer.lt(this._stackTop)) {
             throw new Error('Stack overflow');
         }
@@ -68,7 +68,8 @@ module.exports = class Stack {
      * @throws {Error}
      */
     pop(type) {
-        const newStackPointer = this._stackPointer.add(new Word(type.SIZE));
+        const newStackPointer = this._regressStackPointer(type.SIZE);
+
         if (this._stackPointer.eq(this._stackBottom) || newStackPointer.gt(this._stackBottom)) {
             throw new Error('Stack underflow');
         }
@@ -103,5 +104,31 @@ module.exports = class Stack {
         this._basePointer = this.pop(Word);
 
         return returnAddress;
+    }
+
+    /**
+     * @param {number} size
+     * @return {Word}
+     * @private
+     */
+    _advanceStackPointer(size) {
+        try {
+            return this._stackPointer.sub(new Word(size));
+        } catch (e) {
+            throw 'Stack overflow';
+        }
+    }
+
+    /**
+     * @param {number} size
+     * @return {Word}
+     * @private
+     */
+    _regressStackPointer(size) {
+        try {
+            return this._stackPointer.add(new Word(size));
+        } catch (e) {
+            throw 'Stack underflow';
+        }
     }
 };

@@ -120,4 +120,3 @@ Move instruction:
 - create an authoritative source of definitions within an interpreter implementation, so that all of its modules can use it instead of duplicating decisions in code
 - remove interface classes, which are unnecessary, and replace them with docblocs. Do not require things only to use them in docblocks
 - add a caching instruction set that doesn't require re-loading again the same instructions from disk
-- `call` instruction hard codes the IP increment to calculate the next instruction, instead of depending on `Interpreter` (which is currently the one defining the fixed instruction size). In the general case of variable-length instructions, each instruction will know its size, so it will be logical for `call` to know how to calculate the following address without depending on anything else
