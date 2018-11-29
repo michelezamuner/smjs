@@ -53,11 +53,12 @@ test('creates instructions with single dependency', () => {
             this.registers = registers;
         }
     };
-    const opcode = 'opcode';
+    const instructionName = 'instruction';
+    const definitionName = 'Instruction';
 
-    loader.load = opc => opc === opcode ? definition : null;
+    loader.load = name => name === definitionName ? definition : null;
 
-    const def = instructionSet.get(opcode);
+    const def = instructionSet.get(instructionName);
 
     expect(def).toBeInstanceOf(definition);
     expect(def.registers).toBe(registers);
@@ -76,11 +77,12 @@ test('creates instructions with multiple dependencies', () => {
             this.system = system;
         }
     };
-    const opcode = 'opcode';
+    const instructionName = 'instruction';
+    const definitionName = 'Instruction';
 
-    loader.load = opc => opc === opcode ? definition : null;
+    loader.load = name => name === definitionName ? definition : null;
 
-    const def = instructionSet.get(opcode);
+    const def = instructionSet.get(instructionName);
 
     expect(def).toBeInstanceOf(definition);
     expect(def.registers).toBe(registers);

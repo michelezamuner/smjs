@@ -153,7 +153,7 @@ test('can pop frames', () => {
     }
 });
 
-test('fails when underflowing', () => {
+test('fails when underflow', () => {
     memory.write = () => null;
     memory.readSet = () => [];
 
@@ -170,7 +170,16 @@ test('fails when underflowing', () => {
     expect(() => stack.pop(Double)).toThrow(new Error('Stack underflow'));
 });
 
-test('fails when overflowing', () => {
+test('fails with underflow because of data type exception', () => {
+    memory.getMax = () => new Word(65535);
+    const stack = new Stack(memory, new Word(random(Word)));
+
+    stack.push(new Byte(random(Byte)));
+
+    expect(() => stack.pop(Word)).toThrow(new Error('Stack underflow'));
+});
+
+test('fails when overflow', () => {
     memory.write = () => null;
     memory.readSet = () => [];
 
@@ -183,4 +192,16 @@ test('fails when overflowing', () => {
 
     stack.push(new Byte(random(Byte)));
     expect(() => stack.push(new Byte(random(Byte)))).toThrow(new Error('Stack overflow'));
+});
+
+test('fails with overflow because of data type exception', () => {
+    memory.getMax = () => new Word(1);
+    memory.write = () => null;
+    const stack = new Stack(memory, new Word(1));
+
+    stack.push(new Byte(random(Byte)));
+
+    expect(() => stack.push(new Byte(random(Byte)))).toThrow(new Error('Stack overflow'));
+    expect(() => stack.push(new Word(random(Word)))).toThrow(new Error('Stack overflow'));
+    expect(() => stack.push(new Double(random(Double)))).toThrow(new Error('Stack overflow'));
 });

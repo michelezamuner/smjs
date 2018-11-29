@@ -26,8 +26,7 @@ module.exports = class Call extends Definition {
      */
     exec(byte2, byte3, byte4) {
         const procedureAddress = new Word(byte2, byte3);
-        const instructionSize = new Word(4);
-        const returnAddress = this._registers.getIp().add(instructionSize);
+        const returnAddress = this._registers.getIp();
 
         this._stack.pushFrame(returnAddress);
         this._registers.setIp(procedureAddress);

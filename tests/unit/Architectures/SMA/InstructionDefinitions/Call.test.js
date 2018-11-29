@@ -35,12 +35,10 @@ test('implements get dependencies', () => {
 });
 
 test('pushes new stack frame and jumps to the called procedure', () => {
-    const instructionSize = 4;
-    const currentAddress = new Word(random(Word));
     const procedureAddress = new Word(random(Word));
-    const returnAddress = currentAddress.add(new Word(instructionSize));
+    const returnAddress = new Word(random(Word));
 
-    registers.getIp = () => currentAddress;
+    registers.getIp = () => returnAddress;
 
     definition.exec(...procedureAddress.expand());
 
