@@ -35,7 +35,7 @@ $ ./run bin/smm myprogram.sm
 
 Or, do all these steps at once:
 ```
-$ ./run sm mycode.php
+$ ./run bin/sm mycode.php
 ```
 
 
@@ -120,3 +120,4 @@ Move instruction:
 - create an authoritative source of definitions within an interpreter implementation, so that all of its modules can use it instead of duplicating decisions in code
 - remove interface classes, which are unnecessary, and replace them with docblocs. Do not require things only to use them in docblocks
 - add a caching instruction set that doesn't require re-loading again the same instructions from disk
+- data types SIZE should already return a base data type

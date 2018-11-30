@@ -30,18 +30,19 @@ beforeEach(() => {
 });
 
 test('can push any type', () => {
-    let address = memoryMax;
+    let stackPointer = memoryMax;
     for (const type of [Byte, Word, Double]) {
         memory.write = jest.fn();
         const value = new type(random(type));
         const bytes = value.expand();
 
         stack.push(value);
-        address = address.sub(new Word(type.SIZE));
         for (let i = 0; i < type.SIZE; i++) {
-            expect(memory.write.mock.calls[i][0]).toStrictEqual(address.add(new Word(i)));
+            expect(memory.write.mock.calls[i][0]).toStrictEqual(stackPointer.sub(new Word(i + 1)));
             expect(memory.write.mock.calls[i][1]).toStrictEqual(bytes[i]);
         }
+
+        stackPointer = stackPointer.sub(new Word(type.SIZE));
     }
 });
 
@@ -54,7 +55,9 @@ test('can pop value of given type', () => {
         stack.push(value);
 
         address = address.sub(new Word(type.SIZE));
-        memory.readSet = (addr, size) => addr.eq(address) && size.eq(new Byte(type.SIZE)) ? value.expand() : null;
+        // Values are stored in the stack with the stack pointer pointing to the LSB
+        memory.readSet = (addr, size) =>
+            addr.eq(address) && size.eq(new Byte(type.SIZE)) ? value.expand().reverse() : null;
 
         const result = stack.pop(type);
         address = address.add(new Word(type.SIZE));
@@ -76,17 +79,17 @@ test('can push new frames', () => {
         stack.pushFrame(returnAddress);
 
         // Push the current base pointer
-        expect(memory.write.mock.calls[0][0]).toStrictEqual(stackPointer.sub(new Word(2)));
+        expect(memory.write.mock.calls[0][0]).toStrictEqual(stackPointer.sub(new Word(1)));
         expect(memory.write.mock.calls[0][1]).toStrictEqual(basePointer.expand()[0]);
-        expect(memory.write.mock.calls[1][0]).toStrictEqual(stackPointer.sub(new Word(1)));
+        expect(memory.write.mock.calls[1][0]).toStrictEqual(stackPointer.sub(new Word(2)));
         expect(memory.write.mock.calls[1][1]).toStrictEqual(basePointer.expand()[1]);
 
         stackPointer = stackPointer.sub(new Word(2));
 
         // Push the given return address
-        expect(memory.write.mock.calls[2][0]).toStrictEqual(stackPointer.sub(new Word(2)));
+        expect(memory.write.mock.calls[2][0]).toStrictEqual(stackPointer.sub(new Word(1)));
         expect(memory.write.mock.calls[2][1]).toStrictEqual(returnAddress.expand()[0]);
-        expect(memory.write.mock.calls[3][0]).toStrictEqual(stackPointer.sub(new Word(1)));
+        expect(memory.write.mock.calls[3][0]).toStrictEqual(stackPointer.sub(new Word(2)));
         expect(memory.write.mock.calls[3][1]).toStrictEqual(returnAddress.expand()[1]);
 
         stackPointer = stackPointer.sub(new Word(2));
@@ -139,7 +142,9 @@ test('can pop frames', () => {
     }
 
     // Mock memory
-    memory.readSet = (addr, size) => (addr in mockMemory) && size.eq(new Byte(Word.SIZE)) ? mockMemory[addr] : null;
+    // Values are stored in the stack with the stack pointer pointing to the LSB
+    memory.readSet = (addr, size) =>
+        (addr in mockMemory) && size.eq(new Byte(Word.SIZE)) ? mockMemory[addr].reverse() : null;
 
     for (let i = framesCount - 1; i >= 0; i--) {
         // Pop frame

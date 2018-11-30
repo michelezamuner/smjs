@@ -50,12 +50,13 @@ module.exports = class Stack {
         if (this._stackPointer.eq(this._stackTop) || newStackPointer.lt(this._stackTop)) {
             throw new Error('Stack overflow');
         }
-        this._stackPointer = newStackPointer;
 
         const bytes = value.expand();
         for (let i = 0; i < value.constructor.SIZE; i++) {
-            this._memory.write(this._stackPointer.add(new Word(i)), bytes[i]);
+            this._memory.write(this._stackPointer.sub(new Word(i + 1)), bytes[i]);
         }
+
+        this._stackPointer = newStackPointer;
     }
 
     /**
@@ -74,7 +75,9 @@ module.exports = class Stack {
             throw new Error('Stack underflow');
         }
 
-        const value = new type(...this._memory.readSet(this._stackPointer, new Byte(type.SIZE)));
+        const bytes = this._memory.readSet(this._stackPointer, new Byte(type.SIZE));
+        // Values are saved with LSB first
+        const value = new type(...bytes.reverse());
         this._stackPointer = newStackPointer;
 
         return value;
