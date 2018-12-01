@@ -125,6 +125,32 @@ module.exports = class Assembler {
                 return [Instruction.jl, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
             case 'jle':
                 return [Instruction.jle, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'pushi':
+                return [Instruction.pushi, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'push':
+                return [Instruction.push, Register[operands[0]], new Byte(0x00), new Byte(0x00)];
+            case 'pushmb':
+                return [Instruction.pushmb, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'pushmw':
+                return [Instruction.pushmw, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'pushmd':
+                return [Instruction.pushmd, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'pop':
+                return [Instruction.pop, Register[operands[0]], new Byte(0x00), new Byte(0x00)];
+            case 'call':
+                return [Instruction.call, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'calla':
+                return [Instruction.calla, ...(new Word(parseInt(operands[0]))).expand(), new Byte(parseInt(operands[1]))];
+            case 'reti':
+                return [Instruction.reti, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'retr':
+                return [Instruction.retr, Register[operands[0]], new Byte(0x00), new Byte(0x00)];
+            case 'retmb':
+                return [Instruction.retmb, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'retmw':
+                return [Instruction.retmw, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
+            case 'retmd':
+                return [Instruction.retmd, ...(new Word(parseInt(operands[0]))).expand(), new Byte(0x00)];
         }
 
         throw new Error(`Invalid opcode: ${opcode}`);
