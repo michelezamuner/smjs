@@ -115,6 +115,66 @@ test('converts back escaped newline characters', () => {
     ]);
 });
 
+test('supports characters as immediate values', () => {
+    const code = `
+        .data
+            char    db  '!'
+        .text
+            mov al, char
+            mov bl, '*'
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
+        Instruction.movi, Register.bl, new Byte(0x00), new Byte(0x2A),
+        new Byte(0x21),
+    ]);
+});
+
+test('supports strings definitions', () => {
+    const code = `
+        .data
+            msg    db  "Hello, World!"
+        .text
+            mov al, msg[0]
+            mov bl, msg[5]
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
+        Instruction.movm, Register.bl, new Byte(0x00), new Byte(0x0D),
+        new Byte(0x48), new Byte(0x65), new Byte(0x6C), new Byte(0x6C),
+        new Byte(0x6F), new Byte(0x2C), new Byte(0x20), new Byte(0x57),
+        new Byte(0x6F), new Byte(0x72), new Byte(0x6C), new Byte(0x64),
+        new Byte(0x21),
+    ]);
+});
+
+test('supports mixed strings, characters and bytes', () => {
+    const code = `
+        .data
+            msg     db "Hello" ',' 0x20 "World" 0x21
+        .text
+            mov al, msg[0]
+            mov bl, msg[5]
+    `;
+
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
+        Instruction.movm, Register.bl, new Byte(0x00), new Byte(0x0D),
+        new Byte(0x48), new Byte(0x65), new Byte(0x6C), new Byte(0x6C),
+        new Byte(0x6F), new Byte(0x2C), new Byte(0x20), new Byte(0x57),
+        new Byte(0x6F), new Byte(0x72), new Byte(0x6C), new Byte(0x64),
+        new Byte(0x21),
+    ]);
+});
+
 test('fails if invalid opcode is used', () => {
     const opcode = 'invalid';
     const code = `
@@ -131,7 +191,7 @@ test('fails if invalid operands to move instruction', () => {
             mov 0xFF, 0x12
     `;
 
-    expect(() => assembler.assemble(code)).toThrow(new Error(`Invalid operands to mov instruction`));
+    expect(() => assembler.assemble(code)).toThrow(new Error('Invalid operands to mov instruction'));
 });
 
 test('supports move register to register', () => {
@@ -164,15 +224,11 @@ test('supports move immediate to byte memory', () => {
             value db
         .text
             mov value, ${value}
-            mov al, value
     `;
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.movim, new Byte(0x00), new Byte(0x08), new Byte(value),
-        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.movim, new Byte(0x00), new Byte(0x04), new Byte(value)]);
 });
 
 test('supports move immediate to word memory', () => {
@@ -182,15 +238,11 @@ test('supports move immediate to word memory', () => {
             value dw
         .text
             mov value, ${value}
-            mov ax, value
     `;
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.movim, new Byte(0x00), new Byte(0x09), new Byte(value),
-        Instruction.movm, Register.ax, new Byte(0x00), new Byte(0x08),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.movim, new Byte(0x00), new Byte(0x05), new Byte(value)]);
 });
 
 test('supports move immediate to double memory', () => {
@@ -200,15 +252,11 @@ test('supports move immediate to double memory', () => {
             value dd
         .text
             mov value, ${value}
-            mov eax, value
     `;
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.movim, new Byte(0x00), new Byte(0x0B), new Byte(value),
-        Instruction.movm, Register.eax, new Byte(0x00), new Byte(0x08),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.movim, new Byte(0x00), new Byte(0x07), new Byte(value)]);
 });
 
 test('supports move immediate to byte register pointer', () => {
@@ -269,10 +317,8 @@ test('supports move immediate to memory pointer', () => {
     const value = random(Byte);
     const code = `
         .bss
-            value db
             valuePtr dw
         .text
-            mov ax, [value]
             mov valuePtr, ax
             mov [valuePtr], ${value}
     `;
@@ -280,35 +326,25 @@ test('supports move immediate to memory pointer', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Instruction.movi, Register.ax, new Byte(0x00), new Byte(0x0C),
-        Instruction.movrm, new Byte(0x00), new Byte(0x0D), Register.ax,
-        Instruction.movimp, new Byte(0x00), new Byte(0x0D), new Byte(value),
+        Instruction.movrm, new Byte(0x00), new Byte(0x08), Register.ax,
+        Instruction.movimp, new Byte(0x00), new Byte(0x08), new Byte(value),
     ]);
 });
 
 test('supports move memory to register', () => {
     const value1 = new Word(random(Word));
-    const value2 = new Byte(random(Byte));
-    const value3 = new Double(0x01020304);
     const code = `
         .data
             valueA dw ${value1}
-            valueB db ${value2}
-            valueC dd ${value3}
         .text
             mov eax, valueA
-            mov ebx, valueB
-            mov ecx, valueC
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Instruction.movm, Register.eax, new Byte(0x00), new Byte(0x0C),
-        Instruction.movm, Register.ebx, new Byte(0x00), new Byte(0x0E),
-        Instruction.movm, Register.ecx, new Byte(0x00), new Byte(0x0F),
-        ...value1.expand(), value2,
-        ...value3.expand(),
+        Instruction.movm, Register.eax, new Byte(0x00), new Byte(0x04),
+        ...value1.expand()
     ]);
 });
 
@@ -333,30 +369,25 @@ test('supports move register pointer to register', () => {
 });
 
 test('supports move register to memory', () => {
-    const value = random(Byte);
     const code = `
         .bss
             value   db
         .text
-            mov al, ${value}
             mov value, al
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Instruction.movi, Register.al, new Byte(0x00), new Byte(value),
-        Instruction.movrm, new Byte(0x00), new Byte(0x08), Register.al,
+        Instruction.movrm, new Byte(0x00), new Byte(0x04), Register.al,
     ]);
 });
 
 test('supports move register to register pointer', () => {
-    const value = random(Byte);
     const code = `
         .bss
             value   db
         .text
-            mov al, ${value}
             mov bx, [value]
             mov [bx], al
     `;
@@ -364,32 +395,25 @@ test('supports move register to register pointer', () => {
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Instruction.movi, Register.al, new Byte(0x00), new Byte(value),
-        Instruction.movi, Register.bx, new Byte(0x00), new Byte(0x0C),
+        Instruction.movi, Register.bx, new Byte(0x00), new Byte(0x08),
         Instruction.movrp, Register.bx, Register.al, new Byte(0x00),
     ]);
 });
 
 test('supports move register to memory pointer', () => {
-    const value = random(Word);
     const code = `
         .bss
-            value       dw
             valuePtr    dw
         .text
-            mov ax, [value]
             mov valuePtr, ax
-            mov bx, ${value}
             mov [valuePtr], bx
     `;
 
     const bytes = assembler.assemble(code);
 
     expect(bytes).toStrictEqual([
-        Instruction.movi, Register.ax, new Byte(0x00), new Byte(0x10),
-        Instruction.movrm, new Byte(0x00), new Byte(0x12), Register.ax,
-        Instruction.movi, Register.bx, ...(new Word(value)).expand(),
-        Instruction.movrmp, new Byte(0x00), new Byte(0x12), Register.bx,
+        Instruction.movrm, new Byte(0x00), new Byte(0x08), Register.ax,
+        Instruction.movrmp, new Byte(0x00), new Byte(0x08), Register.bx,
     ]);
 });
 
@@ -593,87 +617,6 @@ test('supports move register to table of doubles', () => {
     ]);
 });
 
-test('supports characters as immediate values', () => {
-    const code = `
-        .data
-            char    db  '!'
-        .text
-            mov al, char
-            mov bl, '*'
-    `;
-
-    const bytes = assembler.assemble(code);
-
-    expect(bytes).toStrictEqual([
-        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
-        Instruction.movi, Register.bl, new Byte(0x00), new Byte(0x2A),
-        new Byte(0x21),
-    ]);
-});
-
-test('supports strings definitions', () => {
-    const code = `
-        .data
-            msg    db  "Hello, World!"
-        .text
-            mov al, msg[0]
-            mov bl, msg[5]
-    `;
-
-    const bytes = assembler.assemble(code);
-
-    expect(bytes).toStrictEqual([
-        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
-        Instruction.movm, Register.bl, new Byte(0x00), new Byte(0x0D),
-        new Byte(0x48), new Byte(0x65), new Byte(0x6C), new Byte(0x6C),
-        new Byte(0x6F), new Byte(0x2C), new Byte(0x20), new Byte(0x57),
-        new Byte(0x6F), new Byte(0x72), new Byte(0x6C), new Byte(0x64),
-        new Byte(0x21),
-    ]);
-});
-
-test('supports mixed strings, characters and bytes', () => {
-    const code = `
-        .data
-            msg     db "Hello" ',' 0x20 "World" 0x21
-        .text
-            mov al, msg[0]
-            mov bl, msg[5]
-    `;
-
-    const bytes = assembler.assemble(code);
-
-    expect(bytes).toStrictEqual([
-        Instruction.movm, Register.al, new Byte(0x00), new Byte(0x08),
-        Instruction.movm, Register.bl, new Byte(0x00), new Byte(0x0D),
-        new Byte(0x48), new Byte(0x65), new Byte(0x6C), new Byte(0x6C),
-        new Byte(0x6F), new Byte(0x2C), new Byte(0x20), new Byte(0x57),
-        new Byte(0x6F), new Byte(0x72), new Byte(0x6C), new Byte(0x64),
-        new Byte(0x21),
-    ]);
-});
-
-test('supports syscall', () => {
-    const byte = random(Byte);
-    const code = `
-        .data
-            status db 0x${byte.toString(16)}
-        .text
-            mov al, 1
-            mov bl, status
-            syscall
-    `;
-
-    const bytes = assembler.assemble(code);
-
-    expect(bytes).toStrictEqual([
-        Instruction.movi, Register.al, new Byte(0x00), new Byte(0x01),
-        Instruction.movm, Register.bl, new Byte(0x00), new Byte(0x0C),
-        Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
-        new Byte(byte),
-    ]);
-});
-
 test('supports increment', () => {
     const code = `
         .text
@@ -682,9 +625,7 @@ test('supports increment', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.inc, Register.eax, new Byte(0x00), new Byte(0x00),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.inc, Register.eax, new Byte(0x00), new Byte(0x00)]);
 });
 
 test('supports decrement', () => {
@@ -695,9 +636,7 @@ test('supports decrement', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.dec, Register.eax, new Byte(0x00), new Byte(0x00),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.dec, Register.eax, new Byte(0x00), new Byte(0x00)]);
 });
 
 test('fails if invalid operands to add', () => {
@@ -718,9 +657,7 @@ test('supports add immediate to register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.addi, Register.eax, ...(new Word(value)).expand(),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.addi, Register.eax, ...(new Word(value)).expand()]);
 });
 
 test('supports add register to register', () => {
@@ -731,9 +668,7 @@ test('supports add register to register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.add, Register.eax, Register.ebx, new Byte(0x00),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.add, Register.eax, Register.ebx, new Byte(0x00)]);
 });
 
 test('supports add memory to register', () => {
@@ -771,9 +706,7 @@ test('supports subtract immediate from register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.subi, Register.eax, ...(new Word(value)).expand(),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.subi, Register.eax, ...(new Word(value)).expand()]);
 });
 
 test('supports subtract register from register', () => {
@@ -784,9 +717,7 @@ test('supports subtract register from register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.sub, Register.eax, Register.ebx, new Byte(0x00),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.sub, Register.eax, Register.ebx, new Byte(0x00)]);
 });
 
 test('supports subtract memory from register', () => {
@@ -824,9 +755,7 @@ test('supports multiply register by immediate', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.muli, Register.al, new Byte(0x00), new Byte(value),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.muli, Register.al, new Byte(0x00), new Byte(value)]);
 });
 
 test('supports multiply register by register', () => {
@@ -840,9 +769,7 @@ test('supports multiply register by register', () => {
 
         const bytes = assembler.assemble(code);
 
-        expect(bytes).toStrictEqual([
-            Instruction.mul, Register[couple[0]], Register[couple[1]], new Byte(0x00),
-        ]);
+        expect(bytes).toStrictEqual([Instruction.mul, Register[couple[0]], Register[couple[1]], new Byte(0x00)]);
     }
 });
 
@@ -872,9 +799,7 @@ test('supports compare to immediate', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.cmpi, Register.eax, ...(new Word(value)).expand(),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.cmpi, Register.eax, ...(new Word(value)).expand()]);
 });
 
 test('supports compare to register', () => {
@@ -885,9 +810,7 @@ test('supports compare to register', () => {
 
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([
-        Instruction.cmp, Register.eax, Register.ebx, new Byte(0x00),
-    ]);
+    expect(bytes).toStrictEqual([Instruction.cmp, Register.eax, Register.ebx, new Byte(0x00)]);
 });
 
 test('supports compare to memory', () => {
@@ -1018,3 +941,222 @@ test('supports jump if less or equal', () => {
         Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00),
     ]);
 });
+
+test('fails if invalid operands to push instruction', () => {
+    const code = `
+        .text
+            push invalid
+    `;
+
+    expect(() => assembler.assemble(code)).toThrow(new Error('Invalid operands to push instruction'));
+});
+
+test('supports push immediate', () => {
+    const value = random(Word);
+    const code = `
+        .text
+            push ${value}
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([Instruction.pushi, ...(new Word(value)).expand(), new Byte(0x00)]);
+});
+
+test('supports push register', () => {
+    const code = `
+        .text
+            push eax
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([Instruction.push, Register.eax, new Byte(0x00), new Byte(0x00)]);
+});
+
+test('supports push memory byte', () => {
+    const value = random(Byte);
+    const code = `
+        .data
+            value db ${value}
+        .text
+            push value
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.pushmb, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        new Byte(value),
+    ]);
+});
+
+test('supports push memory word', () => {
+    const value = random(Word);
+    const code = `
+        .data
+            value dw ${value}
+        .text
+            push value
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.pushmw, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        ...(new Word(value)).expand(),
+    ]);
+});
+
+test('supports push memory double', () => {
+    const value = random(Double);
+    const code = `
+        .data
+            value dd ${value}
+        .text
+            push value
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.pushmd, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        ...(new Double(value)).expand(),
+    ]);
+});
+
+test('fails if invalid operands to pop instruction', () => {
+    const code = `
+        .text
+            pop invalid
+    `;
+
+    expect(() => assembler.assemble(code)).toThrow(new Error('Invalid operands to pop instruction'));
+});
+
+test('supports pop', () => {
+    const code = `
+        .text
+            pop eax
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([Instruction.pop, Register.eax, new Byte(0x00), new Byte(0x00)]);
+});
+
+test('supports syscall', () => {
+    const code = `
+        .text
+            syscall
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([Instruction.syscall, new Byte(0x00), new Byte(0x00), new Byte(0x00)]);
+});
+
+test('supports call with no arguments', () => {
+    const code = `
+        .text
+            proc:
+            call proc
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([Instruction.call, new Byte(0x00), new Byte(0x00), new Byte(0x00)]);
+});
+
+test('supports call with arguments', () => {
+    const code = `
+        .text
+            proc:
+            call proc, 5
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([Instruction.calla, new Byte(0x00), new Byte(0x00), new Byte(0x05)]);
+});
+
+test('fails if invalid operands to return instruction', () => {
+    const code = `
+        .text
+            ret invalid
+    `;
+
+    expect(() => assembler.assemble(code)).toThrow(new Error('Invalid operands to return instruction'));
+});
+
+test('supports return no value', () => {
+    const code = `
+        .text
+            ret
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([Instruction.ret, new Byte(0x00), new Byte(0x00), new Byte(0x00)]);
+});
+
+test('supports return immediate', () => {
+    const value = random(Word);
+    const code = `
+        .text
+            ret ${value}
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([Instruction.reti, ...(new Word(value)).expand(), new Byte(0x00)]);
+});
+
+test('supports return register', () => {
+    const code = `
+        .text
+            ret eax
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([Instruction.retr, Register.eax, new Byte(0x00), new Byte(0x00)]);
+});
+
+test('supports return memory byte', () => {
+    const value = random(Byte);
+    const code = `
+        .data
+            value db ${value}
+        .text
+            ret value
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.retmb, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        new Byte(value),
+    ]);
+});
+
+test('supports return memory word', () => {
+    const value = random(Word);
+    const code = `
+        .data
+            value dw ${value}
+        .text
+            ret value
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.retmw, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        ...(new Word(value)).expand()
+    ]);
+});
+
+test('supports return memory double', () => {
+    const value = random(Double);
+    const code = `
+        .data
+            value dd ${value}
+        .text
+            ret value
+    `;
+    const bytes = assembler.assemble(code);
+
+    expect(bytes).toStrictEqual([
+        Instruction.retmd, new Byte(0x00), new Byte(0x04), new Byte(0x00),
+        ...(new Double(value)).expand()
+    ]);
+});
+
+
