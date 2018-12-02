@@ -357,7 +357,7 @@ module.exports = class Assembler {
             return [Instruction.movrm, ...this._getTableItemAddress(tableFirst).expand(), registerSecond];
         }
 
-        throw new Error(`Invalid operands to mov instruction`);
+        throw new Error('Invalid operands to mov instruction');
     }
 
     /**
@@ -491,6 +491,102 @@ module.exports = class Assembler {
     }
 
     /**
+     * @param {[string, string]}operands
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
+    _parsePush(operands) {
+        const immediate = this._parseImmediate(operands[0]);
+        const register = Register[operands[0]];
+        const symbol = this._parseSymbol(operands[0]);
+
+        if (immediate !== undefined) {
+            return [Instruction.pushi, ...(new Word(immediate)).expand(), new Byte(0x00)];
+        }
+
+        if (register) {
+            return [Instruction.push, register, new Byte(0x00), new Byte(0x00)];
+        }
+
+        if (symbol && symbol.type === Byte) {
+            return [Instruction.pushmb, ...symbol.address.expand(), new Byte(0x00)];
+        }
+
+        if (symbol && symbol.type === Word) {
+            return [Instruction.pushmw, ...symbol.address.expand(), new Byte(0x00)];
+        }
+
+        if (symbol && symbol.type === Double) {
+            return [Instruction.pushmd, ...symbol.address.expand(), new Byte(0x00)];
+        }
+
+        throw new Error('Invalid operands to push instruction');
+    }
+
+    /**
+     * @param {[string, string]}operands
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
+    _parsePop(operands) {
+        const register = Register[operands[0]];
+
+        if (register) {
+            return [Instruction.pop, register, new Byte(0x00), new Byte(0x00)];
+        }
+
+        throw new Error('Invalid operands to pop instruction');
+    }
+
+    /**
+     * @param {[String, String]} operands
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
+    _parseCall(operands) {
+        const addr = this._parseLabel(operands[0]);
+
+        if (operands[1] === undefined) {
+            return [Instruction.call, ...(new Word(addr)).expand(), new Byte(0x00)];
+        }
+
+        return [Instruction.calla, ...(new Word(addr)).expand(), new Byte(parseInt(operands[1]))];
+    }
+
+    /**
+     * @param {[String, String]} operands
+     * @return {[Byte, Byte, Byte, Byte]}
+     * @private
+     */
+    _parseRet(operands) {
+        const immediate = this._parseImmediate(operands[0]);
+        const register = Register[operands[0]];
+        const symbol = this._parseSymbol(operands[0]);
+
+        if (immediate !== undefined) {
+            return [Instruction.reti, ...(new Word(immediate)).expand(), new Byte(0x00)];
+        }
+
+        if (register) {
+            return [Instruction.retr, register, new Byte(0x00), new Byte(0x00)];
+        }
+
+        if (symbol && symbol.type === Byte) {
+            return [Instruction.retmb, ...symbol.address.expand(), new Byte(0x00)];
+        }
+
+        if (symbol && symbol.type === Word) {
+            return [Instruction.retmw, ...symbol.address.expand(), new Byte(0x00)];
+        }
+
+        if (symbol && symbol.type === Double) {
+            return [Instruction.retmd, ...symbol.address.expand(), new Byte(0x00)];
+        }
+
+        throw new Error('Invalid operands to return instruction');
+    }
+
+    /**
      * @param {string|number} operand
      * @return {number|undefined}
      * @private
@@ -515,6 +611,15 @@ module.exports = class Assembler {
      */
     _parseSymbol(operand) {
         return this._symbols.find(symbol => symbol.name === operand);
+    }
+
+    /**
+     * @param {string} operand
+     * @return {number}
+     * @private
+     */
+    _parseLabel(operand) {
+        return this._labels[operand];
     }
 
     /**
