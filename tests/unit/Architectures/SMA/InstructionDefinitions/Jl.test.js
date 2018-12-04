@@ -28,7 +28,7 @@ test('implements get dependencies', () => {
 });
 
 test('jump if less flag is raised', () => {
-    const instructionAddress = new Word(random(Word));
+    const instructionAddress = random(Word);
 
     registers.getFlag = flag => flag === Registers.FLAG_LT ? true : null;
 
@@ -38,7 +38,7 @@ test('jump if less flag is raised', () => {
 });
 
 test('does not jump if less flag is not raised', () => {
-    const instructionAddress = new Word(random(Word));
+    const instructionAddress = random(Word);
 
     registers.getFlag = flag => flag === Registers.FLAG_LT ? false : null;
 

@@ -6,9 +6,9 @@ const System = require('../../../../../src/Architectures/SMA/System');
 const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const Double = require('../../../../../src/DataTypes/Double');
-const random = require('../../../random');
 const Register = require('../../../../../src/Architectures/SMA/Mnemonics').register;
 const RegisterAddress = require('../../../../../src/Architectures/SMA/RegisterAddress');
+const random = require('../../../random');
 
 /**
  * @type {Object}
@@ -45,7 +45,7 @@ test('implements get dependencies', () => {
 });
 
 test('implements syscall exit', () => {
-    const value = new Double(new Byte(0x00), new Byte(0x00), new Byte(random(Byte)), new Byte(random(Byte)));
+    const value = new Double(new Byte(0x00), new Byte(0x00), random(Byte), random(Byte));
 
     registers.get = reg => {
         if (reg.eq(new RegisterAddress(Register.eax))) {
@@ -63,13 +63,13 @@ test('implements syscall exit', () => {
 });
 
 test('implements syscall read', () => {
-    const fd = new Byte(random(Byte));
-    const mem = new Word(random(Word));
-    const count = new Word(random(Word));
-    const read = random(Byte);
+    const fd = random(Byte);
+    const mem = random(Word);
+    const count = random(Word);
+    const read = parseInt(random(Byte));
     const bytes = [];
     for (let i = 0; i < read; i++) {
-        bytes.push(new Byte(random(Byte)));
+        bytes.push(random(Byte));
     }
 
     memory.write = jest.fn();
@@ -109,10 +109,10 @@ test('implements syscall read', () => {
 });
 
 test('implements syscall write', () => {
-    const fd = new Byte(random(Byte));
-    const mem = new Word(random(Word));
-    const count = new Word(random(Word));
-    const bytes = new Double(random(Double)).expand();
+    const fd = random(Byte);
+    const mem = random(Word);
+    const count = random(Word);
+    const bytes = random(Double).expand();
     const written = random(Double);
 
     registers.get = reg => {

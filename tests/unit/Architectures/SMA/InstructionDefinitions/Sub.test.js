@@ -41,8 +41,8 @@ test('implements subtract register from register', () => {
         const leftRegisterAddress = new RegisterAddress(leftRegister);
         const rightRegisterAddress = new RegisterAddress(rightRegister);
         const type = leftRegisterAddress.getType();
-        const right = new type(random(type));
-        const left = new type(random(type, parseInt(right)));
+        const right = random(type);
+        const left = random(type, parseInt(right));
 
         registers.get = reg => {
             if (reg.eq(leftRegisterAddress)) {
@@ -57,6 +57,6 @@ test('implements subtract register from register', () => {
         definition.exec(leftRegister, rightRegister);
 
         expect(registers.set.mock.calls[index][0]).toStrictEqual(leftRegisterAddress);
-        expect(registers.set.mock.calls[index][1]).toStrictEqual(new type(parseInt(left) - parseInt(right)));
+        expect(registers.set.mock.calls[index][1]).toStrictEqual(left.sub(right));
     }
 });

@@ -12,7 +12,7 @@ const memory = {};
 /**
  * @type {Word}
  */
-const memoryMax = new Word(random(Word));
+const memoryMax = random(Word);
 
 /**
  * @type {Word}
@@ -33,7 +33,7 @@ test('can push any type', () => {
     let stackPointer = memoryMax;
     for (const type of [Byte, Word, Double]) {
         memory.write = jest.fn();
-        const value = new type(random(type));
+        const value = random(type);
         const bytes = value.expand();
 
         stack.push(value);
@@ -50,7 +50,7 @@ test('can pop value of given type', () => {
     let address = memoryMax;
     for (const type of [Byte, Word, Double]) {
         memory.write = () => null;
-        const value = new type(random(type));
+        const value = random(type);
 
         stack.push(value);
 
@@ -75,7 +75,7 @@ test('can push new frames', () => {
     const framesCount = Math.floor(Math.random() * 5);
     for (let i = 0; i < framesCount; i++) {
         memory.write = jest.fn();
-        const returnAddress = new Word(random(Word));
+        const returnAddress = random(Word);
         stack.pushFrame(returnAddress);
 
         // Push the current base pointer
@@ -98,9 +98,9 @@ test('can push new frames', () => {
         basePointer = stackPointer;
 
         // Work a bit with the stack
-        stack.push(new Byte(random(Byte)));
-        stack.push(new Word(random(Word)));
-        stack.push(new Double(random(Double)));
+        stack.push(random(Byte));
+        stack.push(random(Word));
+        stack.push(random(Double));
 
         // Update the stack pointer to sync with the last stack manipulation
         stackPointer = stackPointer.sub(new Word(7));
@@ -122,7 +122,7 @@ test('can pop frames', () => {
         memory.write = () => null;
 
         // Push frame
-        const returnAddress = new Word(random(Word));
+        const returnAddress = random(Word);
         returnAddresses[i] = returnAddress;
         stack.pushFrame(returnAddress);
         stackPointer = stackPointer.sub(new Word(4));
@@ -135,10 +135,10 @@ test('can pop frames', () => {
         basePointer = stackPointer;
 
         // Work a bit with the stack
-        stack.push(new Byte(random(Byte)));
-        stack.push(new Word(random(Word)));
-        stack.push(new Double(random(Double)));
-        stackPointer = stackPointer.sub(new Word(7));
+        stack.push(random(Byte));
+        stack.push(random(Word));
+        stack.push(random(Double));
+        stackPointer = stackPointer.sub(new Word(Byte.SIZE + Word.SIZE + Double.SIZE));
     }
 
     // Mock memory
@@ -152,9 +152,9 @@ test('can pop frames', () => {
         expect(result).toStrictEqual(returnAddresses[i]);
 
         // Work a bit with the stack
-        stack.push(new Byte(random(Byte)));
-        stack.push(new Word(random(Word)));
-        stack.push(new Double(random(Double)));
+        stack.push(random(Byte));
+        stack.push(random(Word));
+        stack.push(random(Double));
     }
 });
 
@@ -162,14 +162,14 @@ test('fails when underflow', () => {
     memory.write = () => null;
     memory.readSet = () => [];
 
-    stack.push(new Word(random(Word)));
-    stack.push(new Byte(random(Byte)));
+    stack.push(random(Word));
+    stack.push(random(Byte));
     stack.pop(Byte);
     stack.pop(Word);
 
     expect(() => stack.pop(Byte)).toThrow(new Error('Stack underflow'));
 
-    stack.push(new Byte(random(Byte)));
+    stack.push(random(Byte));
 
     expect(() => stack.pop(Word)).toThrow(new Error('Stack underflow'));
     expect(() => stack.pop(Double)).toThrow(new Error('Stack underflow'));
@@ -177,9 +177,9 @@ test('fails when underflow', () => {
 
 test('fails with underflow because of data type exception', () => {
     memory.getMax = () => new Word(65535);
-    const stack = new Stack(memory, new Word(random(Word)));
+    const stack = new Stack(memory, random(Word));
 
-    stack.push(new Byte(random(Byte)));
+    stack.push(random(Byte));
 
     expect(() => stack.pop(Word)).toThrow(new Error('Stack underflow'));
 });
@@ -189,14 +189,14 @@ test('fails when overflow', () => {
     memory.readSet = () => [];
 
     for (let i = 0; i < parseInt(stackSize) - 1; i++) {
-        stack.push(new Byte(random(Byte)));
+        stack.push(random(Byte));
     }
 
-    expect(() => stack.push(new Double(random(Double)))).toThrow(new Error('Stack overflow'));
-    expect(() => stack.push(new Word(random(Word)))).toThrow(new Error('Stack overflow'));
+    expect(() => stack.push(random(Double))).toThrow(new Error('Stack overflow'));
+    expect(() => stack.push(random(Word))).toThrow(new Error('Stack overflow'));
 
-    stack.push(new Byte(random(Byte)));
-    expect(() => stack.push(new Byte(random(Byte)))).toThrow(new Error('Stack overflow'));
+    stack.push(random(Byte));
+    expect(() => stack.push(random(Byte))).toThrow(new Error('Stack overflow'));
 });
 
 test('fails with overflow because of data type exception', () => {
@@ -204,9 +204,9 @@ test('fails with overflow because of data type exception', () => {
     memory.write = () => null;
     const stack = new Stack(memory, new Word(1));
 
-    stack.push(new Byte(random(Byte)));
+    stack.push(random(Byte));
 
-    expect(() => stack.push(new Byte(random(Byte)))).toThrow(new Error('Stack overflow'));
-    expect(() => stack.push(new Word(random(Word)))).toThrow(new Error('Stack overflow'));
-    expect(() => stack.push(new Double(random(Double)))).toThrow(new Error('Stack overflow'));
+    expect(() => stack.push(random(Byte))).toThrow(new Error('Stack overflow'));
+    expect(() => stack.push(random(Word))).toThrow(new Error('Stack overflow'));
+    expect(() => stack.push(random(Double))).toThrow(new Error('Stack overflow'));
 });

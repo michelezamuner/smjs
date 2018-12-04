@@ -3,7 +3,7 @@ const DataType = require('../../../src/DataTypes/DataType');
 const random = require('../random');
 
 test('implements data type', () => {
-    const b = new Byte(random(Byte));
+    const b = random(Byte);
     expect(b instanceof DataType).toBe(true);
 });
 

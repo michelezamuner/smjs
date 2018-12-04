@@ -38,7 +38,7 @@ test('pushes register values to the stack', () => {
         stack.push = jest.fn();
         const registerAddress = new RegisterAddress(register);
         const type = registerAddress.getType();
-        const value = new type(random(type));
+        const value = random(type);
 
         registers.get = addr => addr.eq(registerAddress) ? value : null;
 

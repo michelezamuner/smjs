@@ -28,7 +28,7 @@ test('implements get dependecies', () => {
 });
 
 test('pushes immediate value to the stack', () => {
-    const value = new Word(random(Word));
+    const value = random(Word);
 
     definition.exec(...value.expand());
 

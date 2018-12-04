@@ -35,8 +35,8 @@ test('implements get dependecies', () => {
 });
 
 test('pushes memory double value to the stack', () => {
-    const addr = new Word(random(Word));
-    const value = new Word(random(Word));
+    const addr = random(Word);
+    const value = random(Word);
 
     memory.readSet = (mem, size) => mem.eq(addr) && size.eq(new Byte(Word.SIZE)) ? value.expand() : null;
 

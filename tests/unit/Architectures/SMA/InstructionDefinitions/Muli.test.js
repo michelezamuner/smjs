@@ -32,8 +32,8 @@ test('implements get dependencies', () => {
 });
 
 test('implements multiply register byte by immediate byte', () => {
-    const multiplicand = new Byte(random(Byte));
-    const multiplier = new Word(random(Word));
+    const multiplicand = random(Byte);
+    const multiplier = random(Word);
     const bytes = multiplier.expand();
     const names = ['a', 'b', 'c', 'd'];
 
@@ -52,8 +52,8 @@ test('implements multiply register byte by immediate byte', () => {
 });
 
 test('implements multiply register word by immediate word', () => {
-    const multiplicand = new Word(random(Word));
-    const multiplier = new Word(random(Word));
+    const multiplicand = random(Word);
+    const multiplier = random(Word);
     const names = ['a', 'b', 'c', 'd'];
 
     for (const i in names) {
@@ -71,8 +71,8 @@ test('implements multiply register word by immediate word', () => {
 });
 
 test('implements multiply register double by immediate word', () => {
-    const multiplicand = new Double(random(Double));
-    const multiplier = new Word(random(Word));
+    const multiplicand = random(Double);
+    const multiplier = random(Word);
     const result = parseInt(multiplicand) * parseInt(multiplier);
     const modulo = 2 ** 32;
     const resultHigh = Math.floor(result / modulo);

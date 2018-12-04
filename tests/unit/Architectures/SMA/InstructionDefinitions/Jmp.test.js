@@ -28,7 +28,7 @@ test('implements get dependencies', () => {
 });
 
 test('implements unconditional jump', () => {
-    const instructionAddress = new Word(random(Word));
+    const instructionAddress = random(Word);
 
     definition.exec(...instructionAddress.expand());
 

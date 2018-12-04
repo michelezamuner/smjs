@@ -35,8 +35,8 @@ test('implements get dependencies', () => {
 });
 
 test('pushes new stack frame and jumps to the called procedure', () => {
-    const procedureAddress = new Word(random(Word));
-    const returnAddress = new Word(random(Word));
+    const procedureAddress = random(Word);
+    const returnAddress = random(Word);
 
     registers.getIp = () => returnAddress;
 

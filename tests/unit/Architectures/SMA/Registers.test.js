@@ -22,7 +22,7 @@ test('implements control registers', () => {
 
 test('implements data registers', () => {
     for (const t of ['a', 'b', 'c', 'd']) {
-        const ex = new Double(random(Double));
+        const ex = random(Double);
         const exb = ex.expand();
 
         registers.set(new RegisterAddress(Register[`e${t}x`]), ex);
@@ -32,7 +32,7 @@ test('implements data registers', () => {
         expect(registers.get(new RegisterAddress(Register[`${t}h`]))).toStrictEqual(new Byte(exb[2]));
         expect(registers.get(new RegisterAddress(Register[`${t}l`]))).toStrictEqual(new Byte(exb[3]));
 
-        const x = new Word(random(Word));
+        const x = random(Word);
         const xb = x.expand();
 
         registers.set(new RegisterAddress(Register[`${t}x`]), x);
@@ -42,8 +42,8 @@ test('implements data registers', () => {
         expect(registers.get(new RegisterAddress(Register[`${t}h`]))).toStrictEqual(xb[0]);
         expect(registers.get(new RegisterAddress(Register[`${t}l`]))).toStrictEqual(xb[1]);
 
-        const h = new Byte(random(Byte));
-        const l = new Byte(random(Byte));
+        const h = random(Byte);
+        const l = random(Byte);
 
         registers.set(new RegisterAddress(Register[`${t}h`]), h);
         registers.set(new RegisterAddress(Register[`${t}l`]), l);
@@ -56,7 +56,7 @@ test('implements data registers', () => {
 });
 
 test('implements instruction pointer', () => {
-    const ip = new Word(random(Word));
+    const ip = random(Word);
     registers.setIp(ip);
     expect(registers.getIp()).toStrictEqual(ip);
 });
@@ -64,7 +64,7 @@ test('implements instruction pointer', () => {
 test('implements exit registers', () => {
     expect(registers.shouldExit()).toBe(false);
 
-    const status = new Byte(random(Byte));
+    const status = random(Byte);
 
     registers.setExit(status);
 

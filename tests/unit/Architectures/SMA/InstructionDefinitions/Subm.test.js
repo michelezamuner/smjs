@@ -43,9 +43,9 @@ test('implements add register to memory', () => {
         const register = regs[index];
         const registerAddress = new RegisterAddress(register);
         const type = registerAddress.getType();
-        const right = new type(random(type));
-        const left = new type(random(type, parseInt(right)));
-        const mem = new Word(random(Word));
+        const right = random(type);
+        const left = random(type, parseInt(right));
+        const mem = random(Word);
 
         registers.get = reg => reg.eq(registerAddress) ? left : null;
         memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type.SIZE)) ? right.expand() : null;
@@ -53,6 +53,6 @@ test('implements add register to memory', () => {
         definition.exec(register, ...mem.expand());
 
         expect(registers.set.mock.calls[index][0]).toStrictEqual(registerAddress);
-        expect(registers.set.mock.calls[index][1]).toStrictEqual(new type(parseInt(left) - parseInt(right)));
+        expect(registers.set.mock.calls[index][1]).toStrictEqual(left.sub(right));
     }
 });

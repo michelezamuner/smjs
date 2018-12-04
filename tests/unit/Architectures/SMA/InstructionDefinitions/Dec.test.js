@@ -34,13 +34,13 @@ test('implements increment', () => {
         const register = regs[index];
         const registerAddress = new RegisterAddress(register);
         const type = registerAddress.getType();
-        const value = new type(random(type, 1));
+        const value = random(type, 1);
 
         registers.get = reg => reg.eq(registerAddress) ? value : null;
 
         definition.exec(register);
 
         expect(registers.set.mock.calls[index][0]).toStrictEqual(registerAddress);
-        expect(registers.set.mock.calls[index][1]).toStrictEqual(new type(parseInt(value) - 1));
+        expect(registers.set.mock.calls[index][1]).toStrictEqual(value.dec());
     }
 });

@@ -37,12 +37,12 @@ test('implements get dependencies', () => {
 });
 
 test('pushes new stack frame, pops given size of arguments, and jumps to the called procedure', () => {
-    const procedureAddress = new Word(random(Word));
-    const returnAddress = new Word(random(Word));
-    const argumentsSize = new Byte(random(Byte));
+    const procedureAddress = random(Word);
+    const returnAddress = random(Word);
+    const argumentsSize = random(Byte);
     const argumentsBytes = [];
     for (let i = 0; i < parseInt(argumentsSize); i++) {
-        argumentsBytes[i] = new Byte(random(Byte));
+        argumentsBytes[i] = random(Byte);
     }
 
     registers.getIp = () => returnAddress;

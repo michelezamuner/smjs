@@ -37,10 +37,10 @@ test('implements get dependencies', () => {
 test('pops stack frame and jumps to the return address pushing register as return value', () => {
     for (const register of [Register.al, Register.bx, Register.ecx]) {
         registers.setIp = jest.fn();
-        const returnAddress = new Word(random(Word));
+        const returnAddress = random(Word);
         const registerAddress = new RegisterAddress(register);
         const type = registerAddress.getType();
-        const returnValue = new type(random(type));
+        const returnValue = random(type);
         let isFramePopped = false;
 
         registers.get = reg => reg.eq(registerAddress) ? returnValue : null;

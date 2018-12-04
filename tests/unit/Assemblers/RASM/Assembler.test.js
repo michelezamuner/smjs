@@ -105,7 +105,7 @@ test('supports move immediate to register', () => {
     const code = `movi al, ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.movi, Register.al, ...(new Word(value)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.movi, Register.al, ...value.expand()]);
 });
 
 test('supports move immediate to memory', () => {
@@ -113,7 +113,7 @@ test('supports move immediate to memory', () => {
     const code = `movim 0x08, ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.movim, new Byte(0x00), new Byte(0x08), new Byte(value)]);
+    expect(bytes).toStrictEqual([Instruction.movim, new Byte(0x00), new Byte(0x08), value]);
 });
 
 test('supports move immediate to byte register pointer', () => {
@@ -121,7 +121,7 @@ test('supports move immediate to byte register pointer', () => {
     const code = `movipb ax, ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.movipb, Register.ax, ...(new Word(value)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.movipb, Register.ax, ...value.expand()]);
 });
 
 test('supports move immediate to word register pointer', () => {
@@ -129,7 +129,7 @@ test('supports move immediate to word register pointer', () => {
     const code = `movipw ax, ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.movipw, Register.ax, ...(new Word(value)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.movipw, Register.ax, ...value.expand()]);
 });
 
 test('supports move immediate to double register pointer', () => {
@@ -137,7 +137,7 @@ test('supports move immediate to double register pointer', () => {
     const code = `movipd ax, ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.movipd, Register.ax, ...(new Word(value)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.movipd, Register.ax, ...value.expand()]);
 });
 
 test('supports move immediate to memory pointer', () => {
@@ -145,7 +145,7 @@ test('supports move immediate to memory pointer', () => {
     const code = `movimp 0x0C, ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.movimp, new Byte(0x00), new Byte(0x0C), new Byte(value)]);
+    expect(bytes).toStrictEqual([Instruction.movimp, new Byte(0x00), new Byte(0x0C), value]);
 });
 
 test('supports move memory to register', () => {
@@ -153,7 +153,7 @@ test('supports move memory to register', () => {
     const code = `movm al, ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.movm, Register.al, ...(new Word(addr)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.movm, Register.al, ...addr.expand()]);
 });
 
 test('supports move register pointer to register', () => {
@@ -168,7 +168,7 @@ test('supports move register to memory', () => {
     const code = `movrm ${addr}, al`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.movrm, ...(new Word(addr)).expand(), Register.al]);
+    expect(bytes).toStrictEqual([Instruction.movrm, ...addr.expand(), Register.al]);
 });
 
 test('supports move register to register pointer', () => {
@@ -183,7 +183,7 @@ test('supports move register to memory pointer', () => {
     const code = `movrmp ${addr}, ax`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.movrmp, ...(new Word(addr)).expand(), Register.ax]);
+    expect(bytes).toStrictEqual([Instruction.movrmp, ...addr.expand(), Register.ax]);
 });
 
 test('supports increment', () => {
@@ -205,7 +205,7 @@ test('supports add immediate to register', () => {
     const code = `addi eax, ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.addi, Register.eax, ...(new Word(value)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.addi, Register.eax, ...value.expand()]);
 });
 
 test('supports add register to register', () => {
@@ -220,7 +220,7 @@ test('supports add memory to register', () => {
     const code = `addm eax, ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.addm, Register.eax, ...(new Word(addr)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.addm, Register.eax, ...addr.expand()]);
 });
 
 test('supports subtract immediate from register', () => {
@@ -228,7 +228,7 @@ test('supports subtract immediate from register', () => {
     const code = `subi eax, ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.subi, Register.eax, ...(new Word(value)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.subi, Register.eax, ...value.expand()]);
 });
 
 test('supports subtract register from register', () => {
@@ -243,7 +243,7 @@ test('supports subtract memory from register', () => {
     const code = `subm eax, ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.subm, Register.eax, ...(new Word(addr)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.subm, Register.eax, ...addr.expand()]);
 });
 
 test('supports multiply register by immediate', () => {
@@ -251,7 +251,7 @@ test('supports multiply register by immediate', () => {
     const code = `muli al, ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.muli, Register.al, new Byte(0x00), new Byte(value)]);
+    expect(bytes).toStrictEqual([Instruction.muli, Register.al, new Byte(0x00), value]);
 });
 
 test('supports multiply register by register', () => {
@@ -273,7 +273,7 @@ test('supports multiply register by memory', () => {
     const code = `mulm al, ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.mulm, Register.al, ...(new Word(addr)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.mulm, Register.al, ...addr.expand()]);
 });
 
 test('supports compare to immediate', () => {
@@ -281,7 +281,7 @@ test('supports compare to immediate', () => {
     const code = `cmpi ecx, ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.cmpi, Register.ecx, ...(new Word(value)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.cmpi, Register.ecx, ...value.expand()]);
 });
 
 test('supports compare to register', () => {
@@ -296,7 +296,7 @@ test('supports compare to memory', () => {
     const code = `cmpm ecx, ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.cmpm, Register.ecx, ...(new Word(addr)).expand()]);
+    expect(bytes).toStrictEqual([Instruction.cmpm, Register.ecx, ...addr.expand()]);
 });
 
 test('supports unconditional jump', () => {
@@ -304,7 +304,7 @@ test('supports unconditional jump', () => {
     const code = `jmp ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.jmp, ...(new Word(addr)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.jmp, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports jump if equal', () => {
@@ -312,7 +312,7 @@ test('supports jump if equal', () => {
     const code = `je ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.je, ...(new Word(addr)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.je, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports jump if not equal', () => {
@@ -320,7 +320,7 @@ test('supports jump if not equal', () => {
     const code = `jne ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.jne, ...(new Word(addr)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.jne, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports jump if greater', () => {
@@ -328,7 +328,7 @@ test('supports jump if greater', () => {
     const code = `jg ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.jg, ...(new Word(addr)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.jg, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports jump if greater or equal', () => {
@@ -336,7 +336,7 @@ test('supports jump if greater or equal', () => {
     const code = `jge ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.jge, ...(new Word(addr)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.jge, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports jump if less', () => {
@@ -344,7 +344,7 @@ test('supports jump if less', () => {
     const code = `jl ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.jl, ...(new Word(addr)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.jl, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports jump if less or equal', () => {
@@ -352,7 +352,7 @@ test('supports jump if less or equal', () => {
     const code = `jle ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.jle, ...(new Word(addr)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.jle, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports push immediate', () => {
@@ -360,7 +360,7 @@ test('supports push immediate', () => {
     const code = `pushi ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.pushi, ...(new Word(value)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.pushi, ...value.expand(), new Byte(0x00)]);
 });
 
 test('supports push register', () => {
@@ -371,27 +371,27 @@ test('supports push register', () => {
 });
 
 test('supports push memory byte', () => {
-    const mem = random(Word);
-    const code = `pushmb ${mem}`;
+    const addr = random(Word);
+    const code = `pushmb ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.pushmb, ...(new Word(mem)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.pushmb, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports push memory word', () => {
-    const mem = random(Word);
-    const code = `pushmw ${mem}`;
+    const addr = random(Word);
+    const code = `pushmw ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.pushmw, ...(new Word(mem)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.pushmw, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports push memory double', () => {
-    const mem = random(Word);
-    const code = `pushmd ${mem}`;
+    const addr = random(Word);
+    const code = `pushmd ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.pushmd, ...(new Word(mem)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.pushmd, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports pop to register', () => {
@@ -413,7 +413,7 @@ test('supports call with no arguments', () => {
     const code = `call ${procedure}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.call, ...(new Word(procedure)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.call, ...procedure.expand(), new Byte(0x00)]);
 });
 
 test('supports call with arguments', () => {
@@ -422,7 +422,7 @@ test('supports call with arguments', () => {
     const code = `calla ${procedure}, ${argsSize}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.calla, ...(new Word(procedure)).expand(), new Byte(argsSize)]);
+    expect(bytes).toStrictEqual([Instruction.calla, ...procedure.expand(), new Byte(argsSize)]);
 });
 
 test('supports return no value', () => {
@@ -437,7 +437,7 @@ test('supports return immediate', () => {
     const code = `reti ${value}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.reti, ...(new Word(value)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.reti, ...value.expand(), new Byte(0x00)]);
 });
 
 test('supports return register', () => {
@@ -448,25 +448,25 @@ test('supports return register', () => {
 });
 
 test('supports return memory byte', () => {
-    const mem = random(Word);
-    const code = `retmb ${mem}`;
+    const addr = random(Word);
+    const code = `retmb ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.retmb, ...(new Word(mem)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.retmb, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports return memory word', () => {
-    const mem = random(Word);
-    const code = `retmw ${mem}`;
+    const addr = random(Word);
+    const code = `retmw ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.retmw, ...(new Word(mem)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.retmw, ...addr.expand(), new Byte(0x00)]);
 });
 
 test('supports return memory double', () => {
-    const mem = random(Word);
-    const code = `retmd ${mem}`;
+    const addr = random(Word);
+    const code = `retmd ${addr}`;
     const bytes = assembler.assemble(code);
 
-    expect(bytes).toStrictEqual([Instruction.retmd, ...(new Word(mem)).expand(), new Byte(0x00)]);
+    expect(bytes).toStrictEqual([Instruction.retmd, ...addr.expand(), new Byte(0x00)]);
 });

@@ -29,8 +29,8 @@ test('implements get dependencies', () => {
 });
 
 test('implements move immediate to memory', () => {
-    const value = new Byte(random(Byte));
-    const mem = new Word(random(Word));
+    const value = random(Byte);
+    const mem = random(Word);
 
     definition.exec(...mem.expand(), value);
 

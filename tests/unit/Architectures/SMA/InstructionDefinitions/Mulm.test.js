@@ -38,9 +38,9 @@ test('implements get dependencies', () => {
 });
 
 test('implements multiply register byte by memory', () => {
-    const multiplicand = new Byte(random(Byte));
-    const multiplier = new Byte(random(Byte));
-    const mem = new Word(random(Word));
+    const multiplicand = random(Byte);
+    const multiplier = random(Byte);
+    const mem = random(Word);
     const names = ['a', 'b', 'c', 'd'];
 
     for (const i in names) {
@@ -49,7 +49,7 @@ test('implements multiply register byte by memory', () => {
         const resultRegister = Register[`${x}x`];
 
         registers.get = reg => reg.eq(new RegisterAddress(multiplicandRegister)) ? multiplicand : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(0x01)) ? multiplier.expand() : null;
+        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(Byte.SIZE)) ? multiplier.expand() : null;
 
         definition.exec(multiplicandRegister, ...mem.expand());
 
@@ -60,9 +60,9 @@ test('implements multiply register byte by memory', () => {
 
 
 test('implements multiply register word by memory', () => {
-    const multiplicand = new Word(random(Word));
-    const multiplier = new Word(random(Word));
-    const mem = new Word(random(Word));
+    const multiplicand = random(Word);
+    const multiplier = random(Word);
+    const mem = random(Word);
     const names = ['a', 'b', 'c', 'd'];
 
     for (const i in names) {
@@ -71,7 +71,7 @@ test('implements multiply register word by memory', () => {
         const resultRegister = Register[`e${x}x`];
 
         registers.get = reg => reg.eq(new RegisterAddress(multiplicandRegister)) ? multiplicand : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(0x02)) ? multiplier.expand() : null;
+        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(Word.SIZE)) ? multiplier.expand() : null;
 
         definition.exec(multiplicandRegister, ...mem.expand());
 
@@ -81,8 +81,8 @@ test('implements multiply register word by memory', () => {
 });
 
 test('implements multiply register double by memory', () => {
-    const multiplicand = new Double(random(Word));
-    const multiplier = new Double(random(Double));
+    const multiplicand = random(Word).cast(Double);
+    const multiplier = random(Double);
     const result = parseInt(multiplicand) * parseInt(multiplier);
     const modulo = 2 ** 32;
     const resultHigh = Math.floor(result / modulo);

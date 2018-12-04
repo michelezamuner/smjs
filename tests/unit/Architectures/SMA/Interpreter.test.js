@@ -32,7 +32,7 @@ test('provides instructions size', () => {
 });
 
 test('executes the correct instruction', () => {
-    const [byte1, byte2, byte3, byte4] = (new Double(random(Double))).expand();
+    const [byte1, byte2, byte3, byte4] = random(Double).expand();
     const instruction = {
         exec: jest.fn(),
     };
