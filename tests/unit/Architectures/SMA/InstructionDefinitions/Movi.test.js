@@ -4,9 +4,9 @@ const Registers = require('../../../../../src/Architectures/SMA/Registers');
 const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const Double = require('../../../../../src/DataTypes/Double');
-const random = require('../../../random');
 const Register = require('../../../../../src/Architectures/SMA/Mnemonics').register;
 const RegisterAddress = require('../../../../../src/Architectures/SMA/RegisterAddress');
+const random = require('../../../random');
 
 /**
  * @type {Object}
@@ -32,7 +32,7 @@ test('implements get dependencies', () => {
 });
 
 test('implements move immediate to register', () => {
-    const value = new Word(random(Word));
+    const value = random(Word);
     const bytes = value.expand();
 
     definition.exec(Register.al, ...bytes);

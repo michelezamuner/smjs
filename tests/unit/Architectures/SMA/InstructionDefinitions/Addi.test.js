@@ -36,15 +36,15 @@ test('implements add register to immediate', () => {
         const register = regs[index];
         const registerAddress = new RegisterAddress(register);
         const type = registerAddress.getType();
-        const right = type === Byte ? new Word(random(Byte)) : new Word(random(Word));
-        const left = new type(random(type, 0, parseInt(right)));
-        const result = parseInt(left) + parseInt(right);
+        const right = type === Byte ? random(Byte).cast(Word) : random(Word);
+        const left = random(type, 0, parseInt(right));
+        const result = left.add(right);
 
         registers.get = reg => reg.eq(registerAddress) ? left : null;
 
         definition.exec(register, ...right.expand());
 
         expect(registers.set.mock.calls[index][0]).toStrictEqual(registerAddress);
-        expect(registers.set.mock.calls[index][1]).toStrictEqual(new type(result));
+        expect(registers.set.mock.calls[index][1]).toStrictEqual(result);
     }
 });

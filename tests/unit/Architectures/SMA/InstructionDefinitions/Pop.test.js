@@ -38,7 +38,7 @@ test('pops values into registers', () => {
         registers.set = jest.fn();
         const registerAddress = new RegisterAddress(register);
         const type = registerAddress.getType();
-        const value = new type(random(type));
+        const value = random(type);
 
         stack.pop = poppedType => poppedType === type ? value : null;
 

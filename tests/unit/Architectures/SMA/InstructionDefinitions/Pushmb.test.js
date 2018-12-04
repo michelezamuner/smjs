@@ -35,8 +35,8 @@ test('implements get dependecies', () => {
 });
 
 test('pushes memory byte value to the stack', () => {
-    const addr = new Word(random(Word));
-    const value = new Byte(random(Byte));
+    const addr = random(Word);
+    const value = random(Byte);
 
     memory.read = mem => mem.eq(addr) ? value : null;
 

@@ -44,7 +44,7 @@ test('implements compare register to register', () => {
         const type = firstAddress.getType();
         const value = random(type, 1, 1);
 
-        registers.get = reg => reg.eq(firstAddress) || reg.eq(secondAddress) ? new type(value) : null;
+        registers.get = reg => reg.eq(firstAddress) || reg.eq(secondAddress) ? value : null;
         definition.exec(first, second, new Byte(0x00));
 
         expect(registers.setFlag.mock.calls[index * 9][0]).toStrictEqual(Registers.FLAG_EQ);
@@ -56,9 +56,9 @@ test('implements compare register to register', () => {
 
         registers.get = reg => {
             if (reg.eq(firstAddress)) {
-                return new type(value - 1);
+                return value.dec();
             } else if (reg.eq(secondAddress)) {
-                return new type(value);
+                return value;
             }
 
             return null;
@@ -74,9 +74,9 @@ test('implements compare register to register', () => {
 
         registers.get = reg => {
             if (reg.eq(firstAddress)) {
-                return new type(value + 1);
+                return value.inc();
             } else if (reg.eq(secondAddress)) {
-                return new type(value);
+                return value;
             }
 
             return null;

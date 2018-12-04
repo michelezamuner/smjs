@@ -32,8 +32,8 @@ test('implements get dependencies', () => {
 });
 
 test('implements multiply register byte by register byte', () => {
-    const multiplicand = new Byte(random(Byte));
-    const multiplier = new Byte(random(Byte));
+    const multiplicand = random(Byte);
+    const multiplier = random(Byte);
     const multiplicandRegister = Register.al;
     const multiplierRegister = Register.bl;
     const resultRegister = Register.ax;
@@ -55,8 +55,8 @@ test('implements multiply register byte by register byte', () => {
 });
 
 test('implements multiply register word by register word', () => {
-    const multiplicand = new Word(random(Word));
-    const multiplier = new Word(random(Word));
+    const multiplicand = random(Word);
+    const multiplier = random(Word);
     const multiplicandRegister = Register.ax;
     const multiplierRegister = Register.bx;
     const resultRegister = Register.eax;
@@ -78,8 +78,8 @@ test('implements multiply register word by register word', () => {
 });
 
 test('implements multiply register double by register double', () => {
-    const multiplicand = new Double(random(Double));
-    const multiplier = new Double(random(Double));
+    const multiplicand = random(Double);
+    const multiplier = random(Double);
     const result = parseInt(multiplicand) * parseInt(multiplier);
     const modulo = 2 ** 32;
     const resultHigh = Math.floor(result / modulo);
@@ -109,8 +109,8 @@ test('implements multiply register double by register double', () => {
 });
 
 test('implements multiply register double by register double with alternate register', () => {
-    const multiplicand = new Double(random(Double));
-    const multiplier = new Double(random(Double));
+    const multiplicand = random(Double);
+    const multiplier = random(Double);
     const result = parseInt(multiplicand) * parseInt(multiplier);
     const modulo = 2 ** 32;
     const resultHigh = Math.floor(result / modulo);

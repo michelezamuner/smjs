@@ -29,9 +29,9 @@ test('implements get dependencies', () => {
 });
 
 test('implements move immediate to memory pointer', () => {
-    const value = new Byte(random(Byte));
-    const ptr = new Word(random(Word));
-    const mem = new Word(random(Word));
+    const value = random(Byte);
+    const ptr = random(Word);
+    const mem = random(Word);
 
     memory.readSet = (addr, size) => addr.eq(ptr) && size.eq(new Byte(0x02)) ? mem.expand() : null;
 

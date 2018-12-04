@@ -34,8 +34,8 @@ test('implements get dependencies', () => {
 });
 
 test('pops stack frame and jumps to the return address pushing immediate as return value', () => {
-    const returnAddress = new Word(random(Word));
-    const returnValue = new Word(random(Word));
+    const returnAddress = random(Word);
+    const returnValue = random(Word);
     let isFramePopped = false;
 
     stack.popFrame = () => {

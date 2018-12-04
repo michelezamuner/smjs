@@ -28,7 +28,7 @@ test('implements get dependencies', () => {
 });
 
 test('jumps if less flag is raised and equal flag is not raised', () => {
-    const instructionAddress = new Word(random(Word));
+    const instructionAddress = random(Word);
 
     registers.getFlag = flag => {
         if (flag === Registers.FLAG_LT) {
@@ -46,7 +46,7 @@ test('jumps if less flag is raised and equal flag is not raised', () => {
 });
 
 test('jumps if less flag is raised and equal flag is raised', () => {
-    const instructionAddress = new Word(random(Word));
+    const instructionAddress = random(Word);
 
     registers.getFlag = flag => {
         if (flag === Registers.FLAG_LT) {
@@ -64,7 +64,7 @@ test('jumps if less flag is raised and equal flag is raised', () => {
 });
 
 test('jumps if less flag is not raised and equal flag is raised', () => {
-    const instructionAddress = new Word(random(Word));
+    const instructionAddress = random(Word);
 
     registers.getFlag = flag => {
         if (flag === Registers.FLAG_LT) {
@@ -82,7 +82,7 @@ test('jumps if less flag is not raised and equal flag is raised', () => {
 });
 
 test('does not jump if less flag is not raised and equal flag is not raised', () => {
-    const instructionAddress = new Word(random(Word));
+    const instructionAddress = random(Word);
 
     registers.getFlag = flag => {
         if (flag === Registers.FLAG_LT) {

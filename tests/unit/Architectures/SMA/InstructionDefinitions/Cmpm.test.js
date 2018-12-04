@@ -44,10 +44,10 @@ test('implements compare register to memory', () => {
         const registerAddress = new RegisterAddress(register);
         const type = registerAddress.getType();
         const value = random(type, 1, 1);
-        const mem = new Word(random(Word));
+        const mem = random(Word);
 
-        registers.get = reg => reg.eq(registerAddress) ? new type(value) : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type.SIZE)) ? (new type(value)).expand() : null;
+        registers.get = reg => reg.eq(registerAddress) ? value : null;
+        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type.SIZE)) ? value.expand() : null;
 
         definition.exec(register, ...mem.expand());
 
@@ -58,8 +58,8 @@ test('implements compare register to memory', () => {
         expect(registers.setFlag.mock.calls[index * 9 + 2][0]).toStrictEqual(Registers.FLAG_GT);
         expect(registers.setFlag.mock.calls[index * 9 + 2][1]).toStrictEqual(false);
 
-        registers.get = reg => reg.eq(registerAddress) ? new type(value - 1) : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type.SIZE)) ? (new type(value)).expand() : null;
+        registers.get = reg => reg.eq(registerAddress) ? value.dec() : null;
+        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type.SIZE)) ? value.expand() : null;
 
         definition.exec(register, ...mem.expand());
 
@@ -70,8 +70,8 @@ test('implements compare register to memory', () => {
         expect(registers.setFlag.mock.calls[index * 9 + 5][0]).toStrictEqual(Registers.FLAG_GT);
         expect(registers.setFlag.mock.calls[index * 9 + 5][1]).toStrictEqual(false);
 
-        registers.get = reg => reg.eq(registerAddress) ? new type(value + 1) : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type.SIZE)) ? (new type(value)).expand() : null;
+        registers.get = reg => reg.eq(registerAddress) ? value.inc() : null;
+        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type.SIZE)) ? value.expand() : null;
 
         definition.exec(register, ...mem.expand());
 

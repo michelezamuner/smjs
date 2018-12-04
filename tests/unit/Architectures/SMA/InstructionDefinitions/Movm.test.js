@@ -4,9 +4,9 @@ const Registers = require('../../../../../src/Architectures/SMA/Registers');
 const Memory = require('../../../../../src/ProcessorInterfaces/Memory');
 const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
-const random = require('../../../random');
 const Register = require('../../../../../src/Architectures/SMA/Mnemonics').register;
 const RegisterAddress = require('../../../../../src/Architectures/SMA/RegisterAddress');
+const random = require('../../../random');
 
 /**
  * @type {Object}
@@ -39,9 +39,9 @@ test('implements get dependencies', () => {
 test('implements move memory to register', () => {
     for (const register of [Register.ah, Register.ax, Register.eax]) {
         registers.set = jest.fn();
-        const mem = new Word(random(Word));
+        const mem = random(Word);
         const type = new RegisterAddress(register).getType();
-        const value = new type(random(type));
+        const value = random(type);
 
         memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type.SIZE)) ? value.expand() : null;
 

@@ -3,9 +3,9 @@ const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/
 const Registers = require('../../../../../src/Architectures/SMA/Registers');
 const Byte = require('../../../../../src/DataTypes/Byte');
 const Double = require('../../../../../src/DataTypes/Double');
-const random = require('../../../random');
 const Register = require('../../../../../src/Architectures/SMA/Mnemonics').register;
 const RegisterAddress = require('../../../../../src/Architectures/SMA/RegisterAddress');
+const random = require('../../../random');
 
 /**
  * @type {Object}
@@ -31,7 +31,7 @@ test('implements get dependencies', () => {
 });
 
 test('implements move register to register', () => {
-    const value = new Double(random(Double));
+    const value = random(Double);
 
     registers.get = addr => addr.eq(new RegisterAddress(Register.ebx)) ? value : null;
 

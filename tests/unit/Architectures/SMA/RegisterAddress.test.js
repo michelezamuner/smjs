@@ -69,7 +69,7 @@ test('tells to which part of the register it refers to', () => {
 });
 
 test('can be created from bytes', () => {
-    const value = new Byte(random(Byte));
+    const value = random(Byte);
     const address = new RegisterAddress(value);
     expect(address.eq(new RegisterAddress(value))).toBe(true);
     expect(address.toString()).toBe(value.toString());

@@ -34,17 +34,17 @@ test('reads zeros wherever nothing has been written', () => {
 });
 
 test('writes and reads', () => {
-    const address = new Word(random(Word));
-    const value = new Byte(random(Byte));
+    const address = random(Word);
+    const value = random(Byte);
 
     memory.write(address, value);
     expect(memory.read(address)).toStrictEqual(value);
 });
 
 test('reads a set of bytes', () => {
-    const offsetValue = random(Word);
+    const offsetValue = parseInt(random(Word));
     const offset = new Word(offsetValue < 4 ? offsetValue : offsetValue - 4);
-    const bytes = [new Byte(random(Byte)), new Byte(random(Byte)), new Byte(random(Byte)), new Byte(random(Byte))];
+    const bytes = [random(Byte), random(Byte), random(Byte), random(Byte)];
 
     for (const index in bytes) {
         memory.write(new Word(parseInt(offset) + parseInt(index)), bytes[index]);
@@ -79,8 +79,8 @@ test('fails if trying to write to address outside of memory size', () => {
 });
 
 test('fails if trying to write non bytes', () => {
-    expect(() => memory.write(new Word(), new Word(random(Word))))
+    expect(() => memory.write(new Word(), random(Word)))
         .toThrow('Only single bytes can be written to memory');
-    expect(() => memory.write(new Word(), new Double(random(Word))))
+    expect(() => memory.write(new Word(), random(Word)))
         .toThrow('Only single bytes can be written to memory');
 });

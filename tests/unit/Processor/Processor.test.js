@@ -55,7 +55,7 @@ test('executes the given instructions in sequence and exits with exit context', 
 
     interpreter.exec = jest.fn(() => registers.getIp().eq(new Word(0x08))
         ? registers.shouldExit = () => true
-        : registers.getExitStatus = () => new Byte(value)
+        : registers.getExitStatus = () => value
     );
 
     const exitStatus = processor.run();
@@ -64,7 +64,7 @@ test('executes the given instructions in sequence and exits with exit context', 
     expect(interpreter.exec).toBeCalledTimes(2);
     expect(interpreter.exec).nthCalledWith(1, [new Byte(0x00), new Byte(0x01), new Byte(0x02), new Byte(0x03)]);
     expect(interpreter.exec).nthCalledWith(2, [new Byte(0x04), new Byte(0x05), new Byte(0x06), new Byte(0x07)]);
-    expect(exitStatus).toBe(value);
+    expect(exitStatus).toBe(parseInt(value));
 });
 
 test('fails with missing exit if read set goes out of memory', () => {
