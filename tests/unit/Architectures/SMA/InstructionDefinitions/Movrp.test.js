@@ -53,9 +53,9 @@ test('implements move register to register pointer', () => {
             return null;
         };
 
-        definition.exec(Register.bx, register, new Byte(0x00));
+        definition.exec(Register.bx, register);
 
-        for (let i = 0; i < type.SIZE; i++) {
+        for (let i = 0; i < parseInt(type.SIZE); i++) {
             expect(memory.write.mock.calls[i][0]).toStrictEqual(mem.add(new Byte(i)));
             expect(memory.write.mock.calls[i][1]).toStrictEqual(valueb[i]);
         }
@@ -70,7 +70,7 @@ test('fails if type mismatch on move register to register pointer', () => {
         Register.dh, Register.dl, Register.edx,
     ];
     for (const register of forbidden) {
-        expect(() => definition.exec(register, Register.ah, new Byte(0x00)))
+        expect(() => definition.exec(register, Register.ah))
             .toThrow(`Cannot use register ${new RegisterAddress(register)} as pointer`)
     }
 });

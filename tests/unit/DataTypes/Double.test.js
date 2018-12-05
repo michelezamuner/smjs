@@ -13,11 +13,15 @@ test('defaults to zero', () => {
 });
 
 test('implements size', () => {
-    expect(Double.SIZE).toBe(4);
+    expect(Double.SIZE).toStrictEqual(new Byte(4));
 });
 
 test('implements unit type', () => {
     expect(Double.UNIT_TYPE).toBe(Byte);
+});
+
+test('implements scalar size', () => {
+    expect(Double._SCALAR_SIZE).toBe(4);
 });
 
 test('can be constructed from four bytes', () => {

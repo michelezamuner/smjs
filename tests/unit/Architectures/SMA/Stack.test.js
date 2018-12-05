@@ -37,12 +37,12 @@ test('can push any type', () => {
         const bytes = value.expand();
 
         stack.push(value);
-        for (let i = 0; i < type.SIZE; i++) {
+        for (let i = 0; i < parseInt(type.SIZE); i++) {
             expect(memory.write.mock.calls[i][0]).toStrictEqual(stackPointer.sub(new Word(i + 1)));
             expect(memory.write.mock.calls[i][1]).toStrictEqual(bytes[i]);
         }
 
-        stackPointer = stackPointer.sub(new Word(type.SIZE));
+        stackPointer = stackPointer.sub(type.SIZE);
     }
 });
 
@@ -54,13 +54,13 @@ test('can pop value of given type', () => {
 
         stack.push(value);
 
-        address = address.sub(new Word(type.SIZE));
+        address = address.sub(type.SIZE);
         // Values are stored in the stack with the stack pointer pointing to the LSB
         memory.readSet = (addr, size) =>
-            addr.eq(address) && size.eq(new Byte(type.SIZE)) ? value.expand().reverse() : null;
+            addr.eq(address) && size.eq(type.SIZE) ? value.expand().reverse() : null;
 
         const result = stack.pop(type);
-        address = address.add(new Word(type.SIZE));
+        address = address.add(type.SIZE);
 
         expect(result).toStrictEqual(value);
     }
@@ -129,7 +129,7 @@ test('can pop frames', () => {
 
         // Store return address and old base pointer
         mockMemory[stackPointer] = returnAddress.expand();
-        mockMemory[stackPointer.add(new Word(Word.SIZE))] = basePointer.expand();
+        mockMemory[stackPointer.add(Word.SIZE)] = basePointer.expand();
 
         // Update new base pointer
         basePointer = stackPointer;
@@ -138,13 +138,13 @@ test('can pop frames', () => {
         stack.push(random(Byte));
         stack.push(random(Word));
         stack.push(random(Double));
-        stackPointer = stackPointer.sub(new Word(Byte.SIZE + Word.SIZE + Double.SIZE));
+        stackPointer = stackPointer.sub(Byte.SIZE.add(Word.SIZE).add(Double.SIZE));
     }
 
     // Mock memory
     // Values are stored in the stack with the stack pointer pointing to the LSB
     memory.readSet = (addr, size) =>
-        (addr in mockMemory) && size.eq(new Byte(Word.SIZE)) ? mockMemory[addr].reverse() : null;
+        (addr in mockMemory) && size.eq(Word.SIZE) ? mockMemory[addr].reverse() : null;
 
     for (let i = framesCount - 1; i >= 0; i--) {
         // Pop frame

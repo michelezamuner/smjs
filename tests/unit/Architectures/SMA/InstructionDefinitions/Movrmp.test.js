@@ -45,7 +45,7 @@ test('implements move register to memory pointer', () => {
         const valueb = value.expand();
 
         registers.get = reg => reg.eq(new RegisterAddress(register)) ? value : null;
-        memory.readSet = (addr, size) => addr.eq(ptr) && size.eq(new Byte(0x02)) ? mem.expand() : null;
+        memory.readSet = (addr, size) => addr.eq(ptr) && size.eq(Word.SIZE) ? mem.expand() : null;
 
         definition.exec(...ptr.expand(), register);
 

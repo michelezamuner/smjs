@@ -52,7 +52,7 @@ module.exports = class Stack {
         }
 
         const bytes = value.expand();
-        for (let i = 0; i < value.constructor.SIZE; i++) {
+        for (let i = 0; i < parseInt(value.constructor.SIZE); i++) {
             this._memory.write(this._stackPointer.sub(new Word(i + 1)), bytes[i]);
         }
 
@@ -75,7 +75,7 @@ module.exports = class Stack {
             throw new Error('Stack underflow');
         }
 
-        const bytes = this._memory.readSet(this._stackPointer, new Byte(type.SIZE));
+        const bytes = this._memory.readSet(this._stackPointer, type.SIZE);
         // Values are saved with LSB first
         const value = new type(...bytes.reverse());
         this._stackPointer = newStackPointer;
@@ -110,26 +110,26 @@ module.exports = class Stack {
     }
 
     /**
-     * @param {number} size
+     * @param {Byte} size
      * @return {Word}
      * @private
      */
     _advanceStackPointer(size) {
         try {
-            return this._stackPointer.sub(new Word(size));
+            return this._stackPointer.sub(size);
         } catch (e) {
             throw 'Stack overflow';
         }
     }
 
     /**
-     * @param {number} size
+     * @param {Byte} size
      * @return {Word}
      * @private
      */
     _regressStackPointer(size) {
         try {
-            return this._stackPointer.add(new Word(size));
+            return this._stackPointer.add(size);
         } catch (e) {
             throw 'Stack underflow';
         }

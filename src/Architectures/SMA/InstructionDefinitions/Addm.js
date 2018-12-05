@@ -3,7 +3,6 @@ const Registers = require('../Registers');
 const RegisterAddress = require('../RegisterAddress');
 const Memory = require('../../../ProcessorInterfaces/Memory');
 const Word = require('../../../DataTypes/Word');
-const Byte = require('../../../DataTypes/Byte');
 
 module.exports = class Addm extends Definition {
     /**
@@ -31,7 +30,7 @@ module.exports = class Addm extends Definition {
         const mem = new Word(byte3, byte4);
         const left = this._registers.get(address);
         const type = address.getType();
-        const right = new type(...this._memory.readSet(mem, new Byte(type.SIZE)));
+        const right = new type(...this._memory.readSet(mem, type.SIZE));
         this._registers.set(address, left.add(right));
     }
 };

@@ -1,6 +1,5 @@
 const Definition = require('../InstructionSet/Definition');
 const Memory = require('../../../ProcessorInterfaces/Memory');
-const Byte = require('../../../DataTypes/Byte');
 const Word = require('../../../DataTypes/Word');
 
 /**
@@ -27,7 +26,7 @@ module.exports = class Movimp extends Definition {
      */
     exec(byte2, byte3, byte4) {
         const address = new Word(byte2, byte3);
-        const actual = new Word(...this._memory.readSet(address, new Byte(0x02)));
+        const actual = new Word(...this._memory.readSet(address, Word.SIZE));
         this._memory.write(actual, byte4);
     }
 };

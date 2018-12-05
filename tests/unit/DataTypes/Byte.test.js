@@ -12,9 +12,13 @@ test('defaults to zero', () => {
 });
 
 test('implements size', () => {
-    expect(Byte.SIZE).toBe(1);
+    expect(Byte.SIZE).toStrictEqual(new Byte(0x01));
 });
 
 test('implements unit type', () => {
     expect(Byte.UNIT_TYPE).toBe(Byte);
+});
+
+test('implements scalar size', () => {
+    expect(Byte._SCALAR_SIZE).toBe(1);
 });

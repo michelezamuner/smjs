@@ -13,11 +13,15 @@ test('defaults to zero', () => {
 });
 
 test('implements size', () => {
-    expect(Word.SIZE).toBe(2);
+    expect(Word.SIZE).toStrictEqual(new Byte(0x02));
 });
 
 test('implements unit type', () => {
     expect(Word.UNIT_TYPE).toBe(Byte);
+});
+
+test('implements scalar size', () => {
+    expect(Word._SCALAR_SIZE).toBe(2);
 });
 
 test('can be constructed from two bytes', () => {

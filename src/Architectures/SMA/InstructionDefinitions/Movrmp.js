@@ -33,8 +33,8 @@ module.exports = class Movrmp extends Definition {
         const address = new Word(byte2, byte3);
         const register = new RegisterAddress(byte4);
         const bytes = this._registers.get(register).expand();
-        const actual = new Word(...this._memory.readSet(address, new Byte(0x02)));
-        for (let i = 0; i< register.getType().SIZE; i++) {
+        const actual = new Word(...this._memory.readSet(address, Word.SIZE));
+        for (let i = 0; i < bytes.length; i++) {
             this._memory.write(actual.add(new Byte(i)), bytes[i]);
         }
     }

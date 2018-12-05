@@ -2,7 +2,6 @@ const Definition = require('../InstructionSet/Definition');
 const Registers = require('../Registers');
 const Memory = require('../../../../src/ProcessorInterfaces/Memory');
 const Stack = require('../Stack');
-const Byte = require('../../../DataTypes/Byte');
 const Word = require('../../../DataTypes/Word');
 
 module.exports = class Retmw extends Definition {
@@ -29,7 +28,7 @@ module.exports = class Retmw extends Definition {
      * @inheritDoc
      */
     exec(byte2, byte3, byte4) {
-        const value = new Word(...this._memory.readSet(new Word(byte2, byte3), new Byte(Word.SIZE)));
+        const value = new Word(...this._memory.readSet(new Word(byte2, byte3), Word.SIZE));
         this._registers.setIp(this._stack.popFrame());
         this._stack.push(value);
     }

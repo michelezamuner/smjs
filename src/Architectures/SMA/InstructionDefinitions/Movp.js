@@ -2,7 +2,6 @@ const Definition = require('../InstructionSet/Definition');
 const Registers = require('../Registers');
 const Memory = require('../../../ProcessorInterfaces/Memory');
 const RegisterAddress = require('../RegisterAddress');
-const Byte = require('../../../DataTypes/Byte');
 
 /**
  * @implements Definition
@@ -38,7 +37,7 @@ module.exports = class Movp extends Definition {
 
         const addr = this._registers.get(source);
         const type = dest.getType();
-        const value = this._memory.readSet(addr, new Byte(type.SIZE));
+        const value = this._memory.readSet(addr, type.SIZE);
         this._registers.set(dest, new type(...value));
     }
 };

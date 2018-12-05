@@ -45,5 +45,5 @@ test('implements move immediate to register', () => {
 
     definition.exec(Register.eax, ...bytes);
     expect(registers.set.mock.calls[2][0]).toStrictEqual(new RegisterAddress(Register.eax));
-    expect(registers.set.mock.calls[2][1]).toStrictEqual(new Double(new Byte(0x00), new Byte(0x00), ...bytes));
+    expect(registers.set.mock.calls[2][1]).toStrictEqual((new Word(...bytes)).cast(Double));
 });

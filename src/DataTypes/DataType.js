@@ -3,7 +3,7 @@
  */
 module.exports = class DataType {
     /**
-     * @return {number}
+     * @return {DataType}
      */
     static get SIZE() {
         throw 'Not implemented';
@@ -13,6 +13,14 @@ module.exports = class DataType {
      * @return {function}
      */
     static get UNIT_TYPE() {
+        throw 'Not implemented';
+    }
+
+    /**
+     * @return {number}
+     * @private
+     */
+    static get _SCALAR_SIZE() {
         throw 'Not implemented';
     }
 
@@ -65,9 +73,10 @@ module.exports = class DataType {
             value = (value - remainder) / 0x100;
         }
         const bytes = [];
-        for (let i = 0; i < this.constructor.SIZE; i++) {
+        for (let i = 0; i < this.constructor._SCALAR_SIZE; i++) {
             bytes[i] = values[i] ? values[i] : 0x00;
         }
+
         return bytes.reverse().map(val => new this.constructor.UNIT_TYPE(val));
     }
 
@@ -76,8 +85,8 @@ module.exports = class DataType {
      * @return {DataType}
      */
     cast(type) {
-        if (type.SIZE < this.constructor.SIZE) {
-            throw new Error(`Cannot cast data type of size ${this.constructor.SIZE} to data type of size ${type.SIZE}`);
+        if (type.SIZE < this.constructor._SCALAR_SIZE) {
+            throw new Error(`Cannot cast data type of size ${this.constructor._SCALAR_SIZE} to data type of size ${type._SCALAR_SIZE}`);
         }
 
         return new type(this._value);
@@ -118,7 +127,7 @@ module.exports = class DataType {
      * @return {DataType}
      */
     mul(dataType) {
-        if (dataType.constructor.SIZE !== this.constructor.SIZE) {
+        if (dataType.constructor._SCALAR_SIZE !== this.constructor._SCALAR_SIZE) {
             throw new Error(`Type mismatch: cannot multiply types of different sizes`);
         }
 
@@ -174,7 +183,7 @@ module.exports = class DataType {
         }
 
         if (value > this._getMax()) {
-            throw new Error(`Value out of bounds for type of size ${this.constructor.SIZE}: ${value}`);
+            throw new Error(`Value out of bounds for type of size ${this.constructor._SCALAR_SIZE}: ${value}`);
         }
 
         return value;
@@ -185,6 +194,6 @@ module.exports = class DataType {
      * @private
      */
     _getMax() {
-        return 2 ** (8 * this.constructor.SIZE) - 1;
+        return 2 ** (8 * this.constructor._SCALAR_SIZE) - 1;
     }
 };
