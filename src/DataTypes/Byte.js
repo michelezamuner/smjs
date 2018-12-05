@@ -5,7 +5,7 @@ module.exports = class Byte extends DataType {
      * @inheritDoc
      */
     static get SIZE() {
-        return 1;
+        return new Byte(1);
     }
 
     /**
@@ -13,6 +13,13 @@ module.exports = class Byte extends DataType {
      */
     static get UNIT_TYPE() {
         return Byte;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    static get _SCALAR_SIZE() {
+        return 1;
     }
 
     /**

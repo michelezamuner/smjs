@@ -37,9 +37,8 @@ module.exports = class Movrp extends Definition {
         }
 
         const bytes = this._registers.get(source).expand();
-        const type = source.getType();
         const actual = this._registers.get(target);
-        for (let i = 0; i < type.SIZE; i++) {
+        for (let i = 0; i < bytes.length; i++) {
             this._memory.write(actual.add(new Byte(i)), bytes[i]);
         }
     }

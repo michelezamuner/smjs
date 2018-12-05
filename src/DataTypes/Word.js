@@ -6,7 +6,7 @@ module.exports = class Word extends DataType {
      * @inheritDoc
      */
     static get SIZE() {
-        return 2;
+        return new Byte(2);
     }
 
     /**
@@ -14,6 +14,13 @@ module.exports = class Word extends DataType {
      */
     static get UNIT_TYPE() {
         return Byte;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    static get _SCALAR_SIZE() {
+        return 2;
     }
 
     /**

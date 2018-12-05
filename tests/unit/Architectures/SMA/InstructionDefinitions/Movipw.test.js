@@ -47,7 +47,7 @@ test('implements move immediate to byte register pointer', () => {
 
     expect(memory.write.mock.calls[0][0]).toStrictEqual(address);
     expect(memory.write.mock.calls[0][1]).toStrictEqual(bytes[0]);
-    expect(memory.write.mock.calls[1][0]).toStrictEqual(address.add(new Byte(0x01)));
+    expect(memory.write.mock.calls[1][0]).toStrictEqual(address.inc());
     expect(memory.write.mock.calls[1][1]).toStrictEqual(bytes[1]);
 });
 

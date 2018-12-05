@@ -31,8 +31,8 @@ test('accepts only positive integers', () => {
 });
 
 test('fails if value out of bounds', () => {
-    const value = 2 ** (8 * Type.SIZE);
-    expect(() => new Type(value)).toThrow(new Error(`Value out of bounds for type of size ${Type.SIZE}: ${value}`));
+    const value = 2 ** (8 * parseInt(Type.SIZE));
+    expect(() => new Type(value)).toThrow(new Error(`Value out of bounds for type of size ${parseInt(Type.SIZE)}: ${value}`));
 });
 
 test('support copy constructor', () => {
@@ -59,10 +59,13 @@ test('expand to list of unit data types', () => {
     const size = 2 ** Math.floor(Math.random() * 3);
     class TypeToExpand extends DataType {
         static get SIZE() {
-            return size;
+            return new TypeToExpand(size);
         }
         static get UNIT_TYPE() {
             return TypeToExpand;
+        }
+        static get _SCALAR_SIZE() {
+            return size;
         }
         constructor(value) {
             super(value);
@@ -98,7 +101,7 @@ test('cannot cast to a smaller data type', () => {
     const value = random(Bigger);
 
     expect(() => value.cast(Smaller))
-        .toThrow(new Error(`Cannot cast data type of size ${Bigger.SIZE} to data type of size ${Smaller.SIZE}`));
+        .toThrow(new Error(`Cannot cast data type of size ${parseInt(Bigger.SIZE)} to data type of size ${parseInt(Smaller.SIZE)}`));
 });
 
 test('cast to a bigger data type', () => {
@@ -178,8 +181,14 @@ test('fails if not multiplying for same sized type', () => {
  * @return {function}
  */
 function createDataType(size) {
-    return class extends DataType {
+    return class Type extends DataType {
         static get SIZE() {
+            return new Type(size);
+        }
+        static get UNIT_TYPE() {
+            return Type;
+        }
+        static get _SCALAR_SIZE() {
             return size;
         }
         constructor(value) {

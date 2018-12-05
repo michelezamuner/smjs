@@ -127,7 +127,7 @@ module.exports = class Assembler {
                 type: type,
                 bytes: bytes,
             });
-            address = address.add(new Byte(type.SIZE * size));
+            address = address.add(new Byte(parseInt(type.SIZE) * size));
         }
         for (const line of bssSegment) {
             const parts = line.split(/\s+/);
@@ -138,7 +138,7 @@ module.exports = class Assembler {
                 address: address,
                 type: type,
             });
-            address = address.add(new Byte(type.SIZE * size));
+            address = address.add(new Byte(parseInt(type.SIZE) * size));
         }
     }
 
@@ -305,7 +305,7 @@ module.exports = class Assembler {
         }
 
         if (symbolFirst && immediate !== undefined) {
-            const address = symbolFirst.address.add(new Byte(symbolFirst.type.SIZE - 1));
+            const address = symbolFirst.address.add(symbolFirst.type.SIZE.dec());
             return [Instruction.movim, ...address.expand(), new Byte(immediate)];
         }
 
@@ -349,7 +349,7 @@ module.exports = class Assembler {
         }
 
         if (tableFirst && immediate) {
-            const address = this._getTableItemAddress(tableFirst).add(new Byte(tableFirst.symbol.type.SIZE - 1));
+            const address = this._getTableItemAddress(tableFirst).add(tableFirst.symbol.type.SIZE.dec());
             return [Instruction.movim, ...address.expand(), new Byte(immediate)];
         }
 
@@ -655,6 +655,7 @@ module.exports = class Assembler {
      * @private
      */
     _getTableItemAddress(tableOperand) {
-        return tableOperand.symbol.address.add(new Byte(tableOperand.symbol.type.SIZE * tableOperand.index));
+        return tableOperand.symbol.address
+            .add(new Byte(parseInt(tableOperand.symbol.type.SIZE) * tableOperand.index));
     }
 };

@@ -2,7 +2,6 @@ const Movp = require('../../../../../src/Architectures/SMA/InstructionDefinition
 const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/Definition');
 const Registers = require('../../../../../src/Architectures/SMA/Registers');
 const Memory = require('../../../../../src/ProcessorInterfaces/Memory');
-const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const Register = require('../../../../../src/Architectures/SMA/Mnemonics').register;
 const RegisterAddress = require('../../../../../src/Architectures/SMA/RegisterAddress');
@@ -43,9 +42,9 @@ test('implements move register pointer to register', () => {
         const mem = random(Word);
 
         registers.get = reg => reg.eq(new RegisterAddress(Register.bx)) ? mem : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type.SIZE)) ? value.expand() : null;
+        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? value.expand() : null;
 
-        definition.exec(reg, Register.bx, new Byte(0x00));
+        definition.exec(reg, Register.bx);
 
         expect(registers.set.mock.calls[0][0]).toStrictEqual(new RegisterAddress(reg));
         expect(registers.set.mock.calls[0][1]).toStrictEqual(value);
@@ -60,7 +59,7 @@ test('fails if size mismatch on move register pointer to register', () => {
         Register.dh, Register.dl, Register.edx,
     ];
     for (const register of forbidden) {
-        expect(() => definition.exec(Register.eax, register, new Byte(0x00)))
+        expect(() => definition.exec(Register.eax, register))
             .toThrow(`Cannot use register ${new RegisterAddress(register)} as pointer`);
     }
 });

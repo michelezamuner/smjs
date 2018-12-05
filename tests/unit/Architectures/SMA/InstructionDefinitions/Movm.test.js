@@ -2,7 +2,6 @@ const Movm = require('../../../../../src/Architectures/SMA/InstructionDefinition
 const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/Definition');
 const Registers = require('../../../../../src/Architectures/SMA/Registers');
 const Memory = require('../../../../../src/ProcessorInterfaces/Memory');
-const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const Register = require('../../../../../src/Architectures/SMA/Mnemonics').register;
 const RegisterAddress = require('../../../../../src/Architectures/SMA/RegisterAddress');
@@ -43,7 +42,7 @@ test('implements move memory to register', () => {
         const type = new RegisterAddress(register).getType();
         const value = random(type);
 
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(new Byte(type.SIZE)) ? value.expand() : null;
+        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? value.expand() : null;
 
         definition.exec(register, ...mem.expand());
 

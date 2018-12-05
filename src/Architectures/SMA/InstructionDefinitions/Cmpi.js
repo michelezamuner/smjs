@@ -43,7 +43,7 @@ module.exports = class Cmpi extends Definition {
      */
     _getValue(registerAddress, byte3, byte4) {
         if (registerAddress.isWhole()) {
-            return new Double(new Byte(0x00), new Byte(0x00), byte3, byte4);
+            return (new Word(byte3, byte4)).cast(Double);
         }
 
         if (registerAddress.isHalf()) {

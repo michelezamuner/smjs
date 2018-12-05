@@ -2,7 +2,6 @@ const Pushmd = require('../../../../../src/Architectures/SMA/InstructionDefiniti
 const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/Definition');
 const Memory = require('../../../../../src/ProcessorInterfaces/Memory');
 const Stack = require('../../../../../src/Architectures/SMA/Stack');
-const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const Double = require('../../../../../src/DataTypes/Double');
 const random = require('../../../random');
@@ -39,7 +38,7 @@ test('pushes memory double value to the stack', () => {
     const addr = random(Word);
     const value = random(Double);
 
-    memory.readSet = (mem, size) => mem.eq(addr) && size.eq(new Byte(Double.SIZE)) ? value.expand() : null;
+    memory.readSet = (mem, size) => mem.eq(addr) && size.eq(Double.SIZE) ? value.expand() : null;
 
     definition.exec(...addr.expand());
 

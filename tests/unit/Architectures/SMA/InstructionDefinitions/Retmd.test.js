@@ -3,7 +3,6 @@ const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/
 const Registers = require('../../../../../src/Architectures/SMA/Registers');
 const Memory = require('../../../../../src/ProcessorInterfaces/Memory');
 const Stack = require('../../../../../src/Architectures/SMA/Stack');
-const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const Double = require('../../../../../src/DataTypes/Double');
 const random = require('../../../random');
@@ -57,7 +56,7 @@ test('pops stack frame and jumps to the return address pushing memory byte as re
     });
 
     memory.readSet = (addr, size) =>
-        addr.eq(returnValueAddress) && size.eq(new Byte(Double.SIZE)) ? returnValue.expand() : null;
+        addr.eq(returnValueAddress) && size.eq(Double.SIZE) ? returnValue.expand() : null;
 
     definition.exec(...returnValueAddress.expand());
 

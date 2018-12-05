@@ -30,7 +30,7 @@ module.exports = class Mulm extends Definition {
     exec(byte2, byte3, byte4) {
         const multiplicandRegister = new RegisterAddress(byte2);
         const type = multiplicandRegister.getType();
-        const multiplier = this._memory.readSet(new Word(byte3, byte4), new Byte(type.SIZE));
+        const multiplier = this._memory.readSet(new Word(byte3, byte4), type.SIZE);
         this[`_multiply${type.name}s`](multiplicandRegister, multiplier);
     }
 

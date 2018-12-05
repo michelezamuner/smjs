@@ -47,7 +47,7 @@ module.exports = class Movi extends Definition {
         }
 
         if (register.isWhole()) {
-            return new Double(new Byte(0x00), new Byte(0x00), byte3, byte4);
+            return (new Word(byte3, byte4)).cast(Double);
         }
 
         return new Word(byte3, byte4);
