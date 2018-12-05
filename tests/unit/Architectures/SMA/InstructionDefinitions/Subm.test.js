@@ -47,7 +47,7 @@ test('implements add register to memory', () => {
         const mem = random(Word);
 
         registers.get = reg => reg.eq(registerAddress) ? left : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? right.expand() : null;
+        memory.read = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? right.expand() : null;
 
         definition.exec(register, ...mem.expand());
 

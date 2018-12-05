@@ -75,7 +75,7 @@ module.exports = class Stack {
             throw new Error('Stack underflow');
         }
 
-        const bytes = this._memory.readSet(this._stackPointer, type.SIZE);
+        const bytes = this._memory.read(this._stackPointer, type.SIZE);
         // Values are saved with LSB first
         const value = new type(...bytes.reverse());
         this._stackPointer = newStackPointer;

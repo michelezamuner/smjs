@@ -42,7 +42,7 @@ test('implements move memory to register', () => {
         const type = new RegisterAddress(register).getType();
         const value = random(type);
 
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? value.expand() : null;
+        memory.read = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? value.expand() : null;
 
         definition.exec(register, ...mem.expand());
 

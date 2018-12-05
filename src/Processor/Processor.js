@@ -31,7 +31,7 @@ module.exports = class Processor {
                 throw new MissingExitException('Missing exit instruction');
             }
 
-            const instruction = this._memory.readSet(this._registers.getIp(), this._interpreter.getInstructionSize());
+            const instruction = this._memory.read(this._registers.getIp(), this._interpreter.getInstructionSize());
             this._registers.setIp(this._registers.getIp().add(this._interpreter.getInstructionSize()));
 
             this._interpreter.exec(instruction);

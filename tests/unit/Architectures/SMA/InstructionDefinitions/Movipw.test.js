@@ -38,17 +38,14 @@ test('implements get dependencies', () => {
 
 test('implements move immediate to byte register pointer', () => {
     const value = random(Word);
-    const bytes = value.expand();
     const address = random(Word);
 
     registers.get = reg => reg.eq(new RegisterAddress(Register.ax)) ? address : null;
 
-    definition.exec(Register.ax, ...bytes);
+    definition.exec(Register.ax, ...value.expand());
 
     expect(memory.write.mock.calls[0][0]).toStrictEqual(address);
-    expect(memory.write.mock.calls[0][1]).toStrictEqual(bytes[0]);
-    expect(memory.write.mock.calls[1][0]).toStrictEqual(address.inc());
-    expect(memory.write.mock.calls[1][1]).toStrictEqual(bytes[1]);
+    expect(memory.write.mock.calls[0][1]).toStrictEqual(value);
 });
 
 test('fails if size mismatch on move immediate to byte register pointer', () => {

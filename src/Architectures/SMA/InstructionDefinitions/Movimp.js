@@ -26,7 +26,7 @@ module.exports = class Movimp extends Definition {
      */
     exec(byte2, byte3, byte4) {
         const address = new Word(byte2, byte3);
-        const actual = new Word(...this._memory.readSet(address, Word.SIZE));
+        const actual = new Word(...this._memory.read(address, Word.SIZE));
         this._memory.write(actual, byte4);
     }
 };

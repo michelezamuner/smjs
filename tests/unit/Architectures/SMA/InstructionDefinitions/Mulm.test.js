@@ -49,7 +49,7 @@ test('implements multiply register byte by memory', () => {
         const resultRegister = Register[`${x}x`];
 
         registers.get = reg => reg.eq(new RegisterAddress(multiplicandRegister)) ? multiplicand : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(Byte.SIZE) ? multiplier.expand() : null;
+        memory.read = (addr, size) => addr.eq(mem) && size.eq(Byte.SIZE) ? multiplier.expand() : null;
 
         definition.exec(multiplicandRegister, ...mem.expand());
 
@@ -71,7 +71,7 @@ test('implements multiply register word by memory', () => {
         const resultRegister = Register[`e${x}x`];
 
         registers.get = reg => reg.eq(new RegisterAddress(multiplicandRegister)) ? multiplicand : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(Word.SIZE) ? multiplier.expand() : null;
+        memory.read = (addr, size) => addr.eq(mem) && size.eq(Word.SIZE) ? multiplier.expand() : null;
 
         definition.exec(multiplicandRegister, ...mem.expand());
 
@@ -99,7 +99,7 @@ test('implements multiply register double by memory', () => {
         registers.get = reg => reg.eq(new RegisterAddress(multiplicandRegister)) ? multiplicand : null;
         registers.getResultLowRegister = () => Register.edx;
         registers.getResultLowRegisterAlternate = () => Register.eax;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(Double.SIZE) ? multiplier.expand() : null;
+        memory.read = (addr, size) => addr.eq(mem) && size.eq(Double.SIZE) ? multiplier.expand() : null;
 
         definition.exec(multiplicandRegister, ...mem.expand());
 

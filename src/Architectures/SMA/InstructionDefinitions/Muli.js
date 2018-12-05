@@ -72,7 +72,7 @@ module.exports = class Muli extends Definition {
             : new RegisterAddress(this._registers.getResultLowRegister());
         const resultHighRegister = multiplicandRegister;
         const multiplicand = this._registers.get(multiplicandRegister);
-        const multiplier = new Double(new Byte(), new Byte(), byte3, byte4);
+        const multiplier = new Word(byte3, byte4).cast(Double);
         const result = multiplicand.mul(multiplier);
         this._registers.set(resultHighRegister, result[0]);
         this._registers.set(resultLowRegister, result[1]);

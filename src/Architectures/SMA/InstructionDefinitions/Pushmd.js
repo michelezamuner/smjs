@@ -26,7 +26,7 @@ module.exports = class Pushmd extends Definition {
      * @inheritDoc
      */
     exec(byte2, byte3, byte4) {
-        const bytes = this._memory.readSet(new Word(byte2, byte3), Double.SIZE);
+        const bytes = this._memory.read(new Word(byte2, byte3), Double.SIZE);
         const value = new Double(...bytes);
         this._stack.push(value);
     }

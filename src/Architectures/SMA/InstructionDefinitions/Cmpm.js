@@ -29,7 +29,7 @@ module.exports = class Cmpm extends Definition {
         const registerAddress = new RegisterAddress(byte2);
         const type = registerAddress.getType();
         const left = this._registers.get(registerAddress);
-        const right = new type(...this._memory.readSet(new Word(byte3, byte4), type.SIZE));
+        const right = new type(...this._memory.read(new Word(byte3, byte4), type.SIZE));
         this._registers.setFlag(Registers.FLAG_EQ, left.eq(right));
         this._registers.setFlag(Registers.FLAG_LT, left.lt(right));
         this._registers.setFlag(Registers.FLAG_GT, left.gt(right));

@@ -2,7 +2,6 @@ const Definition = require('../InstructionSet/Definition');
 const Registers = require('../Registers');
 const Memory = require('../../../ProcessorInterfaces/Memory');
 const RegisterAddress = require('../RegisterAddress');
-const Byte = require('../../../DataTypes/Byte');
 const Word = require('../../../DataTypes/Word');
 const Double = require('../../../DataTypes/Double');
 
@@ -38,9 +37,6 @@ module.exports = class Movipd extends Definition {
             throw `Cannot use register ${register} as pointer`;
         }
         const address = this._registers.get(register);
-        const bytes = value.cast(Double).expand();
-        for (let i = 0; i < bytes.length; i++) {
-            this._memory.write(address.add(new Byte(i)), bytes[i]);
-        }
+        this._memory.write(address, value.cast(Double));
     }
 };

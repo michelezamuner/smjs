@@ -30,7 +30,7 @@ module.exports = class Subm extends Definition {
         const mem = new Word(byte3, byte4);
         const left = this._registers.get(address);
         const type = address.getType();
-        const right = new type(...this._memory.readSet(mem, type.SIZE));
+        const right = new type(...this._memory.read(mem, type.SIZE));
         this._registers.set(address, left.sub(right));
     }
 };

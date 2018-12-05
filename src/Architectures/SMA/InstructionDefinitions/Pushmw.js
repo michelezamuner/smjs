@@ -25,7 +25,7 @@ module.exports = class Pushmw extends Definition {
      * @inheritDoc
      */
     exec(byte2, byte3, byte4) {
-        const bytes = this._memory.readSet(new Word(byte2, byte3), Word.SIZE);
+        const bytes = this._memory.read(new Word(byte2, byte3), Word.SIZE);
         const value = new Word(...bytes);
         this._stack.push(value);
     }

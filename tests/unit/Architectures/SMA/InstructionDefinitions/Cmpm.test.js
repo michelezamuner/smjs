@@ -46,7 +46,7 @@ test('implements compare register to memory', () => {
         const mem = random(Word);
 
         registers.get = reg => reg.eq(registerAddress) ? value : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? value.expand() : null;
+        memory.read = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? value.expand() : null;
 
         definition.exec(register, ...mem.expand());
 
@@ -58,7 +58,7 @@ test('implements compare register to memory', () => {
         expect(registers.setFlag.mock.calls[index * 9 + 2][1]).toStrictEqual(false);
 
         registers.get = reg => reg.eq(registerAddress) ? value.dec() : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? value.expand() : null;
+        memory.read = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? value.expand() : null;
 
         definition.exec(register, ...mem.expand());
 
@@ -70,7 +70,7 @@ test('implements compare register to memory', () => {
         expect(registers.setFlag.mock.calls[index * 9 + 5][1]).toStrictEqual(false);
 
         registers.get = reg => reg.eq(registerAddress) ? value.inc() : null;
-        memory.readSet = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? value.expand() : null;
+        memory.read = (addr, size) => addr.eq(mem) && size.eq(type.SIZE) ? value.expand() : null;
 
         definition.exec(register, ...mem.expand());
 

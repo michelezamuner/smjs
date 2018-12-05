@@ -29,7 +29,7 @@ module.exports = class Retmd extends Definition {
      * @inheritDoc
      */
     exec(byte2, byte3, byte4) {
-        const value = new Double(...this._memory.readSet(new Word(byte2, byte3), Double.SIZE));
+        const value = new Double(...this._memory.read(new Word(byte2, byte3), Double.SIZE));
         this._registers.setIp(this._stack.popFrame());
         this._stack.push(value);
     }

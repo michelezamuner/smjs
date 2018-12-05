@@ -15,8 +15,6 @@ module.exports = class Loader {
      */
     load(data) {
         const bytes = data.split('').map(char => new Byte(char.charCodeAt(0)));
-        for (const address in bytes) {
-            this._memory.write(new this._addressType(parseInt(address)), bytes[address]);
-        }
+        this._memory.write(new this._addressType(0), bytes);
     }
 };

@@ -32,7 +32,7 @@ module.exports = class Movm extends Definition {
         const register = new RegisterAddress(byte2);
         const address = new Word(byte3, byte4);
         const type = register.getType();
-        const value = this._memory.readSet(address, type.SIZE);
+        const value = this._memory.read(address, type.SIZE);
         this._registers.set(register, new type(...value));
     }
 };

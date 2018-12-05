@@ -56,7 +56,7 @@ test('can pop value of given type', () => {
 
         address = address.sub(type.SIZE);
         // Values are stored in the stack with the stack pointer pointing to the LSB
-        memory.readSet = (addr, size) =>
+        memory.read = (addr, size) =>
             addr.eq(address) && size.eq(type.SIZE) ? value.expand().reverse() : null;
 
         const result = stack.pop(type);
@@ -143,7 +143,7 @@ test('can pop frames', () => {
 
     // Mock memory
     // Values are stored in the stack with the stack pointer pointing to the LSB
-    memory.readSet = (addr, size) =>
+    memory.read = (addr, size) =>
         (addr in mockMemory) && size.eq(Word.SIZE) ? mockMemory[addr].reverse() : null;
 
     for (let i = framesCount - 1; i >= 0; i--) {
@@ -160,7 +160,7 @@ test('can pop frames', () => {
 
 test('fails when underflow', () => {
     memory.write = () => null;
-    memory.readSet = () => [];
+    memory.read = () => [];
 
     stack.push(random(Word));
     stack.push(random(Byte));
@@ -186,7 +186,7 @@ test('fails with underflow because of data type exception', () => {
 
 test('fails when overflow', () => {
     memory.write = () => null;
-    memory.readSet = () => [];
+    memory.read = () => [];
 
     for (let i = 0; i < parseInt(stackSize) - 1; i++) {
         stack.push(random(Byte));

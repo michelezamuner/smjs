@@ -1,6 +1,7 @@
 const Definition = require('../InstructionSet/Definition');
 const Memory = require('../../../ProcessorInterfaces/Memory');
 const Word = require('../../../DataTypes/Word');
+const Byte = require('../../../DataTypes/Byte');
 const Stack = require('../Stack');
 
 module.exports = class Pushmb extends Definition {
@@ -25,7 +26,7 @@ module.exports = class Pushmb extends Definition {
      * @inheritDoc
      */
     exec(byte2, byte3, byte4) {
-        const value = this._memory.read(new Word(byte2, byte3));
-        this._stack.push(value);
+        const value = this._memory.read(new Word(byte2, byte3), Byte.SIZE);
+        this._stack.push(value[0]);
     }
 };

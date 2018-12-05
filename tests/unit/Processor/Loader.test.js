@@ -20,14 +20,15 @@ beforeEach(() => {
 });
 
 test('loads bytes into memory', () => {
-    let bytes = '';
+    let chars = '';
+    const bytes = [];
     for (let i = 0x00; i < 0xFF; i++) {
-        bytes += String.fromCharCode(0xFF - i);
+        chars += String.fromCharCode(0xFF - i);
+        bytes.push(new Byte(0xFF - i));
     }
-    loader.load(bytes);
 
-    expect(memory.write).toBeCalledTimes(0xFF);
-    for (let i = 0x00; i < 0xFF; i++) {
-        expect(memory.write).nthCalledWith(i + 1, new Byte(i), new Byte(0xFF - i));
-    }
+    loader.load(chars);
+
+    expect(memory.write.mock.calls[0][0]).toStrictEqual(new Word());
+    expect(memory.write.mock.calls[0][1]).toStrictEqual(bytes);
 });

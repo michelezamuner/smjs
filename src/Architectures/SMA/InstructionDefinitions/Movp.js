@@ -37,7 +37,7 @@ module.exports = class Movp extends Definition {
 
         const addr = this._registers.get(source);
         const type = dest.getType();
-        const value = this._memory.readSet(addr, type.SIZE);
+        const value = this._memory.read(addr, type.SIZE);
         this._registers.set(dest, new type(...value));
     }
 };
