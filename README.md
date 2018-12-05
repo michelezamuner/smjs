@@ -115,9 +115,7 @@ Move instruction:
 ## TODO
 
 - Either add instructions movimpb, movimpw, movimpd (because different sizes cannot be supported from the assembler using movimp), or remove movimp altogether and let the assembler do the trick of writing in the correct place of memory (also if using RASM pointers are pretty pointless since we know all memory addresses explicitly). If going for the second, consider removing all pointer instructions from SMA, and implement them only on BASM. BASM code should not rely on defining _low variables because of these types problems.
-- Memory should only have `read()` and `write()` taking address and size (default one)
 - Decide how to handle negative numbers as result of subtract
 - create an authoritative source of definitions within an interpreter implementation, so that all of its modules can use it instead of duplicating decisions in code
 - remove interface classes, which are unnecessary, and replace them with docblocs. Do not require things only to use them in docblocks
 - add a caching instruction set that doesn't require re-loading again the same instructions from disk
-- data types SIZE should already return a base data type

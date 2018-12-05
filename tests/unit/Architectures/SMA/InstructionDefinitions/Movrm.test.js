@@ -2,7 +2,6 @@ const Movrm = require('../../../../../src/Architectures/SMA/InstructionDefinitio
 const Definition = require('../../../../../src/Architectures/SMA/InstructionSet/Definition');
 const Registers = require('../../../../../src/Architectures/SMA/Registers');
 const Memory = require('../../../../../src/ProcessorInterfaces/Memory');
-const Byte = require('../../../../../src/DataTypes/Byte');
 const Word = require('../../../../../src/DataTypes/Word');
 const Register = require('../../../../../src/Architectures/SMA/Mnemonics').register;
 const RegisterAddress = require('../../../../../src/Architectures/SMA/RegisterAddress');
@@ -39,17 +38,14 @@ test('implements move register to memory', () => {
     for (const register of [Register.ah, Register.ax, Register.eax]) {
         memory.write = jest.fn();
         const mem = random(Word);
-        const type = new RegisterAddress(register).getType();
-        const value = random(type);
-        const valueb = value.expand();
+        const registerAddress = new RegisterAddress(register);
+        const value = random(registerAddress.getType());
 
-        registers.get = reg => reg.eq(new RegisterAddress(register)) ? value : null;
+        registers.get = reg => reg.eq(registerAddress) ? value : null;
 
         definition.exec(...mem.expand(), register);
 
-        for (let i = 0; i < type.SIZE; i++) {
-            expect(memory.write.mock.calls[i][0]).toStrictEqual(mem.add(new Byte(i)));
-            expect(memory.write.mock.calls[i][1]).toStrictEqual(valueb[i]);
-        }
+        expect(memory.write.mock.calls[0][0]).toStrictEqual(mem);
+        expect(memory.write.mock.calls[0][1]).toStrictEqual(value);
     }
 });

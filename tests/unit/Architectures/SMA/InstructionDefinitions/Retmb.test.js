@@ -55,7 +55,7 @@ test('pops stack frame and jumps to the return address pushing memory byte as re
         expect(isFramePopped).toBe(true);
     });
 
-    memory.read = addr => addr.eq(returnValueAddress) ? returnValue : null;
+    memory.read = (addr, size) => addr.eq(returnValueAddress) && size.eq(Byte.SIZE) ? returnValue.expand() : null;
 
     definition.exec(...returnValueAddress.expand());
 

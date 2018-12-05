@@ -2,6 +2,7 @@ const Definition = require('../InstructionSet/Definition');
 const Registers = require('../Registers');
 const Memory = require('../../../../src/ProcessorInterfaces/Memory');
 const Stack = require('../Stack');
+const Byte = require('../../../DataTypes/Byte');
 const Word = require('../../../DataTypes/Word');
 
 module.exports = class Retmb extends Definition {
@@ -28,8 +29,8 @@ module.exports = class Retmb extends Definition {
      * @inheritDoc
      */
     exec(byte2, byte3, byte4) {
-        const value = this._memory.read(new Word(byte2, byte3));
+        const value = this._memory.read(new Word(byte2, byte3), Byte.SIZE);
         this._registers.setIp(this._stack.popFrame());
-        this._stack.push(value);
+        this._stack.push(value[0]);
     }
 };

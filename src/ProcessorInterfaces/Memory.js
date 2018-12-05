@@ -15,31 +15,21 @@ module.exports = class Memory {
     }
 
     /**
-     * Read the byte at the given address.
-     *
-     * @param {DataType} address
-     * @return {Byte}
-     */
-    read(address) {
-        throw 'Not implemented';
-    }
-
-    /**
-     * Read a set of bytes of the given size, at the given address.
+     * Read a set of bytes of the given size located at the given address.
      *
      * @param {DataType} address
      * @param {DataType} size
      * @return {Byte[]}
      */
-    readSet(address, size) {
+    read(address, size) {
         throw 'Not implemented';
     }
 
     /**
-     * Write the given byte at the given address.
+     * Write the given value at the given address.
      *
      * @param {DataType} address
-     * @param {Byte} value
+     * @param {DataType|Byte[]} value
      */
     write(address, value) {
         throw 'Not implemented';

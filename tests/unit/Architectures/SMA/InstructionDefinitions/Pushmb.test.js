@@ -38,7 +38,7 @@ test('pushes memory byte value to the stack', () => {
     const addr = random(Word);
     const value = random(Byte);
 
-    memory.read = mem => mem.eq(addr) ? value : null;
+    memory.read = (mem, size) => mem.eq(addr) && size.eq(Byte.SIZE) ? value.expand() : null;
 
     definition.exec(...addr.expand());
 

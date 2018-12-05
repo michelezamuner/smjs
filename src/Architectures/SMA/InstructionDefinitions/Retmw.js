@@ -28,7 +28,7 @@ module.exports = class Retmw extends Definition {
      * @inheritDoc
      */
     exec(byte2, byte3, byte4) {
-        const value = new Word(...this._memory.readSet(new Word(byte2, byte3), Word.SIZE));
+        const value = new Word(...this._memory.read(new Word(byte2, byte3), Word.SIZE));
         this._registers.setIp(this._stack.popFrame());
         this._stack.push(value);
     }

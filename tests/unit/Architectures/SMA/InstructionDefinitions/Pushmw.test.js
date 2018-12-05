@@ -37,7 +37,7 @@ test('pushes memory double value to the stack', () => {
     const addr = random(Word);
     const value = random(Word);
 
-    memory.readSet = (mem, size) => mem.eq(addr) && size.eq(Word.SIZE) ? value.expand() : null;
+    memory.read = (mem, size) => mem.eq(addr) && size.eq(Word.SIZE) ? value.expand() : null;
 
     definition.exec(...addr.expand());
 

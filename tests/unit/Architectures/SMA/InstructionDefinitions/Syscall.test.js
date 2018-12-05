@@ -101,7 +101,7 @@ test('implements syscall read', () => {
     definition.exec();
 
     for (let i = 0; i < read; i++) {
-        expect(memory.write.mock.calls[i][0]).toStrictEqual(new Word(parseInt(mem) + i));
+        expect(memory.write.mock.calls[i][0]).toStrictEqual(mem.add(new Word(i)));
         expect(memory.write.mock.calls[i][1]).toStrictEqual(bytes[i]);
     }
     expect(registers.set.mock.calls[0][0]).toStrictEqual(new RegisterAddress(Register.eax));
@@ -127,7 +127,7 @@ test('implements syscall write', () => {
         }
     };
 
-    memory.readSet = (addr, size) => addr.eq(mem) && size.eq(count) ? bytes : [];
+    memory.read = (addr, size) => addr.eq(mem) && size.eq(count) ? bytes : [];
 
     system.write = (fdArg, bufArg, countArg) => {
         const expectedBuf = new Double(...bytes);

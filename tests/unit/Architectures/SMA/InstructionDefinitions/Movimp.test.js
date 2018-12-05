@@ -33,7 +33,7 @@ test('implements move immediate to memory pointer', () => {
     const ptr = random(Word);
     const mem = random(Word);
 
-    memory.readSet = (addr, size) => addr.eq(ptr) && size.eq(Word.SIZE) ? mem.expand() : null;
+    memory.read = (addr, size) => addr.eq(ptr) && size.eq(Word.SIZE) ? mem.expand() : null;
 
     definition.exec(...ptr.expand(), value);
 
