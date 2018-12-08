@@ -7,10 +7,6 @@ const Byte = require('../../DataTypes/Byte');
  * The Stack encapsulates all details regarding implementing a call stack within the main memory, and it's meant
  * to be used by instructions to perform their operations.
  *
- * Despite still relying on the concept of Stack Pointer and Base Pointer, these are not stored externally, but only as
- * implementation details of Stack, with the intent of preventing manual manipulation of them: all stack operations can
- * thus be done only by using the stack abstractions, which are push, pop, push frame and pop frame.
- *
  * The stack is oriented from the top of the available memory, growing downwards; any data type can be pushed on the
  * stack, and the stack pointer always points to the least significant byte of the last pushed value.
  *
@@ -20,8 +16,6 @@ const Byte = require('../../DataTypes/Byte');
  * maximum value that can be represented by the data type, meaning that it won't be possible to be incremented: for this
  * reason, the maximum usable address is one less than the maximum of the memory, and when the stack is empty, the stack
  * pointer points to the maximum address of the memory.
- *
- * @type {Stack}
  */
 module.exports = class Stack {
     /**
