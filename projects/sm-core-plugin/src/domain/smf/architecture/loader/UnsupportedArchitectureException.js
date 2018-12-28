@@ -1,3 +1,6 @@
+/**
+ * Thrown when trying to create an interpreter with an unsupported architecture.
+ */
 module.exports = class UnsupportedArchitectureException extends Error {
     /**
      * @param {string} architecture

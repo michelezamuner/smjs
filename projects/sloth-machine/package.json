@@ -7,7 +7,9 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
-    "core": "file:../sm-core-plugin"
+    "container": "file:../container",
+    "core": "file:../sm-core-plugin",
+    "parser": "file:../command-line-parser"
   },
   "devDependencies": {
     "jest": "^23.6.0"

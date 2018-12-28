@@ -97,7 +97,7 @@ domain
                 read(Address, data.<Size>): data.<Unit>[]
         interpreter [data, program]
             <Loader>
-                load(String): Program
+                load(): Program
             <ExitStatus>: data.<Data>
             Context
                 shouldJump(): bool
@@ -109,14 +109,26 @@ domain
                 getOpcodeSize(): data.<Size>
                 getOperandsSize(program.<Opcode>): data.<Size>
                 exec(program.Instruction): Context
+        architecture [interpreter]
+            <Architecture>
+                getInterpreter(): interpreter.<Interpreter>
+                getLoader(): interpreter.<Loader>
+            <Loader>
+                load(String): <Architecture>
         processor [program, interpreter, data]
             Processor
                 Processor(interpreter.<Interpreter>)
                 run(program.Program): interpreter.<ExitStatus>
+            Builder
+                setInterpreter(interpreter.<Interpreter>)
+                build(): Processor
     sma [smf]
         loader
-            Loader
-                load(String): smf.program.Program
+            <StringLoader>
+                load(): String                
+            Loader: smf.interpreter.<Loader>
+                Loader(<StringLoader>)
+                load(): smf.program.Program
         data [smf.data]
             Byte: smf.data.<Unit>
             Word: smf.data.<Data>
@@ -131,18 +143,19 @@ domain
         interpreter [smf.interpreter]
             ExitStatus: smf.interpreter.<ExitStatus>
             Interpreter: smf.interpreter.<Interpreter>
-                Interpreter(<System>)
+                Interpreter(smf.architecture.<Architecture>, <System>)
                 ...
+        architecture
+            Architecture
+                getInterpreter(): interpreter.Interpreter
+                getLoader(): loader.Loader
         instructions
             ...
 application
-    loader [domain.smf.program]
-        <Loader>
-            load(): domain.smf.program.Program
-    system [domain.sma.system]
-        <System>: domain.sma.system.<System>
-            read(...): ...
-            write(...): ...
+    architecture [domain.smf.architecture, domain.sma.loader, domain.sma.system]
+        <ArchitectureLoader>: domain.smf.architecture.<Loader>
+        <ProgramLoader>: domain.sma.loader.<StringLoader>
+        <System>: domain.sma.system<System>
     vm
         run_program [application.loader, domain.smf.program, domain.smf.processor, domain.smf.interpreter]
             <Request>
@@ -151,20 +164,20 @@ application
             <Presenter>
                 present(Response)
             RunProgram
-                RunProgram(application.loader.<Loader>, domain.smf.processor.Processor, <Presenter>)
+                RunProgram(application.architecture.<ArchitectureLoader>, domain.smf.processor.ProcessorBuilder, <Presenter>)
                 exec(<Request>)
 adapters
     cli
-        file_loader [application.loader, domain.smf.program, domain.smf.interpreter]
-            Loader: application.loader.<Loader>
-                Loader(domain.smf.interpreter.<Loader>, File)
-                load(): domain.smf.program.Program
-        inline_loader [application.loader, domain.smf.program, domain.smf.interpreter]
-            Loader: application.loader.<Loader>
-                Loader(domain.smf.interpreter.<Loader>, string)
-                load(): domain.smf.program.Program
-        system [application.system]
-            System: application.system.<System>
+        file_loader [application.architecture]
+            Loader: application.architecture.<ProgramLoader>
+                Loader(File)
+                load(): String
+        inline_loader [application.architecture]
+            Loader: application.architecture.<ProgramLoader>
+                Loader(String)
+                load(): String
+        system [application.architecture]
+            System: application.architecture.<System>
                 read(...): ...
                 write(...): ...
         vm
@@ -231,18 +244,31 @@ class Processor
         return exitStatus
 ```
 ```
+module domain.smf.processor
+
+import domain.smf.interpreter.<Interpreter>
+import domain.smf.processor.Processor
+
+class ProcessorBuilder
+    setInterpreter(<Interpreter> interpreter)
+        this.interpreter = interpreter
+    build(): Processor
+        return new Processor(this.interpreter)
+```
+```
 module domain.sma.loader
 
 import domain.smf.interpreter.<Loader>
 import domain.smf.program.Program
 import domain.smf.program.Address
+import domain.sma.loader.<StringLoader>
 import domain.sma.data.Byte
 
 class Loader: <Loader>
-    Loader(string data)
-        this.data = data
+    Loader(<StringLoader> loader)
+        this.loader = loader
     load(): Program
-        bytes = data.split('').map(char -> new Byte(char.encode()))
+        bytes = this.loader.load().split('').map(char -> new Byte(char.encode()))
         return new Program(bytes, new Address(0))
 ```
 ```
@@ -290,56 +316,56 @@ class Interpreter: <Interpreter>
 ```
 module application.vm.run_program
 
-import domain.smf.processor.Processor
+import domain.smf.processor.ProcessorBuilder
+import application.architecture.<ArchitectureLoader>
 import application.loader.<Loader>
 import application.vm.run_program.<Presenter>
 import application.vm.run_program.<Request>
 import application.vm.run_program.Response
 
 class RunProgram
-    RunProgram(<Loader> loader, Processor processor, <Presenter> presenter)
-        this.loader = loader
-        this.processor = processor
+    RunProgram(<ArchitectureLoader> loader, ProcessorBuilder builder, <Presenter> presenter)
+        this.architectureLoader = loader
+        this.processorBuilder = builder
         this.presenter = presenter
 
     exec(Request request)
-        // here request is not carrying any data, so it could be removed, but we leave it here
-        // to show where it would be according to the architecture
-
-        program = loader.load()
+        architectureName = request.getArchitecture()
+        architecture = this.architectureLoader.load(architectureName)
+        
+        interpreter = architecture.getInterpreter()
+        processor = this.processorBuilder
+            .setInterpreter(interpreter)
+            .build()
+        programLoader = architecture.getLoader()
+        
+        program = programLoader.load()
         exitStatus = processor.run(program)
         presenter.present(new Response(exitStatus))
 ```
 ```
 module adapters.cli.file_loader
 
-import domain.smf.program.Program
-import domain.smf.interpreter.<Loader> as <ILoader>
-import application.vm.loader.<Loader>
+import application.architecture.<ProgramLoader>
 
-class Loader: <Loader>
-    Loader(<ILoader> loader, File file)
-        this.loader = loader
+class Loader: <ProgramLoader>
+    Loader(File file)
         this.file = file
     
-    load(): Program
-        data = file.getContents()
-        return this.loader.load(data)
+    load(): String
+        return this.file.getContents()
 ```
 ```
 module adapters.cli.inline_loader
 
-import domain.smf.program.Program
-import domain.smf.interpreter.<Loader> as <ILoader>
-import application.vm.loader.<Loader>
+import application.architecture.<ProgramLoader>
 
-class Loader: <Loader>
-    Loader(<ILoader> loader, String data)
-        this.loader = loader
+class Loader: <ProgramLoader>
+    Loader(String data)
         this.data = data
         
-    load(): Program
-        return this.loader.load(data)
+    load(): String
+        return this.data
 ```
 ```
 module adapters.cli.vm.run_program

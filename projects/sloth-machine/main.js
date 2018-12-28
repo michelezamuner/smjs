@@ -1,22 +1,14 @@
-const AppConfig = require('./src/app/AppConfig');
-const args = process.argv.slice(2);
+const Container = require('container').Container;
+const Parser = require('parser').CommandLineParser;
+const App = require('./src/app/App');
 
-let architecture = 'sma';
-let file;
+try {
+    const container = new Container();
+    const parser = new Parser(process.argv.slice(2));
+    const app = new App(container, parser);
 
-for (const arg in args) {
-    if (arg.startsWith('--arc=')) {
-        architecture = arg.substring(6);
-        continue;
-    }
-
-    file = arg;
+    app.run();
+} catch (e) {
+    console.error(e instanceof Error ? e.message : e);
+    process.exit(127);
 }
-
-if (file === null) {
-    throw new Error('No program file given');
-}
-
-const config = new AppConfig(architecture, file);
-
-// @todo: define container and run app
