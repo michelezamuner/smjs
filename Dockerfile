@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY . /app
 
-RUN yarn
+RUN /app/build
 
-CMD ["yarn", "test"]
+CMD /app/test

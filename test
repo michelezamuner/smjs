@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+yarn test
+
+cd projects/sloth-machine && yarn test
