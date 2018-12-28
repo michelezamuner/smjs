@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+yarn
+
+cd projects/sloth-machine && yarn

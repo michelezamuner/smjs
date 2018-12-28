@@ -1,4 +1,4 @@
-# Use local modules
+# Monorepo and directory layout
 
 
 ## Context
@@ -53,6 +53,7 @@ sloth_machine_compiler
     adapters
         sm_cmp
     -> sloth_machine_core_plugin
+    -> sma_architecture_plugin
     -> assembler_feature_plugin
     -> compiler_feature_plugin
     -> basm_assembler_plugin
@@ -61,6 +62,7 @@ sloth_machine_repl
     adapters
         sm_repl
     -> sloth_machine_core_plugin
+    -> sma_architecture_plugin
     -> repl_feature_plugin
     -> basm_assembler_plugin
     -> php_compiler_plugin
@@ -68,6 +70,7 @@ sloth_machine_debugger
     adapters
         sm_dbg
     -> sloth_machine_core_plugin
+    -> sma_architecture_plugin
     -> debugger_feature_plugin
     -> basm_assembler_plugin
     -> php_compiler_plugin
@@ -75,6 +78,7 @@ sloth_machine_dev
     adapters
         sm_dev
     -> sloth_machine_core_plugin
+    -> sma_architecture_plugin
     -> assembler_feature_plugin
     -> compiler_feature_plugin
     -> repl_feature_plugin
@@ -85,6 +89,7 @@ sloth_machine_web
     adapters
         sm_web
     -> sloth_machine_core_plugin
+    -> sma_architecture_plugin
     -> assembler_feature_plugin
     -> compiler_feature_plugin
     -> repl_feature_plugin
