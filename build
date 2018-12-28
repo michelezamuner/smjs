@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 
+echo "Building smjs..."
 yarn
 
-cd projects/sloth-machine && yarn
+for dir in $(ls "projects"); do
+    (
+        echo "Building ${dir}..."
+        cd "./projects/${dir}" && yarn
+    )
+done

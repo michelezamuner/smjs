@@ -3,7 +3,7 @@ const fs = require('fs');
 const exec = require('child_process').exec;
 const bin = process.env.SM_BIN;
 
-test.skip('an error is returned if an unsupported architecture is selected', () => {
+test('an error is returned if an unsupported architecture is selected', () => {
     return (async () => {
         const arc = 'unsupported';
         const file = `/tmp/file.sm`;

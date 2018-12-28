@@ -1,5 +1,5 @@
-const Container = require('./Container');
-const AppConfig = require('./AppConfig');
+const Container = require('container').Container;
+const Parser = require('parser').CommandLineParser;
 const RunProgramController = require('../adapters/cli/vm/run_program/Controller');
 const Request = require('../adapters/cli/vm/run_program/Request');
 const UnsupportedArchitectureException = require('core').UnsupportedArchitectureException;
@@ -7,23 +7,25 @@ const UnsupportedArchitectureException = require('core').UnsupportedArchitecture
 module.exports = class App {
     /**
      * @param {Container} container
+     * @param {Parser} parser
      */
-    constructor(container) {
+    constructor(container, parser) {
         this._container = container;
+        this._parser = parser;
     }
 
-    /**
-     * @param {AppConfig} config
-     */
-    run(config) {
+    run() {
+        const architecture = this._parser.getArgument('arc');
         const controller = this._container.make(RunProgramController);
         try {
-            const request = new Request(config.getArchitecture());
+            const request = new Request(architecture);
             controller.run(request);
         } catch (e) {
             if (e.constructor === UnsupportedArchitectureException) {
                 throw new Error(`Unsupported architecture "${e.getArchitecture()}"`);
             }
+
+            throw e;
         }
     }
 };

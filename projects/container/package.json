@@ -1,0 +1,15 @@
+{
+  "name": "container",
+  "version": "0.0.0",
+  "description": "Dependency injection container",
+  "main": "lib.js",
+  "repository": "https://github.com/michelezamuner/smjs",
+  "author": "Michele Zamuner",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "scripts": {
+    "test": "node --use_strict ./node_modules/.bin/jest"
+  }
+}

@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 
-yarn test
+echo "Running tests for smjs..."
+yarn test tests
 
-cd projects/sloth-machine && yarn test
+for dir in $(ls "projects"); do
+    (
+        echo "Running tests for ${dir}..."
+        cd "./projects/${dir}" && yarn test
+    )
+done
