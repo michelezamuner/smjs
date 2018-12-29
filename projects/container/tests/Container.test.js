@@ -1,6 +1,18 @@
 const Container = require('../src/Container');
 
 class Test {}
+class TestAlternate {}
+class Test1 {
+    static get __DEPS__() { return [Test]; }
+    constructor(test) { this._test = test; }
+    getTest() { return this._test; }
+}
+class Test2 {
+    static get __DEPS__() { return [Test, Test1]; }
+    constructor(test, test1) { this._test = test; this._test1 = test1; }
+    getTest() { return this._test; }
+    getTest1() { return this._test1; }
+}
 
 const container = new Container();
 
@@ -8,4 +20,21 @@ test('create object from class', () => {
     const instance = container.make(Test);
 
     expect(instance).toBeInstanceOf(Test);
+});
+
+test('create object with unregistered dependencies', () => {
+    const instance = container.make(Test2);
+
+    expect(instance).toBeInstanceOf(Test2);
+    expect(instance.getTest()).toBeInstanceOf(Test);
+    expect(instance.getTest1()).toBeInstanceOf(Test1);
+    expect(instance.getTest1().getTest()).toBeInstanceOf(Test);
+});
+
+test('create object with registered dependencies', () => {
+    container.bind(Test, new TestAlternate());
+    const instance = container.make(Test2);
+
+    expect(instance.getTest()).toBeInstanceOf(TestAlternate);
+    expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
 });

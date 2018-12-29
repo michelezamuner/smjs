@@ -1,7 +1,9 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
 
 echo "Running tests for smjs..."
-yarn test tests
+yarn test $(pwd)/tests
 
 for dir in $(ls "projects"); do
     (
