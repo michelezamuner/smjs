@@ -15,6 +15,6 @@
     "jest": "^23.6.0"
   },
   "scripts": {
-    "test": "SM_BIN=$(pwd)/bin/sm node --use_strict ./node_modules/.bin/jest"
+    "test": "SM_BIN=$(pwd)/bin/sm SM_ENV=test node --use_strict ./node_modules/.bin/jest ./tests"
   }
 }

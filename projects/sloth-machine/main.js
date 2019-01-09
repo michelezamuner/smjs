@@ -3,7 +3,15 @@ const Provider = require('./src/app/Provider');
 const Parser = require('parser').CommandLineParser;
 const App = require('./src/app/App');
 const AppException = require('./src/app/AppException');
-const config = require('./config/app');
+
+let config = null;
+switch (process.env.SM_ENV) {
+    case 'test':
+        config = require('./config/test');
+        break;
+    default:
+        config = require('./config/app');
+}
 
 try {
     const container = new Container();

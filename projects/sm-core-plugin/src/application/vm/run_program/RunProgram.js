@@ -20,6 +20,8 @@ module.exports = class RunProgram {
         const architectureName = request.getArchitecture();
         const architecture = this._architectureLoader.load(architectureName);
 
+        const programLoader = architecture.getLoader();
+        const program = programLoader.load();
         // @todo: implement this
     }
 };

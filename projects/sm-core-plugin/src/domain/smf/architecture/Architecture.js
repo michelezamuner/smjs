@@ -1,3 +1,18 @@
+const Interpreter = require('../interpreter/Interpreter');
+const Loader = require('../interpreter/Loader');
+
 module.exports = class Architecture {
-    // @todo: implement this
+    /**
+     * @return {Interpreter}
+     */
+    getInterpreter() {
+        throw 'Not implemented';
+    }
+
+    /**
+     * @return {Loader}
+     */
+    getLoader() {
+        throw 'Not implemented';
+    }
 };

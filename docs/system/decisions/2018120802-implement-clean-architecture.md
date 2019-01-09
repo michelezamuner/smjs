@@ -96,6 +96,8 @@ domain
                 getStartingAddress(): <Address>
                 read(Address, data.<Size>): data.<Unit>[]
         interpreter [data, program]
+            <StringLoader>
+                load(): String
             <Loader>
                 load(): Program
             <ExitStatus>: data.<Data>
@@ -123,18 +125,16 @@ domain
                 setInterpreter(interpreter.<Interpreter>)
                 build(): Processor
     sma [smf]
-        loader
-            <StringLoader>
-                load(): String                
+        loader [smf.interpreter, smf.program]
             Loader: smf.interpreter.<Loader>
-                Loader(<StringLoader>)
+                Loader(smf.interpreter.<StringLoader>)
                 load(): smf.program.Program
         data [smf.data]
             Byte: smf.data.<Unit>
             Word: smf.data.<Data>
             Double: smf.data.<Data>
             Size: smf.data.<Size>
-        program
+        program [smf.program]
             Address: smf.program.<Address>
         system
             <System>
@@ -143,10 +143,9 @@ domain
         interpreter [smf.interpreter]
             ExitStatus: smf.interpreter.<ExitStatus>
             Interpreter: smf.interpreter.<Interpreter>
-                Interpreter(smf.architecture.<Architecture>, <System>)
                 ...
-        architecture
-            Architecture
+        architecture [smf.architecture, smf.interpreter]
+            Architecture: smf.architecture.<Architecture>
                 getInterpreter(): interpreter.Interpreter
                 getLoader(): loader.Loader
         instructions
