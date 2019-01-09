@@ -2,7 +2,7 @@ const ArchitectureInterface = require('core').Architecture;
 const Loader = require('core').ProgramLoader;
 
 module.exports = {
-    Loader: class Architecture extends ArchitectureInterface {
+    Architecture: class Architecture extends ArchitectureInterface {
         /**
          * @param {Loader} loader
          */
