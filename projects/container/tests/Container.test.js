@@ -16,13 +16,13 @@ class Test2 {
 
 const container = new Container();
 
-test('create object from class', () => {
+test('create instance from class', () => {
     const instance = container.make(Test);
 
     expect(instance).toBeInstanceOf(Test);
 });
 
-test('create object with unregistered dependencies', () => {
+test('create instance from unbound dependencies', () => {
     const instance = container.make(Test2);
 
     expect(instance).toBeInstanceOf(Test2);
@@ -31,8 +31,24 @@ test('create object with unregistered dependencies', () => {
     expect(instance.getTest1().getTest()).toBeInstanceOf(Test);
 });
 
-test('create object with registered dependencies', () => {
+test('create instance from bound instances', () => {
     container.bind(Test, new TestAlternate());
+    const instance = container.make(Test2);
+
+    expect(instance.getTest()).toBeInstanceOf(TestAlternate);
+    expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
+});
+
+test('create object from bound types', () => {
+    container.bind(Test, TestAlternate);
+    const instance = container.make(Test2);
+
+    expect(instance.getTest()).toBeInstanceOf(TestAlternate);
+    expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
+});
+
+test('create object from bound callbacks', () => {
+    container.bind(Test, () => new TestAlternate());
     const instance = container.make(Test2);
 
     expect(instance.getTest()).toBeInstanceOf(TestAlternate);

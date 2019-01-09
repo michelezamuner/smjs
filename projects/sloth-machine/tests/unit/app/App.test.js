@@ -28,22 +28,46 @@ const parser = {};
 const controller = {};
 
 /**
+ * @type {string}
+ */
+const parsedArchitecture = 'architecture';
+
+/**
+ * @type {string}
+ */
+const parsedFile = 'file';
+
+/**
  * @type {null|App}
  */
 let app = null;
 
 beforeEach(() => {
     container.make = type => type === RunProgramController ? controller : null;
+    container.bind = jest.fn();
     provider.register = jest.fn();
+    parser.getArgument = name => {
+        if (name === App.CLI_ARG_ARCHITECTURE) {
+            return parsedArchitecture;
+        }
+        if (name === undefined) {
+            return parsedFile;
+        }
+        return null;
+    };
+    controller.runProgram = jest.fn();
     app = new App(container, provider, parser);
 });
 
-test('forwards execution to controller', () => {
-    const architecture = 'architecture';
-    const expectedRequest = new Request(architecture);
+test('binds given program file', () => {
+    app.run();
 
-    controller.runProgram = jest.fn();
-    parser.getArgument = name => name === 'arc' ? architecture : null;
+    expect(container.bind.mock.calls[0][0]).toStrictEqual('app.file');
+    expect(container.bind.mock.calls[0][1]).toStrictEqual(parsedFile);
+});
+
+test('forwards execution to controller', () => {
+    const expectedRequest = new Request(parsedArchitecture);
 
     app.run();
 
@@ -52,23 +76,16 @@ test('forwards execution to controller', () => {
 });
 
 test('wraps unsupported architecture exception', () => {
-    const architecture = 'unsupported';
-
-    parser.getArgument = name => name === 'arc' ? architecture : null;
     controller.runProgram = request => {
-        if (request.getArchitecture() === architecture) {
-            throw new UnsupportedArchitectureException(architecture);
+        if (request.getArchitecture() === parsedArchitecture) {
+            throw new UnsupportedArchitectureException(parsedArchitecture);
         }
     };
 
-    expect(() => app.run()).toThrow(new AppException(`Unsupported architecture "${architecture}"`));
+    expect(() => app.run()).toThrow(new AppException(`Unsupported architecture "${parsedArchitecture}"`));
 });
 
 test.skip('fails if no program file is passed', () => {
-    // @todo: implement this
-});
-
-test.skip('fails if invalid program file is passed', () => {
     // @todo: implement this
 });
 

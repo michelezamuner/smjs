@@ -21,7 +21,7 @@ test('an error is returned if an unsupported architecture is selected', () => {
     })();
 });
 
-test.skip('an error is returned if no program file is passed', () => {
+test('an error is returned if no program file is passed', () => {
     return (async () => {
         let hasThrown = false;
         try {
@@ -36,14 +36,14 @@ test.skip('an error is returned if no program file is passed', () => {
     })();
 });
 
-test.skip('an error is returned if an invalid program file is passed', () => {
+test.only('an error is returned if an invalid program file is passed', () => {
     return (async () => {
         let hasThrown = false;
         try {
             await promisify(exec)(`${bin} invalid`);
         } catch (e) {
             hasThrown = true;
-            expect(e.stderr.trim()).toBe('Invalid program file given');
+            expect(e.stderr.trim()).toBe('Invalid program file given: "invalid"');
             expect(e.code).toBe(127);
         }
 
