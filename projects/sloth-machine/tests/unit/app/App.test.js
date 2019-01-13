@@ -75,6 +75,27 @@ test('forwards execution to controller', () => {
     expect(controller.runProgram.mock.calls[0][0]).toStrictEqual(expectedRequest);
 });
 
+test('uses default architecture', () => {
+    const expectedRequest = new Request(App.DEFAULT_ARCHITECTURE);
+
+    parser.getArgument = name => {
+        if (name === undefined) {
+            return parsedFile;
+        }
+        return null;
+    };
+
+    app.run();
+
+    expect(controller.runProgram.mock.calls[0][0]).toStrictEqual(expectedRequest);
+});
+
+test('fails if no program file is passed', () => {
+    parser.getArgument = () => null;
+
+    expect(() => app.run()).toThrow(new AppException('No program file given'));
+});
+
 test('wraps unsupported architecture exception', () => {
     controller.runProgram = request => {
         if (request.getArchitecture() === parsedArchitecture) {
@@ -85,10 +106,12 @@ test('wraps unsupported architecture exception', () => {
     expect(() => app.run()).toThrow(new AppException(`Unsupported architecture "${parsedArchitecture}"`));
 });
 
-test.skip('fails if no program file is passed', () => {
-    // @todo: implement this
-});
+test('wraps generic exception', () => {
+    const message = 'message';
 
-test.skip('delegate to adapter', () => {
-    // @todo: implement this
+    controller.runProgram = () => {
+        throw new Error(message);
+    };
+
+    expect(() => app.run()).toThrow(new AppException(message));
 });

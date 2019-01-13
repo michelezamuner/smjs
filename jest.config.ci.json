@@ -1,0 +1,15 @@
+{
+  "bail": true,
+  "verbose": false,
+  "coverageDirectory": "/tmp",
+  "coveragePathIgnorePatterns": ["tests/specs"],
+  "coverageReporters": [],
+  "coverageThreshold": {
+    "global": {
+      "branches": 90,
+      "functions": 90,
+      "lines": 90,
+      "statements": 90
+    }
+  }
+}

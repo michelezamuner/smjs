@@ -4,7 +4,6 @@ const Parser = require('parser').CommandLineParser;
 const RunProgramController = require('../adapters/cli/vm/run_program/Controller');
 const Request = require('../adapters/cli/vm/run_program/Request');
 const UnsupportedArchitectureException = require('core').UnsupportedArchitectureException;
-const ProgramLoaderException = require('core').ProgramLoaderException;
 const AppException = require('./AppException');
 
 module.exports = class App {
@@ -41,11 +40,8 @@ module.exports = class App {
             if (e.constructor === UnsupportedArchitectureException) {
                 throw new AppException(`Unsupported architecture "${e.getArchitecture()}"`);
             }
-            if (e.constructor === ProgramLoaderException) {
-                throw new AppException(e.message);
-            }
 
-            throw e;
+            throw new AppException(e.message);
         }
     }
 };

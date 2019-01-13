@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY . /app
 
-RUN /app/build
+RUN make build
 
-CMD /app/test
+CMD make ci

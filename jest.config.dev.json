@@ -1,0 +1,6 @@
+{
+  "verbose": true,
+  "coverageDirectory": "/tmp",
+  "coveragePathIgnorePatterns": ["tests/specs"],
+  "coverageReporters": ["text"]
+}

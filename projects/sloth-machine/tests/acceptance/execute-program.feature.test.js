@@ -36,7 +36,7 @@ test('an error is returned if no program file is passed', () => {
     })();
 });
 
-test.only('an error is returned if an invalid program file is passed', () => {
+test('an error is returned if an invalid program file is passed', () => {
     return (async () => {
         let hasThrown = false;
         try {
