@@ -3,39 +3,56 @@ module.exports = class Container {
         this._bound = {};
     }
 
-    bind(type, object) {
-        this._bound[type] = object;
+    /**
+     * @param ref
+     * @param object
+     */
+    bind(ref, object) {
+        this._bound[ref] = object;
     }
 
-    make(type) {
-        if (type in this._bound) {
-            return this._makeBound(type);
+    /**
+     * @param ref
+     * @return {*}
+     */
+    make(ref) {
+        if (ref in this._bound) {
+            return this._makeBound(ref);
         }
 
-        if (type.__DEPS__ !== undefined) {
-            return this._makeUnbound(type);
+        if (ref.__DEPS__ !== undefined) {
+            return this._makeUnbound(ref);
         }
 
-        return new type();
+        return new ref();
     }
 
-    _makeBound(type) {
-        if (this._bound[type].constructor === undefined || this._bound[type].constructor.name !== 'Function') {
-            return this._bound[type];
+    /**
+     * @param ref
+     * @return {*}
+     * @private
+     */
+    _makeBound(ref) {
+        // Instance
+        if (this._bound[ref].constructor === undefined || this._bound[ref].constructor.name !== 'Function') {
+            return this._bound[ref];
         }
 
-        try {
-            return this.make(this._bound[type]);
-        } catch (e) {
-            if (e.message.indexOf('is not a constructor') >= 0) {
-                return this._bound[type]();
-            }
-
-            throw e;
+        // Type
+        if (this._bound[ref].prototype !== undefined) {
+            return this.make(this._bound[ref]);
         }
+
+        // Callback
+        return this._bound[ref]();
     }
 
-    _makeUnbound(type) {
-        return new type(...type.__DEPS__.map(dep => this.make(dep)));
+    /**
+     * @param ref
+     * @return {*}
+     * @private
+     */
+    _makeUnbound(ref) {
+        return new ref(...ref.__DEPS__.map(dep => this.make(dep)));
     }
 };

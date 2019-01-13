@@ -1,33 +1,38 @@
 const ArchitectureLoader = require('core').ArchitectureLoader;
-const ArchitecturesDirectoryProvider = require('./ArchitecturesDirectoryProvider');
 const ProgramLoader = require('core').ProgramLoader;
 const UnsupportedArchitectureException = require('core').UnsupportedArchitectureException;
-const fs = require('fs');
+const ModuleLoader = require('./ModuleLoader');
 
 module.exports = class LocalArchitectureLoader extends ArchitectureLoader {
-    static get __DEPS__() { return [ ArchitecturesDirectoryProvider, ProgramLoader ]; }
+    static get __DEPS__() { return [
+        ModuleLoader,
+        ProgramLoader,
+        'adapters.cli.architecture.architectures_directory'
+    ]; }
 
     /**
-     * @param {ArchitecturesDirectoryProvider} directoryProvider
+     * @param {ModuleLoader} moduleLoader
      * @param {ProgramLoader} programLoader
+     * @param {string} architecturesDirectory
      */
-    constructor(directoryProvider, programLoader) {
+    constructor(moduleLoader, programLoader, architecturesDirectory) {
         super();
-        this._directoryProvider = directoryProvider;
+        this._moduleLoader = moduleLoader;
         this._programLoader = programLoader;
+        this._architecturesDirectory = architecturesDirectory;
     }
 
     /**
      * @inheritDoc
      */
     load(name) {
-        const architectureDir = this._directoryProvider.getDirectory() + '/' + name;
-        if (!fs.existsSync(architectureDir)) {
+        const architectureDir = this._architecturesDirectory + '/' + name;
+        try {
+            const architectureFactory = this._moduleLoader.load(architectureDir + '/lib');
+
+            return architectureFactory.create(this._programLoader);
+        } catch (e) {
             throw new UnsupportedArchitectureException(name);
         }
-
-        const architectureClass = require(architectureDir + '/lib').Architecture;
-
-        return new architectureClass(this._programLoader);
     }
 };

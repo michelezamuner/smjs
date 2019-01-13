@@ -1,6 +1,6 @@
-const Controller = require('../../../../../src/adapters/cli/vm/run_program/Controller');
+const Controller = require('../../../../../../src/adapters/cli/vm/run_program/Controller');
 const RunProgram = require('core').RunProgram;
-const Request = require('../../../../../src/adapters/cli/vm/run_program/Request');
+const Request = require('../../../../../../src/adapters/cli/vm/run_program/Request');
 
 /**
  * @type {Object|RunProgram}
@@ -15,6 +15,10 @@ let controller = null;
 beforeEach(() => {
     service.run = jest.fn();
     controller = new Controller(service);
+});
+
+test('can be injected', () => {
+    expect(Controller.__DEPS__).toStrictEqual([ RunProgram ]);
 });
 
 test('calls service with proper request', () => {

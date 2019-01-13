@@ -1,13 +1,17 @@
 const ProgramLoader = require('core').ProgramLoader;
 const ProgramLoaderException = require('core').ProgramLoaderException;
-const fs = require('fs');
+const FileReader = require('./FileReader');
 
 module.exports = class FileProgramLoader extends ProgramLoader {
+    static get __DEPS__() { return [ FileReader, 'adapters.cli.architecture.program_file' ]; }
+
     /**
+     * @param {FileReader} fileReader
      * @param {string} file
      */
-    constructor(file) {
+    constructor(fileReader, file) {
         super();
+        this._fileReader = fileReader;
         this._file = file;
     }
 
@@ -16,7 +20,7 @@ module.exports = class FileProgramLoader extends ProgramLoader {
      */
     load() {
         try {
-            return fs.readFileSync(this._file, { encoding: 'binary' });
+            return this._fileReader.read(this._file, { encoding: 'binary' });
         } catch (e) {
             throw new ProgramLoaderException(`Invalid program file given: "${this._file}"`);
         }
