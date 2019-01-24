@@ -1,0 +1,20 @@
+{
+  "name": "architecture-loader",
+  "version": "0.0.0",
+  "description": "Sloth Machine virtual machine loaders",
+  "main": "lib.js",
+  "repository": "https://github.com/michelezamuner/smjs",
+  "author": "Michele Zamuner",
+  "license": "MIT",
+  "dependencies": {
+    "framework": "file:../sloth-machine-framework"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "scripts": {
+    "test": "node --use_strict ./node_modules/.bin/jest",
+    "coverage": "node --use_strict ./node_modules/.bin/jest --coverage",
+    "ci": "JEST_ENV=ci node --use_strict ./node_modules/.bin/jest --coverage"
+  }
+}

@@ -13,7 +13,25 @@ test('an error is returned if an unsupported architecture is selected', () => {
             await promisify(exec)(`${bin} --arc=${arc} ${file}`);
         } catch (e) {
             hasThrown = true;
-            expect(e.stderr.trim()).toBe(`Unsupported architecture "${arc}"`);
+            expect(e.stderr.trim()).toBe(`Cannot find selected architecture "${arc}"`);
+            expect(e.code).toBe(127);
+        }
+
+        expect(hasThrown).toBe(true);
+    })();
+});
+
+test('an error is returned if an invalid architecture is selected', () => {
+    return (async () => {
+        const arc = 'invalid-sma';
+        const file = `/tmp/file.sm`;
+        await promisify(fs.writeFile)(file, '', 'binary');
+        let hasThrown = false;
+        try {
+            await promisify(exec)(`${bin} --arc=${arc} ${file}`);
+        } catch (e) {
+            hasThrown = true;
+            expect(e.stderr.trim()).toBe(`Selected architecture "${arc}" has invalid implementation`);
             expect(e.code).toBe(127);
         }
 
@@ -38,12 +56,13 @@ test('an error is returned if no program file is passed', () => {
 
 test('an error is returned if an invalid program file is passed', () => {
     return (async () => {
+        const file = 'invalid';
         let hasThrown = false;
         try {
-            await promisify(exec)(`${bin} invalid`);
+            await promisify(exec)(`${bin} ${file}`);
         } catch (e) {
             hasThrown = true;
-            expect(e.stderr.trim()).toBe('Invalid program file given: "invalid"');
+            expect(e.stderr.trim()).toBe(`Invalid program file given: "${file}"`);
             expect(e.code).toBe(127);
         }
 

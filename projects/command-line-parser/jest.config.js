@@ -1,4 +1,6 @@
 const config = {
+    roots: ['./tests'],
+    testEnvironment: "node",
     verbose: true,
     coverageDirectory: '/tmp',
     coverageReporters: ['text'],

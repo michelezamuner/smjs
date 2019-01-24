@@ -12,7 +12,7 @@
   },
   "scripts": {
     "test": "node --use_strict ./node_modules/.bin/jest",
-    "coverage": "node --use_strict ./node_modules/.bin/jest --config jest.config.dev.json --coverage $(pwd)/tests",
-    "ci": "node --use_strict ./node_modules/.bin/jest --config jest.config.ci.json --coverage $(pwd)/tests"
+    "coverage": "node --use_strict ./node_modules/.bin/jest --coverage",
+    "ci": "JEST_ENV=ci node --use_strict ./node_modules/.bin/jest --coverage"
   }
 }

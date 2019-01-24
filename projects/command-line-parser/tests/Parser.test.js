@@ -44,6 +44,6 @@ test('return null if undefined argument', () => {
 
 test('fails if missing assign', () => {
     const arg = '--arg value';
-    expect(() => new Parser([arg]))
-        .toThrow(new MalformedArgsException(`Missing assignment operator in "${arg}"`));
+    expect(() => new Parser([arg])).toThrow(MalformedArgsException);
+    expect(() => new Parser([arg])).toThrow(`Missing assignment operator in "${arg}"`);
 });
