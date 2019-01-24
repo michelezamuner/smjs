@@ -4,8 +4,10 @@ const config = {
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
-        'tests/acceptance',
+        'acceptance',
         'app/Provider\.js',
+        'app/System\.js',
+        'app/NativeSystem\.js',
     ],
     coverageReporters: ['text'],
 };
