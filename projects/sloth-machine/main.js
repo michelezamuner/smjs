@@ -1,8 +1,9 @@
 const Container = require('container').Container;
 const Provider = require('./src/app/Provider');
 const Parser = require('command-line-parser').CommandLineParser;
+const System = require('./src/app/System');
+const NativeSystem = require('./src/app/NativeSystem');
 const App = require('./src/app/App');
-const AppException = require('./src/app/AppException');
 
 let config = null;
 switch (process.env.SM_ENV) {
@@ -13,15 +14,15 @@ switch (process.env.SM_ENV) {
         config = require('./config/app');
 }
 
-try {
-    const container = new Container();
-    container.bind('config', config);
-    const provider = new Provider();
-    const parser = new Parser(process.argv.slice(2));
-    const app = new App(container, provider);
+const container = new Container();
+const provider = new Provider();
+const parser = new Parser(process.argv.slice(2));
 
-    app.run(parser);
-} catch (e) {
-    console.error(e instanceof AppException ? e.message : e);
-    process.exit(127);
-}
+container.bind('config', config);
+container.bind(Parser, parser);
+container.bind(System, NativeSystem);
+provider.register(container);
+
+const app = new App(container);
+
+app.run();
