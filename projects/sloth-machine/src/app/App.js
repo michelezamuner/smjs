@@ -1,10 +1,12 @@
 const Container = require('container').Container;
 const Provider = require('./Provider');
-const Parser = require('parser').CommandLineParser;
-const RunProgramController = require('../adapters/cli/vm/run_program/Controller');
-const Request = require('../adapters/cli/vm/run_program/Request');
-const UnsupportedArchitectureException = require('core').UnsupportedArchitectureException;
+const Parser = require('command-line-parser').CommandLineParser;
+const RunProgramController = require('../adapters/sloth-machine/run_program/Controller');
+const Request = require('../adapters/sloth-machine/run_program/Request');
 const AppException = require('./AppException');
+const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
+const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
+const InvalidProgramException = require('program-loader').InvalidProgramException;
 
 module.exports = class App {
     static get DEFAULT_ARCHITECTURE() { return 'sma'; }
@@ -13,35 +15,41 @@ module.exports = class App {
     /**
      * @param {Container} container
      * @param {Provider} provider
-     * @param {Parser} parser
      */
-    constructor(container, provider, parser) {
+    constructor(container, provider) {
         this._container = container;
         this._provider = provider;
-        this._parser = parser;
     }
 
-    run() {
-        const architecture = this._parser.getArgument(App.CLI_ARG_ARCHITECTURE) || App.DEFAULT_ARCHITECTURE;
-        const file = this._parser.getArgument();
+    /**
+     * @param {Parser} parser
+     */
+    run(parser) {
+        this._provider.register(this._container);
+
+        const architecture = parser.getArgument(App.CLI_ARG_ARCHITECTURE) || App.DEFAULT_ARCHITECTURE;
+        const file = parser.getArgument();
         if (file === null) {
             throw new AppException('No program file given');
         }
-        this._container.bind('app.file', file);
-
-        this._provider.register(this._container);
 
         const controller = this._container.make(RunProgramController);
-        const request = new Request(architecture);
+        const request = new Request(architecture, file);
 
         try {
             controller.runProgram(request);
         } catch (e) {
-            if (e.constructor === UnsupportedArchitectureException) {
-                throw new AppException(`Unsupported architecture "${e.getArchitecture()}"`);
+            if (e instanceof UnsupportedArchitectureException) {
+                throw new AppException(`Cannot find selected architecture "${e.getArchitectureName()}"`);
+            }
+            if (e instanceof InvalidArchitectureException) {
+                throw new AppException(`Selected architecture "${e.getArchitectureName()}" has invalid implementation`);
+            }
+            if (e instanceof InvalidProgramException) {
+                throw new AppException(`Invalid program file given: "${e.getProgramReference()}"`);
             }
 
-            throw new AppException(e.message);
+            throw e;
         }
     }
 };

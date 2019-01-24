@@ -1,0 +1,23 @@
+{
+  "name": "virtual-machine",
+  "version": "0.0.0",
+  "description": "Sloth Machine virtual machine",
+  "main": "lib.js",
+  "repository": "https://github.com/michelezamuner/smjs",
+  "author": "Michele Zamuner",
+  "license": "MIT",
+  "dependencies": {
+    "framework": "file:../sloth-machine-framework",
+    "sloth-machine-framework": "file:../sloth-machine-framework",
+    "program-loader": "file:../program-loader",
+    "architecture-loader": "file:../architecture-loader"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "scripts": {
+    "test": "node --use_strict ./node_modules/.bin/jest",
+    "coverage": "node --use_strict ./node_modules/.bin/jest --coverage",
+    "ci": "JEST_ENV=ci node --use_strict ./node_modules/.bin/jest --coverage"
+  }
+}

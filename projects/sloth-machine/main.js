@@ -1,6 +1,6 @@
 const Container = require('container').Container;
 const Provider = require('./src/app/Provider');
-const Parser = require('parser').CommandLineParser;
+const Parser = require('command-line-parser').CommandLineParser;
 const App = require('./src/app/App');
 const AppException = require('./src/app/AppException');
 
@@ -18,9 +18,9 @@ try {
     container.bind('config', config);
     const provider = new Provider();
     const parser = new Parser(process.argv.slice(2));
-    const app = new App(container, provider, parser);
+    const app = new App(container, provider);
 
-    app.run();
+    app.run(parser);
 } catch (e) {
     console.error(e instanceof AppException ? e.message : e);
     process.exit(127);

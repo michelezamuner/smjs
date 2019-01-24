@@ -1,11 +1,11 @@
 const config = {
+    roots: ['./tests'],
+    testEnvironment: "node",
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
         'tests/acceptance',
-        'adapters/.*/architecture/FileReader.js',
-        'adapters/.*/architecture/ModuleLoader.js',
-        'app/Provider.js',
+        'app/Provider\.js',
     ],
     coverageReporters: ['text'],
 };

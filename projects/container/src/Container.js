@@ -1,3 +1,5 @@
+const ContainerException = require('./ContainerException');
+
 module.exports = class Container {
     constructor() {
         this._bound = {};
@@ -24,7 +26,11 @@ module.exports = class Container {
             return this._makeUnbound(ref);
         }
 
-        return new ref();
+        try {
+            return new ref();
+        } catch (e) {
+            throw new ContainerException(`Unbound reference "${ref}"`);
+        }
     }
 
     /**

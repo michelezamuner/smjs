@@ -1,10 +1,12 @@
 const App = require('../../../src/app/App');
-const Parser = require('parser').CommandLineParser;
+const Parser = require('command-line-parser').CommandLineParser;
 const Container = require('container').Container;
 const Provider = require('../../../src/app/Provider');
-const RunProgramController = require('../../../src/adapters/cli/vm/run_program/Controller');
-const Request = require('../../../src/adapters/cli/vm/run_program/Request');
-const UnsupportedArchitectureException = require('core').UnsupportedArchitectureException;
+const RunProgramController = require('../../../src/adapters/sloth-machine/run_program/Controller');
+const Request = require('../../../src/adapters/sloth-machine/run_program/Request');
+const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
+const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
+const InvalidProgramException = require('program-loader').InvalidProgramException;
 const AppException = require('../../../src/app/AppException');
 
 /**
@@ -44,7 +46,6 @@ let app = null;
 
 beforeEach(() => {
     container.make = type => type === RunProgramController ? controller : null;
-    container.bind = jest.fn();
     provider.register = jest.fn();
     parser.getArgument = name => {
         if (name === App.CLI_ARG_ARCHITECTURE) {
@@ -56,27 +57,20 @@ beforeEach(() => {
         return null;
     };
     controller.runProgram = jest.fn();
-    app = new App(container, provider, parser);
-});
-
-test('binds given program file', () => {
-    app.run();
-
-    expect(container.bind.mock.calls[0][0]).toStrictEqual('app.file');
-    expect(container.bind.mock.calls[0][1]).toStrictEqual(parsedFile);
+    app = new App(container, provider);
 });
 
 test('forwards execution to controller', () => {
-    const expectedRequest = new Request(parsedArchitecture);
+    const expectedRequest = new Request(parsedArchitecture, parsedFile);
 
-    app.run();
+    app.run(parser);
 
     expect(provider.register.mock.calls[0][0]).toStrictEqual(container);
     expect(controller.runProgram.mock.calls[0][0]).toStrictEqual(expectedRequest);
 });
 
 test('uses default architecture', () => {
-    const expectedRequest = new Request(App.DEFAULT_ARCHITECTURE);
+    const expectedRequest = new Request(App.DEFAULT_ARCHITECTURE, parsedFile);
 
     parser.getArgument = name => {
         if (name === undefined) {
@@ -85,7 +79,7 @@ test('uses default architecture', () => {
         return null;
     };
 
-    app.run();
+    app.run(parser);
 
     expect(controller.runProgram.mock.calls[0][0]).toStrictEqual(expectedRequest);
 });
@@ -93,25 +87,49 @@ test('uses default architecture', () => {
 test('fails if no program file is passed', () => {
     parser.getArgument = () => null;
 
-    expect(() => app.run()).toThrow(new AppException('No program file given'));
+    expect(() => app.run(parser)).toThrow(new AppException('No program file given'));
 });
 
 test('wraps unsupported architecture exception', () => {
     controller.runProgram = request => {
-        if (request.getArchitecture() === parsedArchitecture) {
+        if (request.getArchitectureName() === parsedArchitecture) {
             throw new UnsupportedArchitectureException(parsedArchitecture);
         }
     };
 
-    expect(() => app.run()).toThrow(new AppException(`Unsupported architecture "${parsedArchitecture}"`));
+    expect(() => app.run(parser)).toThrow(AppException);
+    expect(() => app.run(parser)).toThrow(`Cannot find selected architecture "${parsedArchitecture}"`);
 });
 
-test('wraps generic exception', () => {
+test('wraps invalid architecture exception', () => {
+    controller.runProgram = request => {
+        if (request.getArchitectureName() === parsedArchitecture) {
+            throw new InvalidArchitectureException(parsedArchitecture);
+        }
+    };
+
+    expect(() => app.run(parser)).toThrow(AppException);
+    expect(() => app.run(parser)).toThrow(`Selected architecture "${parsedArchitecture}" has invalid implementation`);
+});
+
+test('wraps invalid program exception', () => {
+    controller.runProgram = request => {
+        if (request.getProgramReference() === parsedFile) {
+            throw new InvalidProgramException(parsedFile);
+        }
+    };
+
+    expect(() => app.run(parser)).toThrow(AppException);
+    expect(() => app.run(parser)).toThrow(`Invalid program file given: "${parsedFile}"`);
+});
+
+test('forwards generic exception', () => {
     const message = 'message';
 
     controller.runProgram = () => {
         throw new Error(message);
     };
 
-    expect(() => app.run()).toThrow(new AppException(message));
+    expect(() => app.run(parser)).toThrow(Error);
+    expect(() => app.run(parser)).toThrow(message);
 });
