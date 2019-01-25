@@ -1,4 +1,4 @@
-const Program = require('framework').Program;
+const Program = require('sloth-machine-framework').Program;
 const InvalidProgramException = require('./InvalidProgramException');
 
 module.exports = class ProgramLoader {

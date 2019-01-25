@@ -8,7 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "architecture-loader": "file:../architecture-loader",
-    "framework": "file:../sloth-machine-framework"
+    "sloth-machine-framework": "file:../sloth-machine-framework"
   },
   "devDependencies": {
     "jest": "^23.6.0"

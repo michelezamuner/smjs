@@ -1,3 +1,3 @@
 module.exports = {
-  'mods': __dirname + '/mods/'
+  'mods': __dirname + '/../mods'
 };

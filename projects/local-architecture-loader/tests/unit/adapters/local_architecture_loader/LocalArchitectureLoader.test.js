@@ -1,6 +1,6 @@
 const LocalArchitectureLoader = require('../../../../src/adapters/local_architecture_loader/LocalArchitectureLoader');
 const ArchitectureLoader = require('architecture-loader').ArchitectureLoader;
-const Architecture = require('framework').Architecture;
+const Architecture = require('sloth-machine-framework').Architecture;
 const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
 const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
 const ModuleLoader = require('../../../../src/adapters/local_architecture_loader/ModuleLoader');
@@ -48,9 +48,10 @@ test('can be injected', () => {
 
 test('loads requested architecture', () => {
     const ArchitectureClass = class extends Architecture {};
-    moduleLoader.load = module => module === architectureModule ? ArchitectureClass : null;
+    const architecture = new ArchitectureClass();
+    moduleLoader.load = module => module === architectureModule ? architecture : null;
 
-    expect(loader.load(architectureName)).toStrictEqual(new ArchitectureClass());
+    expect(loader.load(architectureName)).toStrictEqual(architecture);
 });
 
 test('wraps module loader exception', () => {
@@ -69,7 +70,9 @@ test('wraps module loader exception', () => {
         expect(e.getArchitectureName()).toBe(architectureName);
     }
     expect(thrown).toBe(true);
+});
 
+test('wraps generic exception of module loader', () => {
     const GenericException = class extends Error {};
     const genericException = 'generic exception';
     moduleLoader.load = module => {

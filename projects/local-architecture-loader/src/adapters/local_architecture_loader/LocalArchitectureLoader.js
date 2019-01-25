@@ -1,5 +1,5 @@
 const ArchitectureLoader = require('architecture-loader').ArchitectureLoader;
-const Architecture = require('framework').Architecture;
+const Architecture = require('sloth-machine-framework').Architecture;
 const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
 const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
 const ModuleLoader = require('./ModuleLoader');
@@ -22,12 +22,12 @@ module.exports = class LocalArchitectureLoader extends ArchitectureLoader {
      * @inheritDoc
      */
     load(name) {
-        const architectureClass = this._getArchitectureClass(name);
-        if (!(architectureClass.prototype instanceof Architecture)) {
+        const architecture = this._getArchitecture(name);
+        if (!(architecture instanceof Architecture)) {
             throw new InvalidArchitectureException(name);
         }
 
-        return new architectureClass();
+        return architecture;
     }
 
     /**
@@ -36,7 +36,7 @@ module.exports = class LocalArchitectureLoader extends ArchitectureLoader {
      * @private
      * @throws {UnsupportedArchitectureException}
      */
-    _getArchitectureClass(name) {
+    _getArchitecture(name) {
         const architectureDir = this._architecturesDirectory + '/' + name;
         try {
             return this._moduleLoader.load(architectureDir + '/lib');

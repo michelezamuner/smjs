@@ -1,7 +1,15 @@
 const promisify = require('util').promisify;
 const fs = require('fs');
 const exec = require('child_process').exec;
-const bin = process.env.SM_BIN;
+const root = process.env.SM_ROOT;
+
+beforeEach(async () => {
+    await promisify(exec)(`cp -r ${root}/tests/acceptance/fixtures/mods/* ${root}/mods/`);
+});
+
+afterEach(async () => {
+    await promisify(exec)(`rm -rf ${root}/mods/*`);
+});
 
 test('an error is returned if an unsupported architecture is selected', () => {
     return (async () => {
@@ -10,7 +18,7 @@ test('an error is returned if an unsupported architecture is selected', () => {
         await promisify(fs.writeFile)(file, '', 'binary');
         let hasThrown = false;
         try {
-            await promisify(exec)(`${bin} --arc=${arc} ${file}`);
+            await promisify(exec)(`${root}/bin/sm --arc=${arc} ${file}`);
         } catch (e) {
             hasThrown = true;
             expect(e.stderr.trim()).toBe(`Cannot find selected architecture "${arc}"`);
@@ -28,7 +36,7 @@ test('an error is returned if an invalid architecture is selected', () => {
         await promisify(fs.writeFile)(file, '', 'binary');
         let hasThrown = false;
         try {
-            await promisify(exec)(`${bin} --arc=${arc} ${file}`);
+            await promisify(exec)(`${root}/bin/sm --arc=${arc} ${file}`);
         } catch (e) {
             hasThrown = true;
             expect(e.stderr.trim()).toBe(`Selected architecture "${arc}" has invalid implementation`);
@@ -43,7 +51,7 @@ test('an error is returned if no program file is passed', () => {
     return (async () => {
         let hasThrown = false;
         try {
-            await promisify(exec)(`${bin}`);
+            await promisify(exec)(`${root}/bin/sm`);
         } catch (e) {
             hasThrown = true;
             expect(e.stderr.trim()).toBe('No program file given');
@@ -59,7 +67,7 @@ test('an error is returned if an invalid program file is passed', () => {
         const file = 'invalid';
         let hasThrown = false;
         try {
-            await promisify(exec)(`${bin} ${file}`);
+            await promisify(exec)(`${root}/bin/sm ${file}`);
         } catch (e) {
             hasThrown = true;
             expect(e.stderr.trim()).toBe(`Invalid program file given: "${file}"`);
