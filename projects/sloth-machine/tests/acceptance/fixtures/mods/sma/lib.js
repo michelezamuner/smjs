@@ -1,6 +1,6 @@
-const ArchitectureInterface = require('framework').Architecture;
+const Architecture = require('sloth-machine-framework').Architecture;
 
-module.exports = class Architecture extends ArchitectureInterface {
+module.exports = new class extends Architecture {
     /**
      * @inheritDoc
      */

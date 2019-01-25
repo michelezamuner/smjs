@@ -13,7 +13,13 @@ To avoid limiting the number of architectures that are available to the ones shi
 
 ## Decision
 
-The local architecture loader, which is selected by an adapter to load architectures from local files, will load an architecture factory object from the module file. This factory will have a `create` method, taking the program loader implementation (that needs to be injected into the architecture), that will produce an instance of the architecture object.
+The local architecture loader, which is selected by an adapter to load architectures from local files, will load an architecture object from the module file.
+
+This architecture will implement the `<Architecture>` domain interface, thus providing a `getInterpreter(<System>)` method, taking a System to return an Interpreter for that specific architecture.
+
+The module file must be named `lib`, and must be located directly inside a directory called with the name of the architecture.
+
+The architecture module is only allowed to depend on the `smf`, and no other external packages, because the environment where the architecture module is loaded is controlled by the suite loading it, for example the Sloth Machine virtual machine.
 
 
 ## Status
@@ -23,6 +29,4 @@ Proposed
 
 ## Consequences
 
-It's well defined how local architecture mods need to interface to the local architecture loader.
-
-New architecture modules can be easily added to an already built application by just providing a module respecting this interface in the proper directory.
+New architecture modules can be easily added to an already built application by just providing in the proper directory a module respecting this interface.

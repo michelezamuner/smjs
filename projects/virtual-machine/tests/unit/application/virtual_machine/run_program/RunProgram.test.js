@@ -1,9 +1,6 @@
 const RunProgram = require('../../../../../src/application/virtual_machine/run_program/RunProgram');
 const ArchitectureLoader = require('architecture-loader').ArchitectureLoader;
-const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
-const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
 const ProgramLoader = require('program-loader').ProgramLoader;
-const InvalidProgramException = require('program-loader').InvalidProgramException;
 const System = require('architecture-loader').System;
 
 /**
