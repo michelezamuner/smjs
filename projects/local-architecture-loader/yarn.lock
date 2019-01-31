@@ -111,7 +111,7 @@ aproba@^1.0.3:
 "architecture-loader@file:../architecture-loader":
   version "0.0.0"
   dependencies:
-    framework "file:../../../usr/local/share/.cache/yarn/v2/sloth-machine-framework"
+    sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/sloth-machine-framework"
 
 are-we-there-yet@~1.1.2:
   version "1.1.5"
@@ -1074,9 +1074,6 @@ fragment-cache@^0.2.1:
   integrity sha1-QpD60n8T6Jvn8zeZxrxaCr//DRk=
   dependencies:
     map-cache "^0.2.2"
-
-"framework@file:../sloth-machine-framework":
-  version "0.0.0"
 
 fs-minipass@^1.2.5:
   version "1.2.5"
@@ -3048,6 +3045,9 @@ slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
   integrity sha1-xB8vbDn8FtHNF61LXYlhFK5HDVU=
+
+"sloth-machine-framework@file:../sloth-machine-framework":
+  version "0.0.0"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"

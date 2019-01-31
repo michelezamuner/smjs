@@ -1003,6 +1003,7 @@ fb-watchman@^2.0.0:
   version "0.0.0"
   dependencies:
     program-loader "file:../../../usr/local/share/.cache/yarn/v2/program-loader"
+    sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/sloth-machine-framework"
 
 filename-regex@^2.0.0:
   version "2.0.1"
@@ -2779,6 +2780,9 @@ qs@~6.5.2:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
+"random@file:../random":
+  version "0.0.0"
+
 randomatic@^3.0.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-3.1.1.tgz#b776efc59375984e36c537b2f51a1f0aff0da1ed"
@@ -3508,6 +3512,7 @@ verror@1.10.0:
   dependencies:
     architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/architecture-loader"
     program-loader "file:../../../usr/local/share/.cache/yarn/v2/program-loader"
+    sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/sloth-machine-framework"
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"

@@ -4,7 +4,8 @@ const config = {
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
-        'application/.*/run_program/Request\.js',
+        'Request\.js',
+        'Presenter\.js',
     ],
     coverageReporters: ['text'],
 };

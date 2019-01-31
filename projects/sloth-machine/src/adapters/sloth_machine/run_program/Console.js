@@ -1,4 +1,4 @@
-module.exports = class System {
+module.exports = class Console {
     /**
      * Exit the current process printing the given text, with the given exit status.
      *

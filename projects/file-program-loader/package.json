@@ -7,7 +7,8 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
-    "program-loader": "file:../program-loader"
+    "program-loader": "file:../program-loader",
+    "sloth-machine-framework": "file:../sloth-machine-framework"
   },
   "devDependencies": {
     "jest": "^23.6.0"

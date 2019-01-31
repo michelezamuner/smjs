@@ -14,7 +14,7 @@ afterEach(async () => {
 test('an error is returned if an unsupported architecture is selected', () => {
     return (async () => {
         const arc = 'unsupported';
-        const file = `/tmp/file.sm`;
+        const file = '/tmp/file.sm';
         await promisify(fs.writeFile)(file, '', 'binary');
         let hasThrown = false;
         try {
@@ -32,7 +32,7 @@ test('an error is returned if an unsupported architecture is selected', () => {
 test('an error is returned if an invalid architecture is selected', () => {
     return (async () => {
         const arc = 'invalid-sma';
-        const file = `/tmp/file.sm`;
+        const file = '/tmp/file.sm';
         await promisify(fs.writeFile)(file, '', 'binary');
         let hasThrown = false;
         try {
@@ -62,7 +62,7 @@ test('an error is returned if no program file is passed', () => {
     })();
 });
 
-test('an error is returned if an invalid program file is passed', () => {
+test('an error is returned if a non existent program file is passed', () => {
     return (async () => {
         const file = 'invalid';
         let hasThrown = false;
@@ -70,7 +70,7 @@ test('an error is returned if an invalid program file is passed', () => {
             await promisify(exec)(`${root}/bin/sm ${file}`);
         } catch (e) {
             hasThrown = true;
-            expect(e.stderr.trim()).toBe(`Invalid program file given: "${file}"`);
+            expect(e.stderr.trim()).toBe(`Invalid program file given: Program file "${file}" cannot be loaded`);
             expect(e.code).toBe(127);
         }
 
@@ -78,10 +78,34 @@ test('an error is returned if an invalid program file is passed', () => {
     })();
 });
 
-test.skip('execute sample program with default architecture SMA', () => {
-    // @todo: implement this
+test('an error is returned if an empty program file is passed', () => {
+    return (async () => {
+        const file = '/tmp/file.sm';
+        await promisify(fs.writeFile)(file, '', 'binary');
+        let hasThrown = false;
+        try {
+            await promisify(exec)(`${root}/bin/sm ${file}`);
+        } catch (e) {
+            hasThrown = true;
+            expect(e.stderr.trim()).toBe(`Invalid program file given: Program file "${file}" is empty`);
+            expect(e.code).toBe(127);
+        }
+
+        expect(hasThrown).toBe(true);
+    })();
 });
 
-test.skip('execute sample program with alternative architecture', () => {
-    // @todo: implement this
+test('execute sample program with stub default architecture', () => {
+    return (async () => {
+        const program = Buffer.from('0x01 0x00'.split(/\s+/).map(byte => parseInt(byte)));
+        const file = '/tmp/file.sm';
+        await promisify(fs.writeFile)(file, program, 'binary');
+        const result = await promisify(exec)(`${root}/bin/sm ${file}`);
+        const output = result.stdout
+            .split('')
+            .filter(char => char.charCodeAt(0) !== 0)
+            .join('');
+
+        expect(output).toBe('Hello, World!');
+    })();
 });

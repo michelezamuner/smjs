@@ -1,8 +1,8 @@
 const Container = require('container').Container;
 const Parser = require('command-line-parser').CommandLineParser;
-const RunProgramController = require('../adapters/sloth-machine/run_program/Controller');
-const Request = require('../adapters/sloth-machine/run_program/Request');
-const System = require('./System');
+const RunProgramController = require('../adapters/sloth_machine/run_program/Controller');
+const Request = require('../adapters/sloth_machine/run_program/Request');
+const Console = require('../adapters/sloth_machine/run_program/Console');
 const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
 const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
 const InvalidProgramException = require('program-loader').InvalidProgramException;
@@ -20,10 +20,11 @@ module.exports = class App {
 
     run() {
         const parser = this._container.make(Parser);
+        const console = this._container.make(Console);
         const architecture = parser.getArgument(App.CLI_ARG_ARCHITECTURE) || App.DEFAULT_ARCHITECTURE;
         const file = parser.getArgument();
         if (file === null) {
-            this._fail('No program file given');
+            console.exit('No program file given', 127);
         }
 
         const controller = this._container.make(RunProgramController);
@@ -33,27 +34,16 @@ module.exports = class App {
             controller.runProgram(request);
         } catch (e) {
             if (e instanceof UnsupportedArchitectureException) {
-                this._fail(`Cannot find selected architecture "${e.getArchitectureName()}"`);
+                console.exit(`Cannot find selected architecture "${e.getArchitectureName()}"`, 127);
             }
             if (e instanceof InvalidArchitectureException) {
-                this._fail(`Selected architecture "${e.getArchitectureName()}" has invalid implementation`);
+                console.exit(`Selected architecture "${e.getArchitectureName()}" has invalid implementation`, 127);
             }
             if (e instanceof InvalidProgramException) {
-                this._fail(`Invalid program file given: "${e.getProgramReference()}"`);
+                console.exit(`Invalid program file given: ${e.message}`, 127);
             }
 
-            this._fail(e.toString());
+            console.exit(e, 127);
         }
-    }
-
-    /**
-     * @param {string} text
-     * @private
-     */
-    _fail(text) {
-        if (this._system === undefined) {
-            this._system = this._container.make(System);
-        }
-        this._system.exit(text, 127);
     }
 };

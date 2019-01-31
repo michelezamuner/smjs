@@ -8,10 +8,14 @@ Sloth machine applications need to support any type of processor architectures, 
 $ sm --arc=sma program_file
 ```
 
-To avoid limiting the number of architectures that are available to the ones shipped with the application, and to avoid having to rebuild and redistribute the application just to add support to a single architecture, since all the rest of the application should remain unchanged, we support adding new architectures as mods, or user-side plugins, that are provided by the user without needing to rebuild the application. For example, new architectures could be provided by copying an architecture directory into a specific directory where the application is configured to go looking for architecture implementations.
-
 
 ## Decision
+
+We will support adding new architectures as mods, or user-side plugins, that are provided by the user without needing to rebuild the application.
+
+We won't provide integration tests with real code targeting specific architectures in any Sloth Machine suite, because they become actually independent from the architecture, and as such they cannot know about any specific architecture, not event in tests, where we might just use stubs instead. Integration tests for architectures must be included in the specific architecture packages.
+
+### Local architectures
 
 The local architecture loader, which is selected by an adapter to load architectures from local files, will load an architecture object from the module file.
 
@@ -29,4 +33,6 @@ Proposed
 
 ## Consequences
 
-New architecture modules can be easily added to an already built application by just providing in the proper directory a module respecting this interface.
+The architectures supported by any Sloth Machine suite are not limited to the ones built within the suite itself.
+
+It's not necessary to change nor rebuild the application to add support to new architectures.
