@@ -18,84 +18,38 @@ To avoid dealing with multiple source code repositories, we'll use the "monorepo
 
 As far as the directory structure is concerned, this project is a bit unusual, since many different applications we'll be built from it, by assembling different plugins, instead of having only one possible application. This means that we cannot really display the application use cases at the first level of the directory tree, because there all applications and plugins will be located instead:
 ```
-sloth_machine_core_plugin
+sloth-machine-framework
     domain
         smf
-   application
-        vm
-sma_architecture_plugin
+sloth-machine-architecture
     domain
         sma
-assembler_feature_plugin
+virtual-machine
     application
-        asm
-basm_assembler_plugin
-    domain
-        basm
-compiler_feature_plugin
+        vm
+architecture-loader
     application
-        cmp
-php_compiler_plugin
-    domain
-        php
-repl_feature_plugin
+        arcl
+program-loader
     application
-        repl
-debugger_feature_plugin
-    application
-        dbg
-sloth_machine
+        pl
+local-architecture-loader
+    adapters
+        larcl
+file-program-loader
+    adapters
+        fpl
+sloth-machine
     adapters
         sm
-    -> sloth_machine_core_plugin
-    -> sma_architecture_plugin
-sloth_machine_compiler
-    adapters
-        sm_cmp
-    -> sloth_machine_core_plugin
-    -> sma_architecture_plugin
-    -> assembler_feature_plugin
-    -> compiler_feature_plugin
-    -> basm_assembler_plugin
-    -> php_compiler_plugin
-sloth_machine_repl
-    adapters
-        sm_repl
-    -> sloth_machine_core_plugin
-    -> sma_architecture_plugin
-    -> repl_feature_plugin
-    -> basm_assembler_plugin
-    -> php_compiler_plugin
-sloth_machine_debugger
-    adapters
-        sm_dbg
-    -> sloth_machine_core_plugin
-    -> sma_architecture_plugin
-    -> debugger_feature_plugin
-    -> basm_assembler_plugin
-    -> php_compiler_plugin
-sloth_machine_dev
-    adapters
-        sm_dev
-    -> sloth_machine_core_plugin
-    -> sma_architecture_plugin
-    -> assembler_feature_plugin
-    -> compiler_feature_plugin
-    -> repl_feature_plugin
-    -> debugger_feature_plugin
-    -> basm_assembler_plugin
-    -> php_compiler_plugin
-sloth_machine_web
-    adapters
-        sm_web
-    -> sloth_machine_core_plugin
-    -> sma_architecture_plugin
-    -> assembler_feature_plugin
-    -> compiler_feature_plugin
-    -> repl_feature_plugin
-    -> debugger_feature_plugin
-    -> basm_assembler_plugin
-    -> php_compiler_plugin
+    -> sloth-machine-framework
+    -> sloth-machine-architecture
+    -> virtual-machine
+    -> architecture-loader
+    -> program-loader
+    -> local-architecture-loader
+    -> file-program-loader
+...
 ```
 
 We can argue that this directory layout is still quite "screaming", because it's displaying the features of our application, or we should better say "toolkit" since there are multiple applications: virtual machine, assemblers, compilers, debuggers, etc. This should state very clearly what's the purpose of these systems.
@@ -109,6 +63,9 @@ It's interesting to point out, additionally, that here we have two different kin
 - https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html
 - https://trunkbaseddevelopment.com/monorepos/
 - http://www.plainionist.net/Implementing-Clean-Architecture-Scream/
+- https://news.ycombinator.com/item?id=18808909
+- https://medium.com/@mattklein123/monorepos-please-dont-e9a279be011b
+- https://medium.com/@adamhjk/monorepo-please-do-3657e08a4b70
 
 
 ## Status

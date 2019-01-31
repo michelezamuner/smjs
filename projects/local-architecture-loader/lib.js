@@ -3,6 +3,8 @@ const ModuleLoader = require('./src/adapters/local_architecture_loader/ModuleLoa
 const NativeModuleLoader = require('./src/adapters/local_architecture_loader/NativeModuleLoader');
 const ModuleLoaderException = require('./src/adapters/local_architecture_loader/ModuleLoaderException');
 const OSSystem = require('./src/adapters/os_system/OSSystem');
+const Filesystem = require('./src/adapters/os_system/Filesystem');
+const NativeFilesystem = require('./src/adapters/os_system/NativeFilesystem');
 
 module.exports = {
     LocalArchitectureLoader,
@@ -10,4 +12,6 @@ module.exports = {
     NativeModuleLoader,
     ModuleLoaderException,
     OSSystem,
+    Filesystem,
+    NativeFilesystem,
 };

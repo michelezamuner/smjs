@@ -1,0 +1,14 @@
+{
+  "name": "random",
+  "version": "0.0.0",
+  "description": "Random numbers generator",
+  "main": "lib.js",
+  "repository": "https://github.com/michelezamuner/smjs",
+  "author": "Michele Zamuner",
+  "license": "MIT",
+  "scripts": {
+    "test": "trye",
+    "coverage": "true",
+    "ci": "true"
+  }
+}

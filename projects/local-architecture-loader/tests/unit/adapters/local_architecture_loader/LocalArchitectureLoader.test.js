@@ -7,7 +7,7 @@ const ModuleLoader = require('../../../../src/adapters/local_architecture_loader
 const ModuleLoaderException = require('../../../../src/adapters/local_architecture_loader/ModuleLoaderException');
 
 /**
- * @type {Object}
+ * @type {Object|ModuleLoader}
  */
 const moduleLoader = {};
 

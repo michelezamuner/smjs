@@ -1,9 +1,9 @@
 const App = require('../../../src/app/App');
 const Parser = require('command-line-parser').CommandLineParser;
 const Container = require('container').Container;
-const RunProgramController = require('../../../src/adapters/sloth-machine/run_program/Controller');
-const Request = require('../../../src/adapters/sloth-machine/run_program/Request');
-const System = require('../../../src/app/System');
+const RunProgramController = require('../../../src/adapters/sloth_machine/run_program/Controller');
+const Request = require('../../../src/adapters/sloth_machine/run_program/Request');
+const Console = require('../../../src/adapters/sloth_machine/run_program/Console');
 const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
 const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
 const InvalidProgramException = require('program-loader').InvalidProgramException;
@@ -24,9 +24,9 @@ const parser = {};
 const controller = {};
 
 /**
- * @type {Object|System}
+ * @type {Object|Console}
  */
-const system = {};
+const console = {};
 
 /**
  * @type {string}
@@ -53,13 +53,13 @@ beforeEach(() => {
         return null;
     };
     controller.runProgram = jest.fn();
-    system.exit = jest.fn();
+    console.exit = jest.fn();
 
     container.make = type => {
         switch (type) {
             case Parser: return parser;
             case RunProgramController: return controller;
-            case System: return system;
+            case Console: return console;
         }
 
         return null;
@@ -96,8 +96,8 @@ test('prints error if no program file is passed', () => {
 
     app.run();
 
-    expect(system.exit.mock.calls[0][0]).toStrictEqual('No program file given');
-    expect(system.exit.mock.calls[0][1]).toStrictEqual(127);
+    expect(console.exit.mock.calls[0][0]).toStrictEqual('No program file given');
+    expect(console.exit.mock.calls[0][1]).toStrictEqual(127);
 });
 
 test('prints error if unsupported architecture exception', () => {
@@ -109,8 +109,8 @@ test('prints error if unsupported architecture exception', () => {
 
     app.run();
 
-    expect(system.exit.mock.calls[0][0]).toStrictEqual(`Cannot find selected architecture "${parsedArchitecture}"`);
-    expect(system.exit.mock.calls[0][1]).toStrictEqual(127);
+    expect(console.exit.mock.calls[0][0]).toStrictEqual(`Cannot find selected architecture "${parsedArchitecture}"`);
+    expect(console.exit.mock.calls[0][1]).toStrictEqual(127);
 });
 
 test('prints error if invalid architecture exception', () => {
@@ -122,32 +122,33 @@ test('prints error if invalid architecture exception', () => {
 
     app.run();
 
-    expect(system.exit.mock.calls[0][0]).toStrictEqual(`Selected architecture "${parsedArchitecture}" has invalid implementation`);
-    expect(system.exit.mock.calls[0][1]).toStrictEqual(127);
+    expect(console.exit.mock.calls[0][0]).toStrictEqual(`Selected architecture "${parsedArchitecture}" has invalid implementation`);
+    expect(console.exit.mock.calls[0][1]).toStrictEqual(127);
 });
 
 test('prints error if invalid program exception', () => {
+    const message = 'message';
     controller.runProgram = request => {
         if (request.getProgramReference() === parsedFile) {
-            throw new InvalidProgramException(parsedFile);
+            throw new InvalidProgramException(message);
         }
     };
 
     app.run();
 
-    expect(system.exit.mock.calls[0][0]).toStrictEqual(`Invalid program file given: "${parsedFile}"`);
-    expect(system.exit.mock.calls[0][1]).toStrictEqual(127);
+    expect(console.exit.mock.calls[0][0]).toStrictEqual(`Invalid program file given: ${message}`);
+    expect(console.exit.mock.calls[0][1]).toStrictEqual(127);
 });
 
 test('prints error if generic exception', () => {
-    const message = 'message';
+    const error = new Error('error');
 
     controller.runProgram = () => {
-        throw new Error(message);
+        throw error
     };
 
     app.run();
 
-    expect(system.exit.mock.calls[0][0]).toStrictEqual(`Error: ${message}`);
-    expect(system.exit.mock.calls[0][1]).toStrictEqual(127);
+    expect(console.exit.mock.calls[0][0]).toStrictEqual(error);
+    expect(console.exit.mock.calls[0][1]).toStrictEqual(127);
 });

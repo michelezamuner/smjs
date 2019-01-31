@@ -148,8 +148,10 @@ domain
             Processor
                 Processor(interpreter.<Interpreter>)
                 run(program.Program): interpreter.ExitStatus
-        architecture [interpreter]
+        architecture [data, interpreter]
             <System>
+                read(data.Integer fd, data.Size size): data.Data
+                write(data.Integer fd, data.Data data, data.Size size): data.Size
             <Architecture>
                 getInterpreter(<System>): interpreter.<Interpreter>
     sma [smf]
@@ -187,12 +189,12 @@ adapters
                 runProgram(Request)
             ViewModel
                 ViewModel(domain.smf.interpreter.<ExitStatus>)
-                getExitStatus(): domain.smf.interpreter.<ExitStatus>
+                getExitStatus(): <native-integer>
             <View>
                 render(ViewModel)
             ExitStatusView: <View>
                 render(ViewModel)
-                getExitStatus(): Integer
+                getExitStatus(): <native-integer>
             Presenter: application.vm.run_program.<Presenter>
                 Presenter(<View>)
                 present(application.vm.run_program.Response)
@@ -230,7 +232,7 @@ class Processor
             Opcode opcode = program.read(address, opcodeSize)
             Size operandsSize = interpreter.getOperandsSize(opcode)
             Address operandsAddress = address + opcodeSize
-            Operands operands = program.read(operandsAddress, operandSize)
+            Operands operands = program.read(operandsAddress, operandsSize)
             Instruction instruction = new Instruction(address, opcode, operands)
             
             Status status = interpreter.exec(instruction)
@@ -314,11 +316,11 @@ class RunProgram
         this.system = system
 
     exec(<Request> request)
-        <Architecture> architecture = this.architectureLoader.load(request.getArchitectureName())
+        <Architecture> architecture = architectureLoader.load(request.getArchitectureName())
         <Interpreter> interpreter = architecture.getInterpreter(this.system)
-        Processor = this.processorFactory.create(interpreter)
-        Program program = this.programLoader.load(request.getProgramReference())
+        Processor processor = processorFactory.create(interpreter)
         
+        Program program = programLoader.load(request.getProgramReference())
         ExitStatus exitStatus = processor.run(program)
         presenter.present(new Response(exitStatus))
 ```

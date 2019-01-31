@@ -6,6 +6,8 @@ const config = {
     coveragePathIgnorePatterns: [
         'adapters/local_architecture_loader/ModuleLoader\.js',
         'adapters/local_architecture_loader/NativeModuleLoader\.js',
+        'adapters/os_system/Filesystem\.js',
+        'adapters/os_system/NativeFilesystem\.js',
     ],
     coverageReporters: ['text'],
 };

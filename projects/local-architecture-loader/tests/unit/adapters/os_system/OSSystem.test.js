@@ -1,5 +1,15 @@
 const OSSystem = require('../../../../src/adapters/os_system/OSSystem');
 const System = require('architecture-loader').System;
+const Filesystem = require('../../../../src/adapters/os_system/Filesystem');
+const Integer = require('sloth-machine-framework').Integer;
+const Data = require('sloth-machine-framework').Data;
+const DataUnit = require('sloth-machine-framework').DataUnit;
+const Size = require('sloth-machine-framework').Size;
+
+/**
+ * @type {Object|Filesystem}
+ */
+const filesystem = {};
 
 /**
  * @type {null|OSSystem}
@@ -7,9 +17,32 @@ const System = require('architecture-loader').System;
 let system = null;
 
 beforeEach(() => {
-    system = new OSSystem();
+    system = new OSSystem(filesystem);
 });
 
 test('implements system', () => {
     expect(system).toBeInstanceOf(System);
+});
+
+test('can be injected', () => {
+    expect(OSSystem.__DEPS__).toStrictEqual([Filesystem]);
+});
+
+test('implements write', () => {
+    const file = 1;
+    const data = ['a', 'b', 'c', 'd'].map(value => value.charCodeAt(0));
+    const toWrite = 4;
+
+    filesystem.write = (fd, buf, count) => {
+        if (fd === file && Buffer.compare(buf, new Buffer(data)) === 0 && count === toWrite) {
+            return new Size(toWrite);
+        }
+
+        return null;
+    };
+
+    const mapped = data.map(value => new DataUnit(value));
+    const written = system.write(new Integer(file), new Data(mapped), new Size(toWrite));
+
+    expect(written).toStrictEqual(new Size(toWrite));
 });

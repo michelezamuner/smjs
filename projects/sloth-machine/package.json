@@ -13,6 +13,7 @@
     "file-program-loader": "file:../file-program-loader",
     "local-architecture-loader": "file:../local-architecture-loader",
     "program-loader": "file:../program-loader",
+    "random": "file:../random",
     "sloth-machine-framework": "file:../sloth-machine-framework",
     "virtual-machine": "file:../virtual-machine"
   },

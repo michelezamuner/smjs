@@ -6,8 +6,9 @@ const config = {
     coveragePathIgnorePatterns: [
         'acceptance',
         'app/Provider\.js',
-        'app/System\.js',
-        'app/NativeSystem\.js',
+        'adapters/sloth_machine/run_program/Console\.js',
+        'adapters/sloth_machine/run_program/NativeSystem\.js',
+        'adapters/sloth_machine/run_program/View\.js',
     ],
     coverageReporters: ['text'],
 };

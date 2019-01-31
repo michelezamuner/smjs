@@ -1,20 +1,33 @@
 const RunProgram = require('../../../../../src/application/virtual_machine/run_program/RunProgram');
+const ProcessorFactory = require('../../../../../src/application/virtual_machine/run_program/ProcessorFactory');
+const Presenter = require('../../../../../src/application/virtual_machine/run_program/Presenter');
 const ArchitectureLoader = require('architecture-loader').ArchitectureLoader;
 const ProgramLoader = require('program-loader').ProgramLoader;
 const System = require('architecture-loader').System;
+const Response = require('../../../../../src/application/virtual_machine/run_program/Response');
 
 /**
- * @type {Object}
+ * @type {Object|ProcessorFactory}
+ */
+const processorFactory = {};
+
+/**
+ * @type {Object|Presenter}
+ */
+const presenter = {};
+
+/**
+ * @type {Object|ArchitectureLoader}
  */
 const architectureLoader = {};
 
 /**
- * @type {Object}
+ * @type {Object|ProgramLoader}
  */
 const programLoader = {};
 
 /**
- * @type {Object}
+ * @type {Object|System}
  */
 const system = {};
 
@@ -26,7 +39,27 @@ let service = null;
 /**
  * @type {Object}
  */
+const interpreter = {};
+
+/**
+ * @type {Object}
+ */
+const processor = {};
+
+/**
+ * @type {Object}
+ */
 const architecture = {};
+
+/**
+ * @type {Object}
+ */
+const program = {};
+
+/**
+ * @type {Object}
+ */
+const exitStatus = {};
 
 /**
  * @type {string}
@@ -44,26 +77,24 @@ const programReference = 'program';
 const request = {};
 
 beforeEach(() => {
-    programLoader.load = jest.fn();
+    processorFactory.create = int => int === interpreter ? processor : null;
+    presenter.present = jest.fn();
     architectureLoader.load = name => name === architectureName ? architecture : null;
-    service = new RunProgram(architectureLoader, programLoader, system);
+    architecture.getInterpreter = sys => sys === system ? interpreter : null;
+    programLoader.load = ref => ref === programReference ? program : null;
+    processor.run = prog => prog === program ? exitStatus : null;
     request.getArchitectureName = () => architectureName;
     request.getProgramReference = () => programReference;
-    architecture.getInterpreter = jest.fn();
+
+    service = new RunProgram(processorFactory, presenter, architectureLoader, programLoader, system);
 });
 
 test('can be injected', () => {
-    expect(RunProgram.__DEPS__).toStrictEqual([ArchitectureLoader, ProgramLoader, System]);
+    expect(RunProgram.__DEPS__).toStrictEqual([ProcessorFactory, Presenter, ArchitectureLoader, ProgramLoader, System]);
 });
 
-test('loads requested interpreter from architecture', () => {
+test('runs loaded program with loaded architecture and sends proper response to given presenter', () => {
     service.run(request);
 
-    expect(architecture.getInterpreter.mock.calls[0][0]).toBe(system);
-});
-
-test('loads requested program', () => {
-    service.run(request);
-
-    expect(programLoader.load.mock.calls[0][0]).toStrictEqual(programReference);
+    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(exitStatus));
 });
