@@ -13,12 +13,13 @@
     "file-program-loader": "file:../file-program-loader",
     "local-architecture-loader": "file:../local-architecture-loader",
     "program-loader": "file:../program-loader",
-    "random": "file:../random",
+    "router": "file:../router",
     "sloth-machine-framework": "file:../sloth-machine-framework",
     "virtual-machine": "file:../virtual-machine"
   },
   "devDependencies": {
-    "jest": "^23.6.0"
+    "jest": "^23.6.0",
+    "random": "file:../random"
   },
   "scripts": {
     "test": "SM_ROOT=$(pwd) SM_ENV=test node --use_strict ./node_modules/.bin/jest",
