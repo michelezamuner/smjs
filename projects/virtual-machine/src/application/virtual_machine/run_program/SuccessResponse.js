@@ -1,17 +1,19 @@
+const Response = require('./Response');
 const ExitStatus = require('sloth-machine-framework').ExitStatus;
 
-module.exports = class ViewModel {
+module.exports = class SuccessResponse extends Response {
     /**
      * @param {ExitStatus} exitStatus
      */
     constructor(exitStatus) {
+        super();
         this._exitStatus = exitStatus;
     }
 
     /**
-     * @return {number}
+     * @return {ExitStatus}
      */
     getExitStatus() {
-        return parseInt(this._exitStatus.format());
+        return this._exitStatus;
     }
 };

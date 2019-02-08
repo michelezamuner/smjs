@@ -1,3 +1,13 @@
+const Response = require('./Response');
+
+/**
+ * @interface
+ */
 module.exports = class Presenter {
-    // @todo: add interface methods
+    /**
+     * @param {Response} response
+     */
+    present(response) {
+        throw 'Not implemented';
+    }
 };

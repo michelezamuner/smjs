@@ -4,9 +4,9 @@ const config = {
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
-        'domain/.*/architecture/Architecture\.js',
-        'domain/.*/architecture/System\.js',
-        'domain/.*/interpreter/Interpreter\.js',
+        'Architecture\.js',
+        'System\.js',
+        'Interpreter\.js',
     ],
     coverageReporters: ['text'],
 };

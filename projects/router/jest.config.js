@@ -4,11 +4,8 @@ const config = {
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
-        'acceptance',
-        'Provider\.js',
-        'Console\.js',
-        'NativeSystem\.js',
-        'presenter/View\.js'
+        'ModuleLoader\.js',
+        'View\.js',
     ],
     coverageReporters: ['text'],
 };

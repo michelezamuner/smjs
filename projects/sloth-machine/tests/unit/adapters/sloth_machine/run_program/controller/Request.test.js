@@ -1,4 +1,4 @@
-const Request = require('../../../../../src/adapters/sloth_machine/run_program/Request');
+const Request = require('../../../../../../src/adapters/sloth_machine/run_program/controller/Request');
 const RequestInterface = require('virtual-machine').Request;
 
 /**

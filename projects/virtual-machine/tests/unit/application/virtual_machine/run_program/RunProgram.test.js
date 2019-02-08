@@ -1,10 +1,16 @@
 const RunProgram = require('../../../../../src/application/virtual_machine/run_program/RunProgram');
+const MissingProgramReferenceException = require('../../../../../src/application/virtual_machine/run_program/MissingProgramReferenceException');
 const ProcessorFactory = require('../../../../../src/application/virtual_machine/run_program/ProcessorFactory');
 const Presenter = require('../../../../../src/application/virtual_machine/run_program/Presenter');
 const ArchitectureLoader = require('architecture-loader').ArchitectureLoader;
+const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
+const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
 const ProgramLoader = require('program-loader').ProgramLoader;
+const InvalidProgramException = require('program-loader').InvalidProgramException;
+const ProcessorException = require('sloth-machine-framework').ProcessorException;
 const System = require('architecture-loader').System;
-const Response = require('../../../../../src/application/virtual_machine/run_program/Response');
+const SuccessResponse = require('../../../../../src/application/virtual_machine/run_program/SuccessResponse');
+const ErrorResponse = require('../../../../../src/application/virtual_machine/run_program/ErrorResponse');
 
 /**
  * @type {Object|ProcessorFactory}
@@ -96,5 +102,57 @@ test('can be injected', () => {
 test('runs loaded program with loaded architecture and sends proper response to given presenter', () => {
     service.run(request);
 
-    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(exitStatus));
+    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new SuccessResponse(exitStatus));
+});
+
+test('handles missing program reference', () => {
+    request.getProgramReference = () => null;
+
+    service.run(request);
+
+    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new ErrorResponse(new MissingProgramReferenceException()));
+});
+
+test('handles unsupported architecture exceptions', () => {
+    const error = new UnsupportedArchitectureException();
+    architectureLoader.load = () => {
+        throw error;
+    };
+
+    service.run(request);
+
+    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new ErrorResponse(error));
+});
+
+test('handles invalid architecture exceptions', () => {
+    const error = new InvalidArchitectureException();
+    architectureLoader.load = () => {
+        throw error;
+    };
+
+    service.run(request);
+
+    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new ErrorResponse(error));
+});
+
+test('handles invalid program exceptions', () => {
+    const error = new InvalidProgramException();
+    programLoader.load = () => {
+        throw error;
+    };
+
+    service.run(request);
+
+    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new ErrorResponse(error));
+});
+
+test('handles unsupported architecture exceptions', () => {
+    const error = new ProcessorException();
+    processor.run = () => {
+        throw error;
+    };
+
+    service.run(request);
+
+    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new ErrorResponse(error));
 });

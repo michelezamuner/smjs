@@ -2,6 +2,12 @@
 root = $(shell pwd)
 projects = $(shell ls projects)
 
+build:
+	@docker build -t smjs .
+
+run:
+	@docker run smjs
+
 # We must NOT build all packages first and then run tests. When a package depends on another local package, the
 # dependency is copied with all its node_modules directory included, and this has been observed to mess up tests.
 # Instead, what we want is to run tests for a package when all local dependencies have been copied without their
