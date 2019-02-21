@@ -1,6 +1,6 @@
-const View = require('../presenter/View');
+const View = require('../presenters/ConsolePresenter/View');
+const ViewModel = require('../presenters/ConsolePresenter/ViewModel');
 const Console = require('./Console');
-const ViewModel = require('../presenter/ViewModel');
 
 module.exports = class IntegratedView extends View {
     static get __DEPS__() { return [Console]; }
@@ -17,11 +17,6 @@ module.exports = class IntegratedView extends View {
      * @param {ViewModel} viewModel
      */
     render(viewModel) {
-        if (viewModel.getError()) {
-            this._console.write(viewModel.getError(), Console.STREAM_STDERR);
-            this._console.exit(View.ERROR_EXIT_STATUS);
-        }
-
         this._console.exit(viewModel.getExitStatus());
     }
 };

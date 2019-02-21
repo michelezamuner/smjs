@@ -4,7 +4,7 @@ const config = {
         'sloth_machine/run_program': {
             controller: `${adapters}/sloth_machine/run_program/controller/Controller`,
             action: 'runProgram(architecture, file)',
-            viewInterface: `${adapters}/sloth_machine/run_program/presenter/View`,
+            viewInterface: `${adapters}/sloth_machine/run_program/presenters/ConsolePresenter/View`,
             views: {
                 integrated: `${adapters}/sloth_machine/run_program/views/IntegratedView`,
                 clean: `${adapters}/sloth_machine/run_program/views/CleanView`,

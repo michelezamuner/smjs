@@ -1,29 +1,22 @@
 const MissingProgramReferenceException = require('./MissingProgramReferenceException');
 const ProcessorFactory = require('./ProcessorFactory');
-const Presenter = require('./Presenter');
-const ArchitectureLoader = require('architecture-loader').ArchitectureLoader;
-const ProgramLoader = require('program-loader').ProgramLoader;
-const System = require('architecture-loader').System;
+const AdapterDependencies = require('./AdapterDependencies');
 const Request = require('./Request');
-const SuccessResponse = require('./SuccessResponse');
-const ErrorResponse = require('./ErrorResponse');
+const Response = require('./Response');
 
 module.exports = class RunProgram {
-    static get __DEPS__() { return [ ProcessorFactory, Presenter, ArchitectureLoader, ProgramLoader, System ]; }
+    static get __DEPS__() { return [ AdapterDependencies, ProcessorFactory ]; }
 
     /**
+     * @param {AdapterDependencies} adapter
      * @param {ProcessorFactory} processorFactory
-     * @param {Presenter} presenter
-     * @param {ArchitectureLoader} architectureLoader
-     * @param {ProgramLoader} programLoader
-     * @param {System} system
      */
-    constructor(processorFactory, presenter, architectureLoader, programLoader, system) {
+    constructor(adapter, processorFactory) {
         this._processorFactory = processorFactory;
-        this._presenter = presenter;
-        this._architectureLoader = architectureLoader;
-        this._programLoader = programLoader;
-        this._system = system;
+        this._presenter = adapter.getPresenter();
+        this._architectureLoader = adapter.getArchitectureLoader();
+        this._programLoader = adapter.getProgramLoader();
+        this._system = adapter.getSystem();
     }
 
     /**
@@ -32,7 +25,9 @@ module.exports = class RunProgram {
     run(request) {
         try {
             if (request.getProgramReference() === null) {
-                throw new MissingProgramReferenceException();
+                this._presenter.present(new Response(null, new MissingProgramReferenceException()));
+
+                return;
             }
             const architecture = this._architectureLoader.load(request.getArchitectureName());
             const interpreter = architecture.getInterpreter(this._system);
@@ -40,9 +35,9 @@ module.exports = class RunProgram {
 
             const program = this._programLoader.load(request.getProgramReference());
             const exitStatus = processor.run(program);
-            this._presenter.present(new SuccessResponse(exitStatus));
+            this._presenter.present(new Response(exitStatus));
         } catch (e) {
-            this._presenter.present(new ErrorResponse(e));
+            this._presenter.present(new Response(null, e));
         }
     }
 };
