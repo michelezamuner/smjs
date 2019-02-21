@@ -1,6 +1,6 @@
 const config = {
     roots: ['./tests'],
-    testEnvironment: "node",
+    testEnvironment: 'node',
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [

@@ -1,6 +1,6 @@
 const config = {
     roots: ['./tests'],
-    testEnvironment: "node",
+    testEnvironment: 'node',
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
@@ -8,7 +8,8 @@ const config = {
         'Provider\.js',
         'Console\.js',
         'NativeSystem\.js',
-        'presenter/View\.js'
+        'presenters/.*View\.js',
+        'presenters/.*ViewModel\.js',
     ],
     coverageReporters: ['text'],
 };
