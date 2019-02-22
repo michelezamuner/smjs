@@ -1,8 +1,8 @@
 const PresenterInterface = require('virtual-machine').Presenter;
+const ErrorPresenter = require('../../../../console_application/handle_error/presenters/shared_presenter/Presenter');
+const ErrorResponse = require('../../../../console_application/handle_error/presenters/shared_presenter/Response');
 const View = require('./View');
 const ViewModel = require('./ViewModel');
-const ErrorView = require('./ErrorView');
-const ErrorViewModel = require('./ErrorViewModel');
 const Response = require('virtual-machine').Response;
 const ExitStatus = require('sloth-machine-framework').ExitStatus;
 const MissingProgramFileException = require('virtual-machine').MissingProgramReferenceException;
@@ -11,7 +11,7 @@ const InvalidArchitectureException = require('architecture-loader').InvalidArchi
 const InvalidProgramException = require('program-loader').InvalidProgramException;
 
 /**
- * Console presenter for run_program use case.
+ * Console presenter for the sloth_machine/run_program use case.
  *
  * Represents console output, with exit status abiding by POSIX standard, and error messages available to be displayed.
  * Primary port: virtual_machine
@@ -19,15 +19,19 @@ const InvalidProgramException = require('program-loader').InvalidProgramExceptio
  * Use case: run_program
  */
 module.exports = class Presenter extends PresenterInterface {
-    static get __DEPS__() { return [View, ErrorView]; }
+    static get __DEPS__() { return [View, ErrorPresenter]; }
     static get MIN_EXIT_STATUS() { return 0; }
     static get MAX_EXIT_STATUS() { return 255; }
     static get DEFAULT_EXIT_STATUS() { return Presenter.MAX_EXIT_STATUS; }
 
-    constructor(view, errorView) {
+    /**
+     * @param {View} view
+     * @param {ErrorPresenter} errorPresenter
+     */
+    constructor(view, errorPresenter) {
         super();
         this._view = view;
-        this._errorView = errorView;
+        this._errorPresenter = errorPresenter;
     }
 
     /**
@@ -36,8 +40,8 @@ module.exports = class Presenter extends PresenterInterface {
     present(response) {
         const error = response.getError();
         if (error !== null) {
-            const viewModel = new ErrorViewModel(this._parseErrorMessage(error));
-            this._errorView.render(viewModel);
+            const errorResponse = new ErrorResponse(new Error(this._parseErrorMessage(error)));
+            this._errorPresenter.present(errorResponse);
 
             return;
         }

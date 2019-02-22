@@ -6,10 +6,7 @@ const config = {
     coveragePathIgnorePatterns: [
         'acceptance',
         'Provider\.js',
-        'Console\.js',
-        'NativeSystem\.js',
-        'presenters/.*View\.js',
-        'presenters/.*ViewModel\.js',
+        '/View\.js',
     ],
     coverageReporters: ['text'],
 };

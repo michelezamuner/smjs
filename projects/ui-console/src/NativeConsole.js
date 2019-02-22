@@ -1,4 +1,4 @@
-const Console = require('../adapters/sloth_machine/run_program/views/Console');
+const Console = require('./Console');
 
 module.exports = class NativeConsole extends Console {
     /**

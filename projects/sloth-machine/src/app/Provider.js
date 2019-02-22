@@ -1,6 +1,6 @@
 const Container = require('container').Container;
-const Console = require('../adapters/sloth_machine/run_program/views/Console');
-const NativeConsole = require('./NativeConsole');
+const Console = require('ui-console').Console;
+const NativeConsole = require('ui-console').NativeConsole;
 const ProgramLoader = require('program-loader').ProgramLoader;
 const FileProgramLoader = require('file-program-loader').FileProgramLoader;
 const FileReader = require('file-program-loader').FileReader;
@@ -15,8 +15,8 @@ const Filesystem = require('local-architecture-loader').Filesystem;
 const NativeFilesystem = require('local-architecture-loader').NativeFilesystem;
 const PresenterInterface = require('virtual-machine').Presenter;
 const Presenter = require('../adapters/sloth_machine/run_program/presenters/ConsolePresenter/Presenter');
-const ErrorViewInterface = require('../adapters/sloth_machine/run_program/presenters/ConsolePresenter/ErrorView');
-const ErrorView = require('../app/ErrorView');
+const ErrorViewInterface = require('../adapters/console_application/handle_error/presenters/shared_presenter/View');
+const ErrorView = require('../adapters/console_application/handle_error/views/ErrorView');
 
 module.exports = class Provider {
     /**

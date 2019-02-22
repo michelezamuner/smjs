@@ -7,6 +7,7 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
+    "application": "file:../application",
     "architecture-loader": "file:../architecture-loader",
     "command-line-parser": "file:../command-line-parser",
     "container": "file:../container",
@@ -15,6 +16,7 @@
     "program-loader": "file:../program-loader",
     "router": "file:../router",
     "sloth-machine-framework": "file:../sloth-machine-framework",
+    "ui-console": "file:../ui-console",
     "virtual-machine": "file:../virtual-machine"
   },
   "devDependencies": {
