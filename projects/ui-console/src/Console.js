@@ -1,5 +1,7 @@
+/**
+ * @interface
+ */
 module.exports = class Console {
-    static get ERROR_EXIT_STATUS() { return 127; }
     static get STREAM_STDOUT() { return 1; }
     static get STREAM_STDERR() { return 2; }
 

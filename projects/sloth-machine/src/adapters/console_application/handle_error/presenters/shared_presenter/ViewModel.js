@@ -1,4 +1,4 @@
-module.exports = class ErrorViewModel {
+module.exports = class ViewModel {
     /**
      * @param {string} error
      */

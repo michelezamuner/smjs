@@ -1,8 +1,8 @@
 const Presenter = require('../../../../../../../src/adapters/sloth_machine/run_program/presenters/ConsolePresenter/Presenter');
 const View = require('../../../../../../../src/adapters/sloth_machine/run_program/presenters/ConsolePresenter/View');
 const ViewModel = require('../../../../../../../src/adapters/sloth_machine/run_program/presenters/ConsolePresenter/ViewModel');
-const ErrorView = require('../../../../../../../src/adapters/sloth_machine/run_program/presenters/ConsolePresenter/ErrorView');
-const ErrorViewModel = require('../../../../../../../src/adapters/sloth_machine/run_program/presenters/ConsolePresenter/ErrorViewModel');
+const ErrorPresenter = require('../../../../../../../src/adapters/console_application/handle_error/presenters/shared_presenter/Presenter');
+const ErrorResponse = require('../../../../../../../src/adapters/console_application/handle_error/presenters/shared_presenter/Response');
 const PresenterInterface = require('virtual-machine').Presenter;
 const Response = require('virtual-machine').Response;
 const ExitStatus = require('sloth-machine-framework').ExitStatus;
@@ -13,9 +13,14 @@ const InvalidProgramException = require('program-loader').InvalidProgramExceptio
 const random = require('random');
 
 /**
- * @type {Object|View}
+ * @type {View}
  */
 const view = {};
+
+/**
+ * @type {ErrorPresenter}
+ */
+const errorPresenter = {};
 
 /**
  * @type {Object|ErrorView}
@@ -29,8 +34,8 @@ let presenter = null;
 
 beforeEach(() => {
     view.render = jest.fn();
-    errorView.render = jest.fn();
-    presenter = new Presenter(view, errorView);
+    errorPresenter.present = jest.fn();
+    presenter = new Presenter(view, errorPresenter);
 });
 
 test('implements presenter interface', () => {
@@ -38,7 +43,7 @@ test('implements presenter interface', () => {
 });
 
 test('can be injected', () => {
-    expect(Presenter.__DEPS__).toStrictEqual([View, ErrorView]);
+    expect(Presenter.__DEPS__).toStrictEqual([View, ErrorPresenter]);
 });
 
 test('handles success response', () => {
@@ -71,7 +76,8 @@ test('handles missing program reference exception', () => {
 
     presenter.present(response);
 
-    expect(errorView.render.mock.calls[0][0]).toStrictEqual(new ErrorViewModel('No program file given'));
+    expect(errorPresenter.present.mock.calls[0][0])
+        .toStrictEqual(new ErrorResponse(new Error('No program file given')));
 });
 
 test('handles unsupported architecture exception', () => {
@@ -80,9 +86,8 @@ test('handles unsupported architecture exception', () => {
 
     presenter.present(response);
 
-    expect(errorView.render.mock.calls[0][0]).toStrictEqual(
-        new ErrorViewModel(`Cannot find selected architecture "${arc}"`)
-    );
+    expect(errorPresenter.present.mock.calls[0][0])
+        .toStrictEqual(new ErrorResponse(new Error(`Cannot find selected architecture "${arc}"`)));
 });
 
 test('handles invalid architecture exception', () => {
@@ -91,9 +96,8 @@ test('handles invalid architecture exception', () => {
 
     presenter.present(response);
 
-    expect(errorView.render.mock.calls[0][0]).toStrictEqual(
-        new ErrorViewModel(`Selected architecture "${arc}" has invalid implementation`)
-    );
+    expect(errorPresenter.present.mock.calls[0][0])
+        .toStrictEqual(new ErrorResponse(new Error(`Selected architecture "${arc}" has invalid implementation`)));
 });
 
 test('handles invalid program exception', () => {
@@ -102,16 +106,16 @@ test('handles invalid program exception', () => {
 
     presenter.present(response);
 
-    expect(errorView.render.mock.calls[0][0]).toStrictEqual(
-        new ErrorViewModel(`Invalid program file given: ${message}`)
-    );
+    expect(errorPresenter.present.mock.calls[0][0])
+        .toStrictEqual(new ErrorResponse(new Error(`Invalid program file given: ${message}`)));
 });
 
 test('handles generic exception', () => {
-    const message = 'error';
-    const response = new Response(null, new Error(message));
+    const error = new Error();
+    const response = new Response(null, error);
 
     presenter.present(response);
 
-    expect(errorView.render.mock.calls[0][0]).toStrictEqual(new ErrorViewModel(message));
+    expect(errorPresenter.present.mock.calls[0][0])
+        .toStrictEqual(new ErrorResponse(error));
 });

@@ -1,13 +1,12 @@
 const config = {
     roots: ['./tests'],
-    testEnvironment: "node",
+    testEnvironment: 'node',
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
-        'acceptance',
-        'app/Provider\.js',
-        'app/System\.js',
-        'app/NativeSystem\.js',
+        'Request\.js',
+        'Response\.js',
+        'Presenter\.js',
     ],
     coverageReporters: ['text'],
 };
