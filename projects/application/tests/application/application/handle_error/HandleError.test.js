@@ -23,6 +23,10 @@ beforeEach(() => {
     service = new HandleError(presenter);
 });
 
+test('can be injected', () => {
+    expect(HandleError.__DEPS__).toStrictEqual([ Presenter ]);
+});
+
 test('uses given presenter to present given errors', () => {
     const error = new Error();
     request.getError = () => error;

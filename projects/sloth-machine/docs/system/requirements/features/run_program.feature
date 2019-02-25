@@ -1,23 +1,23 @@
-Feature: Execute programs
+Feature: Run program
   As a programmer
-  I want to be able to execute programs
+  I want to be able to run a program
   In order to perform computations
 
   Scenario: an error is returned if an unsupported architecture is selected
     Given the "unsupported" architecture is selected
-    When I run the virtual machine
+    When I run the program
     Then the virtual machine terminates with exit status 127
     And the message "Unsupported architecture "unsupported"" is written to the standard error
 
   Scenario: an error is returned if no program file is passed
     Given no program file is passed
-    When I run the virtual machine
+    When I run the program
     Then the virtual machine terminates with exit status 127
     And the message "No program file given" is written to the standard error
 
   Scenario: an error is returned if an invalid program file is passed
     Given an invalid program file is passed
-    When I run the virtual machine
+    When I run the program
     Then the virtual machine terminates with exit status 127
     And the message "Invalid program file given" is written to the standard error
 

@@ -13,8 +13,10 @@ const System = require('architecture-loader').System;
 const OSSystem = require('local-architecture-loader').OSSystem;
 const Filesystem = require('local-architecture-loader').Filesystem;
 const NativeFilesystem = require('local-architecture-loader').NativeFilesystem;
-const PresenterInterface = require('virtual-machine').Presenter;
-const Presenter = require('../adapters/sloth_machine/run_program/presenters/ConsolePresenter/Presenter');
+const VirtualMachinePresenter = require('virtual-machine').Presenter;
+const SlothMachinePresenter = require('../adapters/sloth_machine/run_program/presenters/ConsolePresenter/Presenter');
+const ApplicationPresenter = require('application').application.application.handle_error.Presenter;
+const ConsoleApplicationPresenter = require('../adapters/console_application/handle_error/presenters/console_presenter/Presenter');
 const ErrorViewInterface = require('../adapters/console_application/handle_error/presenters/shared_presenter/View');
 const ErrorView = require('../adapters/console_application/handle_error/views/ErrorView');
 
@@ -30,6 +32,10 @@ module.exports = class Provider {
      */
     register(container) {
         container.bind(Console, NativeConsole);
+
+        container.bind(ApplicationPresenter, ConsoleApplicationPresenter);
+        container.bind(ErrorViewInterface, ErrorView);
+
         container.bind(FileReader, NativeFileReader);
         container.bind(ProgramLoader, FileProgramLoader);
         container.bind(ModuleLoader, NativeModuleLoader);
@@ -37,7 +43,7 @@ module.exports = class Provider {
         container.bind(ArchitectureLoader, LocalArchitectureLoader);
         container.bind(System, OSSystem);
         container.bind(Filesystem, NativeFilesystem);
-        container.bind(PresenterInterface, Presenter);
-        container.bind(ErrorViewInterface, ErrorView);
+
+        container.bind(VirtualMachinePresenter, SlothMachinePresenter);
     }
 };

@@ -2,7 +2,16 @@ const Architecture = require('sloth-machine-framework').Architecture;
 const UnsupportedArchitectureException = require('./UnsupportedArchitectureException');
 const InvalidArchitectureException = require('./InvalidArchitectureException');
 
+/**
+ * @interface
+ */
 module.exports = class ArchitectureLoader {
+    constructor() {
+        if (new.target === ArchitectureLoader) {
+            throw 'Cannot instantiate interface';
+        }
+    }
+
     /**
      * @param {string} architectureName
      * @return {Architecture}

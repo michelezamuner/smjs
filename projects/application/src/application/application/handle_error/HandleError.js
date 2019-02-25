@@ -3,6 +3,8 @@ const Request = require('./Request');
 const Response = require('./Response');
 
 module.exports = class HandleError {
+    static get __DEPS__() { return [ Presenter ]; }
+
     /**
      * @param {Presenter} presenter
      */

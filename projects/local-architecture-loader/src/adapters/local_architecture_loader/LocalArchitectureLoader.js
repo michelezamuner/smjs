@@ -3,7 +3,7 @@ const Architecture = require('sloth-machine-framework').Architecture;
 const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
 const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
 const ModuleLoader = require('./ModuleLoader');
-const ModuleLoaderException = require('./ModuleLoaderException');
+const CannotFindModuleException = require('./CannotFindModuleException');
 
 module.exports = class LocalArchitectureLoader extends ArchitectureLoader {
     static get __DEPS__() { return [ModuleLoader, 'adapters.local_architecture_loader.path']; }
@@ -41,7 +41,7 @@ module.exports = class LocalArchitectureLoader extends ArchitectureLoader {
         try {
             return this._moduleLoader.load(architectureDir + '/lib');
         } catch (e) {
-            if (e instanceof ModuleLoaderException) {
+            if (e instanceof CannotFindModuleException) {
                 throw new UnsupportedArchitectureException(name);
             }
             throw e;

@@ -131,13 +131,13 @@ test('wraps container exceptions', () => {
     expect(() => router.route(input)).toThrow(error);
 });
 
-test('wraps generic exceptions', () => {
+test('forwards generic exceptions', () => {
     const error = 'error';
 
     controller.runProgram = () => {
-        throw error;
+        throw new Error(error);
     };
 
-    expect(() => router.route(input)).toThrow(RouterException);
+    expect(() => router.route(input)).toThrow(Error);
     expect(() => router.route(input)).toThrow(error);
 });

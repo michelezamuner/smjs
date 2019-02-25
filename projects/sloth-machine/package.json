@@ -20,12 +20,12 @@
     "virtual-machine": "file:../virtual-machine"
   },
   "devDependencies": {
-    "jest": "^23.6.0",
+    "jest": "^24.1.0",
     "random": "file:../random"
   },
   "scripts": {
-    "test": "SM_ROOT=$(pwd) SM_ENV=test node --use_strict ./node_modules/.bin/jest",
-    "coverage": "SM_ROOT=$(pwd) SM_ENV=test node --use_strict ./node_modules/.bin/jest --coverage",
-    "ci": "JEST_ENV=ci SM_ROOT=$(pwd) SM_ENV=test node --use_strict ./node_modules/.bin/jest --coverage"
+    "test": "tests/run",
+    "coverage": "tests/run --coverage",
+    "ci": "JEST_ENV=ci tests/run --coverage"
   }
 }

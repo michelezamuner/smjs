@@ -1,4 +1,13 @@
+/**
+ * @interface
+ */
 module.exports = class Filesystem {
+    constructor() {
+        if (new.target === Filesystem) {
+            throw 'Cannot instantiate interface';
+        }
+    }
+
     /**
      * @param {number} fd
      * @param {Buffer} buf
