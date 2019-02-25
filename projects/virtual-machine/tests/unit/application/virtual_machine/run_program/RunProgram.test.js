@@ -167,3 +167,13 @@ test('handles unsupported architecture exceptions', () => {
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
+
+test('forwards generic exceptions', () => {
+    const error = 'error';
+    processor.run = () => {
+        throw new Error('error');
+    };
+
+    expect(() => service.run(request)).toThrow(Error);
+    expect(() => service.run(request)).toThrow(error);
+});

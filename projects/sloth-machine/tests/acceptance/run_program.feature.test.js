@@ -3,14 +3,6 @@ const fs = require('fs');
 const exec = require('child_process').exec;
 const root = process.env.SM_ROOT;
 
-beforeEach(async () => {
-    await promisify(exec)(`cp -r ${root}/tests/acceptance/fixtures/mods/* ${root}/mods/`);
-});
-
-afterEach(async () => {
-    await promisify(exec)(`rm -rf ${root}/mods/*`);
-});
-
 test('an error is returned if an unsupported architecture is selected', () => {
     return (async () => {
         const arc = 'unsupported';
@@ -31,7 +23,7 @@ test('an error is returned if an unsupported architecture is selected', () => {
 
 test('an error is returned if an invalid architecture is selected', () => {
     return (async () => {
-        const arc = 'invalid-sma';
+        const arc = 'invalid';
         const file = '/tmp/file.sm';
         await promisify(fs.writeFile)(file, '', 'binary');
         let hasThrown = false;

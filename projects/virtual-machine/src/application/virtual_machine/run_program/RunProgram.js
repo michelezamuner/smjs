@@ -3,6 +3,10 @@ const ProcessorFactory = require('./ProcessorFactory');
 const AdapterDependencies = require('./AdapterDependencies');
 const Request = require('./Request');
 const Response = require('./Response');
+const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
+const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
+const InvalidProgramException = require('program-loader').InvalidProgramException;
+const ProcessorException = require('sloth-machine-framework').ProcessorException
 
 module.exports = class RunProgram {
     static get __DEPS__() { return [ AdapterDependencies, ProcessorFactory ]; }
@@ -37,7 +41,23 @@ module.exports = class RunProgram {
             const exitStatus = processor.run(program);
             this._presenter.present(new Response(exitStatus));
         } catch (e) {
+            if (!this._isApplicationError(e)) {
+                throw e;
+            }
+
             this._presenter.present(new Response(null, e));
         }
+    }
+
+    /**
+     * @param {Error} error
+     * @return {boolean}
+     * @private
+     */
+    _isApplicationError(error) {
+        return error instanceof UnsupportedArchitectureException ||
+            error instanceof InvalidArchitectureException ||
+            error instanceof InvalidProgramException ||
+            error instanceof ProcessorException;
     }
 };

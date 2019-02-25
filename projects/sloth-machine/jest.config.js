@@ -7,6 +7,7 @@ const config = {
         'acceptance',
         'Provider\.js',
         '/View\.js',
+        '/Request\.js',
     ],
     coverageReporters: ['text'],
 };

@@ -38,11 +38,7 @@ module.exports = class Router {
             throw new RouterException(`Action "${action}" not supported by controller`);
         }
 
-        try {
-            controller[action](...params);
-        } catch (e) {
-            throw new RouterException(e);
-        }
+        controller[action](...params);
     }
 
     /**

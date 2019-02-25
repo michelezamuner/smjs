@@ -4,7 +4,16 @@ const Instruction = require('./Instruction');
 const Status = require('./Status');
 const InterpreterException = require('./InterpreterException');
 
+/**
+ * @interface
+ */
 module.exports = class Interpreter {
+    constructor() {
+        if (new.target === Interpreter) {
+            throw 'Cannot instantiate interface';
+        }
+    }
+
     /**
      * @return {Size}
      */

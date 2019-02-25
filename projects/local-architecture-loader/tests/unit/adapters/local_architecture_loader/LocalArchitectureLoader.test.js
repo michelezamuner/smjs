@@ -4,7 +4,7 @@ const Architecture = require('sloth-machine-framework').Architecture;
 const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
 const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
 const ModuleLoader = require('../../../../src/adapters/local_architecture_loader/ModuleLoader');
-const ModuleLoaderException = require('../../../../src/adapters/local_architecture_loader/ModuleLoaderException');
+const CannotFindModuleException = require('../../../../src/adapters/local_architecture_loader/CannotFindModuleException');
 
 /**
  * @type {Object|ModuleLoader}
@@ -54,10 +54,10 @@ test('loads requested architecture', () => {
     expect(loader.load(architectureName)).toStrictEqual(architecture);
 });
 
-test('wraps module loader exception', () => {
+test('fails if requested architecture cannot be found', () => {
     moduleLoader.load = module => {
         if (module === architectureModule) {
-            throw new ModuleLoaderException();
+            throw new CannotFindModuleException();
         }
     };
 
@@ -72,7 +72,7 @@ test('wraps module loader exception', () => {
     expect(thrown).toBe(true);
 });
 
-test('wraps generic exception of module loader', () => {
+test('forwards generic exception of module loader', () => {
     const GenericException = class extends Error {};
     const genericException = 'generic exception';
     moduleLoader.load = module => {

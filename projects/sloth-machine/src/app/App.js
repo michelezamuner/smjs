@@ -25,6 +25,25 @@ module.exports = class App {
             file: parser.getArgument()
         });
 
-        this._router.route(input);
+        try {
+            this._router.route(input);
+        } catch (e) {
+            this._handleError(e);
+        }
+    }
+
+    /**
+     * @param {*} e
+     * @private
+     */
+    _handleError(e) {
+        const message = `Fatal error: ${e.message || e}`;
+        const input = new Input('console_application/handle_error', 'error', {error: new Error(message)});
+        try {
+            this._router.route(input);
+        } catch (e) {
+            // prevent infinite recursion
+            throw e;
+        }
     }
 };

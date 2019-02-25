@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+readonly node="$(which node)"
+readonly current="$( cd "$(dirname "$0")" ; pwd -P )"
+readonly root="$(realpath "$(dirname "$current")")"
+readonly args="$@"
+
+cp -r $root/tests/acceptance/fixtures/mods/* $root/mods/
+SM_ROOT=$root SM_ENV=test $node --use_strict $root/node_modules/.bin/jest $args
+rm -rf $root/mods/*

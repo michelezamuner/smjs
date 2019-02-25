@@ -1,7 +1,7 @@
 const ModuleLoader = require('./ModuleLoader');
-const ModuleLoaderException = require('./ModuleLoaderException');
+const CannotFindModuleException = require('./CannotFindModuleException');
 
-module.exports = new class NativeModuleLoader extends ModuleLoader {
+module.exports = class NativeModuleLoader extends ModuleLoader {
     /**
      * @inheritDoc
      */
@@ -9,7 +9,11 @@ module.exports = new class NativeModuleLoader extends ModuleLoader {
         try {
             return require(module);
         } catch (e) {
-            throw new ModuleLoaderException(e);
+            if (e.message.startsWith('Cannot find module')) {
+                throw new CannotFindModuleException();
+            }
+
+            throw e;
         }
     }
 };
