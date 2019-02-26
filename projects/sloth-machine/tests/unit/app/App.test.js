@@ -1,4 +1,5 @@
 const App = require('../../../src/app/App');
+const Router = require('router').Router;
 const Input = require('router').Input;
 
 /**
@@ -38,6 +39,10 @@ beforeEach(() => {
     router.route = jest.fn();
     app = new App(router);
     parser.getArgument = arg => arg === App.ARG_ARCHITECTURE ? architecture : file;
+});
+
+test('can be injected', () => {
+    expect(App.__DEPS__).toStrictEqual([ Router ]);
 });
 
 test('routes the correct input', () => {

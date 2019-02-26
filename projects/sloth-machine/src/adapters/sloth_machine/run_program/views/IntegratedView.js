@@ -1,5 +1,5 @@
-const View = require('../presenters/ConsolePresenter/View');
-const ViewModel = require('../presenters/ConsolePresenter/ViewModel');
+const View = require('../presenters/console_presenter/View');
+const ViewModel = require('../presenters/console_presenter/ViewModel');
 const Console = require('ui-console').Console;
 
 module.exports = class IntegratedView extends View {

@@ -1,15 +1,11 @@
 const Router = require('./src/Router');
+const Observer = require('./src/Observer');
 const RouterException = require('./src/RouterException');
 const Input = require('./src/Input');
-const ModuleLoader = require('./src/ModuleLoader');
-const ModuleLoaderException = require('./src/ModuleLoaderException');
-const NativeLoader = require('./src/NativeLoader');
 
 module.exports = {
     Router,
+    Observer,
     RouterException,
-    Input,
-    ModuleLoader,
-    ModuleLoaderException,
-    NativeLoader,
+    Input
 };

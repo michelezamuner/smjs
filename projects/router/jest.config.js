@@ -4,8 +4,7 @@ const config = {
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
-        'ModuleLoader\.js',
-        'View\.js',
+        'Observer\.js',
     ],
     coverageReporters: ['text'],
 };

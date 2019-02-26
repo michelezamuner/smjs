@@ -6,6 +6,7 @@ const Parser = require('command-line-parser');
 module.exports = class App {
     static get DEFAULT_REPRESENTATION() { return 'integrated'; }
     static get ARG_ARCHITECTURE() { return 'arc'; }
+    static get __DEPS__() { return [ Router ]; }
 
     /**
      * @param {Router} router

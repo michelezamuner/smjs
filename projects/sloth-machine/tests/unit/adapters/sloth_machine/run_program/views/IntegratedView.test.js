@@ -1,6 +1,6 @@
 const IntegratedView = require('../../../../../../src/adapters/sloth_machine/run_program/views/IntegratedView');
-const View = require('../../../../../../src/adapters/sloth_machine/run_program/presenters/ConsolePresenter/View');
-const ViewModel = require('../../../../../../src/adapters/sloth_machine/run_program/presenters/ConsolePresenter/ViewModel');
+const View = require('../../../../../../src/adapters/sloth_machine/run_program/presenters/console_presenter/View');
+const ViewModel = require('../../../../../../src/adapters/sloth_machine/run_program/presenters/console_presenter/ViewModel');
 const Console = require('ui-console').Console;
 
 /**
