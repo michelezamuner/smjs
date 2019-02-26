@@ -18,6 +18,10 @@ module.exports = class Container {
      * @return {*}
      */
     make(ref) {
+        if (ref === Container) {
+            return this;
+        }
+
         if (ref in this._bound) {
             return this._makeBound(ref);
         }
@@ -39,17 +43,17 @@ module.exports = class Container {
      * @private
      */
     _makeBound(ref) {
-        // Instance
+        // instance
         if (this._bound[ref].constructor === undefined || this._bound[ref].constructor.name !== 'Function') {
             return this._bound[ref];
         }
 
-        // Type
+        // type
         if (this._bound[ref].prototype !== undefined) {
             return this.make(this._bound[ref]);
         }
 
-        // Callback
+        // callback
         return this._bound[ref]();
     }
 

@@ -1,18 +1,20 @@
+const Observer = require('./Observer');
 const RouterException = require('./RouterException');
-const ModuleLoader = require('./ModuleLoader');
 const Input = require('./Input');
 const Container = require('container').Container;
 
 module.exports = class Router {
+    static get __DEPS__() { return [ Container, Observer, 'router.config' ]; }
+
     /**
      * @param {Container} container
-     * @param {ModuleLoader} loader
-     * @param {Object} config
+     * @param {Observer} observer
+     * @param {{routes: Object[]}} config
      */
-    constructor(container, loader, config) {
+    constructor(container, observer, config) {
         this._container = container;
-        this._loader = loader;
-        this._config = config;
+        this._observer = observer;
+        this._routes = config.routes;
     }
 
     /**
@@ -20,19 +22,11 @@ module.exports = class Router {
      * @throws {RouterException}
      */
     route(input) {
-        const config = this._config[input.getIdentifier()];
-        if (config === undefined) {
-            throw new RouterException(`Resource identifier "${input.getIdentifier()}" is not configured`);
-        }
+        this._observer.observe(input);
 
-        const controllerClass = this._load(config.controller);
-        const action = this._getAction(config.action);
-        const params = this._getParams(config.action, input);
-        const viewInterface = this._load(config.viewInterface);
-        const viewClass = this._load(config.views[input.getRepresentation()]);
-
-        this._container.bind(viewInterface, viewClass);
-        const controller = this._make(controllerClass);
+        const route = this._getRoute(input.getIdentifier());
+        const controller = this._make(route.controller);
+        const [action, params] = this._parseAction(route.action, input);
 
         if (controller[action] === undefined) {
             throw new RouterException(`Action "${action}" not supported by controller`);
@@ -42,54 +36,49 @@ module.exports = class Router {
     }
 
     /**
-     * @param {string} actionDefinition
-     * @return {string}
+     * @param {string} identifier
+     * @return {{identifier, controller, action}}
      * @private
      */
-    _getAction(actionDefinition) {
-        return actionDefinition.split('(')[0];
+    _getRoute(identifier) {
+        for (const route of this._routes) {
+            if (route.identifier === identifier) {
+                return route;
+            }
+        }
+
+        throw new RouterException(`Resource identifier "${identifier}" is not configured`);
     }
 
     /**
-     * @param {string} actionDefinition
+     * @param {string} definition
      * @param {Input} input
-     * @return {string[]}
-     * @throws {RouterException}
+     * @return {[string, Object[]]}
      * @private
      */
-    _getParams(actionDefinition, input) {
-        const separator = actionDefinition.indexOf('(');
+    _parseAction(definition, input) {
+        const separator = definition.indexOf('(');
         if (separator === -1) {
-            return [];
+            throw new RouterException(`Malformed action definition "${definition}"`);
         }
 
-        const formalParams = actionDefinition
-            .substring(separator + 1, actionDefinition.length - 1)
+        const action = definition.split('(')[0];
+        const formalParams = definition
+            .substring(separator + 1, definition.length - 1)
             .split(',')
+            .filter(param => param !== '')
             .map(param => param.trim());
 
-        return formalParams.map(param => {
+        const params = formalParams.map(param => {
             const actual = input.getParameter(param);
             if (actual === undefined) {
-                throw new RouterException(`Missing required "${param}" parameter of definition "${actionDefinition}"`);
+                throw new RouterException(`Missing required "${param}" parameter of definition "${definition}"`);
             }
 
             return actual;
         });
-    }
 
-    /**
-     * @param {string} module
-     * @return {Object}
-     * @throws {RouterException}
-     * @private
-     */
-    _load(module) {
-        try {
-            return this._loader.load(module);
-        } catch (e) {
-            throw new RouterException(e);
-        }
+        return [action, params];
     }
 
     /**

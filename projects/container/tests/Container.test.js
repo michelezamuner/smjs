@@ -17,13 +17,19 @@ class Test2 {
 
 const container = new Container();
 
-test('create instance from class', () => {
+test('returns same instance when creating itself', () => {
+    const instance = container.make(Container);
+
+    expect(instance).toBe(container);
+});
+
+test('creates instance from class', () => {
     const instance = container.make(Test);
 
     expect(instance).toBeInstanceOf(Test);
 });
 
-test('create instance from unbound dependencies', () => {
+test('creates instance from unbound dependencies', () => {
     const instance = container.make(Test2);
 
     expect(instance).toBeInstanceOf(Test2);
@@ -32,7 +38,7 @@ test('create instance from unbound dependencies', () => {
     expect(instance.getTest1().getTest()).toBeInstanceOf(Test);
 });
 
-test('create instance from bound instances', () => {
+test('creates instance from bound instances', () => {
     container.bind(Test, new TestAlternate());
     const instance = container.make(Test2);
 
@@ -40,7 +46,7 @@ test('create instance from bound instances', () => {
     expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
 });
 
-test('create object from bound types', () => {
+test('creates object from bound types', () => {
     container.bind(Test, TestAlternate);
     const instance = container.make(Test2);
 
@@ -48,7 +54,7 @@ test('create object from bound types', () => {
     expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
 });
 
-test('create object from bound callbacks', () => {
+test('creates object from bound callbacks', () => {
     container.bind(Test, () => new TestAlternate());
     const instance = container.make(Test2);
 

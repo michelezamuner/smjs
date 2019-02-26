@@ -1,18 +1,19 @@
 const Router = require('../src/Router');
+const Observer = require('../src/Observer');
 const Input = require('../src/Input');
 const RouterException = require('../src/RouterException');
-const ModuleLoaderException = require('../src/ModuleLoaderException');
+const Container = require('container').Container;
 const ContainerException = require('container').ContainerException;
 
 /**
- * @type {Object}
+ * @type {Object|Container}
  */
 const container = {};
 
 /**
- * @type {Object}
+ * @type {Object|Observer}
  */
-const loader = {};
+const observer = {};
 
 /**
  * @type {null|Router}
@@ -32,93 +33,104 @@ const controller = {};
 /**
  * @type {Object}
  */
-const viewInterface = {};
-
-/**
- * @type {Object}
- */
-const viewClass = {};
-
-/**
- * @type {Object}
- */
 const config = {};
+
+/**
+ * @type {string}
+ */
+const identifier = 'sloth_machine/run_program';
+
+/**
+ * @type {string}
+ */
+const representation = 'integrated';
+
+/**
+ * @type {string}
+ */
+const program = 'program/path';
+
+/**
+ * @type {string}
+ */
+const architecture = 'sma';
 
 /**
  * @type {Input}
  */
-const input = new Input('sloth_machine/run_program', 'integrated', {program: 'program/path', architecture: 'sma'});
+const input = new Input(identifier, representation, {program: program, architecture: architecture});
 
 beforeEach(() => {
-    loader.load = path => {
-        switch (path) {
-            case 'sloth_machine/run_program/Controller': return controllerClass;
-            case 'sloth_machine/run_program/views/IntegratedView': return viewClass;
-            case 'sloth_machine/run_program/views/View': return viewInterface;
-        }
-
-        return null;
-    };
     controller.runProgram = jest.fn();
     container.make = ref => ref === controllerClass ? controller : null;
     container.bind = jest.fn();
-    config['sloth_machine/run_program'] = {
-        controller: 'sloth_machine/run_program/Controller',
-        action: 'runProgram(architecture, program)',
-        viewInterface: 'sloth_machine/run_program/views/View',
-        views: {
-            integrated: 'sloth_machine/run_program/views/IntegratedView',
-            clean: 'sloth_machine/run_program/views/CleanView',
-            verbose: 'sloth_machine/run_program/views/VerboseView'
-        }
-    };
-    router = new Router(container, loader, config);
+    observer.observe = jest.fn();
+    config.routes = [
+        {
+            identifier: identifier,
+            controller: controllerClass,
+            action: 'runProgram(architecture, program)',
+        },
+    ];
+    router = new Router(container, observer, config);
+});
+
+test('can be injected', () => {
+    expect(Router.__DEPS__).toStrictEqual([ Container, Observer, 'router.config' ]);
 });
 
 test('routes given input to proper controller action and view', () => {
     router.route(input);
 
-    expect(controller.runProgram.mock.calls[0][0]).toBe('sma');
-    expect(controller.runProgram.mock.calls[0][1]).toBe('program/path');
-    expect(container.bind.mock.calls[0][0]).toBe(viewInterface);
-    expect(container.bind.mock.calls[0][1]).toBe(viewClass);
+    expect(controller.runProgram.mock.calls[0][0]).toBe(architecture);
+    expect(controller.runProgram.mock.calls[0][1]).toBe(program);
+    expect(observer.observe.mock.calls[0][0]).toBe(input);
+});
+
+test('calls observer before making controller', () => {
+    container.make = jest.fn();
+    observer.observe = () => {
+        throw new Error();
+    };
+
+    expect(() => router.route(input)).toThrow(Error);
+    expect(container.make).not.toBeCalled();
 });
 
 test('fails if identifier is not configured', () => {
     const identifier = 'invalid';
-    const input = new Input(identifier, 'integrated', {program: 'program/path', architecture: 'sma'});
+    const input = new Input(identifier, representation, {program: program, architecture: architecture});
 
     expect(() => router.route(input)).toThrow(RouterException);
     expect(() => router.route(input)).toThrow(`Resource identifier "${identifier}" is not configured`);
 });
 
+test('fails if action is malformed', () => {
+    const action = 'malformed';
+    config.routes[0].action = action;
+
+    expect(() => router.route(input)).toThrow(RouterException);
+    expect(() => router.route(input)).toThrow(`Malformed action definition "${action}"`);
+});
+
 test('fails if controller does not support action', () => {
     const action = 'invalid';
-    config['sloth_machine/run_program'].action = action;
+    config.routes[0].action = `${action}()`;
 
     expect(() => router.route(input)).toThrow(RouterException);
     expect(() => router.route(input)).toThrow(`Action "${action}" not supported by controller`);
 });
 
 test('fails if required parameters are not passed to action', () => {
-    config['sloth_machine/run_program'].action = 'runProgram(other, params)';
+    const action = 'runProgram(other, params)';
+    config.routes[0].action = action;
 
     expect(() => router.route(input)).toThrow(RouterException);
     expect(() => router.route(input)).toThrow(
-        `Missing required "other" parameter of definition "runProgram(other, params)"`
+        `Missing required "other" parameter of definition "${action}"`
     );
 });
 
-test('wraps loader exceptions', () => {
-    const error = 'error';
-
-    loader.load = () => {
-        throw new ModuleLoaderException(error);
-    };
-
-    expect(() => router.route(input)).toThrow(RouterException);
-    expect(() => router.route(input)).toThrow(error);
-});
 
 test('wraps container exceptions', () => {
     const error = 'error';
