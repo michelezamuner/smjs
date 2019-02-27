@@ -14,7 +14,7 @@ const console = {};
 let view = null;
 
 beforeEach(() => {
-    console.write = jest.fn();
+    console.writeError = jest.fn();
     console.exit = jest.fn();
     view = new View(console);
 });
@@ -32,7 +32,6 @@ test('renders errors to STDOUT', () => {
 
     view.render(new ViewModel(error));
 
-    expect(console.write.mock.calls[0][0]).toBe(error);
-    expect(console.write.mock.calls[0][1]).toBe(Console.STREAM_STDERR);
+    expect(console.writeError.mock.calls[0][0]).toBe(error);
     expect(console.exit.mock.calls[0][0]).toBe(View.ERROR_EXIT_STATUS);
 });

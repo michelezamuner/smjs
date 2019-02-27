@@ -18,7 +18,7 @@ module.exports = class FileProgramLoader extends ProgramLoader {
     }
 
     /**
-     * @inheritDoc
+     * @override
      */
     load(programReference) {
         const binary = this._loadBinary(programReference);

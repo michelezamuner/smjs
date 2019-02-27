@@ -4,7 +4,7 @@ const fs = require('fs');
 
 module.exports = class NativeFileReader extends FileReader {
     /**
-     * @inheritDoc
+     * @override
      */
     read(file, options) {
         try {

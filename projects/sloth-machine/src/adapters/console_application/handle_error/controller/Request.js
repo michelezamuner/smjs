@@ -10,7 +10,7 @@ module.exports = class Request extends RequestInterface {
     }
 
     /**
-     * @return {Error}
+     * @override
      */
     getError() {
         return this._error;
