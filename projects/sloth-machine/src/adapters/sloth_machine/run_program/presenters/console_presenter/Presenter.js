@@ -3,7 +3,6 @@ const ErrorPresenter = require('../../../../console_application/handle_error/pre
 const ErrorResponse = require('../../../../console_application/handle_error/presenters/shared_presenter/Response');
 const View = require('./View');
 const ViewModel = require('./ViewModel');
-const Response = require('virtual-machine').Response;
 const ExitStatus = require('sloth-machine-framework').ExitStatus;
 const MissingProgramFileException = require('virtual-machine').MissingProgramReferenceException;
 const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
@@ -35,7 +34,7 @@ module.exports = class Presenter extends PresenterInterface {
     }
 
     /**
-     * @param {Response} response
+     * @override
      */
     present(response) {
         const error = response.getError();

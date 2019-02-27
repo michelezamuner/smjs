@@ -2,9 +2,6 @@
  * @interface
  */
 module.exports = class Console {
-    static get STREAM_STDOUT() { return 1; }
-    static get STREAM_STDERR() { return 2; }
-
     constructor() {
         if (new.target === Console) {
             throw 'Cannot instantiate interface';
@@ -12,10 +9,13 @@ module.exports = class Console {
     }
 
     /**
-     * @param {string} text
-     * @param {number} [stream=Console.STREAM_STDOUT]
+     * @param {string} message
      */
-    write(text, stream = Console.STREAM_STDOUT) {
+    write(message) {
+        throw 'Not implemented';
+    }
+
+    writeError(message) {
         throw 'Not implemented';
     }
 

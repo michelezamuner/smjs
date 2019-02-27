@@ -1,5 +1,4 @@
 const View = require('../presenters/console_presenter/View');
-const ViewModel = require('../presenters/console_presenter/ViewModel');
 const Console = require('ui-console').Console;
 
 module.exports = class IntegratedView extends View {
@@ -14,7 +13,7 @@ module.exports = class IntegratedView extends View {
     }
 
     /**
-     * @param {ViewModel} viewModel
+     * @override
      */
     render(viewModel) {
         this._console.exit(viewModel.getExitStatus());

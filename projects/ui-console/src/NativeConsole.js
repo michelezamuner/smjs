@@ -2,21 +2,21 @@ const Console = require('./Console');
 
 module.exports = class NativeConsole extends Console {
     /**
-     * @inheritDoc
+     * @override
      */
-    write(text, stream = Console.STREAM_STDOUT) {
-        switch (stream) {
-            case Console.STREAM_STDOUT:
-                process.stdout.write(text);
-                break;
-            case Console.STREAM_STDERR:
-                process.stderr.write(text);
-                break;
-        }
+    write(message) {
+        process.stdout.write(message);
     }
 
     /**
-     * @inheritDoc
+     * @override
+     */
+    writeError(message) {
+        process.stderr.write(message);
+    }
+
+    /**
+     * @override
      */
     exit(exitStatus = 0) {
         process.exit(exitStatus);

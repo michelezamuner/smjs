@@ -1,7 +1,6 @@
 const PresenterInterface = require('application').application.application.handle_error.Presenter;
 const SharedPresenter = require('../shared_presenter/Presenter');
 const SharedResponse = require('../shared_presenter/Response');
-const Response = require('application').application.application.handle_error.Response;
 
 /**
  * Console presenter for the console_application/handle_error use case.
@@ -23,7 +22,7 @@ module.exports = class Presenter extends PresenterInterface {
     }
 
     /**
-     * @param {Response} response
+     * @override
      */
     present(response) {
         this._presenter.present(new SharedResponse(response.getError()));

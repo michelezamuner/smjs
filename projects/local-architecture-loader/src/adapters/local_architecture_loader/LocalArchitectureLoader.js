@@ -19,7 +19,7 @@ module.exports = class LocalArchitectureLoader extends ArchitectureLoader {
     }
 
     /**
-     * @inheritDoc
+     * @override
      */
     load(name) {
         const architecture = this._getArchitecture(name);

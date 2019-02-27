@@ -12,14 +12,14 @@ module.exports = class Request extends RequestInterface {
     }
 
     /**
-     * @return {string}
+     * @override
      */
     getArchitectureName() {
         return this._architectureName;
     }
 
     /**
-     * @return {string}
+     * @override
      */
     getProgramReference() {
         return this._programReference;

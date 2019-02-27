@@ -14,7 +14,7 @@ module.exports = class OSSystem extends System {
     }
 
     /**
-     * @inheritDoc
+     * @override
      */
     write(fd, data, size) {
         const file = parseInt(fd.format());

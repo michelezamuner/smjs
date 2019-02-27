@@ -3,7 +3,7 @@ const CannotFindModuleException = require('./CannotFindModuleException');
 
 module.exports = class NativeModuleLoader extends ModuleLoader {
     /**
-     * @inheritDoc
+     * @override
      */
     load(module) {
         try {
