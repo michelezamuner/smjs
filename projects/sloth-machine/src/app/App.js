@@ -20,13 +20,13 @@ module.exports = class App {
      * @throws {RouterException}
      */
     run(parser) {
-        // @todo: allow different representations
-        const input = new Input('sloth_machine/run_program', App.DEFAULT_REPRESENTATION, {
-            architecture: parser.getArgument(App.ARG_ARCHITECTURE),
-            file: parser.getArgument()
-        });
-
         try {
+            // @todo: allow different representations
+            const input = new Input('sloth_machine/run_program', App.DEFAULT_REPRESENTATION, {
+                architecture: parser.getArgument(App.ARG_ARCHITECTURE),
+                file: parser.getArgument()
+            });
+
             this._router.route(input);
         } catch (e) {
             this._handleError(e);
@@ -44,6 +44,7 @@ module.exports = class App {
             this._router.route(input);
         } catch (e) {
             // prevent infinite recursion
+            // @todo: log this instead of crashing the app
             throw e;
         }
     }

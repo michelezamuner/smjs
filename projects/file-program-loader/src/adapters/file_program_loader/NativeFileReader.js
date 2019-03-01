@@ -10,7 +10,11 @@ module.exports = class NativeFileReader extends FileReader {
         try {
             return fs.readFileSync(file, options);
         } catch (e) {
-            throw new FileReaderException(e);
+            if (e.message.startsWith('ENOENT: no such file or directory')) {
+                throw new FileReaderException();
+            }
+
+            throw e;
         }
     }
 };

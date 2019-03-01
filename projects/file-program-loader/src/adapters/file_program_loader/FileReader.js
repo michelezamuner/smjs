@@ -3,9 +3,9 @@ const FileReaderException = require('./FileReaderException');
 /**
  * @interface
  */
-module.exports = class FileReader {
+module.exports = class Adapters_FileProgramLoader_FileReader {
     constructor() {
-        if (new.target === FileReader) {
+        if (new.target === Adapters_FileProgramLoader_FileReader) {
             throw 'Cannot instantiate interface';
         }
     }

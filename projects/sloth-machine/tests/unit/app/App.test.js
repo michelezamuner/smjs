@@ -51,7 +51,23 @@ test('routes the correct input', () => {
     expect(router.route.mock.calls[0][0]).toStrictEqual(input);
 });
 
-test('handles system errors', () => {
+test('handles parser errors', () => {
+    const error = 'error';
+    const message = `Fatal error: ${error}`;
+    const errorInput = new Input('console_application/handle_error', 'error', {error: new Error(message)});
+
+    parser.getArgument = arg => {
+        if (arg === App.ARG_ARCHITECTURE) {
+            throw new Error(error);
+        }
+    };
+
+    app.run(parser);
+
+    expect(router.route.mock.calls[0][0]).toStrictEqual(errorInput);
+});
+
+test('handles router errors', () => {
     const error = 'error';
     const message = `Fatal error: ${error}`;
     const errorInput = new Input('console_application/handle_error', 'error', {error: new Error(message)});
