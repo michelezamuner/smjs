@@ -131,18 +131,6 @@ test('fails if required parameters are not passed to action', () => {
     );
 });
 
-
-test('wraps container exceptions', () => {
-    const error = 'error';
-
-    container.make = () => {
-        throw new ContainerException(error);
-    };
-
-    expect(() => router.route(input)).toThrow(RouterException);
-    expect(() => router.route(input)).toThrow(error);
-});
-
 test('forwards generic exceptions', () => {
     const error = 'error';
 

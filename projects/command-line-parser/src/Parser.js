@@ -3,9 +3,11 @@ const MalformedArgsException = require('./MalformedArgsException');
 module.exports = class Parser {
     /**
      * @param {string[]} args
+     * @throws {MalformedArgsException}
      */
     constructor(args) {
-        this._args = this._parse(args);
+        this._unparsedArgs = args;
+        this._args = null;
     }
 
     /**
@@ -13,6 +15,10 @@ module.exports = class Parser {
      * @return {string|null}
      */
     getArgument(name) {
+        if (this._args === null) {
+            this._args = this._parse();
+        }
+
         if (name === undefined || name === null) {
             name = 0;
         }
@@ -25,14 +31,14 @@ module.exports = class Parser {
     }
 
     /**
-     * @param {string[]} args
      * @return {Object}
+     * @throws {MalformedArgsException}
      * @private
      */
-    _parse(args) {
+    _parse() {
         const parsedArgs = {};
 
-        for (const arg of args) {
+        for (const arg of this._unparsedArgs) {
             if (arg.startsWith('--')) {
                 const {name, value} = this._parseArgument(arg, 2);
                 parsedArgs[name] = value;
@@ -58,6 +64,7 @@ module.exports = class Parser {
      * @param {string} arg
      * @param {number} start
      * @return {{name: string, value: string}}
+     * @throws {MalformedArgsException}
      * @private
      */
     _parseArgument(arg, start) {

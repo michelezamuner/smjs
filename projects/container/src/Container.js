@@ -16,6 +16,7 @@ module.exports = class Container {
     /**
      * @param ref
      * @return {*}
+     * @throws {ContainerException}
      */
     make(ref) {
         if (ref === Container) {
@@ -33,7 +34,7 @@ module.exports = class Container {
         try {
             return new ref();
         } catch (e) {
-            throw new ContainerException(`Unbound reference "${ref}"`);
+            throw new ContainerException(`Unbound reference "${ref.name || ref}"`);
         }
     }
 

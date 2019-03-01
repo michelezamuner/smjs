@@ -14,6 +14,11 @@ class Test2 {
     getTest() { return this._test; }
     getTest1() { return this._test1; }
 }
+class Interface {
+    constructor() {
+        throw 'Cannot instantiate interface';
+    }
+}
 
 const container = new Container();
 
@@ -66,4 +71,9 @@ test('fails if trying to make an unbound value', () => {
     const ref = 'unbound ref';
     expect(() => container.make(ref)).toThrow(ContainerException);
     expect(() => container.make(ref)).toThrow(`Unbound reference "${ref}"`);
+});
+
+test('fails if trying to make an unbound interface', () => {
+    expect(() => container.make(Interface)).toThrow(ContainerException);
+    expect(() => container.make(Interface)).toThrow(`Unbound reference "Interface"`);
 });

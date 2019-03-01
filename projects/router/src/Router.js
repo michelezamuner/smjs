@@ -25,7 +25,7 @@ module.exports = class Router {
         this._observer.observe(input);
 
         const route = this._getRoute(input.getIdentifier());
-        const controller = this._make(route.controller);
+        const controller = this._container.make(route.controller);
         const [action, params] = this._parseAction(route.action, input);
 
         if (controller[action] === undefined) {
@@ -79,19 +79,5 @@ module.exports = class Router {
         });
 
         return [action, params];
-    }
-
-    /**
-     * @param {Object} reference
-     * @return {Object}
-     * @throws {RouterException}
-     * @private
-     */
-    _make(reference) {
-        try {
-            return this._container.make(reference);
-        } catch (e) {
-            throw new RouterException(e);
-        }
     }
 };
