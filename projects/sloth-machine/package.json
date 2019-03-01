@@ -13,8 +13,10 @@
     "container": "file:../container",
     "file-program-loader": "file:../file-program-loader",
     "local-architecture-loader": "file:../local-architecture-loader",
+    "message-bus": "file:../message-bus",
     "program-loader": "file:../program-loader",
     "router": "file:../router",
+    "simple-message-bus": "file:../simple-message-bus",
     "sloth-machine-framework": "file:../sloth-machine-framework",
     "ui-console": "file:../ui-console",
     "virtual-machine": "file:../virtual-machine"

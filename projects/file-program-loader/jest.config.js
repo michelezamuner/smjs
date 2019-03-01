@@ -4,8 +4,8 @@ const config = {
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
-        'adapters/file_program_loader/FileReader\.js',
-        'adapters/file_program_loader/NativeFileReader\.js',
+        'FileReader\.js',
+        'NativeFileReader\.js',
     ],
     coverageReporters: ['text'],
 };

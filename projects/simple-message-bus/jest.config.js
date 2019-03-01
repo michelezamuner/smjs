@@ -4,7 +4,6 @@ const config = {
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
-        'application/.*/ProgramLoader\.js',
     ],
     coverageReporters: ['text'],
 };

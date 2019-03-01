@@ -1,12 +1,20 @@
+require('jest-extensions');
 const HandleError = require('../../../../src/application/application/handle_error/HandleError');
 const Presenter = require('../../../../src/application/application/handle_error/Presenter');
+const MessageBus = require('message-bus').MessageBus;
 const Request = require('../../../../src/application/application/handle_error/Request');
 const Response = require('../../../../src/application/application/handle_error/Response');
+const ErrorReceived = require('../../../../src/application/application/handle_error/messages/ErrorReceived');
 
 /**
- * @type {Presenter}
+ * @type {Object|Presenter}
  */
 const presenter = {};
+
+/**
+ * @type {Object|MessageBus}
+ */
+const bus = {};
 
 /**
  * @type {null|HandleError}
@@ -18,13 +26,20 @@ let service = null;
  */
 const request = {};
 
+/**
+ * @type {null|boolean}
+ */
+let presenterCalled = null;
+
 beforeEach(() => {
-    presenter.present = jest.fn();
-    service = new HandleError(presenter);
+    presenterCalled = false;
+    presenter.present = jest.fn(() => presenterCalled = true);
+    bus.send = jest.fn(() => expect(presenterCalled).toBe(false));
+    service = new HandleError(presenter, bus);
 });
 
 test('can be injected', () => {
-    expect(HandleError.__DEPS__).toStrictEqual([ Presenter ]);
+    expect(HandleError.__DEPS__).toStrictEqual([ Presenter, MessageBus ]);
 });
 
 test('uses given presenter to present given errors', () => {
@@ -33,5 +48,8 @@ test('uses given presenter to present given errors', () => {
 
     service.handle(request);
 
-    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(error));
+    expect(bus.send.mock.calls[0][0]).to(msg => msg instanceof ErrorReceived && msg.getError() === error);
+    expect(presenter.present.mock.calls[0][0]).toStrictEqual(
+        new Response(new Error('A fatal error happened in the application')));
 });
+

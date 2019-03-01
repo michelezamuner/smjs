@@ -2,21 +2,24 @@ const Presenter = require('./Presenter');
 const ArchitectureLoader = require('architecture-loader').ArchitectureLoader;
 const ProgramLoader = require('program-loader').ProgramLoader;
 const System = require('architecture-loader').System;
+const MessageBus = require('message-bus').MessageBus;
 
 module.exports = class AdapterDependencies {
-    static get __DEPS__() { return [Presenter, ArchitectureLoader, ProgramLoader, System]; }
+    static get __DEPS__() { return [Presenter, ArchitectureLoader, ProgramLoader, System, MessageBus]; }
 
     /**
      * @param {Presenter} presenter
      * @param {ArchitectureLoader} architectureLoader
      * @param {ProgramLoader} programLoader
      * @param {System} system
+     * @param {MessageBus} bus
      */
-    constructor(presenter, architectureLoader, programLoader, system) {
+    constructor(presenter, architectureLoader, programLoader, system, bus) {
         this._presenter = presenter;
         this._architectureLoader = architectureLoader;
         this._programLoader = programLoader;
         this._system = system;
+        this._bus = bus;
     }
 
     /**
@@ -45,5 +48,12 @@ module.exports = class AdapterDependencies {
      */
     getSystem() {
         return this._system;
+    }
+
+    /**
+     * @return {MessageBus}
+     */
+    getMessageBus() {
+        return this._bus;
     }
 };

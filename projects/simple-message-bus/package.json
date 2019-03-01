@@ -1,20 +1,16 @@
 {
-  "name": "virtual-machine",
+  "name": "simple-message-bus",
   "version": "0.0.0",
-  "description": "Sloth Machine virtual machine",
+  "description": "Simple message bus",
   "main": "lib.js",
   "repository": "https://github.com/michelezamuner/smjs",
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
-    "architecture-loader": "file:../architecture-loader",
-    "message-bus": "file:../message-bus",
-    "program-loader": "file:../program-loader",
-    "sloth-machine-framework": "file:../sloth-machine-framework"
+    "message-bus": "file:../message-bus"
   },
   "devDependencies": {
-    "jest": "^24.1.0",
-    "jest-extensions": "file:../jest-extensions"
+    "jest": "^24.1.0"
   },
   "scripts": {
     "test": "node --use_strict ./node_modules/.bin/jest",
