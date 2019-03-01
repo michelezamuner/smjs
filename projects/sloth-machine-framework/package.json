@@ -6,9 +6,11 @@
   "repository": "https://github.com/michelezamuner/smjs",
   "author": "Michele Zamuner",
   "license": "MIT",
+  "dependencies": {
+  },
   "devDependencies": {
     "random": "file:../random",
-    "jest": "^23.6.0"
+    "jest": "^24.1.0"
   },
   "scripts": {
     "test": "node --use_strict ./node_modules/.bin/jest",

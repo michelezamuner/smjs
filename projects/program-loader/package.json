@@ -9,7 +9,8 @@
   "dependencies": {
     "sloth-machine-framework": "file:../sloth-machine-framework"
   },
-  "devDependencies": {},
+  "devDependencies": {
+  },
   "scripts": {
     "test": "true",
     "coverage": "true",

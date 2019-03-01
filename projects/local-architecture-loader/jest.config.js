@@ -4,10 +4,10 @@ const config = {
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
-        'adapters/local_architecture_loader/ModuleLoader\.js',
-        'adapters/local_architecture_loader/NativeModuleLoader\.js',
-        'adapters/os_system/Filesystem\.js',
-        'adapters/os_system/NativeFilesystem\.js',
+        'ModuleLoader\.js',
+        'NativeModuleLoader\.js',
+        'Filesystem\.js',
+        'NativeFilesystem\.js',
     ],
     coverageReporters: ['text'],
 };

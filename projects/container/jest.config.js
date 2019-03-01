@@ -3,6 +3,8 @@ const config = {
     testEnvironment: 'node',
     verbose: true,
     coverageDirectory: '/tmp',
+    coveragePathIgnorePatterns: [
+    ],
     coverageReporters: ['text'],
 };
 

@@ -1,3 +1,4 @@
+require('jest-extensions');
 const RunProgram = require('../../../../../src/application/virtual_machine/run_program/RunProgram');
 const MissingProgramReferenceException = require('../../../../../src/application/virtual_machine/run_program/MissingProgramReferenceException');
 const ProcessorFactory = require('../../../../../src/application/virtual_machine/run_program/ProcessorFactory');
@@ -7,6 +8,10 @@ const InvalidArchitectureException = require('architecture-loader').InvalidArchi
 const InvalidProgramException = require('program-loader').InvalidProgramException;
 const ProcessorException = require('sloth-machine-framework').ProcessorException;
 const Response = require('../../../../../src/application/virtual_machine/run_program/Response');
+const ArchitectureLoaded = require('../../../../../src/application/virtual_machine/run_program/messages/ArchitectureLoaded');
+const ProgramLoaded = require('../../../../../src/application/virtual_machine/run_program/messages/ProgramLoaded');
+const ExecutionTerminated = require('../../../../../src/application/virtual_machine/run_program/messages/ExecutionTerminated');
+const ApplicationFailed = require('../../../../../src/application/virtual_machine/run_program/messages/ApplicationFailed');
 
 /**
  * @type {Object|ProcessorFactory}
@@ -42,6 +47,11 @@ const programLoader = {};
  * @type {Object}
  */
 const system = {};
+
+/**
+ * @type {Object}
+ */
+const bus = {};
 
 /**
  * @type {Object}
@@ -83,13 +93,21 @@ const programReference = 'program';
  */
 const request = {};
 
+/**
+ * @type {null|boolean}
+ */
+let presenterCalled = null;
+
 beforeEach(() => {
+    presenterCalled = false;
     processorFactory.create = int => int === interpreter ? processor : null;
     adapter.getPresenter = () => presenter;
     adapter.getArchitectureLoader = () => architectureLoader;
     adapter.getProgramLoader = () => programLoader;
     adapter.getSystem = () => system;
-    presenter.present = jest.fn();
+    adapter.getMessageBus = () => bus;
+    presenter.present = jest.fn(() => presenterCalled = true);
+    bus.send = jest.fn(() => expect(presenterCalled).toBe(false));
     architectureLoader.load = name => name === architectureName ? architecture : null;
     architecture.getInterpreter = sys => sys === system ? interpreter : null;
     programLoader.load = ref => ref === programReference ? program : null;
@@ -110,14 +128,26 @@ test('runs loaded program with loaded architecture and sends proper response to 
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(exitStatus));
 });
 
+test('sends proper application messages', () => {
+    service.run(request);
+
+    expect(bus.send.mock.calls[0][0]).to(msg =>
+        msg instanceof ArchitectureLoaded && msg.getArchitecture() === architecture);
+    expect(bus.send.mock.calls[1][0]).to(msg =>
+        msg instanceof ProgramLoaded && msg.getProgram() === program);
+    expect(bus.send.mock.calls[2][0]).to(msg =>
+        msg instanceof ExecutionTerminated && msg.getExitStatus() === exitStatus);
+});
+
 test('handles missing program reference', () => {
-    const error = new MissingProgramReferenceException();
     request.getProgramReference = () => null;
 
     service.run(request);
 
+    expect(bus.send.mock.calls[0][0]).to(msg =>
+        msg instanceof ApplicationFailed && msg.getError() instanceof MissingProgramReferenceException);
     expect(presenter.present).toBeCalledTimes(1);
-    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
+    expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, new MissingProgramReferenceException()));
 });
 
 test('handles unsupported architecture exceptions', () => {
@@ -128,6 +158,7 @@ test('handles unsupported architecture exceptions', () => {
 
     service.run(request);
 
+    expect(bus.send.mock.calls[0][0]).to(msg => msg instanceof ApplicationFailed && msg.getError() === error);
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
@@ -140,6 +171,7 @@ test('handles invalid architecture exceptions', () => {
 
     service.run(request);
 
+    expect(bus.send.mock.calls[0][0]).to(msg => msg instanceof ApplicationFailed && msg.getError() === error);
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
@@ -152,11 +184,12 @@ test('handles invalid program exceptions', () => {
 
     service.run(request);
 
+    expect(bus.send.mock.calls[1][0]).to(msg => msg instanceof ApplicationFailed && msg.getError() === error);
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
 
-test('handles unsupported architecture exceptions', () => {
+test('handles processor exceptions', () => {
     const error = new ProcessorException();
     processor.run = () => {
         throw error;
@@ -164,6 +197,7 @@ test('handles unsupported architecture exceptions', () => {
 
     service.run(request);
 
+    expect(bus.send.mock.calls[2][0]).to(msg => msg instanceof ApplicationFailed && msg.getError() === error);
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });

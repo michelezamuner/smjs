@@ -7,10 +7,12 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
-    "container": "file:../container"
+    "container": "file:../container",
+    "message-bus": "file:../message-bus"
   },
   "devDependencies": {
-    "jest": "^23.6.0"
+    "jest": "^24.1.0",
+    "jest-extensions": "file:../jest-extensions"
   },
   "scripts": {
     "test": "node --use_strict ./node_modules/.bin/jest",

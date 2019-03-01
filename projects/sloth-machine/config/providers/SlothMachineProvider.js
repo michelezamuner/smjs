@@ -12,6 +12,8 @@ const System = require('architecture-loader').System;
 const OSSystem = require('local-architecture-loader').OSSystem;
 const Filesystem = require('local-architecture-loader').Filesystem;
 const NativeFilesystem = require('local-architecture-loader').NativeFilesystem;
+const MessageBus = require('message-bus').MessageBus;
+const SimpleMessageBus = require('simple-message-bus').SimpleMessageBus;
 
 module.exports = class SlothMachineProvider extends Provider {
     static get __DEPS__() { return [ Container ]; }
@@ -35,5 +37,6 @@ module.exports = class SlothMachineProvider extends Provider {
         this._container.bind(ArchitectureLoader, LocalArchitectureLoader);
         this._container.bind(System, OSSystem);
         this._container.bind(Filesystem, NativeFilesystem);
+        this._container.bind(MessageBus, SimpleMessageBus);
     }
 };

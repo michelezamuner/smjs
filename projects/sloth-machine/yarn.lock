@@ -220,6 +220,7 @@ append-transform@^1.0.0:
   version "0.0.0"
   dependencies:
     container "file:../../../usr/local/share/.cache/yarn/v2/container"
+    message-bus "file:../../../usr/local/share/.cache/yarn/v2/message-bus"
 
 aproba@^1.0.3:
   version "1.2.0"
@@ -2051,6 +2052,9 @@ merge@^1.2.0:
   resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.1.tgz#38bebf80c3220a8a487b6fcfb3941bb11720c145"
   integrity sha512-VjFo4P5Whtj4vsLzsYBu5ayHhoHJ0UqNm7ibvShmbmoz7tGi0vXaoJbGdB+GmDMLUdg8DpQXEIeVDAe8MaABvQ==
 
+"message-bus@file:../message-bus":
+  version "0.0.0"
+
 micromatch@^3.1.10, micromatch@^3.1.4:
   version "3.1.10"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-3.1.10.tgz#70859bc95c9840952f359a068a3fc49f9ecfac23"
@@ -2843,6 +2847,11 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
 
+"simple-message-bus@file:../simple-message-bus":
+  version "0.0.0"
+  dependencies:
+    message-bus "file:../../../usr/local/share/.cache/yarn/v2/message-bus"
+
 sisteransi@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/sisteransi/-/sisteransi-1.0.0.tgz#77d9622ff909080f1c19e5f4a1df0c1b0a27b88c"
@@ -3273,6 +3282,7 @@ verror@1.10.0:
   version "0.0.0"
   dependencies:
     architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/architecture-loader"
+    message-bus "file:../../../usr/local/share/.cache/yarn/v2/message-bus"
     program-loader "file:../../../usr/local/share/.cache/yarn/v2/program-loader"
     sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/sloth-machine-framework"
 

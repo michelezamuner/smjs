@@ -1,7 +1,7 @@
 {
-  "name": "random",
+  "name": "jest-extensions",
   "version": "0.0.0",
-  "description": "Random numbers generator",
+  "description": "Jest extensions",
   "main": "lib.js",
   "repository": "https://github.com/michelezamuner/smjs",
   "author": "Michele Zamuner",
