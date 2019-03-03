@@ -5,6 +5,7 @@ const Logger = require('logger').Logger;
 const ConsoleHandler = require('logger').ConsoleHandler;
 const FileHandler = require('logger').FileHandler;
 const Console = require('ui-console').Console;
+const ErrorHandlerFailed = require('../../src/ErrorHandlerFailed');
 const ErrorReceived = require('application').application.application.handle_error.messages.ErrorReceived;
 const ApplicationFailed = require('virtual-machine').ApplicationFailed;
 const ArchitectureLoaded = require('virtual-machine').ArchitectureLoaded;
@@ -35,7 +36,7 @@ module.exports = class LoggerProvider extends Provider {
             error.addHandler(new ConsoleHandler(this._container.make(Console), ConsoleHandler.STREAM_STDERR));
         }
 
-        bus.register([ErrorReceived], msg => error.log(msg.getError().stack));
+        bus.register([ErrorReceived, ErrorHandlerFailed], msg => error.log(msg.getError().stack));
         bus.register([ApplicationFailed], msg => error.log(config.debug ? msg.getError().stack : msg.getError().message));
 
         if (config.debug) {

@@ -1,4 +1,3 @@
-require('jest-extensions');
 const HandleError = require('../../../../src/application/application/handle_error/HandleError');
 const Presenter = require('../../../../src/application/application/handle_error/Presenter');
 const MessageBus = require('message-bus').MessageBus;
@@ -48,7 +47,7 @@ test('uses given presenter to present given errors', () => {
 
     service.handle(request);
 
-    expect(bus.send.mock.calls[0][0]).to(msg => msg instanceof ErrorReceived && msg.getError() === error);
+    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ErrorReceived(error));
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(
         new Response(new Error('A fatal error happened in the application')));
 });

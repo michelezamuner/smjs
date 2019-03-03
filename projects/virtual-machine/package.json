@@ -13,8 +13,7 @@
     "sloth-machine-framework": "file:../sloth-machine-framework"
   },
   "devDependencies": {
-    "jest": "^24.1.0",
-    "jest-extensions": "file:../jest-extensions"
+    "jest": "^24.1.0"
   },
   "scripts": {
     "test": "node --use_strict ./node_modules/.bin/jest",

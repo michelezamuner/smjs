@@ -1,4 +1,3 @@
-require('jest-extensions');
 const RunProgram = require('../../../../../src/application/virtual_machine/run_program/RunProgram');
 const MissingProgramReferenceException = require('../../../../../src/application/virtual_machine/run_program/MissingProgramReferenceException');
 const ProcessorFactory = require('../../../../../src/application/virtual_machine/run_program/ProcessorFactory');
@@ -131,12 +130,9 @@ test('runs loaded program with loaded architecture and sends proper response to 
 test('sends proper application messages', () => {
     service.run(request);
 
-    expect(bus.send.mock.calls[0][0]).to(msg =>
-        msg instanceof ArchitectureLoaded && msg.getArchitectureName() === architectureName && msg.getArchitecture() === architecture);
-    expect(bus.send.mock.calls[1][0]).to(msg =>
-        msg instanceof ProgramLoaded && msg.getProgramReference() === programReference && msg.getProgram() === program);
-    expect(bus.send.mock.calls[2][0]).to(msg =>
-        msg instanceof ExecutionTerminated && msg.getExitStatus() === exitStatus);
+    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ArchitectureLoaded(architecture, architectureName));
+    expect(bus.send.mock.calls[1][0]).toStrictEqual(new ProgramLoaded(program, programReference));
+    expect(bus.send.mock.calls[2][0]).toStrictEqual(new ExecutionTerminated(exitStatus));
 });
 
 test('handles missing program reference', () => {
@@ -144,8 +140,7 @@ test('handles missing program reference', () => {
 
     service.run(request);
 
-    expect(bus.send.mock.calls[0][0]).to(msg =>
-        msg instanceof ApplicationFailed && msg.getError() instanceof MissingProgramReferenceException);
+    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ApplicationFailed(new MissingProgramReferenceException()))
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, new MissingProgramReferenceException()));
 });
@@ -158,7 +153,7 @@ test('handles unsupported architecture exceptions', () => {
 
     service.run(request);
 
-    expect(bus.send.mock.calls[0][0]).to(msg => msg instanceof ApplicationFailed && msg.getError() === error);
+    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ApplicationFailed(error));
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
@@ -171,7 +166,7 @@ test('handles invalid architecture exceptions', () => {
 
     service.run(request);
 
-    expect(bus.send.mock.calls[0][0]).to(msg => msg instanceof ApplicationFailed && msg.getError() === error);
+    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ApplicationFailed(error));
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
@@ -184,7 +179,7 @@ test('handles invalid program exceptions', () => {
 
     service.run(request);
 
-    expect(bus.send.mock.calls[1][0]).to(msg => msg instanceof ApplicationFailed && msg.getError() === error);
+    expect(bus.send.mock.calls[1][0]).toStrictEqual(new ApplicationFailed(error));
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
@@ -197,7 +192,7 @@ test('handles processor exceptions', () => {
 
     service.run(request);
 
-    expect(bus.send.mock.calls[2][0]).to(msg => msg instanceof ApplicationFailed && msg.getError() === error);
+    expect(bus.send.mock.calls[2][0]).toStrictEqual(new ApplicationFailed(error));
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
