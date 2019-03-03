@@ -1,4 +1,4 @@
-const App = require('../../../src/app/App');
+const Launcher = require('../../src/Launcher');
 const Router = require('router').Router;
 const Input = require('router').Input;
 
@@ -8,9 +8,9 @@ const Input = require('router').Input;
 const router = {};
 
 /**
- * @type {null|App}
+ * @type {null|Launcher}
  */
-let app = null;
+let launcher = null;
 
 /**
  * @type {Object}
@@ -30,23 +30,23 @@ const file = 'file';
 /**
  * @type {Input}
  */
-const input = new Input('sloth_machine/run_program', App.DEFAULT_REPRESENTATION, {
+const input = new Input('sloth_machine/run_program', Launcher.DEFAULT_REPRESENTATION, {
     architecture: architecture,
     file: file
 });
 
 beforeEach(() => {
     router.route = jest.fn();
-    app = new App(router);
-    parser.getArgument = arg => arg === App.ARG_ARCHITECTURE ? architecture : file;
+    launcher = new Launcher(router);
+    parser.getArgument = arg => arg === Launcher.ARG_ARCHITECTURE ? architecture : file;
 });
 
 test('can be injected', () => {
-    expect(App.__DEPS__).toStrictEqual([ Router ]);
+    expect(Launcher.__DEPS__).toStrictEqual([ Router ]);
 });
 
 test('routes the correct input', () => {
-    app.run(parser);
+    launcher.launch(parser);
 
     expect(router.route.mock.calls[0][0]).toStrictEqual(input);
 });
@@ -56,12 +56,12 @@ test('handles parser errors', () => {
     const errorInput = new Input('console_application/handle_error', 'error', {error: error});
 
     parser.getArgument = arg => {
-        if (arg === App.ARG_ARCHITECTURE) {
+        if (arg === Launcher.ARG_ARCHITECTURE) {
             throw error;
         }
     };
 
-    app.run(parser);
+    launcher.launch(parser);
 
     expect(router.route.mock.calls[0][0]).toStrictEqual(errorInput);
 });
@@ -76,7 +76,7 @@ test('handles router errors', () => {
         }
     });
 
-    app.run(parser);
+    launcher.launch(parser);
 
     expect(router.route.mock.calls[1][0]).toStrictEqual(errorInput);
 });
@@ -91,7 +91,7 @@ test('converts basic router errors into proper error objects', () => {
         }
     });
 
-    app.run(parser);
+    launcher.launch(parser);
 
     expect(router.route.mock.calls[1][0]).toStrictEqual(errorInput);
 });
@@ -108,6 +108,6 @@ test('forwards errors happening in error routing', () => {
         }
     };
 
-    expect(() => app.run(parser)).toThrow(Error);
-    expect(() => app.run(parser)).toThrow(error);
+    expect(() => launcher.launch(parser)).toThrow(Error);
+    expect(() => launcher.launch(parser)).toThrow(error);
 });

@@ -1,4 +1,4 @@
-const Provider = require('../../src/app/Provider');
+const Provider = require('./Provider');
 const Container = require('container').Container;
 const FileReader = require('file-program-loader').FileReader;
 const NativeFileReader = require('file-program-loader').NativeFileReader;

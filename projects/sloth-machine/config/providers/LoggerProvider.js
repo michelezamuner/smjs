@@ -1,4 +1,4 @@
-const Provider = require('../../src/app/Provider');
+const Provider = require('./Provider');
 const Container = require('container').Container;
 const MessageBus = require('message-bus').MessageBus;
 const Logger = require('logger').Logger;
