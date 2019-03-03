@@ -42,13 +42,13 @@ module.exports = class RunProgram {
             }
 
             const architecture = this._architectureLoader.load(request.getArchitectureName());
-            this._bus.send(new ArchitectureLoaded(architecture));
+            this._bus.send(new ArchitectureLoaded(architecture, request.getArchitectureName()));
 
             const interpreter = architecture.getInterpreter(this._system);
             const processor = this._processorFactory.create(interpreter);
 
             const program = this._programLoader.load(request.getProgramReference());
-            this._bus.send(new ProgramLoaded(program));
+            this._bus.send(new ProgramLoaded(program, request.getProgramReference()));
 
             const exitStatus = processor.run(program);
             this._bus.send(new ExecutionTerminated(exitStatus));

@@ -38,8 +38,7 @@ module.exports = class App {
      * @private
      */
     _handleError(e) {
-        const message = `Fatal error: ${e.message || e}`;
-        const input = new Input('console_application/handle_error', 'error', {error: new Error(message)});
+        const input = new Input('console_application/handle_error', 'error', {error: e instanceof Error ? e : new Error(e)});
         try {
             this._router.route(input);
         } catch (e) {

@@ -13,6 +13,7 @@
     "container": "file:../container",
     "file-program-loader": "file:../file-program-loader",
     "local-architecture-loader": "file:../local-architecture-loader",
+    "logger": "file:../logger",
     "message-bus": "file:../message-bus",
     "program-loader": "file:../program-loader",
     "router": "file:../router",

@@ -9,10 +9,10 @@ module.exports = class MessageBus {
     }
 
     /**
-     * @param {Function} type
+     * @param {Function[]} types
      * @param {Function} handler
      */
-    register(type, handler) {
+    register(types, handler) {
         throw 'Not implemented';
     }
 
