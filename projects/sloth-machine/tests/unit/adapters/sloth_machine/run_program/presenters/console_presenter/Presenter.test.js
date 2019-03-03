@@ -23,11 +23,6 @@ const view = {};
 const errorPresenter = {};
 
 /**
- * @type {Object|ErrorView}
- */
-const errorView = {};
-
-/**
  * @type {null|Presenter}
  */
 let presenter = null;

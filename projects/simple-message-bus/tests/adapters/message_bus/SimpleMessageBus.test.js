@@ -5,13 +5,8 @@ const SimpleMessageBus = require('../../../src/adapters/message_bus/SimpleMessag
  */
 let bus = null;
 
-class MessageType {
-
-}
-
-class OtherType {
-
-}
+class MessageType {}
+class OtherType {}
 
 beforeEach(() => {
     bus = new SimpleMessageBus();
@@ -63,7 +58,6 @@ test('does nothing if no handler is registered for type of sent message', () => 
     const handler = jest.fn();
 
     bus.register([MessageType], handler);
-
     bus.send(new OtherType());
 
     expect(handler).not.toBeCalled();

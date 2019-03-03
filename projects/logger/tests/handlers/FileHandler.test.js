@@ -29,6 +29,14 @@ test('implements interface', () => {
 test('uses default writer', () => {
     const handler = new FileHandler(file);
 
+    let thrown = false;
+    try {
+        handler.handle('message');
+    } catch (e) {
+        thrown = true;
+    }
+
+    expect(thrown).toBe(false);
 });
 
 test('appends to given file', () => {
