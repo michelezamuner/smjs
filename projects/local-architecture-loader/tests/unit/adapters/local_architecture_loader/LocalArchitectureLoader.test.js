@@ -61,15 +61,13 @@ test('fails if requested architecture cannot be found', () => {
         }
     };
 
-    let thrown = false;
+    expect.assertions(2);
     try {
         loader.load(architectureName);
     } catch (e) {
-        thrown = true;
         expect(e).toBeInstanceOf(UnsupportedArchitectureException);
         expect(e.getArchitectureName()).toBe(architectureName);
     }
-    expect(thrown).toBe(true);
 });
 
 test('forwards generic exception of module loader', () => {
@@ -88,13 +86,11 @@ test('fails if loaded module is not an architecture', () => {
     const architecture = 'not a real architecture';
     moduleLoader.load = module => module === architectureModule ? architecture : null;
 
-    let thrown = false;
+    expect.assertions(2);
     try {
         loader.load(architectureName);
     } catch (e) {
-        thrown = true;
         expect(e).toBeInstanceOf(InvalidArchitectureException);
         expect(e.getArchitectureName()).toBe(architectureName);
     }
-    expect(thrown).toBe(true);
 });

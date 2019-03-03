@@ -212,15 +212,13 @@ test('wraps interpreter exceptions', () => {
         throw new InterpreterException(expectedMessage);
     };
 
-    let thrown = false;
+    expect.assertions(2);
     try {
         processor.run(program);
     } catch (e) {
-        thrown = true;
         expect(e).toBeInstanceOf(ProcessorException);
         expect(e.message).toBe(expectedMessage);
     }
-    expect(thrown).toBe(true);
 });
 
 test('forwards generic exceptions', () => {
@@ -229,13 +227,11 @@ test('forwards generic exceptions', () => {
         throw new Error(expectedMessage);
     };
 
-    let thrown = false;
+    expect.assertions(2);
     try {
         processor.run(program);
     } catch (e) {
-        thrown = true;
         expect(e).toBeInstanceOf(Error);
         expect(e.message).toBe(expectedMessage);
     }
-    expect(thrown).toBe(true);
 });

@@ -52,6 +52,7 @@ test('can read chunks of data of given size at given address', () => {
 
 test('fails if invalid address', () => {
     const address = new Address(0xFF);
+
     expect(() => program.read(address, new Size(1))).toThrow(InvalidAddressException);
     expect(() => program.read(address, new Size(1))).toThrow(`Invalid address ${address.format()}`);
 });
@@ -59,6 +60,7 @@ test('fails if invalid address', () => {
 test('fails if read out of bounds', () => {
     const address = new Address(6);
     const size = new Size(5);
+
     expect(() => program.read(address, size)).toThrow(ReadOutOfBoundsException);
     expect(() => program.read(address, size))
         .toThrow(`Out of bounds read of ${size.format()} units at address ${address.format()}`);

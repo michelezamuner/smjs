@@ -32,10 +32,12 @@ test('can be set to exit', () => {
 
 test('cannot be both jump and exit', () => {
     const jumpStatus = new Status({});
+
     expect(jumpStatus.shouldExit()).toBe(false);
     expect(() => jumpStatus.getExitStatus()).toThrow('Trying to get exit status when program is not exiting');
 
     const exitStatus = new Status(null, {});
+
     expect(exitStatus.shouldJump()).toBe(false);
     expect(() => exitStatus.getJumpAddress()).toThrow('Trying to get jump address when program is not jumping');
 });

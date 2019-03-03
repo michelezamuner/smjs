@@ -3,7 +3,6 @@ const Observer = require('../src/Observer');
 const Input = require('../src/Input');
 const RouterException = require('../src/RouterException');
 const Container = require('container').Container;
-const ContainerException = require('container').ContainerException;
 
 /**
  * @type {Object|Container}
