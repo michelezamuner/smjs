@@ -7,6 +7,7 @@ const config = {
         'Request\.js',
         'Response\.js',
         'Presenter\.js',
+        '/messages/',
     ],
     coverageReporters: ['text'],
 };
