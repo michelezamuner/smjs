@@ -52,13 +52,12 @@ test('routes the correct input', () => {
 });
 
 test('handles parser errors', () => {
-    const error = 'error';
-    const message = `Fatal error: ${error}`;
-    const errorInput = new Input('console_application/handle_error', 'error', {error: new Error(message)});
+    const error = new Error();
+    const errorInput = new Input('console_application/handle_error', 'error', {error: error});
 
     parser.getArgument = arg => {
         if (arg === App.ARG_ARCHITECTURE) {
-            throw new Error(error);
+            throw error;
         }
     };
 
@@ -68,13 +67,27 @@ test('handles parser errors', () => {
 });
 
 test('handles router errors', () => {
-    const error = 'error';
-    const message = `Fatal error: ${error}`;
-    const errorInput = new Input('console_application/handle_error', 'error', {error: new Error(message)});
+    const error = new Error();
+    const errorInput = new Input('console_application/handle_error', 'error', {error: error});
 
     router.route = jest.fn(arg => {
         if (arg.getIdentifier() === input.getIdentifier()) {
-            throw new Error(error);
+            throw error;
+        }
+    });
+
+    app.run(parser);
+
+    expect(router.route.mock.calls[1][0]).toStrictEqual(errorInput);
+});
+
+test('converts basic router errors into proper error objects', () => {
+    const error = 'error';
+    const errorInput = new Input('console_application/handle_error', 'error', {error: new Error(error)});
+
+    router.route = jest.fn(arg => {
+        if (arg.getIdentifier() === input.getIdentifier()) {
+            throw error;
         }
     });
 

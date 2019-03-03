@@ -6,7 +6,7 @@ module.exports = class UnsupportedArchitectureException extends Error {
      * @param {string} architectureName
      */
     constructor(architectureName) {
-        super();
+        super(`Architecture "${architectureName}" is not supported`);
         this._architectureName = architectureName;
     }
 

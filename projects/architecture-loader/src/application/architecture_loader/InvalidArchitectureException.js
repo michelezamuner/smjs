@@ -6,7 +6,7 @@ module.exports = class InvalidArchitectureException extends Error {
      * @param {string} architectureName
      */
     constructor(architectureName) {
-        super();
+        super(`Architecture "${architectureName}" is invalid`);
         this._architectureName = architectureName;
     }
 

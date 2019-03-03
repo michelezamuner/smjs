@@ -9,11 +9,13 @@ module.exports = class SimpleMessageBus extends MessageBus {
     /**
      * @override
      */
-    register(type, handler) {
-        if (this._handlers[type] === undefined) {
-            this._handlers[type] = [];
+    register(types, handler) {
+        for (const type of types) {
+            if (this._handlers[type] === undefined) {
+                this._handlers[type] = [];
+            }
+            this._handlers[type].push(handler);
         }
-        this._handlers[type].push(handler);
     }
 
     /**

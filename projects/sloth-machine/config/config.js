@@ -1,7 +1,12 @@
 const config = {
+    debug: true,
+    env: process.env.SM_ENV || 'dev',
+    logs: __dirname + '/../logs',
+    mods: __dirname + '/../mods',
     providers: [
         require('./providers/AppProvider'),
         require('./providers/SlothMachineProvider'),
+        require('./providers/LoggerProvider'),
     ],
     router: {
         routes: [
@@ -52,11 +57,17 @@ const config = {
                 ]
             },
         ]
-    }
+    },
 };
 
-const envConfig = process.env.SM_ENV === 'test'
-    ? require('./config-test')
-    : require('./config-app');
+let envConfig = {};
+switch (config.env) {
+    case 'test':
+        envConfig = require('./config-test');
+        break;
+    case 'prod':
+        envConfig = require('./config-prod');
+        break;
+}
 
 module.exports = { ...config, ... envConfig };

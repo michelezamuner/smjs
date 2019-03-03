@@ -132,9 +132,9 @@ test('sends proper application messages', () => {
     service.run(request);
 
     expect(bus.send.mock.calls[0][0]).to(msg =>
-        msg instanceof ArchitectureLoaded && msg.getArchitecture() === architecture);
+        msg instanceof ArchitectureLoaded && msg.getArchitectureName() === architectureName && msg.getArchitecture() === architecture);
     expect(bus.send.mock.calls[1][0]).to(msg =>
-        msg instanceof ProgramLoaded && msg.getProgram() === program);
+        msg instanceof ProgramLoaded && msg.getProgramReference() === programReference && msg.getProgram() === program);
     expect(bus.send.mock.calls[2][0]).to(msg =>
         msg instanceof ExecutionTerminated && msg.getExitStatus() === exitStatus);
 });
