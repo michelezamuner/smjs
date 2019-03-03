@@ -1,4 +1,4 @@
-const Provider = require('../../src/app/Provider');
+const Provider = require('./Provider');
 const Container = require('container').Container;
 const RouterObserver = require('router').Observer;
 const ViewsProvider = require('./ViewsProvider');

@@ -3,7 +3,7 @@ const RouterException = require('router').RouterException;
 const Input = require('router').Input;
 const Parser = require('command-line-parser');
 
-module.exports = class App {
+module.exports = class Launcher {
     static get DEFAULT_REPRESENTATION() { return 'integrated'; }
     static get ARG_ARCHITECTURE() { return 'arc'; }
     static get __DEPS__() { return [ Router ]; }
@@ -19,11 +19,11 @@ module.exports = class App {
      * @param {Parser} parser
      * @throws {RouterException}
      */
-    run(parser) {
+    launch(parser) {
         try {
             // @todo: allow different representations
-            const input = new Input('sloth_machine/run_program', App.DEFAULT_REPRESENTATION, {
-                architecture: parser.getArgument(App.ARG_ARCHITECTURE),
+            const input = new Input('sloth_machine/run_program', Launcher.DEFAULT_REPRESENTATION, {
+                architecture: parser.getArgument(Launcher.ARG_ARCHITECTURE),
                 file: parser.getArgument()
             });
 
