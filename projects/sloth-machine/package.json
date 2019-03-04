@@ -14,7 +14,7 @@
     "lib/console": "file:../libraries/console",
     "lib/container": "file:../libraries/container",
     "lib/logger": "file:../libraries/logger",
-    "lib/router": "file:../router",
+    "lib/router": "file:../libraries/router",
     "local-architecture-loader": "file:../local-architecture-loader",
     "message-bus": "file:../message-bus",
     "program-loader": "file:../program-loader",
