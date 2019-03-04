@@ -1,4 +1,4 @@
-const UnsupportedArchitectureException = require('../../../../src/application/architecture_loader/UnsupportedArchitectureException');
+const UnsupportedArchitectureException = require('../../src/UnsupportedArchitectureException');
 
 test('contains architecture name', () => {
     const architectureName = 'architecture';

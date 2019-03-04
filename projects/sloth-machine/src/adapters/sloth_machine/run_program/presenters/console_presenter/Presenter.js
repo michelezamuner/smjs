@@ -5,8 +5,8 @@ const View = require('./View');
 const ViewModel = require('./ViewModel');
 const ExitStatus = require('domain/sloth-machine-framework').interpreter.ExitStatus;
 const MissingProgramFileException = require('virtual-machine').MissingProgramReferenceException;
-const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
-const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
+const UnsupportedArchitectureException = require('app/architecture-loader').UnsupportedArchitectureException;
+const InvalidArchitectureException = require('app/architecture-loader').InvalidArchitectureException;
 const InvalidProgramException = require('program-loader').InvalidProgramException;
 
 /**

@@ -7,10 +7,11 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
-    "architecture-loader": "file:../architecture-loader",
+    "app/architecture-loader": "file:../application/architecture-loader",
+    "app/system": "file:../application/system",
+    "domain/sloth-machine-framework": "file:../domain/sloth-machine-framework",
     "message-bus": "file:../message-bus",
-    "program-loader": "file:../program-loader",
-    "domain/sloth-machine-framework": "file:../domain/sloth-machine-framework"
+    "program-loader": "file:../program-loader"
   },
   "devDependencies": {
     "jest": "^24.1.0"

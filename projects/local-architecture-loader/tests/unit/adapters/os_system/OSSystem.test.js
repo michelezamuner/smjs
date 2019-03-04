@@ -1,5 +1,5 @@
 const OSSystem = require('../../../../src/adapters/os_system/OSSystem');
-const System = require('architecture-loader').System;
+const System = require('app/system').System;
 const Filesystem = require('../../../../src/adapters/os_system/Filesystem');
 const Integer = require('domain/sloth-machine-framework').data.Integer;
 const Data = require('domain/sloth-machine-framework').data.Data;

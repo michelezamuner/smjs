@@ -209,6 +209,11 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
+"app/architecture-loader@file:../application/architecture-loader":
+  version "0.0.0"
+  dependencies:
+    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
+
 "app/core@file:../application/core":
   version "0.0.0"
   dependencies:
@@ -216,6 +221,11 @@ anymatch@^2.0.0:
 
 "app/message-bus@file:../message-bus":
   version "0.0.0"
+
+"app/system@file:../application/system":
+  version "0.0.0"
+  dependencies:
+    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
 
 append-transform@^1.0.0:
   version "1.0.0"
@@ -228,11 +238,6 @@ aproba@^1.0.3:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
   integrity sha512-Y9J6ZjXtoYh8RnXVCMOU/ttDmk1aBjunq9vO0ta5x85WDQiQfUF9sIPBITdbiiIVcBo03Hi3jMxigBtsddlXRw==
-
-"architecture-loader@file:../architecture-loader":
-  version "0.0.0"
-  dependencies:
-    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
 
 are-we-there-yet@~1.1.2:
   version "1.1.5"
@@ -1991,7 +1996,8 @@ load-json-file@^4.0.0:
 "local-architecture-loader@file:../local-architecture-loader":
   version "0.0.0"
   dependencies:
-    architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/architecture-loader"
+    app/architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/application/architecture-loader"
+    app/system "file:../../../usr/local/share/.cache/yarn/v2/application/system"
     domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
 
 locate-path@^3.0.0:
@@ -3288,7 +3294,8 @@ verror@1.10.0:
 "virtual-machine@file:../virtual-machine":
   version "0.0.0"
   dependencies:
-    architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/architecture-loader"
+    app/architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/application/architecture-loader"
+    app/system "file:../../../usr/local/share/.cache/yarn/v2/application/system"
     domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
     message-bus "file:../../../usr/local/share/.cache/yarn/v2/message-bus"
     program-loader "file:../../../usr/local/share/.cache/yarn/v2/program-loader"
