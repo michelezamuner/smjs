@@ -9,7 +9,7 @@ const ExitStatus = require('domain/sloth-machine-framework').interpreter.ExitSta
 const MissingProgramReferenceException = require('virtual-machine').MissingProgramReferenceException;
 const UnsupportedArchitectureException = require('app/architecture-loader').UnsupportedArchitectureException;
 const InvalidArchitectureException = require('app/architecture-loader').InvalidArchitectureException;
-const InvalidProgramException = require('program-loader').InvalidProgramException;
+const InvalidProgramException = require('app/program-loader').InvalidProgramException;
 const random = require('lib/random');
 
 /**

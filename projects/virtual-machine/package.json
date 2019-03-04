@@ -9,9 +9,9 @@
   "dependencies": {
     "app/architecture-loader": "file:../application/architecture-loader",
     "app/message-bus": "file:../application/message-bus",
+    "app/program-loader": "file:../application/program-loader",
     "app/system": "file:../application/system",
-    "domain/sloth-machine-framework": "file:../domain/sloth-machine-framework",
-    "program-loader": "file:../program-loader"
+    "domain/sloth-machine-framework": "file:../domain/sloth-machine-framework"
   },
   "devDependencies": {
     "jest": "^24.1.0"

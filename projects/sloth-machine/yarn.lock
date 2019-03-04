@@ -222,6 +222,11 @@ anymatch@^2.0.0:
 "app/message-bus@file:../application/message-bus":
   version "0.0.0"
 
+"app/program-loader@file:../application/program-loader":
+  version "0.0.0"
+  dependencies:
+    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
+
 "app/system@file:../application/system":
   version "0.0.0"
   dependencies:
@@ -939,8 +944,8 @@ fb-watchman@^2.0.0:
 "file-program-loader@file:../file-program-loader":
   version "0.0.0"
   dependencies:
+    app/program-loader "file:../../../usr/local/share/.cache/yarn/v2/application/program-loader"
     domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
-    program-loader "file:../../../usr/local/share/.cache/yarn/v2/program-loader"
 
 fileset@^2.0.3:
   version "2.0.3"
@@ -2563,11 +2568,6 @@ process-nextick-args@~2.0.0:
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.0.tgz#a37d732f4271b4ab1ad070d35508e8290788ffaa"
   integrity sha512-MtEC1TqN0EU5nephaJ4rAtThHtC86dNN9qCuEhtshvpVBkAW5ZO7BASN9REnF9eoXGcRub+pFuKEpOHE+HbEMw==
 
-"program-loader@file:../program-loader":
-  version "0.0.0"
-  dependencies:
-    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
-
 prompts@^2.0.1:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/prompts/-/prompts-2.0.3.tgz#c5ccb324010b2e8f74752aadceeb57134c1d2522"
@@ -3293,9 +3293,9 @@ verror@1.10.0:
   dependencies:
     app/architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/application/architecture-loader"
     app/message-bus "file:../../../usr/local/share/.cache/yarn/v2/application/message-bus"
+    app/program-loader "file:../../../usr/local/share/.cache/yarn/v2/application/program-loader"
     app/system "file:../../../usr/local/share/.cache/yarn/v2/application/system"
     domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
-    program-loader "file:../../../usr/local/share/.cache/yarn/v2/program-loader"
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"

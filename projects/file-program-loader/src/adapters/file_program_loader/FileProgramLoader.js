@@ -1,5 +1,5 @@
-const ProgramLoader = require('program-loader').ProgramLoader;
-const InvalidProgramException = require('program-loader').InvalidProgramException;
+const ProgramLoader = require('app/program-loader').ProgramLoader;
+const InvalidProgramException = require('app/program-loader').InvalidProgramException;
 const FileReader = require('./FileReader');
 const FileReaderException = require('./FileReaderException');
 const Program = require('domain/sloth-machine-framework').program.Program;
