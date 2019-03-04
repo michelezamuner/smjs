@@ -1,7 +1,7 @@
 const IntegratedView = require('../../../../../../src/adapters/sloth_machine/run_program/views/IntegratedView');
 const View = require('../../../../../../src/adapters/sloth_machine/run_program/presenters/console_presenter/View');
 const ViewModel = require('../../../../../../src/adapters/sloth_machine/run_program/presenters/console_presenter/ViewModel');
-const Console = require('ui-console').Console;
+const Console = require('lib/console').Console;
 
 /**
  * @type {Object|Console}

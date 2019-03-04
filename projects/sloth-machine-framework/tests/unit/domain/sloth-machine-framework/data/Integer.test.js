@@ -1,5 +1,5 @@
 const Integer = require('../../../../../src/domain/sloth-machine-framework/data/Integer');
-const random = require('random');
+const random = require('lib/random');
 
 test('defaults to zero', () => {
     const integer = new Integer();

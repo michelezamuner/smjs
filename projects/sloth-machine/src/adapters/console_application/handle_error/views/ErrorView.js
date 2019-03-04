@@ -1,5 +1,5 @@
 const View = require('../presenters/shared_presenter/View');
-const Console = require('ui-console').Console;
+const Console = require('lib/console').Console;
 
 module.exports = class ErrorView extends View {
     static get __DEPS__() { return [Console]; }

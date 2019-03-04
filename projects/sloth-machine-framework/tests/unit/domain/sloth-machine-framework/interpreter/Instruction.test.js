@@ -3,7 +3,7 @@ const DataUnit = require('../../../../../src/domain/sloth-machine-framework/data
 const Address = require('../../../../../src/domain/sloth-machine-framework/data/Address');
 const Opcode = require('../../../../../src/domain/sloth-machine-framework/interpreter/Opcode');
 const Operands = require('../../../../../src/domain/sloth-machine-framework/interpreter/Operands');
-const random = require('random');
+const random = require('lib/random');
 
 test('implements instruction details', () => {
     const address = new Address(random(100));

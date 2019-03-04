@@ -1,5 +1,5 @@
 const DataUnit = require('../../../../../src/domain/sloth-machine-framework/data/DataUnit');
-const random = require('random');
+const random = require('lib/random');
 
 test('supports equals', () => {
     const value = random(100);

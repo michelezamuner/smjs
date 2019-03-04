@@ -27,7 +27,7 @@ test('implements interface', () => {
 });
 
 test('uses default writer', () => {
-    const handler = new FileHandler(file);
+    const handler = new FileHandler('/tmp/file');
 
     let thrown = false;
     try {

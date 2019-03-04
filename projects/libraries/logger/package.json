@@ -7,7 +7,7 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
-    "ui-console": "file:../ui-console"
+    "lib/console": "file:../console"
   },
   "devDependencies": {
     "jest": "^24.1.0"

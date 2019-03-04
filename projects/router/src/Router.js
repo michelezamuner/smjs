@@ -1,7 +1,7 @@
 const Observer = require('./Observer');
 const RouterException = require('./RouterException');
 const Input = require('./Input');
-const Container = require('container').Container;
+const Container = require('lib/container').Container;
 
 module.exports = class Router {
     static get __DEPS__() { return [ Container, Observer, 'router.config' ]; }
