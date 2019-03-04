@@ -1,8 +1,8 @@
 const LocalArchitectureLoader = require('../../../../src/adapters/local_architecture_loader/LocalArchitectureLoader');
-const ArchitectureLoader = require('architecture-loader').ArchitectureLoader;
+const ArchitectureLoader = require('app/architecture-loader').ArchitectureLoader;
 const Architecture = require('domain/sloth-machine-framework').architecture.Architecture;
-const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
-const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
+const UnsupportedArchitectureException = require('app/architecture-loader').UnsupportedArchitectureException;
+const InvalidArchitectureException = require('app/architecture-loader').InvalidArchitectureException;
 const ModuleLoader = require('../../../../src/adapters/local_architecture_loader/ModuleLoader');
 const CannotFindModuleException = require('../../../../src/adapters/local_architecture_loader/CannotFindModuleException');
 

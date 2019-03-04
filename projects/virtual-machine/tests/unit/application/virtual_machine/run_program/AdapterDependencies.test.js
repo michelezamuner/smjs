@@ -1,8 +1,8 @@
 const AdapterDependencies = require('../../../../../src/application/virtual_machine/run_program/AdapterDependencies');
 const Presenter = require('../../../../../src/application/virtual_machine/run_program/Presenter');
-const ArchitectureLoader = require('architecture-loader').ArchitectureLoader;
+const ArchitectureLoader = require('app/architecture-loader').ArchitectureLoader;
 const ProgramLoader = require('program-loader').ProgramLoader;
-const System = require('architecture-loader').System;
+const System = require('app/system').System;
 const MessageBus = require('message-bus').MessageBus;
 
 /**

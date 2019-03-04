@@ -1,4 +1,4 @@
-const System = require('architecture-loader').System;
+const System = require('app/system').System;
 const Filesystem = require('./Filesystem');
 const Size = require('domain/sloth-machine-framework').data.Size;
 

@@ -7,8 +7,9 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
+    "app/architecture-loader": "file:../application/architecture-loader",
     "app/core": "file:../application/core",
-    "architecture-loader": "file:../architecture-loader",
+    "app/system": "file:../application/system",
     "domain/sloth-machine-framework": "file:../domain/sloth-machine-framework",
     "file-program-loader": "file:../file-program-loader",
     "lib/command-line-parser": "file:../libraries/command-line-parser",

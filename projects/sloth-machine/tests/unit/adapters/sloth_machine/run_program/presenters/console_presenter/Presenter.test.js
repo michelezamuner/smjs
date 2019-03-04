@@ -7,8 +7,8 @@ const PresenterInterface = require('virtual-machine').Presenter;
 const Response = require('virtual-machine').Response;
 const ExitStatus = require('domain/sloth-machine-framework').interpreter.ExitStatus;
 const MissingProgramReferenceException = require('virtual-machine').MissingProgramReferenceException;
-const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
-const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
+const UnsupportedArchitectureException = require('app/architecture-loader').UnsupportedArchitectureException;
+const InvalidArchitectureException = require('app/architecture-loader').InvalidArchitectureException;
 const InvalidProgramException = require('program-loader').InvalidProgramException;
 const random = require('lib/random');
 
