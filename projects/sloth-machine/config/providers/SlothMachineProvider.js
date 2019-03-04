@@ -2,18 +2,18 @@ const Provider = require('./Provider');
 const Container = require('lib/container').Container;
 const Console = require('lib/console').Console;
 const NativeConsole = require('lib/console').NativeConsole;
-const FileReader = require('file-program-loader').FileReader;
-const NativeFileReader = require('file-program-loader').NativeFileReader;
+const FileReader = require('adapters/file-program-loader').FileReader;
+const NativeFileReader = require('adapters/file-program-loader').NativeFileReader;
 const ProgramLoader = require('app/program-loader').ProgramLoader;
-const FileProgramLoader = require('file-program-loader').FileProgramLoader;
-const ModuleLoader = require('local-architecture-loader').ModuleLoader;
-const NativeModuleLoader = require('local-architecture-loader').NativeModuleLoader;
+const FileProgramLoader = require('adapters/file-program-loader').FileProgramLoader;
+const ModuleLoader = require('adapters/local-architecture-loader').ModuleLoader;
+const NativeModuleLoader = require('adapters/local-architecture-loader').NativeModuleLoader;
 const ArchitectureLoader = require('app/architecture-loader').ArchitectureLoader;
-const LocalArchitectureLoader = require('local-architecture-loader').LocalArchitectureLoader;
+const LocalArchitectureLoader = require('adapters/local-architecture-loader').LocalArchitectureLoader;
 const System = require('app/system').System;
-const OSSystem = require('local-architecture-loader').OSSystem;
-const Filesystem = require('local-architecture-loader').Filesystem;
-const NativeFilesystem = require('local-architecture-loader').NativeFilesystem;
+const OSSystem = require('adapters/os-system').OSSystem;
+const Filesystem = require('adapters/os-system').Filesystem;
+const NativeFilesystem = require('adapters/os-system').NativeFilesystem;
 
 module.exports = class SlothMachineProvider extends Provider {
     static get __DEPS__() { return [ Container ]; }

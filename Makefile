@@ -2,6 +2,7 @@
 root = $(shell pwd)
 domain = $(shell ls projects/domain)
 application = $(shell ls projects/application)
+adapters = $(shell ls projects/adapters)
 projects = $(shell ls projects)
 libraries = $(shell ls projects/libraries)
 
@@ -25,5 +26,6 @@ ssh:
 clean:
 	@$(foreach project,$(domain),cd $(root)/projects/domain/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
 	@$(foreach project,$(application),cd $(root)/projects/application/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
+	@$(foreach project,$(adapters),cd $(root)/projects/adapters/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
 	@$(foreach project,$(libraries),cd $(root)/projects/libraries/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
 	@$(foreach project,$(projects),cd $(root)/projects/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
