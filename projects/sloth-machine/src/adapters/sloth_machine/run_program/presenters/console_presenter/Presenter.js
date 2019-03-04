@@ -7,7 +7,7 @@ const ExitStatus = require('domain/sloth-machine-framework').interpreter.ExitSta
 const MissingProgramFileException = require('virtual-machine').MissingProgramReferenceException;
 const UnsupportedArchitectureException = require('app/architecture-loader').UnsupportedArchitectureException;
 const InvalidArchitectureException = require('app/architecture-loader').InvalidArchitectureException;
-const InvalidProgramException = require('program-loader').InvalidProgramException;
+const InvalidProgramException = require('app/program-loader').InvalidProgramException;
 
 /**
  * Console presenter for the sloth_machine/run_program use case.

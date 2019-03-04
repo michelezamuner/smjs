@@ -209,6 +209,11 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
+"app/program-loader@file:../application/program-loader":
+  version "0.0.0"
+  dependencies:
+    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
+
 append-transform@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/append-transform/-/append-transform-1.0.0.tgz#046a52ae582a228bd72f58acfbe2967c678759ab"
@@ -2509,11 +2514,6 @@ process-nextick-args@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.0.tgz#a37d732f4271b4ab1ad070d35508e8290788ffaa"
   integrity sha512-MtEC1TqN0EU5nephaJ4rAtThHtC86dNN9qCuEhtshvpVBkAW5ZO7BASN9REnF9eoXGcRub+pFuKEpOHE+HbEMw==
-
-"program-loader@file:../program-loader":
-  version "0.0.0"
-  dependencies:
-    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
 
 prompts@^2.0.1:
   version "2.0.3"
