@@ -11,8 +11,8 @@ const config = {
     router: {
         routes: [
             {
-                identifier: 'console_application/handle_error',
-                controller: require('../src/adapters/console_application/handle_error/controller/Controller'),
+                identifier: 'sloth_machine_core/handle_error',
+                controller: require('../src/adapters/sloth_machine_core/handle_error/controller/Controller'),
                 action: 'handleError(error)',
             },{
                 identifier: 'sloth_machine/run_program',
@@ -24,13 +24,13 @@ const config = {
     ui: {
         use_cases: [
             {
-                presenter: require('application').application.application.handle_error.Presenter,
+                presenter: require('app/core').handle_error.Presenter,
                 output_models: [
                     {
-                        presenter: require('../src/adapters/console_application/handle_error/presenters/console_presenter/Presenter'),
-                        view: require('../src/adapters/console_application/handle_error/presenters/shared_presenter/View'),
+                        presenter: require('../src/adapters/sloth_machine_core/handle_error/presenters/console_presenter/Presenter'),
+                        view: require('../src/adapters/sloth_machine_core/handle_error/presenters/shared_presenter/View'),
                         views: {
-                            '*': require('../src/adapters/console_application/handle_error/views/ErrorView'),
+                            '*': require('../src/adapters/sloth_machine_core/handle_error/views/ErrorView'),
                         }
                     }
                 ]
