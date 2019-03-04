@@ -1,4 +1,4 @@
-const RunProgram = require('virtual-machine').RunProgram;
+const RunProgram = require('app/virtual-machine').run_program.RunProgram;
 const Request = require('./Request');
 
 /**

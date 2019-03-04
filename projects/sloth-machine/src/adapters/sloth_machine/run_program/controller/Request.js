@@ -1,4 +1,4 @@
-const RequestInterface = require('virtual-machine').Request;
+const RequestInterface = require('app/virtual-machine').run_program.Request;
 
 module.exports = class Request extends RequestInterface {
     /**

@@ -1,5 +1,5 @@
-const AdapterDependencies = require('../../../../../src/application/virtual_machine/run_program/AdapterDependencies');
-const Presenter = require('../../../../../src/application/virtual_machine/run_program/Presenter');
+const AdapterDependencies = require('../../../src/run_program/AdapterDependencies');
+const Presenter = require('../../../src/run_program/Presenter');
 const ArchitectureLoader = require('app/architecture-loader').ArchitectureLoader;
 const ProgramLoader = require('app/program-loader').ProgramLoader;
 const System = require('app/system').System;

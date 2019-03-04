@@ -1,4 +1,4 @@
-const ProcessorFactory = require('../../../../../src/application/virtual_machine/run_program/ProcessorFactory');
+const ProcessorFactory = require('../../../src/run_program/ProcessorFactory');
 const Processor = require('domain/sloth-machine-framework').processor.Processor;
 
 test('creates processors', () => {

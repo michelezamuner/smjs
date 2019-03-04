@@ -7,10 +7,10 @@ const FileHandler = require('lib/logger').FileHandler;
 const Console = require('lib/console').Console;
 const ErrorHandlerFailed = require('../../src/ErrorHandlerFailed');
 const ErrorReceived = require('app/core').handle_error.messages.ErrorReceived;
-const ApplicationFailed = require('virtual-machine').ApplicationFailed;
-const ArchitectureLoaded = require('virtual-machine').ArchitectureLoaded;
-const ExecutionTerminated = require('virtual-machine').ExecutionTerminated;
-const ProgramLoaded = require('virtual-machine').ProgramLoaded;
+const ApplicationFailed = require('app/virtual-machine').run_program.messages.ApplicationFailed;
+const ArchitectureLoaded = require('app/virtual-machine').run_program.messages.ArchitectureLoaded;
+const ExecutionTerminated = require('app/virtual-machine').run_program.messages.ExecutionTerminated;
+const ProgramLoaded = require('app/virtual-machine').run_program.messages.ProgramLoaded;
 
 module.exports = class LoggerProvider extends Provider {
     static get __DEPS__() { return [ Container ]; }
