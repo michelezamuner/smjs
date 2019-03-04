@@ -1,16 +1,16 @@
-const RunProgram = require('../../../../../src/application/virtual_machine/run_program/RunProgram');
-const MissingProgramReferenceException = require('../../../../../src/application/virtual_machine/run_program/MissingProgramReferenceException');
-const ProcessorFactory = require('../../../../../src/application/virtual_machine/run_program/ProcessorFactory');
-const AdapterDependencies = require('../../../../../src/application/virtual_machine/run_program/AdapterDependencies');
+const RunProgram = require('../../../src/run_program/RunProgram');
+const MissingProgramReferenceException = require('../../../src/run_program/MissingProgramReferenceException');
+const ProcessorFactory = require('../../../src/run_program/ProcessorFactory');
+const AdapterDependencies = require('../../../src/run_program/AdapterDependencies');
 const UnsupportedArchitectureException = require('app/architecture-loader').UnsupportedArchitectureException;
 const InvalidArchitectureException = require('app/architecture-loader').InvalidArchitectureException;
 const InvalidProgramException = require('app/program-loader').InvalidProgramException;
 const ProcessorException = require('domain/sloth-machine-framework').processor.ProcessorException;
-const Response = require('../../../../../src/application/virtual_machine/run_program/Response');
-const ArchitectureLoaded = require('../../../../../src/application/virtual_machine/run_program/messages/ArchitectureLoaded');
-const ProgramLoaded = require('../../../../../src/application/virtual_machine/run_program/messages/ProgramLoaded');
-const ExecutionTerminated = require('../../../../../src/application/virtual_machine/run_program/messages/ExecutionTerminated');
-const ApplicationFailed = require('../../../../../src/application/virtual_machine/run_program/messages/ApplicationFailed');
+const Response = require('../../../src/run_program/Response');
+const ArchitectureLoaded = require('../../../src/run_program/messages/ArchitectureLoaded');
+const ProgramLoaded = require('../../../src/run_program/messages/ProgramLoaded');
+const ExecutionTerminated = require('../../../src/run_program/messages/ExecutionTerminated');
+const ApplicationFailed = require('../../../src/run_program/messages/ApplicationFailed');
 
 /**
  * @type {Object|ProcessorFactory}

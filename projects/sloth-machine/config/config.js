@@ -36,7 +36,7 @@ const config = {
                 ]
             },
             {
-                presenter: require('virtual-machine').Presenter,
+                presenter: require('app/virtual-machine').run_program.Presenter,
                 output_models: [
                     {
                         presenter: require('../src/adapters/sloth_machine/run_program/presenters/console_presenter/Presenter'),

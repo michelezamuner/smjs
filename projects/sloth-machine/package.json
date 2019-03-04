@@ -12,6 +12,7 @@
     "app/message-bus": "file:../application/message-bus",
     "app/program-loader": "file:../application/program-loader",
     "app/system": "file:../application/system",
+    "app/virtual-machine": "file:../application/virtual-machine",
     "domain/sloth-machine-framework": "file:../domain/sloth-machine-framework",
     "file-program-loader": "file:../file-program-loader",
     "lib/command-line-parser": "file:../libraries/command-line-parser",
@@ -20,8 +21,7 @@
     "lib/logger": "file:../libraries/logger",
     "lib/router": "file:../libraries/router",
     "local-architecture-loader": "file:../local-architecture-loader",
-    "simple-message-bus": "file:../simple-message-bus",
-    "virtual-machine": "file:../virtual-machine"
+    "simple-message-bus": "file:../simple-message-bus"
   },
   "devDependencies": {
     "jest": "^24.1.0",

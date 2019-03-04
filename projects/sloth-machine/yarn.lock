@@ -232,6 +232,15 @@ anymatch@^2.0.0:
   dependencies:
     domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
 
+"app/virtual-machine@file:../application/virtual-machine":
+  version "0.0.0"
+  dependencies:
+    app/architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/npm-app/architecture-loader"
+    app/message-bus "file:../../../usr/local/share/.cache/yarn/v2/npm-app/message-bus"
+    app/program-loader "file:../../../usr/local/share/.cache/yarn/v2/npm-app/program-loader"
+    app/system "file:../../../usr/local/share/.cache/yarn/v2/npm-app/system"
+    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
+
 append-transform@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/append-transform/-/append-transform-1.0.0.tgz#046a52ae582a228bd72f58acfbe2967c678759ab"
@@ -3287,15 +3296,6 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
-
-"virtual-machine@file:../virtual-machine":
-  version "0.0.0"
-  dependencies:
-    app/architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/application/architecture-loader"
-    app/message-bus "file:../../../usr/local/share/.cache/yarn/v2/application/message-bus"
-    app/program-loader "file:../../../usr/local/share/.cache/yarn/v2/application/program-loader"
-    app/system "file:../../../usr/local/share/.cache/yarn/v2/application/system"
-    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"

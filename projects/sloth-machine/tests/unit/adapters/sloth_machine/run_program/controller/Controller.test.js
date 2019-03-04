@@ -1,7 +1,7 @@
 const Controller = require('../../../../../../src/adapters/sloth_machine/run_program/controller/Controller');
 const Request = require('../../../../../../src/adapters/sloth_machine/run_program/controller/Request');
-const RequestInterface = require('virtual-machine').Request;
-const RunProgram = require('virtual-machine').RunProgram;
+const RequestInterface = require('app/virtual-machine').run_program.Request;
+const RunProgram = require('app/virtual-machine').run_program.RunProgram;
 
 /**
  * @type {Object|RunProgram}
