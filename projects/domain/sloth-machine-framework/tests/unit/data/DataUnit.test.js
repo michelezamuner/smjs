@@ -1,4 +1,4 @@
-const DataUnit = require('../../../../../src/domain/sloth-machine-framework/data/DataUnit');
+const DataUnit = require('../../../src/data/DataUnit');
 const random = require('lib/random');
 
 test('supports equals', () => {

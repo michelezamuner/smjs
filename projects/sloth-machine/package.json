@@ -9,6 +9,7 @@
   "dependencies": {
     "application": "file:../application",
     "architecture-loader": "file:../architecture-loader",
+    "domain/sloth-machine-framework": "file:../domain/sloth-machine-framework",
     "file-program-loader": "file:../file-program-loader",
     "lib/command-line-parser": "file:../libraries/command-line-parser",
     "lib/console": "file:../libraries/console",
@@ -19,7 +20,6 @@
     "message-bus": "file:../message-bus",
     "program-loader": "file:../program-loader",
     "simple-message-bus": "file:../simple-message-bus",
-    "sloth-machine-framework": "file:../sloth-machine-framework",
     "virtual-machine": "file:../virtual-machine"
   },
   "devDependencies": {

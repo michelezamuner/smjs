@@ -229,7 +229,7 @@ aproba@^1.0.3:
 "architecture-loader@file:../architecture-loader":
   version "0.0.0"
   dependencies:
-    sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
 
 are-we-there-yet@~1.1.2:
   version "1.1.5"
@@ -723,6 +723,9 @@ diff-sequences@^24.0.0:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-24.0.0.tgz#cdf8e27ed20d8b8d3caccb4e0c0d8fe31a173013"
   integrity sha512-46OkIuVGBBnrC0soO/4LHu5LHGHx0uhP65OVz8XOrAJpqiCB2aVIuESvjI1F9oqebuvY8lekS1pt6TN7vt7qsw==
 
+"domain/sloth-machine-framework@file:../domain/sloth-machine-framework":
+  version "0.0.0"
+
 domexception@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/domexception/-/domexception-1.0.1.tgz#937442644ca6a31261ef36e3ec677fe805582c90"
@@ -928,8 +931,8 @@ fb-watchman@^2.0.0:
 "file-program-loader@file:../file-program-loader":
   version "0.0.0"
   dependencies:
+    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
     program-loader "file:../../../usr/local/share/.cache/yarn/v2/program-loader"
-    sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/sloth-machine-framework"
 
 fileset@^2.0.3:
   version "2.0.3"
@@ -1986,7 +1989,7 @@ load-json-file@^4.0.0:
   version "0.0.0"
   dependencies:
     architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/architecture-loader"
-    sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
 
 locate-path@^3.0.0:
   version "3.0.0"
@@ -2557,7 +2560,7 @@ process-nextick-args@~2.0.0:
 "program-loader@file:../program-loader":
   version "0.0.0"
   dependencies:
-    sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
 
 prompts@^2.0.1:
   version "2.0.3"
@@ -2868,9 +2871,6 @@ slash@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-2.0.0.tgz#de552851a1759df3a8f206535442f5ec4ddeab44"
   integrity sha512-ZYKh3Wh2z1PpEXWr0MpSBZ0V6mZHAQfYevttO11c51CaWjGTaadiKZ+wVt1PbMlDV5qhMFslpZCemhwOK7C89A==
-
-"sloth-machine-framework@file:../sloth-machine-framework":
-  version "0.0.0"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
@@ -3286,9 +3286,9 @@ verror@1.10.0:
   version "0.0.0"
   dependencies:
     architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/architecture-loader"
+    domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
     message-bus "file:../../../usr/local/share/.cache/yarn/v2/message-bus"
     program-loader "file:../../../usr/local/share/.cache/yarn/v2/program-loader"
-    sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/sloth-machine-framework"
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"

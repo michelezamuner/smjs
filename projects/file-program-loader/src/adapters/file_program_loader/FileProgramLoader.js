@@ -2,9 +2,9 @@ const ProgramLoader = require('program-loader').ProgramLoader;
 const InvalidProgramException = require('program-loader').InvalidProgramException;
 const FileReader = require('./FileReader');
 const FileReaderException = require('./FileReaderException');
-const Program = require('sloth-machine-framework').Program;
-const Data = require('sloth-machine-framework').Data;
-const DataUnit = require('sloth-machine-framework').DataUnit;
+const Program = require('domain/sloth-machine-framework').program.Program;
+const Data = require('domain/sloth-machine-framework').data.Data;
+const DataUnit = require('domain/sloth-machine-framework').data.DataUnit;
 
 module.exports = class FileProgramLoader extends ProgramLoader {
     static get __DEPS__() { return [ FileReader ]; }

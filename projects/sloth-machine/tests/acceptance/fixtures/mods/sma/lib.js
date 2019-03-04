@@ -1,11 +1,11 @@
-const Architecture = require('sloth-machine-framework').Architecture;
-const Size = require('sloth-machine-framework').Size;
-const Status = require('sloth-machine-framework').Status;
-const Opcode = require('sloth-machine-framework').Opcode;
-const DataUnit = require('sloth-machine-framework').DataUnit;
-const Data = require('sloth-machine-framework').Data;
-const Integer = require('sloth-machine-framework').Integer;
-const ExitStatus = require('sloth-machine-framework').ExitStatus;
+const Architecture = require('domain/sloth-machine-framework').architecture.Architecture;
+const Size = require('domain/sloth-machine-framework').data.Size;
+const Status = require('domain/sloth-machine-framework').interpreter.Status;
+const Opcode = require('domain/sloth-machine-framework').interpreter.Opcode;
+const DataUnit = require('domain/sloth-machine-framework').data.DataUnit;
+const Data = require('domain/sloth-machine-framework').data.Data;
+const Integer = require('domain/sloth-machine-framework').data.Integer;
+const ExitStatus = require('domain/sloth-machine-framework').interpreter.ExitStatus;
 
 module.exports = new class extends Architecture {
     /**

@@ -1,4 +1,4 @@
-const Status = require('../../../../../src/domain/sloth-machine-framework/interpreter/Status');
+const Status = require('../../../src/interpreter/Status');
 
 test('defaults to no jump no exit', () => {
     const status = new Status();

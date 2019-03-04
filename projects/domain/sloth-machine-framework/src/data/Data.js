@@ -13,6 +13,10 @@ module.exports = class Data {
      * @return {boolean}
      */
     eq(data) {
+        if (this._data.length !== data._data.length) {
+            return false;
+        }
+
         for (const i in this._data) {
             if (!this._data[i].eq(data._data[i])) {
                 return false;

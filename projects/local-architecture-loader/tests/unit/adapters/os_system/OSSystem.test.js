@@ -1,10 +1,10 @@
 const OSSystem = require('../../../../src/adapters/os_system/OSSystem');
 const System = require('architecture-loader').System;
 const Filesystem = require('../../../../src/adapters/os_system/Filesystem');
-const Integer = require('sloth-machine-framework').Integer;
-const Data = require('sloth-machine-framework').Data;
-const DataUnit = require('sloth-machine-framework').DataUnit;
-const Size = require('sloth-machine-framework').Size;
+const Integer = require('domain/sloth-machine-framework').data.Integer;
+const Data = require('domain/sloth-machine-framework').data.Data;
+const DataUnit = require('domain/sloth-machine-framework').data.DataUnit;
+const Size = require('domain/sloth-machine-framework').data.Size;
 
 /**
  * @type {Object|Filesystem}

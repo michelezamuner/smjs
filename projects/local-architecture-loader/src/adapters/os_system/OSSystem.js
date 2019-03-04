@@ -1,6 +1,6 @@
 const System = require('architecture-loader').System;
 const Filesystem = require('./Filesystem');
-const Size = require('sloth-machine-framework').Size;
+const Size = require('domain/sloth-machine-framework').data.Size;
 
 module.exports = class OSSystem extends System {
     static get __DEPS__() { return [Filesystem]; }
