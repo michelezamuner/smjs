@@ -2,7 +2,7 @@ const Presenter = require('./Presenter');
 const ArchitectureLoader = require('app/architecture-loader').ArchitectureLoader;
 const ProgramLoader = require('program-loader').ProgramLoader;
 const System = require('app/system').System;
-const MessageBus = require('message-bus').MessageBus;
+const MessageBus = require('app/message-bus').MessageBus;
 
 module.exports = class AdapterDependencies {
     static get __DEPS__() { return [Presenter, ArchitectureLoader, ProgramLoader, System, MessageBus]; }

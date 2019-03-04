@@ -3,7 +3,7 @@ const ErrorHandlerFailed = require('../../src/ErrorHandlerFailed');
 const Container = require('lib/container').Container;
 const Router = require('lib/router').Router;
 const Input = require('lib/router').Input;
-const MessageBus = require('message-bus').MessageBus;
+const MessageBus = require('app/message-bus').MessageBus;
 
 /**
  * @type {Object|Container}

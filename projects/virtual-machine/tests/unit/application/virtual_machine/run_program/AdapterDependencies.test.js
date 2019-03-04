@@ -3,7 +3,7 @@ const Presenter = require('../../../../../src/application/virtual_machine/run_pr
 const ArchitectureLoader = require('app/architecture-loader').ArchitectureLoader;
 const ProgramLoader = require('program-loader').ProgramLoader;
 const System = require('app/system').System;
-const MessageBus = require('message-bus').MessageBus;
+const MessageBus = require('app/message-bus').MessageBus;
 
 /**
  * @type {Object|Presenter}

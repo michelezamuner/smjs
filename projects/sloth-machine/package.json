@@ -9,6 +9,7 @@
   "dependencies": {
     "app/architecture-loader": "file:../application/architecture-loader",
     "app/core": "file:../application/core",
+    "app/message-bus": "file:../application/message-bus",
     "app/system": "file:../application/system",
     "domain/sloth-machine-framework": "file:../domain/sloth-machine-framework",
     "file-program-loader": "file:../file-program-loader",
@@ -18,7 +19,6 @@
     "lib/logger": "file:../libraries/logger",
     "lib/router": "file:../libraries/router",
     "local-architecture-loader": "file:../local-architecture-loader",
-    "message-bus": "file:../message-bus",
     "program-loader": "file:../program-loader",
     "simple-message-bus": "file:../simple-message-bus",
     "virtual-machine": "file:../virtual-machine"

@@ -6,10 +6,8 @@
   "repository": "https://github.com/michelezamuner/smjs",
   "author": "Michele Zamuner",
   "license": "MIT",
-  "dependencies": {
-  },
-  "devDependencies": {
-  },
+  "dependencies": {},
+  "devDependencies": {},
   "scripts": {
     "test": "true",
     "coverage": "true",

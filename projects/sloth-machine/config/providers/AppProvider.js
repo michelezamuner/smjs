@@ -2,7 +2,7 @@ const Provider = require('./Provider');
 const Container = require('lib/container').Container;
 const RouterObserver = require('lib/router').Observer;
 const ViewsProvider = require('./ViewsProvider');
-const MessageBus = require('message-bus').MessageBus;
+const MessageBus = require('app/message-bus').MessageBus;
 const SimpleMessageBus = require('simple-message-bus').SimpleMessageBus;
 
 module.exports = class AppProvider extends Provider {

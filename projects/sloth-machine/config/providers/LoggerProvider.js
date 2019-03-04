@@ -1,6 +1,6 @@
 const Provider = require('./Provider');
 const Container = require('lib/container').Container;
-const MessageBus = require('message-bus').MessageBus;
+const MessageBus = require('app/message-bus').MessageBus;
 const Logger = require('lib/logger').Logger;
 const ConsoleHandler = require('lib/logger').ConsoleHandler;
 const FileHandler = require('lib/logger').FileHandler;
