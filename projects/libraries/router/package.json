@@ -7,7 +7,7 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
-    "lib/container": "file:../libraries/container"
+    "lib/container": "file:../container"
   },
   "devDependencies": {
     "jest": "^24.1.0"

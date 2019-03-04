@@ -1,6 +1,7 @@
 .PHONY: build ci ssh clean
 root = $(shell pwd)
 projects = $(shell ls projects)
+libraries = $(shell ls projects/libraries)
 
 build:
 	@docker build -t smjs .
@@ -21,3 +22,4 @@ ssh:
 
 clean:
 	@$(foreach project,$(projects),cd $(root)/projects/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
+	@$(foreach library,$(libraries),cd $(root)/projects/libraries/$(library) && echo Cleaning $(library)... && rm -rf node_modules/ &&) true
