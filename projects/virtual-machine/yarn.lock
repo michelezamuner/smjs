@@ -214,6 +214,9 @@ anymatch@^2.0.0:
   dependencies:
     domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
 
+"app/message-bus@file:../application/message-bus":
+  version "0.0.0"
+
 "app/system@file:../application/system":
   version "0.0.0"
   dependencies:
@@ -2054,9 +2057,6 @@ merge@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.1.tgz#38bebf80c3220a8a487b6fcfb3941bb11720c145"
   integrity sha512-VjFo4P5Whtj4vsLzsYBu5ayHhoHJ0UqNm7ibvShmbmoz7tGi0vXaoJbGdB+GmDMLUdg8DpQXEIeVDAe8MaABvQ==
-
-"message-bus@file:../message-bus":
-  version "0.0.0"
 
 micromatch@^3.1.10, micromatch@^3.1.4:
   version "3.1.10"

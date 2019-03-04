@@ -217,9 +217,9 @@ anymatch@^2.0.0:
 "app/core@file:../application/core":
   version "0.0.0"
   dependencies:
-    app/message-bus "file:../../../usr/local/share/.cache/yarn/v2/message-bus"
+    app/message-bus "file:../../../usr/local/share/.cache/yarn/v2/npm-app/message-bus"
 
-"app/message-bus@file:../message-bus":
+"app/message-bus@file:../application/message-bus":
   version "0.0.0"
 
 "app/system@file:../application/system":
@@ -2079,9 +2079,6 @@ merge@^1.2.0:
   resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.1.tgz#38bebf80c3220a8a487b6fcfb3941bb11720c145"
   integrity sha512-VjFo4P5Whtj4vsLzsYBu5ayHhoHJ0UqNm7ibvShmbmoz7tGi0vXaoJbGdB+GmDMLUdg8DpQXEIeVDAe8MaABvQ==
 
-"message-bus@file:../message-bus":
-  version "0.0.0"
-
 micromatch@^3.1.10, micromatch@^3.1.4:
   version "3.1.10"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-3.1.10.tgz#70859bc95c9840952f359a068a3fc49f9ecfac23"
@@ -2869,7 +2866,7 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
 "simple-message-bus@file:../simple-message-bus":
   version "0.0.0"
   dependencies:
-    message-bus "file:../../../usr/local/share/.cache/yarn/v2/message-bus"
+    app/message-bus "file:../../../usr/local/share/.cache/yarn/v2/application/message-bus"
 
 sisteransi@^1.0.0:
   version "1.0.0"
@@ -3295,9 +3292,9 @@ verror@1.10.0:
   version "0.0.0"
   dependencies:
     app/architecture-loader "file:../../../usr/local/share/.cache/yarn/v2/application/architecture-loader"
+    app/message-bus "file:../../../usr/local/share/.cache/yarn/v2/application/message-bus"
     app/system "file:../../../usr/local/share/.cache/yarn/v2/application/system"
     domain/sloth-machine-framework "file:../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
-    message-bus "file:../../../usr/local/share/.cache/yarn/v2/message-bus"
     program-loader "file:../../../usr/local/share/.cache/yarn/v2/program-loader"
 
 w3c-hr-time@^1.0.1:

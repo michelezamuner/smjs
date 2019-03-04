@@ -1,4 +1,4 @@
-const MessageBus = require('message-bus').MessageBus;
+const MessageBus = require('app/message-bus').MessageBus;
 
 module.exports = class SimpleMessageBus extends MessageBus {
     constructor() {

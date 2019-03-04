@@ -2,7 +2,7 @@ const Container = require('lib/container').Container;
 const Router = require('lib/router').Router;
 const RouterException = require('lib/router').RouterException;
 const Input = require('lib/router').Input;
-const MessageBus = require('message-bus').MessageBus;
+const MessageBus = require('app/message-bus').MessageBus;
 const ErrorHandlerFailed = require('./ErrorHandlerFailed');
 const Parser = require('lib/command-line-parser');
 
