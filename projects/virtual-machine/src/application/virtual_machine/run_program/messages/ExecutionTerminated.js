@@ -1,4 +1,4 @@
-const ExitStatus = require('sloth-machine-framework').ExitStatus;
+const ExitStatus = require('domain/sloth-machine-framework').interpreter.ExitStatus;
 
 module.exports = class ExecutionTerminated {
     /**

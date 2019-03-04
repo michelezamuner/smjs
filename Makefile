@@ -2,6 +2,7 @@
 root = $(shell pwd)
 projects = $(shell ls projects)
 libraries = $(shell ls projects/libraries)
+domain = $(shell ls projects/domain)
 
 build:
 	@docker build -t smjs .
@@ -21,5 +22,6 @@ ssh:
 	@docker run -ti -v $(root):/app:delegated smjs bash
 
 clean:
+	@$(foreach project,$(domain),cd $(root)/projects/domain/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
+	@$(foreach project,$(libraries),cd $(root)/projects/libraries/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
 	@$(foreach project,$(projects),cd $(root)/projects/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
-	@$(foreach library,$(libraries),cd $(root)/projects/libraries/$(library) && echo Cleaning $(library)... && rm -rf node_modules/ &&) true

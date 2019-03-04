@@ -1,4 +1,4 @@
-const Architecture = require('sloth-machine-framework').Architecture;
+const Architecture = require('domain/sloth-machine-framework').architecture.Architecture;
 const UnsupportedArchitectureException = require('./UnsupportedArchitectureException');
 const InvalidArchitectureException = require('./InvalidArchitectureException');
 

@@ -10,7 +10,7 @@
     "architecture-loader": "file:../architecture-loader",
     "message-bus": "file:../message-bus",
     "program-loader": "file:../program-loader",
-    "sloth-machine-framework": "file:../sloth-machine-framework"
+    "domain/sloth-machine-framework": "file:../domain/sloth-machine-framework"
   },
   "devDependencies": {
     "jest": "^24.1.0"

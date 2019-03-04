@@ -1,5 +1,5 @@
 const ProcessorFactory = require('../../../../../src/application/virtual_machine/run_program/ProcessorFactory');
-const Processor = require('sloth-machine-framework').Processor;
+const Processor = require('domain/sloth-machine-framework').processor.Processor;
 
 test('creates processors', () => {
     const factory = new ProcessorFactory();

@@ -1,5 +1,5 @@
-const Address = require('../../../../../src/domain/sloth-machine-framework/data/Address');
-const Integer = require('../../../../../src/domain/sloth-machine-framework/data/Integer');
+const Address = require('../../../src/data/Address');
+const Integer = require('../../../src/data/Integer');
 const random = require('lib/random');
 
 test('extends integer', () => {

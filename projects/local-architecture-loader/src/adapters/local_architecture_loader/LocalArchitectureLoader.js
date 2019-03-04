@@ -1,5 +1,5 @@
 const ArchitectureLoader = require('architecture-loader').ArchitectureLoader;
-const Architecture = require('sloth-machine-framework').Architecture;
+const Architecture = require('domain/sloth-machine-framework').architecture.Architecture;
 const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
 const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
 const ModuleLoader = require('./ModuleLoader');

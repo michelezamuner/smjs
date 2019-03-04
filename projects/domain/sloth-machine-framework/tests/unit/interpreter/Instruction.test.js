@@ -1,8 +1,8 @@
-const Instruction = require('../../../../../src/domain/sloth-machine-framework/interpreter/Instruction');
-const DataUnit = require('../../../../../src/domain/sloth-machine-framework/data/DataUnit');
-const Address = require('../../../../../src/domain/sloth-machine-framework/data/Address');
-const Opcode = require('../../../../../src/domain/sloth-machine-framework/interpreter/Opcode');
-const Operands = require('../../../../../src/domain/sloth-machine-framework/interpreter/Operands');
+const Instruction = require('../../../src/interpreter/Instruction');
+const DataUnit = require('../../../src/data/DataUnit');
+const Address = require('../../../src/data/Address');
+const Opcode = require('../../../src/interpreter/Opcode');
+const Operands = require('../../../src/interpreter/Operands');
 const random = require('lib/random');
 
 test('implements instruction details', () => {

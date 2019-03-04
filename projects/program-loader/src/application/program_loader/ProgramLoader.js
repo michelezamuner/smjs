@@ -1,4 +1,4 @@
-const Program = require('sloth-machine-framework').Program;
+const Program = require('domain/sloth-machine-framework').program.Program;
 const InvalidProgramException = require('./InvalidProgramException');
 
 /**

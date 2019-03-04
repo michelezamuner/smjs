@@ -1,10 +1,10 @@
-const Program = require('../../../../../src/domain/sloth-machine-framework/program/Program');
-const DataUnit = require('../../../../../src/domain/sloth-machine-framework/data/DataUnit');
-const Data = require('../../../../../src/domain/sloth-machine-framework/data/Data');
-const Address = require('../../../../../src/domain/sloth-machine-framework/data/Address');
-const Size = require('../../../../../src/domain/sloth-machine-framework/data/Size');
-const InvalidAddressException = require('../../../../../src/domain/sloth-machine-framework/program/InvalidAddressException');
-const ReadOutOfBoundsException = require('../../../../../src/domain/sloth-machine-framework/program/ReadOutOfBoundsException');
+const Program = require('../../../src/program/Program');
+const DataUnit = require('../../../src/data/DataUnit');
+const Data = require('../../../src/data/Data');
+const Address = require('../../../src/data/Address');
+const Size = require('../../../src/data/Size');
+const InvalidAddressException = require('../../../src/program/InvalidAddressException');
+const ReadOutOfBoundsException = require('../../../src/program/ReadOutOfBoundsException');
 
 const data = new Data([
     new DataUnit(0x00), new DataUnit(0x01), new DataUnit(0x02), new DataUnit(0x03),
