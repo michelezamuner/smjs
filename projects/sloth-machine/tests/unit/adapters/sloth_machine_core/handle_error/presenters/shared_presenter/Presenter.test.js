@@ -1,7 +1,7 @@
-const Presenter = require('../../../../../../../src/adapters/console_application/handle_error/presenters/shared_presenter/Presenter');
-const View = require('../../../../../../../src/adapters/console_application/handle_error/presenters/shared_presenter/View');
-const Response = require('../../../../../../../src/adapters/console_application/handle_error/presenters/shared_presenter/Response');
-const ViewModel = require('../../../../../../../src/adapters/console_application/handle_error/presenters/shared_presenter/ViewModel');
+const Presenter = require('../../../../../../../src/adapters/sloth_machine_core/handle_error/presenters/shared_presenter/Presenter');
+const View = require('../../../../../../../src/adapters/sloth_machine_core/handle_error/presenters/shared_presenter/View');
+const Response = require('../../../../../../../src/adapters/sloth_machine_core/handle_error/presenters/shared_presenter/Response');
+const ViewModel = require('../../../../../../../src/adapters/sloth_machine_core/handle_error/presenters/shared_presenter/ViewModel');
 
 /**
  * @type {View}

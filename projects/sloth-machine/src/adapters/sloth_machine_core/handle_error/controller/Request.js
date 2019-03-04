@@ -1,4 +1,4 @@
-const RequestInterface = require('application').application.application.handle_error.Request;
+const RequestInterface = require('app/core').handle_error.Request;
 
 module.exports = class Request extends RequestInterface {
     /**

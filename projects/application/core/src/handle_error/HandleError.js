@@ -1,5 +1,5 @@
 const Presenter = require('./Presenter');
-const MessageBus = require('message-bus').MessageBus;
+const MessageBus = require('app/message-bus').MessageBus;
 const Request = require('./Request');
 const Response = require('./Response');
 const ErrorReceived = require('./messages/ErrorReceived');

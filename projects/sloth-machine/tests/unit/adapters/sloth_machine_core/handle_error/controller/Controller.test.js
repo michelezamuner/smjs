@@ -1,7 +1,7 @@
-const Controller = require('../../../../../../src/adapters/console_application/handle_error/controller/Controller');
-const Request = require('../../../../../../src/adapters/console_application/handle_error/controller/Request');
-const RequestInterface = require('application').application.application.handle_error.Request;
-const HandleError = require('application').application.application.handle_error.HandleError;
+const Controller = require('../../../../../../src/adapters/sloth_machine_core/handle_error/controller/Controller');
+const Request = require('../../../../../../src/adapters/sloth_machine_core/handle_error/controller/Request');
+const RequestInterface = require('app/core').handle_error.Request;
+const HandleError = require('app/core').handle_error.HandleError;
 
 /**
  * @type {Object|HandleError}

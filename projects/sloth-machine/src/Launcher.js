@@ -47,7 +47,7 @@ module.exports = class Launcher {
      * @private
      */
     _handleError(e) {
-        const input = new Input('console_application/handle_error', 'error', {error: e instanceof Error ? e : new Error(e)});
+        const input = new Input('sloth_machine_core/handle_error', 'error', {error: e instanceof Error ? e : new Error(e)});
         try {
             this._container.make(Router).route(input);
         } catch (e) {

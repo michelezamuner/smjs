@@ -1,8 +1,8 @@
-const Presenter = require('../../../../../../../src/adapters/console_application/handle_error/presenters/console_presenter/Presenter');
-const PresenterInterface = require('application').application.application.handle_error.Presenter;
-const SharedPresenter = require('../../../../../../../src/adapters/console_application/handle_error/presenters/shared_presenter/Presenter');
-const SharedResponse = require('../../../../../../../src/adapters/console_application/handle_error/presenters/shared_presenter/Response');
-const Response = require('application').application.application.handle_error.Response;
+const Presenter = require('../../../../../../../src/adapters/sloth_machine_core/handle_error/presenters/console_presenter/Presenter');
+const PresenterInterface = require('app/core').handle_error.Presenter;
+const SharedPresenter = require('../../../../../../../src/adapters/sloth_machine_core/handle_error/presenters/shared_presenter/Presenter');
+const SharedResponse = require('../../../../../../../src/adapters/sloth_machine_core/handle_error/presenters/shared_presenter/Response');
+const Response = require('app/core').handle_error.Response;
 
 /**
  * @type {SharedPresenter}

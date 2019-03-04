@@ -1,4 +1,4 @@
-const HandleError = require('application').application.application.handle_error.HandleError;
+const HandleError = require('app/core').handle_error.HandleError;
 const Request = require('./Request');
 
 module.exports = class Controller {

@@ -107,7 +107,7 @@ test('routes the correct input', () => {
 
 test('handles parser errors', () => {
     const error = new Error();
-    const errorInput = new Input('console_application/handle_error', 'error', {error: error});
+    const errorInput = new Input('sloth_machine_core/handle_error', 'error', {error: error});
 
     parser.getArgument = arg => {
         if (arg === Launcher.ARG_ARCHITECTURE) {
@@ -122,7 +122,7 @@ test('handles parser errors', () => {
 
 test('handles router errors', () => {
     const error = new Error();
-    const errorInput = new Input('console_application/handle_error', 'error', {error: error});
+    const errorInput = new Input('sloth_machine_core/handle_error', 'error', {error: error});
 
     router.route = jest.fn(arg => {
         if (arg.getIdentifier() === input.getIdentifier()) {
@@ -137,7 +137,7 @@ test('handles router errors', () => {
 
 test('converts basic router errors into proper error objects', () => {
     const error = 'error';
-    const errorInput = new Input('console_application/handle_error', 'error', {error: new Error(error)});
+    const errorInput = new Input('sloth_machine_core/handle_error', 'error', {error: new Error(error)});
 
     router.route = jest.fn(arg => {
         if (arg.getIdentifier() === input.getIdentifier()) {
@@ -157,7 +157,7 @@ test('sends errors happening in error routing as messages', () => {
         if (arg.getIdentifier() === input.getIdentifier()) {
             throw new Error();
         }
-        if (arg.getIdentifier() === 'console_application/handle_error') {
+        if (arg.getIdentifier() === 'sloth_machine_core/handle_error') {
             throw error;
         }
     };
@@ -174,7 +174,7 @@ test('uses proper error object when sending error handler failures', () => {
         if (arg.getIdentifier() === input.getIdentifier()) {
             throw new Error();
         }
-        if (arg.getIdentifier() === 'console_application/handle_error') {
+        if (arg.getIdentifier() === 'sloth_machine_core/handle_error') {
             throw error;
         }
     };

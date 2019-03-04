@@ -1,9 +1,9 @@
-const HandleError = require('../../../../src/application/application/handle_error/HandleError');
-const Presenter = require('../../../../src/application/application/handle_error/Presenter');
-const MessageBus = require('message-bus').MessageBus;
-const Request = require('../../../../src/application/application/handle_error/Request');
-const Response = require('../../../../src/application/application/handle_error/Response');
-const ErrorReceived = require('../../../../src/application/application/handle_error/messages/ErrorReceived');
+const HandleError = require('../../src/handle_error/HandleError');
+const Presenter = require('../../src/handle_error/Presenter');
+const MessageBus = require('app/message-bus').MessageBus;
+const Request = require('../../src/handle_error/Request');
+const Response = require('../../src/handle_error/Response');
+const ErrorReceived = require('../../src/handle_error/messages/ErrorReceived');
 
 /**
  * @type {Object|Presenter}
