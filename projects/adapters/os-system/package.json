@@ -1,0 +1,21 @@
+{
+  "name": "os-system",
+  "version": "0.0.0",
+  "description": "Sloth Machine OS System",
+  "main": "lib.js",
+  "repository": "https://github.com/michelezamuner/smjs",
+  "author": "Michele Zamuner",
+  "license": "MIT",
+  "dependencies": {
+    "app/system": "file:../../application/system",
+    "domain/sloth-machine-framework": "file:../../domain/sloth-machine-framework"
+  },
+  "devDependencies": {
+    "jest": "^24.1.0"
+  },
+  "scripts": {
+    "test": "node --use_strict ./node_modules/.bin/jest",
+    "coverage": "node --use_strict ./node_modules/.bin/jest --coverage",
+    "ci": "JEST_ENV=ci node --use_strict ./node_modules/.bin/jest --coverage"
+  }
+}
