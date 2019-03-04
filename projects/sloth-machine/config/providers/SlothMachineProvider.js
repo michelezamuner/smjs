@@ -1,5 +1,7 @@
 const Provider = require('./Provider');
-const Container = require('container').Container;
+const Container = require('lib/container').Container;
+const Console = require('lib/console').Console;
+const NativeConsole = require('lib/console').NativeConsole;
 const FileReader = require('file-program-loader').FileReader;
 const NativeFileReader = require('file-program-loader').NativeFileReader;
 const ProgramLoader = require('program-loader').ProgramLoader;
@@ -12,7 +14,6 @@ const System = require('architecture-loader').System;
 const OSSystem = require('local-architecture-loader').OSSystem;
 const Filesystem = require('local-architecture-loader').Filesystem;
 const NativeFilesystem = require('local-architecture-loader').NativeFilesystem;
-const MessageBus = require('message-bus').MessageBus;
 
 module.exports = class SlothMachineProvider extends Provider {
     static get __DEPS__() { return [ Container ]; }
@@ -29,6 +30,7 @@ module.exports = class SlothMachineProvider extends Provider {
      * @override
      */
     register() {
+        this._container.bind(Console, NativeConsole);
         this._container.bind(FileReader, NativeFileReader);
         this._container.bind(ProgramLoader, FileProgramLoader);
         this._container.bind(ModuleLoader, NativeModuleLoader);

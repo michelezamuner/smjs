@@ -1,6 +1,6 @@
-const Container = require('container').Container;
-const RouterObserver = require('router').Observer;
-const Input = require('router').Input;
+const Container = require('lib/container').Container;
+const RouterObserver = require('lib/router').Observer;
+const Input = require('lib/router').Input;
 
 module.exports = class RoutesProvider extends RouterObserver {
     static get __DEPS__() { return [Container]; }

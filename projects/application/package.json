@@ -7,7 +7,6 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
-    "container": "file:../container",
     "message-bus": "file:../message-bus"
   },
   "devDependencies": {

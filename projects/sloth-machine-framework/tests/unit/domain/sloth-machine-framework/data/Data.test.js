@@ -1,6 +1,6 @@
 const Data = require('../../../../../src/domain/sloth-machine-framework/data/Data');
 const DataUnit = require('../../../../../src/domain/sloth-machine-framework/data/DataUnit');
-const random = require('random');
+const random = require('lib/random');
 
 test('defaults to empty set', () => {
     const data = new Data();

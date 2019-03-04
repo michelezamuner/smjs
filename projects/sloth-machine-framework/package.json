@@ -9,7 +9,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "random": "file:../random",
+    "lib/random": "file:../libraries/random",
     "jest": "^24.1.0"
   },
   "scripts": {

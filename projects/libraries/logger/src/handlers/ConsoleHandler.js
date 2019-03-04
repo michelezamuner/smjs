@@ -1,5 +1,5 @@
 const Handler = require('../Handler');
-const Console = require('ui-console').Console;
+const Console = require('lib/console').Console;
 const LoggerException = require('../LoggerException');
 
 module.exports = class ConsoleHandler extends Handler {

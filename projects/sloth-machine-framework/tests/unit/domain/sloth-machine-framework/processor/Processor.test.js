@@ -11,7 +11,7 @@ const Opcode = require('../../../../../src/domain/sloth-machine-framework/interp
 const Operands = require('../../../../../src/domain/sloth-machine-framework/interpreter/Operands');
 const ExitStatus = require('../../../../../src/domain/sloth-machine-framework/interpreter/ExitStatus');
 const InterpreterException = require('../../../../../src/domain/sloth-machine-framework/interpreter/InterpreterException');
-const random = require('random');
+const random = require('lib/random');
 
 /**
  * @type {Object}

@@ -9,22 +9,22 @@
   "dependencies": {
     "application": "file:../application",
     "architecture-loader": "file:../architecture-loader",
-    "command-line-parser": "file:../command-line-parser",
-    "container": "file:../container",
     "file-program-loader": "file:../file-program-loader",
+    "lib/command-line-parser": "file:../libraries/command-line-parser",
+    "lib/console": "file:../libraries/console",
+    "lib/container": "file:../libraries/container",
+    "lib/logger": "file:../libraries/logger",
+    "lib/router": "file:../router",
     "local-architecture-loader": "file:../local-architecture-loader",
-    "logger": "file:../logger",
     "message-bus": "file:../message-bus",
     "program-loader": "file:../program-loader",
-    "router": "file:../router",
     "simple-message-bus": "file:../simple-message-bus",
     "sloth-machine-framework": "file:../sloth-machine-framework",
-    "ui-console": "file:../ui-console",
     "virtual-machine": "file:../virtual-machine"
   },
   "devDependencies": {
     "jest": "^24.1.0",
-    "random": "file:../random"
+    "lib/random": "file:../libraries/random"
   },
   "scripts": {
     "test": "tests/run",

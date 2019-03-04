@@ -2,7 +2,7 @@ const Router = require('../src/Router');
 const Observer = require('../src/Observer');
 const Input = require('../src/Input');
 const RouterException = require('../src/RouterException');
-const Container = require('container').Container;
+const Container = require('lib/container').Container;
 
 /**
  * @type {Object|Container}

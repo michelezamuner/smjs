@@ -10,7 +10,7 @@ const MissingProgramReferenceException = require('virtual-machine').MissingProgr
 const UnsupportedArchitectureException = require('architecture-loader').UnsupportedArchitectureException;
 const InvalidArchitectureException = require('architecture-loader').InvalidArchitectureException;
 const InvalidProgramException = require('program-loader').InvalidProgramException;
-const random = require('random');
+const random = require('lib/random');
 
 /**
  * @type {View}
