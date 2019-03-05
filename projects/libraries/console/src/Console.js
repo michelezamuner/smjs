@@ -1,9 +1,9 @@
 /**
  * @interface
  */
-module.exports = class Console {
+module.exports = class Console_Console {
     constructor() {
-        if (new.target === Console) {
+        if (new.target === Console_Console) {
             throw 'Cannot instantiate interface';
         }
     }

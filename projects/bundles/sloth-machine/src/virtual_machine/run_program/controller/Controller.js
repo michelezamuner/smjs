@@ -1,15 +1,7 @@
 const RunProgram = require('app/virtual-machine').run_program.RunProgram;
 const Request = require('./Request');
 
-/**
- * Controller for run_program: translates input data using adapter-specific format into request data using
- * application-specific format.
- *
- * Primary port: virtual_machine
- * Primary adapter: sloth_machine
- * Use case: run_program
- */
-module.exports = class Controller {
+module.exports = class SlothMachine_VirtualMachine_RunProgram_Controller_Controller {
     static get DEFAULT_ARCHITECTURE() { return 'sma'; }
     static get __DEPS__() { return [ RunProgram ]; }
 

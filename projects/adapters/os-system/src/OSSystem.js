@@ -2,7 +2,7 @@ const System = require('app/system').System;
 const Filesystem = require('./Filesystem');
 const Size = require('domain/sloth-machine-framework').data.Size;
 
-module.exports = class OSSystem extends System {
+module.exports = class OSSystem_OSSystem extends System {
     static get __DEPS__() { return [Filesystem]; }
 
     /**

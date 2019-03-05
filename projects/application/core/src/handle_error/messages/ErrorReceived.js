@@ -1,4 +1,4 @@
-module.exports = class ErrorReceived {
+module.exports = class Core_HandleError_Messages_ErrorReceived {
     /**
      * @param {Error} error
      */

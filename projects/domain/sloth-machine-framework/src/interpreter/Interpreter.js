@@ -7,9 +7,9 @@ const InterpreterException = require('./InterpreterException');
 /**
  * @interface
  */
-module.exports = class Interpreter {
+module.exports = class SlothMachineFramework_Interpreter_Interpreter {
     constructor() {
-        if (new.target === Interpreter) {
+        if (new.target === SlothMachineFramework_Interpreter_Interpreter) {
             throw 'Cannot instantiate interface';
         }
     }

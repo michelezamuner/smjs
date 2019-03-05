@@ -1,6 +1,6 @@
 const ContainerException = require('./ContainerException');
 
-module.exports = class Container {
+module.exports = class Container_Container {
     constructor() {
         this._bound = {};
     }

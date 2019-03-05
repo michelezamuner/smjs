@@ -5,9 +5,9 @@ const Size = require('../data/Size');
 /**
  * @interface
  */
-module.exports = class System {
+module.exports = class SlothMachineFramework_Architecture_System {
     constructor() {
-        if (new.target === System) {
+        if (new.target === SlothMachineFramework_Architecture_System) {
             throw 'Cannot instantiate interface';
         }
     }

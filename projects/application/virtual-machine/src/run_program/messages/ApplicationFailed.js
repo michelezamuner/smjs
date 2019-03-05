@@ -1,4 +1,4 @@
-module.exports = class ApplicationFailed {
+module.exports = class VirtualMachine_RunProgram_Messages_ApplicationFailed {
     /**
      * @param {Error} error
      */

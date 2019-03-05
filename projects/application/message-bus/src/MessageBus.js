@@ -1,9 +1,9 @@
 /**
  * @interface
  */
-module.exports = class MessageBus {
+module.exports = class MessageBus_MessageBus {
     constructor() {
-        if (new.target === MessageBus) {
+        if (new.target === MessageBus_MessageBus) {
             throw 'Cannot instantiate interface';
         }
     }

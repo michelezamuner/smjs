@@ -3,9 +3,9 @@ const Response = require('./Response');
 /**
  * @interface
  */
-module.exports = class Presenter {
+module.exports = class VirtualMachine_RunProgram_Presenter {
     constructor() {
-        if (new.target === Presenter) {
+        if (new.target === VirtualMachine_RunProgram_Presenter) {
             throw 'Cannot instantiate interface';
         }
     }

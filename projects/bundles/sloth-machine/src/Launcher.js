@@ -6,7 +6,7 @@ const MessageBus = require('app/message-bus').MessageBus;
 const ErrorHandlerFailed = require('./ErrorHandlerFailed');
 const Parser = require('lib/command-line-parser');
 
-module.exports = class Launcher {
+module.exports = class SlothMachine_Launcher {
     static get DEFAULT_REPRESENTATION() { return 'integrated'; }
     static get ARG_ARCHITECTURE() { return 'arc'; }
 

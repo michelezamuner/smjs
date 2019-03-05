@@ -2,7 +2,7 @@ const Handler = require('../Handler');
 const Console = require('lib/console').Console;
 const LoggerException = require('../LoggerException');
 
-module.exports = class ConsoleHandler extends Handler {
+module.exports = class Logger_Handlers_ConsoleHandler extends Handler {
     static get STREAM_STDOUT() { return 0; }
     static get STREAM_STDERR() { return 1; }
 

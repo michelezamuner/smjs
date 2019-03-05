@@ -1,7 +1,7 @@
 const FileHandlerWriter = require('./FileHandlerWriter');
 const fs = require('fs');
 
-module.exports = class FileHandlerNativeWriter extends FileHandlerWriter {
+module.exports = class Logger_Handlers_FileHandlerNativeWriter extends FileHandlerWriter {
     /**
      * @override
      */

@@ -1,9 +1,9 @@
 /**
  * @interface
  */
-module.exports = class Filesystem {
+module.exports = class OSSystem_Filesystem {
     constructor() {
-        if (new.target === Filesystem) {
+        if (new.target === OSSystem_Filesystem) {
             throw 'Cannot instantiate interface';
         }
     }

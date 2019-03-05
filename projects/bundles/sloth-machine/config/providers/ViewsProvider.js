@@ -2,8 +2,13 @@ const Container = require('lib/container').Container;
 const RouterObserver = require('lib/router').Observer;
 const Input = require('lib/router').Input;
 
-module.exports = class RoutesProvider extends RouterObserver {
+module.exports = class SlothMachine_Providers_RoutesProvider extends RouterObserver {
     static get __DEPS__() { return [Container]; }
+
+    /**
+     *
+     * @param container
+     */
     constructor(container) {
         super();
         this._container = container;

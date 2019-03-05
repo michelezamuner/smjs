@@ -3,9 +3,9 @@ const ViewModel = require('./ViewModel');
 /**
  * @interface
  */
-module.exports = class View {
+module.exports = class SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_View {
     constructor() {
-        if (new.target === View) {
+        if (new.target === SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_View) {
             throw 'Cannot instantiate interface';
         }
     }

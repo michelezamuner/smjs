@@ -1,4 +1,4 @@
-module.exports = class Integer {
+module.exports = class SlothMachineFramework_Data_Integer {
     /**
      * @param {*} value
      */

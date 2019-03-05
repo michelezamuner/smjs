@@ -1,4 +1,4 @@
-module.exports = class ErrorHandlerFailed {
+module.exports = class SlothMachine_ErrorHandlerFailed {
     /**
      * @param {Error} error
      */

@@ -3,7 +3,7 @@ const LoggerException = require('./LoggerException');
 const TimeProvider = require('./TimeProvider');
 const SimpleTimeProvider = require('./SimpleTimeProvider');
 
-module.exports = class Logger {
+module.exports = class Logger_Logger {
     /**
      * @param {TimeProvider} time
      */

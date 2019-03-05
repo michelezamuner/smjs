@@ -2,7 +2,7 @@ const Address = require('../data/Address');
 const Opcode = require('./Opcode');
 const Operands = require('./Operands');
 
-module.exports = class Instruction {
+module.exports = class SlothMachineFramework_Interpreter_Instruction {
     /**
      * @param {Address} address
      * @param {Opcode} opcode

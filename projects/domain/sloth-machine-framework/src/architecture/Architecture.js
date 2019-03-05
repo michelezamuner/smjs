@@ -4,9 +4,9 @@ const System = require('./System');
 /**
  * @interface
  */
-module.exports = class Architecture {
+module.exports = class SlothMachineFramework_Architecture_Architecture {
     constructor() {
-        if (new.target === Architecture) {
+        if (new.target === SlothMachineFramework_Architecture_Architecture) {
             throw 'Cannot instantiate interface';
         }
     }

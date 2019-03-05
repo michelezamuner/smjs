@@ -1,4 +1,4 @@
-module.exports = class Input {
+module.exports = class Router_Input {
     /**
      * @param {string} identifier
      * @param {string} representation

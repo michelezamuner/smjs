@@ -1,7 +1,7 @@
 const HandleError = require('app/core').handle_error.HandleError;
 const Request = require('./Request');
 
-module.exports = class Controller {
+module.exports = class SlothMachine_Core_HandleError_Controller_Controller {
     static get __DEPS__() { return [ HandleError ]; }
 
     /**

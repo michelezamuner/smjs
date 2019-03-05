@@ -1,6 +1,6 @@
 const DataUnit = require('./DataUnit');
 
-module.exports = class Data {
+module.exports = class SlothMachineFramework_Data_Data {
     /**
      * @param {DataUnit[]} data
      */

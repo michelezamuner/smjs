@@ -2,7 +2,7 @@ const Handler = require('../Handler');
 const FileHandlerWriter = require('./FileHandlerWriter');
 const FileHandlerNativeWriter = require('./FileHandlerNativeWriter');
 
-module.exports = class FileHandler extends Handler {
+module.exports = class Logger_Handlers_FileHandler extends Handler {
     /**
      * @param {string} file
      * @param {FileHandlerWriter} writer

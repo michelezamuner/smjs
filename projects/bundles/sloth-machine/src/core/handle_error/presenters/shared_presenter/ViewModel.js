@@ -1,4 +1,4 @@
-module.exports = class ViewModel {
+module.exports = class SlothMachine_Core_HandleError_Presenters_SharedPresenter_ViewModel {
     /**
      * @param {string} error
      */

@@ -15,7 +15,7 @@ const OSSystem = require('adapters/os-system').OSSystem;
 const Filesystem = require('adapters/os-system').Filesystem;
 const NativeFilesystem = require('adapters/os-system').NativeFilesystem;
 
-module.exports = class SlothMachineProvider extends Provider {
+module.exports = class SlothMachine_Providers_SlothMachineProvider extends Provider {
     static get __DEPS__() { return [ Container ]; }
 
     /**

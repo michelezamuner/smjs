@@ -1,6 +1,6 @@
 /**
  * Thrown when an error happen while a program is being run.
  */
-module.exports = class ProcessorException extends Error {
+module.exports = class SlothMachineFramework_Processor_ProcessorException extends Error {
 
 };

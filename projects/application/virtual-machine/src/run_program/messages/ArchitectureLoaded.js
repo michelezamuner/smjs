@@ -1,6 +1,6 @@
 const Architecture = require('domain/sloth-machine-framework').architecture.Architecture;
 
-module.exports = class ArchitectureLoaded {
+module.exports = class VirtualMachine_RunProgram_Messages_ArchitectureLoaded {
     /**
      * @param {Architecture} architecture
      * @param {string} name

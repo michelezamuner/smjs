@@ -1,6 +1,6 @@
 const ExitStatus = require('domain/sloth-machine-framework').interpreter.ExitStatus;
 
-module.exports = class Response {
+module.exports = class VirtualMachine_RunProgram_Response {
     /**
      * @param {ExitStatus|null} exitStatus
      * @param {Error|null} error
