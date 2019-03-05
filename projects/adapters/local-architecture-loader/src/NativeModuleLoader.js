@@ -1,7 +1,7 @@
 const ModuleLoader = require('./ModuleLoader');
 const CannotFindModuleException = require('./CannotFindModuleException');
 
-module.exports = class NativeModuleLoader extends ModuleLoader {
+module.exports = class LocalArchitectureLoader_NativeModuleLoader extends ModuleLoader {
     /**
      * @override
      */

@@ -1,7 +1,7 @@
 /**
  * Thrown when trying to load an architecture that is not supported.
  */
-module.exports = class UnsupportedArchitectureException extends Error {
+module.exports = class ArchitectureLoader_UnsupportedArchitectureException extends Error {
     /**
      * @param {string} architectureName
      */

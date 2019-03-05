@@ -3,9 +3,9 @@ const CannotFindModuleException = require('./CannotFindModuleException');
 /**
  * @interface
  */
-module.exports = class ModuleLoader {
+module.exports = class LocalArchitectureLoader_ModuleLoader {
     constructor() {
-        if (new.target === ModuleLoader) {
+        if (new.target === LocalArchitectureLoader_ModuleLoader) {
             throw 'Cannot instantiate interface';
         }
     }

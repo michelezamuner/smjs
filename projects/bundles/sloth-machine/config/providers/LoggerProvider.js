@@ -12,7 +12,7 @@ const ArchitectureLoaded = require('app/virtual-machine').run_program.messages.A
 const ExecutionTerminated = require('app/virtual-machine').run_program.messages.ExecutionTerminated;
 const ProgramLoaded = require('app/virtual-machine').run_program.messages.ProgramLoaded;
 
-module.exports = class LoggerProvider extends Provider {
+module.exports = class SlothMachine_Providers_LoggerProvider extends Provider {
     static get __DEPS__() { return [ Container ]; }
 
     /**

@@ -2,7 +2,7 @@ const FileReader = require('./FileReader');
 const FileReaderException = require('./FileReaderException');
 const fs = require('fs');
 
-module.exports = class NativeFileReader extends FileReader {
+module.exports = class FileProgramLoader_NativeFileReader extends FileReader {
     /**
      * @override
      */

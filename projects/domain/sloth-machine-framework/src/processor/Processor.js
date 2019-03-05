@@ -9,7 +9,7 @@ const Opcode = require('../interpreter/Opcode');
 const Operands = require('../interpreter/Operands');
 const Instruction = require('../interpreter/Instruction');
 
-module.exports = class Processor {
+module.exports = class SlothMachineFramework_Processor_Processor {
     /**
      * @param {Interpreter} interpreter
      */

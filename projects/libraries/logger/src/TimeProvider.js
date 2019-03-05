@@ -1,9 +1,9 @@
 /**
  * @interface
  */
-module.exports = class TimeProvider {
+module.exports = class Logger_TimeProvider {
     constructor() {
-        if (new.target === TimeProvider) {
+        if (new.target === Logger_TimeProvider) {
             throw 'Cannot instantiate interface';
         }
     }

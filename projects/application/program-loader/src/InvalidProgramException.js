@@ -1,6 +1,6 @@
 /**
  * Thrown when trying to load a program with an invalid reference.
  */
-module.exports = class InvalidProgramException extends Error {
+module.exports = class ProgramLoader_InvalidProgramException extends Error {
 
 };

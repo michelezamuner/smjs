@@ -9,15 +9,7 @@ const UnsupportedArchitectureException = require('app/architecture-loader').Unsu
 const InvalidArchitectureException = require('app/architecture-loader').InvalidArchitectureException;
 const InvalidProgramException = require('app/program-loader').InvalidProgramException;
 
-/**
- * Console presenter for the sloth_machine/run_program use case.
- *
- * Represents console output, with exit status abiding by POSIX standard, and error messages available to be displayed.
- * Primary port: virtual_machine
- * Primary adapter: sloth_machine
- * Use case: run_program
- */
-module.exports = class Presenter extends PresenterInterface {
+module.exports = class SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_Presenter extends PresenterInterface {
     static get __DEPS__() { return [View, ErrorPresenter]; }
     static get MIN_EXIT_STATUS() { return 0; }
     static get MAX_EXIT_STATUS() { return 255; }

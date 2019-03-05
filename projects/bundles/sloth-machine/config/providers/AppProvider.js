@@ -5,7 +5,7 @@ const ViewsProvider = require('./ViewsProvider');
 const MessageBus = require('app/message-bus').MessageBus;
 const SimpleMessageBus = require('adapters/simple-message-bus').SimpleMessageBus;
 
-module.exports = class AppProvider extends Provider {
+module.exports = class SlothMachine_Providers_AppProvider extends Provider {
     static get __DEPS__() { return [ Container ]; }
 
     /**

@@ -1,4 +1,4 @@
-module.exports = class ViewModel {
+module.exports = class SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_ViewModel {
     /**
      * @param {number} exitStatus
      */

@@ -1,6 +1,6 @@
 const Program = require('domain/sloth-machine-framework').program.Program;
 
-module.exports = class ProgramLoaded {
+module.exports = class VirtualMachine_RunProgram_Messages_ProgramLoaded {
     /**
      * @param {Program} program
      * @param {string} reference

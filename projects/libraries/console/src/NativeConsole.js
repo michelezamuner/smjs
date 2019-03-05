@@ -1,6 +1,6 @@
 const Console = require('./Console');
 
-module.exports = class NativeConsole extends Console {
+module.exports = class Console_NativeConsole extends Console {
     /**
      * @override
      */

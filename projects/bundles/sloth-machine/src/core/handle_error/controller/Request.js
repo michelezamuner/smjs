@@ -1,6 +1,6 @@
 const RequestInterface = require('app/core').handle_error.Request;
 
-module.exports = class Request extends RequestInterface {
+module.exports = class SlothMachine_Core_HandleError_Controller_Request extends RequestInterface {
     /**
      * @param {Error} error
      */

@@ -1,9 +1,9 @@
 /**
  * @interface
  */
-module.exports = class Request {
+module.exports = class Core_HandleError_Request {
     constructor() {
-        if (new.target === Request) {
+        if (new.target === Core_HandleError_Request) {
             throw 'Cannot instantiate interface';
         }
     }

@@ -5,9 +5,9 @@ const InvalidArchitectureException = require('./InvalidArchitectureException');
 /**
  * @interface
  */
-module.exports = class ArchitectureLoader {
+module.exports = class ArchitectureLoader_ArchitectureLoader {
     constructor() {
-        if (new.target === ArchitectureLoader) {
+        if (new.target === ArchitectureLoader_ArchitectureLoader) {
             throw 'Cannot instantiate interface';
         }
     }

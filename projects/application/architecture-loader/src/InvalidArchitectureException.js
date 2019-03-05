@@ -1,7 +1,7 @@
 /**
  * Thrown when the module that is being loaded is not a valid architecture.
  */
-module.exports = class InvalidArchitectureException extends Error {
+module.exports = class ArchitectureLoader_InvalidArchitectureException extends Error {
     /**
      * @param {string} architectureName
      */

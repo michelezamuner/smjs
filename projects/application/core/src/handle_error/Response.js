@@ -1,4 +1,4 @@
-module.exports = class Response {
+module.exports = class Core_HandleError_Response {
     /**
      * @param {Error} error
      */

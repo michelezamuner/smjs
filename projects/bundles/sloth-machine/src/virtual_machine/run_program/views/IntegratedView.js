@@ -1,7 +1,7 @@
 const View = require('../presenters/console_presenter/View');
 const Console = require('lib/console').Console;
 
-module.exports = class IntegratedView extends View {
+module.exports = class SlothMachine_VirtualMachine_RunProgram_Views_IntegratedView extends View {
     static get __DEPS__() { return [Console]; }
 
     /**

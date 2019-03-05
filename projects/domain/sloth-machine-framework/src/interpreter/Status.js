@@ -1,7 +1,7 @@
 const Address = require('../data/Address');
 const ExitStatus = require('./ExitStatus');
 
-module.exports = class Status {
+module.exports = class SlothMachineFramework_Interpreter_Status {
     /**
      * @param {Address|null} jumpAddress
      * @param {ExitStatus|null} exitStatus

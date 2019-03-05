@@ -4,7 +4,7 @@ const Data = require('../data/Data');
 const InvalidAddressException = require('./InvalidAddressException');
 const ReadOutOfBoundsException = require('./ReadOutOfBoundsException');
 
-module.exports = class Program {
+module.exports = class SlothMachineFramework_Program_Program {
     /**
      * @param {Data} data
      */

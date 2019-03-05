@@ -2,7 +2,7 @@ const View = require('./View');
 const Response = require('./Response');
 const ViewModel = require('./ViewModel');
 
-module.exports = class Presenter {
+module.exports = class SlothMachine_Core_HandleError_Presenters_SharedPresenter_Presenter {
     static get __DEPS__() { return [View]; }
 
     /**

@@ -4,7 +4,7 @@ const Request = require('./Request');
 const Response = require('./Response');
 const ErrorReceived = require('./messages/ErrorReceived');
 
-module.exports = class HandleError {
+module.exports = class Core_HandleError_HandleError {
     static get __DEPS__() { return [ Presenter, MessageBus ]; }
 
     /**

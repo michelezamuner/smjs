@@ -12,7 +12,7 @@ const ProgramLoaded = require('./messages/ProgramLoaded');
 const ExecutionTerminated = require('./messages/ExecutionTerminated');
 const ApplicationFailed = require('./messages/ApplicationFailed');
 
-module.exports = class RunProgram {
+module.exports = class VirtualMachine_RunProgram_RunProgram {
     static get __DEPS__() { return [ AdapterDependencies, ProcessorFactory ]; }
 
     /**

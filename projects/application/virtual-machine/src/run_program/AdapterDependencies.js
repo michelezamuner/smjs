@@ -4,7 +4,7 @@ const ProgramLoader = require('app/program-loader').ProgramLoader;
 const System = require('app/system').System;
 const MessageBus = require('app/message-bus').MessageBus;
 
-module.exports = class AdapterDependencies {
+module.exports = class VirtualMachine_RunProgram_AdapterDependencies {
     static get __DEPS__() { return [Presenter, ArchitectureLoader, ProgramLoader, System, MessageBus]; }
 
     /**

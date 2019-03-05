@@ -3,7 +3,7 @@ const RouterException = require('./RouterException');
 const Input = require('./Input');
 const Container = require('lib/container').Container;
 
-module.exports = class Router {
+module.exports = class Router_Router {
     static get __DEPS__() { return [ Container, Observer, 'router.config' ]; }
 
     /**

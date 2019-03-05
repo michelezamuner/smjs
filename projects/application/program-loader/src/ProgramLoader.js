@@ -4,9 +4,9 @@ const InvalidProgramException = require('./InvalidProgramException');
 /**
  * @interface
  */
-module.exports = class ProgramLoader {
+module.exports = class ProgramLoader_ProgramLoader {
     constructor() {
-        if (new.target === ProgramLoader) {
+        if (new.target === ProgramLoader_ProgramLoader) {
             throw 'Cannot instantiate interface';
         }
     }

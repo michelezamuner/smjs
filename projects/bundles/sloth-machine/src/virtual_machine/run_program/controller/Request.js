@@ -1,6 +1,6 @@
 const RequestInterface = require('app/virtual-machine').run_program.Request;
 
-module.exports = class Request extends RequestInterface {
+module.exports = class SlothMachine_VirtualMachine_RunProgram_Controller_Request extends RequestInterface {
     /**
      * @param {string} architectureName
      * @param {string} programReference

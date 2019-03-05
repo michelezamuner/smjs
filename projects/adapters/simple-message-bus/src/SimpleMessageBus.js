@@ -1,6 +1,6 @@
 const MessageBus = require('app/message-bus').MessageBus;
 
-module.exports = class SimpleMessageBus extends MessageBus {
+module.exports = class SimpleMessageBus_SimpleMessageBus extends MessageBus {
     constructor() {
         super();
         this._handlers = {};

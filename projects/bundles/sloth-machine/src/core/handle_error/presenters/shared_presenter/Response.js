@@ -1,4 +1,4 @@
-module.exports = class Response {
+module.exports = class SlothMachine_Core_HandleError_Presenters_SharedPresenter_Response {
     /**
      * @param {Error} error
      */

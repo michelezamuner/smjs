@@ -1,7 +1,7 @@
 const Filesystem = require('./Filesystem');
 const fs = require('fs');
 
-module.exports = class NativeFilesystem extends Filesystem {
+module.exports = class OSSystem_NativeFilesystem extends Filesystem {
     /**
      * @override
      */

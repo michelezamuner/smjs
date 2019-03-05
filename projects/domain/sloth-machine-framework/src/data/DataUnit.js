@@ -1,4 +1,4 @@
-module.exports = class DataUnit {
+module.exports = class SlothMachineFramework_Data_DataUnit {
     /**
      * @param {number} value
      */

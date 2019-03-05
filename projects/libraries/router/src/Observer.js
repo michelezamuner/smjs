@@ -3,9 +3,9 @@ const Input = require('./Input');
 /**
  * @interface
  */
-module.exports = class Observer {
+module.exports = class Router_Observer {
     constructor() {
-        if (new.target === Observer) {
+        if (new.target === Router_Observer) {
             throw 'Cannot instantiate interface';
         }
     }

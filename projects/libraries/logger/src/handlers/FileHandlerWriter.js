@@ -1,9 +1,9 @@
 /**
  * @interface
  */
-module.exports = class FileHandlerWriter {
+module.exports = class Logger_Handlers_FileHandlerWriter {
     constructor() {
-        if (new.target === FileHandlerWriter) {
+        if (new.target === Logger_Handlers_FileHandlerWriter) {
             throw 'Cannot instantiate interface';
         }
     }

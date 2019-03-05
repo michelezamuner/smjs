@@ -5,7 +5,7 @@ const UnsupportedArchitectureException = require('app/architecture-loader').Unsu
 const ModuleLoader = require('./ModuleLoader');
 const CannotFindModuleException = require('./CannotFindModuleException');
 
-module.exports = class LocalArchitectureLoader extends ArchitectureLoader {
+module.exports = class LocalArchitectureLoader_LocalArchitectureLoader extends ArchitectureLoader {
     static get __DEPS__() { return [ModuleLoader, 'adapters.local_architecture_loader.path']; }
 
     /**
