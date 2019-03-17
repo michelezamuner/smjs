@@ -1,0 +1,18 @@
+{
+  "name": "poc-sensor-system",
+  "version": "0.0.0",
+  "description": "PoC of a sensor system",
+  "main": "main.js",
+  "repository": "https:///github.com/michelezamuner/smjs",
+  "author": "Michele Zamuner",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^24.1.0"
+  },
+  "scripts": {
+    "test": "SM_ROOT=$(pwd) node --use_strict ./node_modules/.bin/jest",
+    "coverage": "SM_ROOT=$(pwd) node --use_strict ./node_modules/.bin/jest --coverage",
+    "ci": "SM_ROOT=$(pwd) JEST_ENV=ci node --use_strict ./node_modules/.bin/jest --coverage"
+  }
+}
