@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+readonly node="$(which node)"
+readonly current="$( cd "$(dirname "$0")"; pwd -P )"
+readonly root="$(realpath "$(dirname "$current")")"
+
+$node "$root/sensor.js" "$0"
