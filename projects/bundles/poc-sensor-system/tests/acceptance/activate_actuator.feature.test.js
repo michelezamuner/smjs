@@ -6,19 +6,20 @@ const root = process.env.SM_ROOT;
 
 test.skip('actuator is activated after receiving signal', () => {
     return (async () => {
-        const signalContent = 'signal';
-        const actuatorOutputFile = '/tmp/file';
+        const config = require(root + '/config/config.js');
+        const signalValue = 'signal';
+        const actuatorOutputFile = config.actuator.output_file;
 
         if (await exists(actuatorOutputFile)) {
             await promisify(fs.unlink)(actuatorOutputFile);
         }
 
         const system = spawn(`${root}/bin/start-system`, {stdio: 'ignore', detached: true});
-        await promisify(exec)(`${root}/bin/send-signal ${actuatorOutputFile} ${signalContent}`);
+        await promisify(exec)(`${root}/bin/send-signal ${signalValue}`);
         system.kill('SIGINT');
 
         expect(await exists(actuatorOutputFile)).toBe(true);
-        expect(await promisify(fs.readFile)(actuatorOutputFile, {encoding: 'utf8'})).toBe(signalContent);
+        expect(await promisify(fs.readFile)(actuatorOutputFile, {encoding: 'utf8'})).toBe(signalValue);
     })();
 });
 
