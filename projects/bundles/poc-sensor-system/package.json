@@ -11,8 +11,8 @@
     "jest": "^24.1.0"
   },
   "scripts": {
-    "test": "SM_ROOT=$(pwd) node --use_strict ./node_modules/.bin/jest",
-    "coverage": "SM_ROOT=$(pwd) node --use_strict ./node_modules/.bin/jest --coverage",
-    "ci": "SM_ROOT=$(pwd) JEST_ENV=ci node --use_strict ./node_modules/.bin/jest --coverage"
+    "test": "SM_ROOT=$(pwd) SM_ENV=test node --use_strict ./node_modules/.bin/jest",
+    "coverage": "SM_ROOT=$(pwd) SM_ENV=test node --use_strict ./node_modules/.bin/jest --coverage",
+    "ci": "SM_ROOT=$(pwd) SM_ENV=test JEST_ENV=ci node --use_strict ./node_modules/.bin/jest --coverage"
   }
 }

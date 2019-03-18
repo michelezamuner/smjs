@@ -3,7 +3,14 @@ const config = {
     testEnvironment: 'node',
     verbose: true,
     coverageDirectory: '/tmp',
-    coveragePathIgnorePatterns: [],
+    coveragePathIgnorePatterns: [
+        'acceptance/',
+        'messages/',
+        'Actuator\.js',
+        'MessageBus\.js',
+        'Request\.js',
+        '/Signal\.js',
+    ],
     coverageReporters: ['text'],
 };
 
