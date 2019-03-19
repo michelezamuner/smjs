@@ -10,9 +10,9 @@ module.exports = class Logger_Handlers_ConsoleHandler extends Handler {
      * @param {Console} console
      * @param {number} stream
      */
-    constructor(console, stream = ConsoleHandler.STREAM_STDOUT) {
+    constructor(console, stream = Logger_Handlers_ConsoleHandler.STREAM_STDOUT) {
         super();
-        if (stream !== ConsoleHandler.STREAM_STDOUT && stream !== ConsoleHandler.STREAM_STDERR) {
+        if (stream !== Logger_Handlers_ConsoleHandler.STREAM_STDOUT && stream !== ConsoleHandler.STREAM_STDERR) {
             throw new LoggerException('Invalid console handler stream');
         }
         this._console = console;
@@ -23,7 +23,7 @@ module.exports = class Logger_Handlers_ConsoleHandler extends Handler {
      * @override
      */
     handle(message) {
-        if (this._stream === ConsoleHandler.STREAM_STDERR) {
+        if (this._stream === Logger_Handlers_ConsoleHandler.STREAM_STDERR) {
             this._console.writeError(message);
         }
 

@@ -17,7 +17,8 @@ module.exports = class SlothMachine_VirtualMachine_RunProgram_Controller_Control
      * @param {string} programFile
      */
     runProgram(architectureName, programFile) {
-        const request = new Request(architectureName || Controller.DEFAULT_ARCHITECTURE, programFile);
+        const defaultArchitecture = SlothMachine_VirtualMachine_RunProgram_Controller_Controller.DEFAULT_ARCHITECTURE;
+        const request = new Request(architectureName || defaultArchitecture, programFile);
         this.service.run(request);
     }
 };

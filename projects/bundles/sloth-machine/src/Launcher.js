@@ -31,8 +31,8 @@ module.exports = class SlothMachine_Launcher {
             }
 
             // @todo: allow different representations
-            const input = new Input('sloth_machine/run_program', Launcher.DEFAULT_REPRESENTATION, {
-                architecture: parser.getArgument(Launcher.ARG_ARCHITECTURE),
+            const input = new Input('sloth_machine/run_program', SlothMachine_Launcher.DEFAULT_REPRESENTATION, {
+                architecture: parser.getArgument(SlothMachine_Launcher.ARG_ARCHITECTURE),
                 file: parser.getArgument()
             });
 
