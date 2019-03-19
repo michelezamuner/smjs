@@ -7,7 +7,6 @@ const config = {
         'acceptance',
         'Provider\.js',
         '/View\.js',
-        '/Request\.js',
         'ErrorHandlerFailed\.js',
     ],
     coverageReporters: ['text'],
