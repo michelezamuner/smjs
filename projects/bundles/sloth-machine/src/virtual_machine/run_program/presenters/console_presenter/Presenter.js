@@ -13,7 +13,9 @@ module.exports = class SlothMachine_VirtualMachine_RunProgram_Presenters_Console
     static get __DEPS__() { return [View, ErrorPresenter]; }
     static get MIN_EXIT_STATUS() { return 0; }
     static get MAX_EXIT_STATUS() { return 255; }
-    static get DEFAULT_EXIT_STATUS() { return Presenter.MAX_EXIT_STATUS; }
+    static get DEFAULT_EXIT_STATUS() {
+        return SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_Presenter.MAX_EXIT_STATUS;
+    }
 
     /**
      * @param {View} view
@@ -48,8 +50,10 @@ module.exports = class SlothMachine_VirtualMachine_RunProgram_Presenters_Console
      */
     _parseExitStatus(exitStatus) {
         const value = parseInt(exitStatus.format());
-        if (value < Presenter.MIN_EXIT_STATUS || value > Presenter.MAX_EXIT_STATUS) {
-            return Presenter.DEFAULT_EXIT_STATUS;
+        const min = SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_Presenter.MIN_EXIT_STATUS;
+        const max = SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_Presenter.MAX_EXIT_STATUS;
+        if (value < min || value > max) {
+            return SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_Presenter.DEFAULT_EXIT_STATUS;
         }
 
         return value;

@@ -19,7 +19,7 @@ module.exports = class Container_Container {
      * @throws {ContainerException}
      */
     make(ref) {
-        if (ref === Container) {
+        if (ref === Container_Container) {
             return this;
         }
 

@@ -5,7 +5,7 @@ module.exports = class SlothMachineFramework_Data_Data {
      * @param {DataUnit[]} data
      */
     constructor(data = []) {
-        this._data = data instanceof Data ? data._data : data;
+        this._data = data instanceof SlothMachineFramework_Data_Data ? data._data : data;
     }
 
     /**

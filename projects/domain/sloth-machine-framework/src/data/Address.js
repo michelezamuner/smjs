@@ -5,6 +5,6 @@ module.exports = class SlothMachineFramework_Data_Address extends Integer {
      * @inheritDoc
      */
     add(address) {
-        return new Address(super.add(address));
+        return new SlothMachineFramework_Data_Address(super.add(address));
     }
 };
