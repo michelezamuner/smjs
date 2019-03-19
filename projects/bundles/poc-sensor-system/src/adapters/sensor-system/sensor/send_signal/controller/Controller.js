@@ -1,7 +1,7 @@
 const SendSignal = require('../../../../../application/sensor/send_signal/SendSignal');
 const Request = require('./Request');
 
-module.exports = class Controller {
+module.exports = class SensorSystem_Sensor_SendSignal_Controller_Controller {
     static get __DEPS__() { return [ SendSignal ]; }
 
     /**
