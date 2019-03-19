@@ -8,7 +8,6 @@ const config = {
         'messages/',
         'Actuator\.js',
         'MessageBus\.js',
-        'Request\.js',
         '/Signal\.js',
     ],
     coverageReporters: ['text'],
