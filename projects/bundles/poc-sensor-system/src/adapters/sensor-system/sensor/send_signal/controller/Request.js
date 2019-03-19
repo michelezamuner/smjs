@@ -1,7 +1,7 @@
 const RequestInterface = require('../../../../../application/sensor/send_signal/Request');
 const Signal = require('../../../../../domain/signal/Signal');
 
-module.exports = class Request extends RequestInterface {
+module.exports = class SensorSystem_Sensor_SendSignal_Controller_Request extends RequestInterface {
     /**
      * @param {string} value
      */

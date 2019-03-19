@@ -1,4 +1,4 @@
-module.exports = class Signal {
+module.exports = class Signal_Signal {
     /**
      * @param {string} value
      */
