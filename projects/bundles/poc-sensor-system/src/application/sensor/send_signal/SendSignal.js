@@ -1,18 +1,18 @@
 const Request = require('./Request');
 const ActuatorActivated = require('./messages/ActuatorActivated');
 const Actuator = require('../../actuator/Actuator');
-const MessageBus = require('../../message-bus/MessageBus');
+const Notifier = require('../../notifications/Notifier');
 
 module.exports = class Sensor_SendSignal_SendSignal {
-    static get __DEPS__() { return [ Actuator, MessageBus ]; }
+    static get __DEPS__() { return [ Actuator, Notifier ]; }
 
     /**
      * @param {Actuator} actuator
-     * @param {MessageBus} bus
+     * @param {Notifier} notifier
      */
-    constructor(actuator, bus) {
+    constructor(actuator, notifier) {
         this._actuator = actuator;
-        this._bus = bus;
+        this._notifier = notifier;
     }
 
     /**
@@ -22,6 +22,6 @@ module.exports = class Sensor_SendSignal_SendSignal {
         const signal = request.getSignal();
 
         this._actuator.activate(signal);
-        this._bus.send(new ActuatorActivated(signal));
+        this._notifier.notify(new ActuatorActivated(signal));
     }
 };
