@@ -8,6 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "container": "file:../../libraries/container",
+    "message-bus": "file:../../libraries/message-bus",
     "router": "file:../../libraries/router"
   },
   "devDependencies": {

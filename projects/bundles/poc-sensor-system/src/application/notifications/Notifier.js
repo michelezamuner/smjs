@@ -1,9 +1,9 @@
 /**
  * @interface
  */
-module.exports = class MessageBus_MessageBus {
+module.exports = class Notifications_Notifier {
     constructor() {
-        if (new.target === MessageBus_MessageBus) {
+        if (new.target === Notifications_Notifier) {
             throw 'Cannot instantiate interface';
         }
     }
@@ -11,7 +11,7 @@ module.exports = class MessageBus_MessageBus {
     /**
      * @param {Object} message
      */
-    send(message) {
+    notify(message) {
         throw 'Not implemented';
     }
 };

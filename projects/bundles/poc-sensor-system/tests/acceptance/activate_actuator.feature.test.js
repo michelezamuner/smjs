@@ -23,6 +23,18 @@ test.skip('actuator is activated after receiving signal', () => {
     })();
 });
 
+test.skip('system prints messages to STDOUT', () => {
+    return (async () => {
+        const system = spawn(`${root}/bin/start-system`);
+        expect.assertions(1);
+        system.on('data', data => {
+            expect(data).toBe('Server started');
+        });
+        await promisify(exec)(`${root}/bin/send-signal signal`);
+        system.kill('SIGINT');
+    })();
+});
+
 /**
  * @param {string} file
  * @return {Promise<boolean>}
