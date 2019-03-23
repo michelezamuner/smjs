@@ -1,7 +1,7 @@
 const IntegratedView = require('../../../../../src/virtual_machine/run_program/views/IntegratedView');
 const View = require('../../../../../src/virtual_machine/run_program/presenters/console_presenter/View');
 const ViewModel = require('../../../../../src/virtual_machine/run_program/presenters/console_presenter/ViewModel');
-const Console = require('lib/console').Console;
+const Console = require('console-wrapper').Console;
 
 /**
  * @type {Object|Console}

@@ -1,5 +1,5 @@
 const Handler = require('../Handler');
-const Console = require('console').Console;
+const Console = require('console-wrapper').Console;
 const LoggerException = require('../LoggerException');
 
 module.exports = class Logger_Handlers_ConsoleHandler extends Handler {
@@ -12,7 +12,7 @@ module.exports = class Logger_Handlers_ConsoleHandler extends Handler {
      */
     constructor(console, stream = Logger_Handlers_ConsoleHandler.STREAM_STDOUT) {
         super();
-        if (stream !== Logger_Handlers_ConsoleHandler.STREAM_STDOUT && stream !== ConsoleHandler.STREAM_STDERR) {
+        if (stream !== Logger_Handlers_ConsoleHandler.STREAM_STDOUT && stream !== Logger_Handlers_ConsoleHandler.STREAM_STDERR) {
             throw new LoggerException('Invalid console handler stream');
         }
         this._console = console;

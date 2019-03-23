@@ -1,13 +1,14 @@
 {
-  "name": "simple-message-bus",
+  "name": "bus-notifications",
   "version": "0.0.0",
-  "description": "Simple message bus",
+  "description": "Bus notifications",
   "main": "lib.js",
   "repository": "https://github.com/michelezamuner/smjs",
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
-    "app/message-bus": "file:../../application/message-bus"
+    "app/notifications": "file:../../application/notifications",
+    "message-bus": "file:../../libraries/message-bus"
   },
   "devDependencies": {
     "jest": "^24.1.0"

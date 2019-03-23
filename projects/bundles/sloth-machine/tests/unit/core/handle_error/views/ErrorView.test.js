@@ -1,7 +1,7 @@
 const View = require('../../../../../src/core/handle_error/views/ErrorView');
 const ViewInterface = require('../../../../../src/core/handle_error/presenters/shared_presenter/View');
 const ViewModel = require('../../../../../src/core/handle_error/presenters/shared_presenter/ViewModel');
-const Console = require('lib/console').Console;
+const Console = require('console-wrapper').Console;
 
 /**
  * @type {Console}

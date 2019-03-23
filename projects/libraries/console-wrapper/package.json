@@ -1,5 +1,5 @@
 {
-  "name": "console",
+  "name": "console-wrapper",
   "version": "0.0.0",
   "description": "Console wrapper",
   "main": "lib.js",

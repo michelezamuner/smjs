@@ -212,20 +212,20 @@ anymatch@^2.0.0:
 "app/architecture-loader@file:../architecture-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-architecture-loader-0.0.0-83dbc09d-871e-4fbc-a52c-34c390e7d91f-1553376100749/node_modules/domain/sloth-machine-framework"
 
-"app/message-bus@file:../message-bus":
+"app/notifications@file:../notifications":
   version "0.0.0"
 
 "app/program-loader@file:../program-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-program-loader-0.0.0-cbba78c7-2991-4059-8a47-c6a15853a936-1553376100767/node_modules/domain/sloth-machine-framework"
 
 "app/system@file:../system":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v2/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-system-0.0.0-13cd5446-7b17-4e30-a255-04ec801799fa-1553376100774/node_modules/domain/sloth-machine-framework"
 
 append-transform@^1.0.0:
   version "1.0.0"

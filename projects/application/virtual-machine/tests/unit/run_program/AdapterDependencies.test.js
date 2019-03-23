@@ -3,7 +3,7 @@ const Presenter = require('../../../src/run_program/Presenter');
 const ArchitectureLoader = require('app/architecture-loader').ArchitectureLoader;
 const ProgramLoader = require('app/program-loader').ProgramLoader;
 const System = require('app/system').System;
-const MessageBus = require('app/message-bus').MessageBus;
+const Notifier = require('app/notifications').Notifier;
 
 /**
  * @type {Object|Presenter}
@@ -26,9 +26,9 @@ const programLoader = {};
 const system = {};
 
 /**
- * @type {Object|MessageBus}
+ * @type {Object|Notifier}
  */
-const bus = {};
+const notifier = {};
 
 /**
  * @type {null|AdapterDependencies}
@@ -36,11 +36,11 @@ const bus = {};
 let adapter = null;
 
 beforeEach(() => {
-    adapter = new AdapterDependencies(presenter, architectureLoader, programLoader, system, bus);
+    adapter = new AdapterDependencies(presenter, architectureLoader, programLoader, system, notifier);
 });
 
 test('can be injected', () => {
-    expect(AdapterDependencies.__DEPS__).toStrictEqual([Presenter, ArchitectureLoader, ProgramLoader, System, MessageBus]);
+    expect(AdapterDependencies.__DEPS__).toStrictEqual([Presenter, ArchitectureLoader, ProgramLoader, System, Notifier]);
 });
 
 test('provides dependencies', () => {
@@ -48,5 +48,5 @@ test('provides dependencies', () => {
     expect(adapter.getArchitectureLoader()).toBe(architectureLoader);
     expect(adapter.getProgramLoader()).toBe(programLoader);
     expect(adapter.getSystem()).toBe(system);
-    expect(adapter.getMessageBus()).toBe(bus);
+    expect(adapter.getNotifier()).toBe(notifier);
 });

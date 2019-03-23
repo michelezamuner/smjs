@@ -1,6 +1,6 @@
-const Container = require('lib/container').Container;
-const RouterObserver = require('lib/router').Observer;
-const Input = require('lib/router').Input;
+const Container = require('container').Container;
+const RouterObserver = require('router').Observer;
+const Input = require('router').Input;
 
 module.exports = class SlothMachine_Providers_RoutesProvider extends RouterObserver {
     static get __DEPS__() { return [Container]; }

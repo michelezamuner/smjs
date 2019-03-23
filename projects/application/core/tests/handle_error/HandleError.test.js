@@ -1,6 +1,6 @@
 const HandleError = require('../../src/handle_error/HandleError');
 const Presenter = require('../../src/handle_error/Presenter');
-const MessageBus = require('app/message-bus').MessageBus;
+const Notifier = require('app/notifications').Notifier;
 const Request = require('../../src/handle_error/Request');
 const Response = require('../../src/handle_error/Response');
 const ErrorReceived = require('../../src/handle_error/messages/ErrorReceived');
@@ -11,9 +11,9 @@ const ErrorReceived = require('../../src/handle_error/messages/ErrorReceived');
 const presenter = {};
 
 /**
- * @type {Object|MessageBus}
+ * @type {Object|Notifier}
  */
-const bus = {};
+const notifier = {};
 
 /**
  * @type {null|HandleError}
@@ -33,12 +33,12 @@ let presenterCalled = null;
 beforeEach(() => {
     presenterCalled = false;
     presenter.present = jest.fn(() => presenterCalled = true);
-    bus.send = jest.fn(() => expect(presenterCalled).toBe(false));
-    service = new HandleError(presenter, bus);
+    notifier.notify = jest.fn(() => expect(presenterCalled).toBe(false));
+    service = new HandleError(presenter, notifier);
 });
 
 test('can be injected', () => {
-    expect(HandleError.__DEPS__).toStrictEqual([ Presenter, MessageBus ]);
+    expect(HandleError.__DEPS__).toStrictEqual([ Presenter, Notifier ]);
 });
 
 test('uses given presenter to present given errors', () => {
@@ -47,7 +47,7 @@ test('uses given presenter to present given errors', () => {
 
     service.handle(request);
 
-    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ErrorReceived(error));
+    expect(notifier.notify.mock.calls[0][0]).toStrictEqual(new ErrorReceived(error));
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(
         new Response(new Error('A fatal error happened in the application')));
 });

@@ -1,7 +1,7 @@
 {
-  "name": "message-bus",
+  "name": "notifications",
   "version": "0.0.0",
-  "description": "Message bus",
+  "description": "Notifications",
   "main": "lib.js",
   "repository": "https://github.com/michelezamuner/smjs",
   "author": "Michele Zamuner",

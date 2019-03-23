@@ -209,7 +209,7 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-"app/message-bus@file:../message-bus":
+"app/notifications@file:../notifications":
   version "0.0.0"
 
 append-transform@^1.0.0:

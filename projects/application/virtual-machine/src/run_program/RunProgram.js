@@ -25,7 +25,7 @@ module.exports = class VirtualMachine_RunProgram_RunProgram {
         this._architectureLoader = adapter.getArchitectureLoader();
         this._programLoader = adapter.getProgramLoader();
         this._system = adapter.getSystem();
-        this._bus = adapter.getMessageBus();
+        this._notifier = adapter.getNotifier();
     }
 
     /**
@@ -35,23 +35,23 @@ module.exports = class VirtualMachine_RunProgram_RunProgram {
         try {
             if (request.getProgramReference() === null) {
                 const error = new MissingProgramReferenceException();
-                this._bus.send(new ApplicationFailed(error));
+                this._notifier.notify(new ApplicationFailed(error));
                 this._presenter.present(new Response(null, error));
 
                 return;
             }
 
             const architecture = this._architectureLoader.load(request.getArchitectureName());
-            this._bus.send(new ArchitectureLoaded(architecture, request.getArchitectureName()));
+            this._notifier.notify(new ArchitectureLoaded(architecture, request.getArchitectureName()));
 
             const interpreter = architecture.getInterpreter(this._system);
             const processor = this._processorFactory.create(interpreter);
 
             const program = this._programLoader.load(request.getProgramReference());
-            this._bus.send(new ProgramLoaded(program, request.getProgramReference()));
+            this._notifier.notify(new ProgramLoaded(program, request.getProgramReference()));
 
             const exitStatus = processor.run(program);
-            this._bus.send(new ExecutionTerminated(exitStatus));
+            this._notifier.notify(new ExecutionTerminated(exitStatus));
 
             this._presenter.present(new Response(exitStatus));
         } catch (e) {
@@ -59,7 +59,7 @@ module.exports = class VirtualMachine_RunProgram_RunProgram {
                 throw e;
             }
 
-            this._bus.send(new ApplicationFailed(e));
+            this._notifier.notify(new ApplicationFailed(e));
             this._presenter.present(new Response(null, e));
         }
     }
