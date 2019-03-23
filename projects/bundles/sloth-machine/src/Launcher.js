@@ -1,10 +1,10 @@
-const Container = require('lib/container').Container;
-const Router = require('lib/router').Router;
-const RouterException = require('lib/router').RouterException;
-const Input = require('lib/router').Input;
-const MessageBus = require('app/message-bus').MessageBus;
+const Container = require('container').Container;
+const Router = require('router').Router;
+const RouterException = require('router').RouterException;
+const Input = require('router').Input;
+const MessageBus = require('message-bus').MessageBus;
 const ErrorHandlerFailed = require('./ErrorHandlerFailed');
-const Parser = require('lib/command-line-parser');
+const Parser = require('command-line-parser');
 
 module.exports = class SlothMachine_Launcher {
     static get DEFAULT_REPRESENTATION() { return 'integrated'; }

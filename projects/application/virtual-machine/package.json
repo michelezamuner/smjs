@@ -8,7 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "app/architecture-loader": "file:../architecture-loader",
-    "app/message-bus": "file:../message-bus",
+    "app/notifications": "file:../notifications",
     "app/program-loader": "file:../program-loader",
     "app/system": "file:../system",
     "domain/sloth-machine-framework": "file:../../domain/sloth-machine-framework"

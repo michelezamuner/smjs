@@ -7,26 +7,27 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
+    "adapters/bus-notifications": "file:../../adapters/bus-notifications",
     "adapters/file-program-loader": "file:../../adapters/file-program-loader",
     "adapters/local-architecture-loader": "file:../../adapters/local-architecture-loader",
     "adapters/os-system": "file:../../adapters/os-system",
-    "adapters/simple-message-bus": "file:../../adapters/simple-message-bus",
     "app/architecture-loader": "file:../../application/architecture-loader",
     "app/core": "file:../../application/core",
-    "app/message-bus": "file:../../application/message-bus",
+    "app/notifications": "file:../../application/notifications",
     "app/program-loader": "file:../../application/program-loader",
     "app/system": "file:../../application/system",
     "app/virtual-machine": "file:../../application/virtual-machine",
+    "command-line-parser": "file:../../libraries/command-line-parser",
+    "console-wrapper": "file:../../libraries/console-wrapper",
+    "container": "file:../../libraries/container",
     "domain/sloth-machine-framework": "file:../../domain/sloth-machine-framework",
-    "lib/command-line-parser": "file:../../libraries/command-line-parser",
-    "lib/console": "file:../../libraries/console",
-    "lib/container": "file:../../libraries/container",
-    "lib/logger": "file:../../libraries/logger",
-    "lib/router": "file:../../libraries/router"
+    "logger": "file:../../libraries/logger",
+    "message-bus": "file:../../libraries/message-bus",
+    "router": "file:../../libraries/router"
   },
   "devDependencies": {
     "jest": "^24.1.0",
-    "lib/random": "file:../../libraries/random"
+    "random": "file:../../libraries/random"
   },
   "scripts": {
     "test": "tests/run",

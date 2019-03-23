@@ -50,7 +50,7 @@ const system = {};
 /**
  * @type {Object}
  */
-const bus = {};
+const notifier = {};
 
 /**
  * @type {Object}
@@ -104,9 +104,9 @@ beforeEach(() => {
     adapter.getArchitectureLoader = () => architectureLoader;
     adapter.getProgramLoader = () => programLoader;
     adapter.getSystem = () => system;
-    adapter.getMessageBus = () => bus;
+    adapter.getNotifier = () => notifier;
     presenter.present = jest.fn(() => presenterCalled = true);
-    bus.send = jest.fn(() => expect(presenterCalled).toBe(false));
+    notifier.notify = jest.fn(() => expect(presenterCalled).toBe(false));
     architectureLoader.load = name => name === architectureName ? architecture : null;
     architecture.getInterpreter = sys => sys === system ? interpreter : null;
     programLoader.load = ref => ref === programReference ? program : null;
@@ -130,9 +130,9 @@ test('runs loaded program with loaded architecture and sends proper response to 
 test('sends proper application messages', () => {
     service.run(request);
 
-    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ArchitectureLoaded(architecture, architectureName));
-    expect(bus.send.mock.calls[1][0]).toStrictEqual(new ProgramLoaded(program, programReference));
-    expect(bus.send.mock.calls[2][0]).toStrictEqual(new ExecutionTerminated(exitStatus));
+    expect(notifier.notify.mock.calls[0][0]).toStrictEqual(new ArchitectureLoaded(architecture, architectureName));
+    expect(notifier.notify.mock.calls[1][0]).toStrictEqual(new ProgramLoaded(program, programReference));
+    expect(notifier.notify.mock.calls[2][0]).toStrictEqual(new ExecutionTerminated(exitStatus));
 });
 
 test('handles missing program reference', () => {
@@ -140,7 +140,7 @@ test('handles missing program reference', () => {
 
     service.run(request);
 
-    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ApplicationFailed(new MissingProgramReferenceException()))
+    expect(notifier.notify.mock.calls[0][0]).toStrictEqual(new ApplicationFailed(new MissingProgramReferenceException()))
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, new MissingProgramReferenceException()));
 });
@@ -153,7 +153,7 @@ test('handles unsupported architecture exceptions', () => {
 
     service.run(request);
 
-    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ApplicationFailed(error));
+    expect(notifier.notify.mock.calls[0][0]).toStrictEqual(new ApplicationFailed(error));
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
@@ -166,7 +166,7 @@ test('handles invalid architecture exceptions', () => {
 
     service.run(request);
 
-    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ApplicationFailed(error));
+    expect(notifier.notify.mock.calls[0][0]).toStrictEqual(new ApplicationFailed(error));
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
@@ -179,7 +179,7 @@ test('handles invalid program exceptions', () => {
 
     service.run(request);
 
-    expect(bus.send.mock.calls[1][0]).toStrictEqual(new ApplicationFailed(error));
+    expect(notifier.notify.mock.calls[1][0]).toStrictEqual(new ApplicationFailed(error));
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });
@@ -192,7 +192,7 @@ test('handles processor exceptions', () => {
 
     service.run(request);
 
-    expect(bus.send.mock.calls[2][0]).toStrictEqual(new ApplicationFailed(error));
+    expect(notifier.notify.mock.calls[2][0]).toStrictEqual(new ApplicationFailed(error));
     expect(presenter.present).toBeCalledTimes(1);
     expect(presenter.present.mock.calls[0][0]).toStrictEqual(new Response(null, error));
 });

@@ -2,24 +2,24 @@ const Presenter = require('./Presenter');
 const ArchitectureLoader = require('app/architecture-loader').ArchitectureLoader;
 const ProgramLoader = require('app/program-loader').ProgramLoader;
 const System = require('app/system').System;
-const MessageBus = require('app/message-bus').MessageBus;
+const Notifier = require('app/notifications').Notifier;
 
 module.exports = class VirtualMachine_RunProgram_AdapterDependencies {
-    static get __DEPS__() { return [Presenter, ArchitectureLoader, ProgramLoader, System, MessageBus]; }
+    static get __DEPS__() { return [Presenter, ArchitectureLoader, ProgramLoader, System, Notifier]; }
 
     /**
      * @param {Presenter} presenter
      * @param {ArchitectureLoader} architectureLoader
      * @param {ProgramLoader} programLoader
      * @param {System} system
-     * @param {MessageBus} bus
+     * @param {Notifier} notifier
      */
-    constructor(presenter, architectureLoader, programLoader, system, bus) {
+    constructor(presenter, architectureLoader, programLoader, system, notifier) {
         this._presenter = presenter;
         this._architectureLoader = architectureLoader;
         this._programLoader = programLoader;
         this._system = system;
-        this._bus = bus;
+        this._notifier = notifier;
     }
 
     /**
@@ -51,9 +51,9 @@ module.exports = class VirtualMachine_RunProgram_AdapterDependencies {
     }
 
     /**
-     * @return {MessageBus}
+     * @return {Notifier}
      */
-    getMessageBus() {
-        return this._bus;
+    getNotifier() {
+        return this._notifier;
     }
 };

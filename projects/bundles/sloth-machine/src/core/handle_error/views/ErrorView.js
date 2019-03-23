@@ -1,5 +1,5 @@
 const View = require('../presenters/shared_presenter/View');
-const Console = require('lib/console').Console;
+const Console = require('console-wrapper').Console;
 
 module.exports = class SlothMachine_Core_HandleError_Views_ErrorView extends View {
     static get __DEPS__() { return [Console]; }
