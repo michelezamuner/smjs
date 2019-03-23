@@ -6,9 +6,15 @@ const config = {
     coveragePathIgnorePatterns: [
         'acceptance/',
         'messages/',
+        'Provider\.js',
         'Actuator\.js',
         'MessageBus\.js',
         '/Signal\.js',
+        'NativeWriter\.js',
+        'Writer\.js',
+        'ServerBuilder\.js',
+        'Notifier\.js',
+        'Request\.js',
     ],
     coverageReporters: ['text'],
 };

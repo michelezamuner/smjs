@@ -27,6 +27,10 @@ test('implements interface', () => {
     expect(actuator).toBeInstanceOf(Actuator);
 });
 
+test('can be injected', () => {
+    expect(FileActuator.__DEPS__).toStrictEqual([ Writer, 'file_actuator.output_file' ]);
+});
+
 test('writes signal value to file', () => {
     const value = 'value';
     const signal = new Signal(value);

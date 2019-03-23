@@ -4,7 +4,7 @@ const config = {
     verbose: true,
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
-        'acceptance',
+        'acceptance/',
         'Provider\.js',
         '/View\.js',
         'ErrorHandlerFailed\.js',

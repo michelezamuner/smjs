@@ -1,6 +1,6 @@
 const ConsoleHandler = require('../../src/handlers/ConsoleHandler');
 const Handler = require('../../src/Handler');
-const Console = require('lib/console').Console;
+const Console = require('console').Console;
 const LoggerException = require('../../src/LoggerException');
 
 /**
