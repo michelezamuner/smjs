@@ -18,7 +18,7 @@ module.exports = class SensorSystem_Sensor_SendSignal_SignalListener {
      * @param {number} port
      */
     listen(host, port) {
-        const server = this._builder.build(this._handler.handleData);
+        const server = this._builder.build(this._handler);
         server.listen(port, host);
     }
 };

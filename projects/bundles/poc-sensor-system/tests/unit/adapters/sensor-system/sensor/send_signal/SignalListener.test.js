@@ -34,8 +34,7 @@ const host = '127.0.0.1';
 const port = 1234;
 
 beforeEach(() => {
-    handler.handleData = () => {};
-    builder.build = callback => callback === handler.handleData ? server : null;
+    builder.build = hnd => hnd === handler ? server : null;
     server.listen = jest.fn();
     listener = new SignalListener(builder, handler);
 });

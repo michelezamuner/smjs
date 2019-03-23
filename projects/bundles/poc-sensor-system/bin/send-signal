@@ -6,4 +6,4 @@ readonly node="$(which node)"
 readonly current="$( cd "$(dirname "$0")"; pwd -P )"
 readonly root="$(realpath "$(dirname "$current")")"
 
-$node "$root/sensor.js" "$0"
+$node "$root/sensor.js" "$@"

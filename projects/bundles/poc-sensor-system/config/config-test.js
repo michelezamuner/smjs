@@ -1,5 +1,5 @@
 module.exports = {
-    actuator: {
+    file_actuator: {
         output_file: '/tmp/actuator.out',
     }
 };
