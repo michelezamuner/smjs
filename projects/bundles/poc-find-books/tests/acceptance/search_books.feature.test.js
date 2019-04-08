@@ -1,7 +1,7 @@
 const promisify = require('util').promisify;
 const exec = promisify(require('child_process').exec);
 
-test('find books containing search text with console command', async () => {
+test.skip('find books containing search text with console command', async () => {
     const parameters = [
         { search: 'dog', expected: "12" },
         { search: 'ball', expected: "31" },
