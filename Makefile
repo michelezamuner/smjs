@@ -18,7 +18,11 @@ run:
 # node_modules directory, so we clean all packages before running tests on a specific one.
 ci:
 	@yarn && yarn ci
-	@$(foreach project,$(projects),cd $(root) && make clean && cd $(root)/projects/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
+	@$(foreach project,$(domain),cd $(root) && make clean && cd $(root)/projects/domain/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
+	@$(foreach project,$(application),cd $(root) && make clean && cd $(root)/projects/application/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
+	@$(foreach project,$(adapters),cd $(root) && make clean && cd $(root)/projects/adapters/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
+	@$(foreach project,$(bundles),cd $(root) && make clean && cd $(root)/projects/bundles/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
+	@$(foreach project,$(libraries),cd $(root) && make clean && cd $(root)/projects/libraries/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
 
 ssh:
 	@docker run -ti --rm -v $(root):/app:delegated smjs bash

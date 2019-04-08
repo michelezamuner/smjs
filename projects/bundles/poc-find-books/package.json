@@ -1,0 +1,18 @@
+{
+  "name": "poc-find-books",
+  "version": "0.0.0",
+  "description": "PoC of an application to find books",
+  "repository": "https:///github.com/michelezamuner/smjs",
+  "author": "Michele Zamuner",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "jest": "^24.1.0"
+  },
+  "scripts": {
+    "test": "SM_ROOT=$(pwd) SM_ENV=test node --use_strict ./node_modules/.bin/jest",
+    "coverage": "SM_ROOT=$(pwd) SM_ENV=test node --use_strict ./node_modules/.bin/jest --coverage",
+    "ci": "SM_ROOT=$(pwd) SM_ENV=test JEST_ENV=ci node --use_strict ./node_modules/.bin/jest --coverage"
+  }
+}
