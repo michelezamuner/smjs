@@ -6,7 +6,7 @@ readonly search="$1"
 readonly expected="$2"
 readonly node="$(which node)"
 
-$SM_ROOT/bin/adapters/integration-bus >/dev/null &
+$SM_ROOT/bin/application/api-gateway >/dev/null &
 sleep 1
 
 readonly results="$($SM_ROOT/bin/adapters/search $search)"
