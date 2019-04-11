@@ -36,11 +36,6 @@ const identifier = 'sloth_machine/run_program';
 /**
  * @type {string}
  */
-const representation = 'integrated';
-
-/**
- * @type {string}
- */
 const program = 'program/path';
 
 /**
@@ -51,7 +46,7 @@ const architecture = 'sma';
 /**
  * @type {Input}
  */
-const input = new Input(identifier, representation, {program: program, architecture: architecture});
+const input = new Input(identifier, {program: program, architecture: architecture});
 
 beforeEach(() => {
     controller.runProgram = jest.fn();
@@ -80,7 +75,7 @@ test('routes given input to proper controller action and view', () => {
 
 test('fails if identifier is not configured', () => {
     const identifier = 'invalid';
-    const input = new Input(identifier, representation, {program: program, architecture: architecture});
+    const input = new Input(identifier, {program: program, architecture: architecture});
 
     expect(() => router.route(input)).toThrow(RouterException);
     expect(() => router.route(input)).toThrow(`Resource identifier "${identifier}" is not configured`);

@@ -15,7 +15,7 @@ module.exports = class SensorSystem_Sensor_SendSignal_SignalHandler {
      * @param {string} signal
      */
     handleData(signal) {
-        const input = new Input('sensor-system/send_signal', '', { signal: signal });
+        const input = new Input('sensor-system/send_signal', { signal: signal });
         this._router.route(input);
     }
 };
