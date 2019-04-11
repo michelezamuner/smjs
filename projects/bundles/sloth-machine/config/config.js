@@ -11,17 +11,16 @@ const config = {
         require('./providers/LoggerProvider'),
     ],
     router: {
-        routes: [
-            {
-                endpoint: 'sloth_machine_core/handle_error',
+        routes: {
+            'sloth_machine_core/handle_error': {
                 controller: require('../src/core/handle_error/controller/Controller'),
                 action: 'handleError(error)',
-            },{
-                endpoint: 'sloth_machine/run_program',
+            },
+            'sloth_machine/run_program': {
                 controller: require('../src/virtual_machine/run_program/controller/Controller'),
                 action: 'runProgram(architecture, file)',
             },
-        ]
+        }
     },
     ui: {
         use_cases: {
