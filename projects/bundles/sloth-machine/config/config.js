@@ -13,11 +13,11 @@ const config = {
     router: {
         routes: [
             {
-                identifier: 'sloth_machine_core/handle_error',
+                endpoint: 'sloth_machine_core/handle_error',
                 controller: require('../src/core/handle_error/controller/Controller'),
                 action: 'handleError(error)',
             },{
-                identifier: 'sloth_machine/run_program',
+                endpoint: 'sloth_machine/run_program',
                 controller: require('../src/virtual_machine/run_program/controller/Controller'),
                 action: 'runProgram(architecture, file)',
             },

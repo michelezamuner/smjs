@@ -1,18 +1,18 @@
-module.exports = class Router_Input {
+module.exports = class Router_Request {
     /**
-     * @param {string} identifier
+     * @param {string} endpoint
      * @param {Object} parameters
      */
-    constructor(identifier, parameters) {
-        this._identifier = identifier;
+    constructor(endpoint, parameters) {
+        this._endpoint = endpoint;
         this._parameters = parameters;
     }
 
     /**
      * @return {string}
      */
-    getIdentifier() {
-        return this._identifier;
+    getEndpoint() {
+        return this._endpoint;
     }
 
     /**

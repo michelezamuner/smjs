@@ -1,5 +1,5 @@
 const RouterException = require('./RouterException');
-const Input = require('./Input');
+const Request = require('./Request');
 const Container = require('container').Container;
 
 module.exports = class Router_Router {
@@ -15,13 +15,13 @@ module.exports = class Router_Router {
     }
 
     /**
-     * @param {Input} input
+     * @param {Request} request
      * @throws {RouterException}
      */
-    route(input) {
-        const route = this._getRoute(input.getIdentifier());
+    route(request) {
+        const route = this._getRoute(request.getEndpoint());
         const controller = this._container.make(route.controller);
-        const [action, params] = this._parseAction(route.action, input);
+        const [action, params] = this._parseAction(route.action, request);
 
         if (controller[action] === undefined) {
             throw new RouterException(`Action "${action}" not supported by controller`);
@@ -31,27 +31,27 @@ module.exports = class Router_Router {
     }
 
     /**
-     * @param {string} identifier
-     * @return {{identifier, controller, action}}
+     * @param {string} endpoint
+     * @return {{endpoint, controller, action}}
      * @private
      */
-    _getRoute(identifier) {
+    _getRoute(endpoint) {
         for (const route of this._routes) {
-            if (route.identifier === identifier) {
+            if (route.endpoint === endpoint) {
                 return route;
             }
         }
 
-        throw new RouterException(`Resource identifier "${identifier}" is not configured`);
+        throw new RouterException(`Resource endpoint "${endpoint}" is not configured`);
     }
 
     /**
      * @param {string} definition
-     * @param {Input} input
+     * @param {Request} request
      * @return {[string, Object[]]}
      * @private
      */
-    _parseAction(definition, input) {
+    _parseAction(definition, request) {
         const separator = definition.indexOf('(');
         if (separator === -1) {
             throw new RouterException(`Malformed action definition "${definition}"`);
@@ -65,7 +65,7 @@ module.exports = class Router_Router {
             .map(param => param.trim());
 
         const params = formalParams.map(param => {
-            const actual = input.getParameter(param);
+            const actual = request.getParameter(param);
             if (actual === undefined) {
                 throw new RouterException(`Missing required "${param}" parameter of definition "${definition}"`);
             }

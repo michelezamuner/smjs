@@ -3,7 +3,7 @@ const config = {
     router: {
         routes: [
             {
-                identifier: 'sensor-system/send_signal',
+                endpoint: 'sensor-system/send_signal',
                 controller: require('../src/adapters/sensor-system/sensor/send_signal/controller/Controller'),
                 action: 'sendSignal(signal)',
             }

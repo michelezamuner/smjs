@@ -1,5 +1,5 @@
 const Router = require('router').Router;
-const Input = require('router').Input;
+const Request = require('router').Request;
 
 module.exports = class SensorSystem_Sensor_SendSignal_SignalHandler {
     static get __DEPS__() { return [ Router ]; }
@@ -15,7 +15,7 @@ module.exports = class SensorSystem_Sensor_SendSignal_SignalHandler {
      * @param {string} signal
      */
     handleData(signal) {
-        const input = new Input('sensor-system/send_signal', { signal: signal });
+        const input = new Request('sensor-system/send_signal', { signal: signal });
         this._router.route(input);
     }
 };
