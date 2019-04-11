@@ -36,9 +36,9 @@ module.exports = class Router_Router {
      * @private
      */
     _getRoute(endpoint) {
-        for (const route of this._routes) {
-            if (route.endpoint === endpoint) {
-                return route;
+        for (const routeEndpoint in this._routes) {
+            if (routeEndpoint === endpoint) {
+                return this._routes[endpoint];
             }
         }
 

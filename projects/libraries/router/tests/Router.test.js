@@ -52,13 +52,11 @@ beforeEach(() => {
     controller.runProgram = jest.fn();
     container.make = ref => ref === controllerClass ? controller : null;
     container.bind = jest.fn();
-    config.routes = [
-        {
-            endpoint: endpoint,
-            controller: controllerClass,
-            action: 'runProgram(architecture, program)',
-        },
-    ];
+    config.routes = {};
+    config.routes[endpoint] = {
+        controller: controllerClass,
+        action: 'runProgram(architecture, program)',
+    };
     router = new Router(container, config);
 });
 
@@ -83,7 +81,7 @@ test('fails if endpoint is not configured', () => {
 
 test('fails if action is malformed', () => {
     const action = 'malformed';
-    config.routes[0].action = action;
+    config.routes[endpoint].action = action;
 
     expect(() => router.route(request)).toThrow(RouterException);
     expect(() => router.route(request)).toThrow(`Malformed action definition "${action}"`);
@@ -91,7 +89,7 @@ test('fails if action is malformed', () => {
 
 test('fails if controller does not support action', () => {
     const action = 'invalid';
-    config.routes[0].action = `${action}()`;
+    config.routes[endpoint].action = `${action}()`;
 
     expect(() => router.route(request)).toThrow(RouterException);
     expect(() => router.route(request)).toThrow(`Action "${action}" not supported by controller`);
@@ -99,7 +97,7 @@ test('fails if controller does not support action', () => {
 
 test('fails if required parameters are not passed to action', () => {
     const action = 'runProgram(other, params)';
-    config.routes[0].action = action;
+    config.routes[endpoint].action = action;
 
     expect(() => router.route(request)).toThrow(RouterException);
     expect(() => router.route(request)).toThrow(
