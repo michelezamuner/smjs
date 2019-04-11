@@ -173,7 +173,7 @@ test('uses proper error object when sending error handler failures', () => {
             throw error;
         }
     });
-    
+
     launcher.launch(parser);
 
     expect(bus.send.mock.calls[2][0]).toStrictEqual(new ErrorHandlerFailed(new Error(error)));
