@@ -23,7 +23,7 @@ test('can be injected', () => {
 
 test('routes client signal', () => {
     const signal = 'signal';
-    const input = new Input('sensor-system/send_signal', '', { signal: signal });
+    const input = new Input('sensor-system/send_signal', { signal: signal });
 
     handler.handleData(signal);
 

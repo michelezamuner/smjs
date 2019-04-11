@@ -1,12 +1,10 @@
 module.exports = class Router_Input {
     /**
      * @param {string} identifier
-     * @param {string} representation
      * @param {Object} parameters
      */
-    constructor(identifier, representation, parameters) {
+    constructor(identifier, parameters) {
         this._identifier = identifier;
-        this._representation = representation;
         this._parameters = parameters;
     }
 
@@ -15,13 +13,6 @@ module.exports = class Router_Input {
      */
     getIdentifier() {
         return this._identifier;
-    }
-
-    /**
-     * @return {string}
-     */
-    getRepresentation() {
-        return this._representation;
     }
 
     /**
