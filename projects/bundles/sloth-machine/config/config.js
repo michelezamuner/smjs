@@ -6,6 +6,7 @@ const config = {
     providers: [
         require('./providers/AppProvider'),
         require('./providers/SlothMachineProvider'),
+        require('./providers/RouterProvider'),
         require('./providers/LoggerProvider'),
     ],
     router: {

@@ -1,8 +1,6 @@
 const Container = require('container').Container;
-const Router = require('router').Router;
-const RouterException = require('router').RouterException;
-const Input = require('router').Input;
 const MessageBus = require('message-bus').MessageBus;
+const RequestReceived = require('./RequestReceived');
 const ErrorHandlerFailed = require('./ErrorHandlerFailed');
 const Parser = require('command-line-parser');
 
@@ -31,12 +29,15 @@ module.exports = class SlothMachine_Launcher {
             }
 
             // @todo: allow different representations
-            const input = new Input('sloth_machine/run_program', SlothMachine_Launcher.DEFAULT_REPRESENTATION, {
-                architecture: parser.getArgument(SlothMachine_Launcher.ARG_ARCHITECTURE),
-                file: parser.getArgument()
-            });
-
-            this._container.make(Router).route(input);
+            const message = new RequestReceived(
+                'sloth_machine/run_program',
+                SlothMachine_Launcher.DEFAULT_REPRESENTATION,
+                {
+                    architecture: parser.getArgument(SlothMachine_Launcher.ARG_ARCHITECTURE),
+                    file: parser.getArgument()
+                }
+            );
+            this._container.make(MessageBus).send(message);
         } catch (e) {
             this._handleError(e);
         }
@@ -47,9 +48,11 @@ module.exports = class SlothMachine_Launcher {
      * @private
      */
     _handleError(e) {
-        const input = new Input('sloth_machine_core/handle_error', 'error', {error: e instanceof Error ? e : new Error(e)});
+        const message = new RequestReceived('sloth_machine_core/handle_error', 'error', {
+            error: e instanceof Error ? e : new Error(e)
+        });
         try {
-            this._container.make(Router).route(input);
+            this._container.make(MessageBus).send(message);
         } catch (e) {
             // prevent infinite recursion
             this._container.make(MessageBus).send(new ErrorHandlerFailed(e instanceof Error ? e : new Error(e)));

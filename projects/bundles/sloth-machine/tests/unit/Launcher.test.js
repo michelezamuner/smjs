@@ -1,8 +1,7 @@
 const Launcher = require('../../src/Launcher');
 const ErrorHandlerFailed = require('../../src/ErrorHandlerFailed');
 const Container = require('container').Container;
-const Router = require('router').Router;
-const Input = require('router').Input;
+const RequestReceived = require('../../src/RequestReceived');
 const MessageBus = require('message-bus').MessageBus;
 
 /**
@@ -36,11 +35,6 @@ const provider1 = {};
 const provider2 = {};
 
 /**
- * @type {Object|Router}
- */
-const router = {};
-
-/**
  * @type {string}
  */
 const architecture = 'architecture';
@@ -55,19 +49,10 @@ const file = 'file';
  */
 const bus = {};
 
-/**
- * @type {Input}
- */
-const input = new Input('sloth_machine/run_program', Launcher.DEFAULT_REPRESENTATION, {
-    architecture: architecture,
-    file: file
-});
-
 beforeEach(() => {
     container.bind = jest.fn();
     container.make = ref => {
         switch (ref) {
-            case Router: return router;
             case MessageBus: return bus;
             case 'provider1': return provider1;
             case 'provider2': return provider2;
@@ -77,7 +62,6 @@ beforeEach(() => {
     config.providers = ['provider1', 'provider2'];
     provider1.register = jest.fn();
     provider2.register = jest.fn();
-    router.route = jest.fn();
     bus.send = jest.fn();
 
     launcher = new Launcher(container, config);
@@ -99,15 +83,20 @@ test('register providers', () => {
     expect(provider2.register).toBeCalled();
 });
 
-test('routes the correct input', () => {
+test('sends message for requests', () => {
+    const message = new RequestReceived('sloth_machine/run_program', Launcher.DEFAULT_REPRESENTATION, {
+        architecture: architecture,
+        file: file,
+    });
+
     launcher.launch(parser);
 
-    expect(router.route.mock.calls[0][0]).toStrictEqual(input);
+    expect(bus.send.mock.calls[0][0]).toStrictEqual(message);
 });
 
 test('handles parser errors', () => {
     const error = new Error();
-    const errorInput = new Input('sloth_machine_core/handle_error', 'error', {error: error});
+    const message = new RequestReceived('sloth_machine_core/handle_error', 'error', {error: error});
 
     parser.getArgument = arg => {
         if (arg === Launcher.ARG_ARCHITECTURE) {
@@ -117,69 +106,75 @@ test('handles parser errors', () => {
 
     launcher.launch(parser);
 
-    expect(router.route.mock.calls[0][0]).toStrictEqual(errorInput);
+    expect(bus.send.mock.calls[0][0]).toStrictEqual(message);
 });
 
-test('handles router errors', () => {
+test('handles request errors', () => {
     const error = new Error();
-    const errorInput = new Input('sloth_machine_core/handle_error', 'error', {error: error});
+    const message = new RequestReceived('sloth_machine_core/handle_error', 'error', {error: error});
 
-    router.route = jest.fn(arg => {
-        if (arg.getIdentifier() === input.getIdentifier()) {
+    bus.send = jest.fn(message => {
+        if (message.getEndpoint() === 'sloth_machine/run_program') {
             throw error;
         }
     });
 
     launcher.launch(parser);
 
-    expect(router.route.mock.calls[1][0]).toStrictEqual(errorInput);
+    expect(bus.send.mock.calls[1][0]).toStrictEqual(message);
 });
 
-test('converts basic router errors into proper error objects', () => {
+test('converts basic request errors into proper error objects', () => {
     const error = 'error';
-    const errorInput = new Input('sloth_machine_core/handle_error', 'error', {error: new Error(error)});
+    const message = new RequestReceived('sloth_machine_core/handle_error', 'error', {error: new Error(error)});
 
-    router.route = jest.fn(arg => {
-        if (arg.getIdentifier() === input.getIdentifier()) {
+    bus.send = jest.fn(message => {
+        if (message.getEndpoint() === 'sloth_machine/run_program') {
             throw error;
         }
     });
 
     launcher.launch(parser);
 
-    expect(router.route.mock.calls[1][0]).toStrictEqual(errorInput);
+    expect(bus.send.mock.calls[1][0]).toStrictEqual(message);
 });
 
-test('sends errors happening in error routing as messages', () => {
+test('sends errors happening in error handling as messages', () => {
     const error = new Error();
 
-    router.route = arg => {
-        if (arg.getIdentifier() === input.getIdentifier()) {
+    bus.send = jest.fn(message => {
+        if (message.constructor !== RequestReceived) {
+            return;
+        }
+        if (message.getEndpoint() === 'sloth_machine/run_program') {
             throw new Error();
         }
-        if (arg.getIdentifier() === 'sloth_machine_core/handle_error') {
+        if (message.getEndpoint() === 'sloth_machine_core/handle_error') {
             throw error;
         }
-    };
+    });
 
     launcher.launch(parser);
 
-    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ErrorHandlerFailed(error));
+    expect(bus.send.mock.calls[2][0]).toStrictEqual(new ErrorHandlerFailed(error));
 });
 
 test('uses proper error object when sending error handler failures', () => {
     const error = 'error';
 
-    router.route = arg => {
-        if (arg.getIdentifier() === input.getIdentifier()) {
+    bus.send = jest.fn(message => {
+        if (message.constructor !== RequestReceived) {
+            return;
+        }
+        if (message.getEndpoint() === 'sloth_machine/run_program') {
             throw new Error();
         }
-        if (arg.getIdentifier() === 'sloth_machine_core/handle_error') {
+        if (message.getEndpoint() === 'sloth_machine_core/handle_error') {
             throw error;
         }
-    };
-
+    });
+    
     launcher.launch(parser);
 
-    expect(bus.send.mock.calls[0][0]).toStrictEqual(new ErrorHandlerFailed(new Error(error)));
+    expect(bus.send.mock.calls[2][0]).toStrictEqual(new ErrorHandlerFailed(new Error(error)));
 });
