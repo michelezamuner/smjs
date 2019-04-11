@@ -3,7 +3,7 @@ const Container = require('container').Container;
 const MessageBus = require('message-bus').MessageBus;
 const Router = require('router').Router;
 const Input = require('router').Input;
-const RequestReceived = require('../../src/RequestReceived');
+const ViewRegistered = require('../../src/ViewRegistered');
 
 module.exports = class SlothMachine_Providers_RouterProvider extends Provider {
     static get __DEPS__() { return [ Container ]; }
@@ -23,8 +23,6 @@ module.exports = class SlothMachine_Providers_RouterProvider extends Provider {
         const bus = this._container.make(MessageBus);
         const router = this._container.make(Router);
 
-        bus.register([RequestReceived], msg =>
-            router.route(new Input(msg.getEndpoint(), msg.getRepresentation(), msg.getParameters()))
-        );
+        bus.register([ViewRegistered], msg => router.route(new Input(msg.getEndpoint(), '', msg.getParameters())));
     }
 };

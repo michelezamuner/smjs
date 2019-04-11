@@ -7,6 +7,7 @@ const config = {
         require('./providers/AppProvider'),
         require('./providers/SlothMachineProvider'),
         require('./providers/RouterProvider'),
+        require('./providers/ViewsProvider'),
         require('./providers/LoggerProvider'),
     ],
     router: {
@@ -23,8 +24,8 @@ const config = {
         ]
     },
     ui: {
-        use_cases: [
-            {
+        use_cases: {
+            'sloth_machine_core/handle_error': {
                 presenter: require('app/core').handle_error.Presenter,
                 output_models: [
                     {
@@ -36,7 +37,8 @@ const config = {
                     }
                 ]
             },
-            {
+            'sloth_machine/run_program': {
+                dependencies: ['sloth_machine_core/handle_error'],
                 presenter: require('app/virtual-machine').run_program.Presenter,
                 output_models: [
                     {
@@ -57,7 +59,7 @@ const config = {
                     }
                 ]
             },
-        ]
+        }
     },
 };
 

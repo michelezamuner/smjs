@@ -3,9 +3,7 @@ const config = {
     testEnvironment: 'node',
     verbose: true,
     coverageDirectory: '/tmp',
-    coveragePathIgnorePatterns: [
-        'Observer\.js',
-    ],
+    coveragePathIgnorePatterns: [],
     coverageReporters: ['text'],
 };
 

@@ -1,19 +1,16 @@
-const Observer = require('./Observer');
 const RouterException = require('./RouterException');
 const Input = require('./Input');
 const Container = require('container').Container;
 
 module.exports = class Router_Router {
-    static get __DEPS__() { return [ Container, Observer, 'router.config' ]; }
+    static get __DEPS__() { return [ Container, 'router.config' ]; }
 
     /**
      * @param {Container} container
-     * @param {Observer} observer
      * @param {{routes: Object[]}} config
      */
-    constructor(container, observer, config) {
+    constructor(container, config) {
         this._container = container;
-        this._observer = observer;
         this._routes = config.routes;
     }
 
@@ -22,8 +19,6 @@ module.exports = class Router_Router {
      * @throws {RouterException}
      */
     route(input) {
-        this._observer.observe(input);
-
         const route = this._getRoute(input.getIdentifier());
         const controller = this._container.make(route.controller);
         const [action, params] = this._parseAction(route.action, input);

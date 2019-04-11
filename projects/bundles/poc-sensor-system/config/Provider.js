@@ -1,5 +1,4 @@
 const Container = require('container').Container;
-const RouterObserver = require('router').Observer;
 const Actuator = require('../src/application/actuator/Actuator');
 const FileActuator = require('../src/adapters/file-actuator/FileActuator');
 const Notifier = require('../src/application/notifications/Notifier');
@@ -23,7 +22,6 @@ module.exports = class Provider {
         const config = this._container.make('config');
 
         this._container.bind('router.config', config.router);
-        this._container.bind(RouterObserver, { observe: () => {} });
         this._container.bind(Actuator, FileActuator);
         this._container.bind(Notifier, BusNotifier);
         this._container.bind(Writer, NativeWriter);
@@ -32,7 +30,7 @@ module.exports = class Provider {
         const bus = new MessageBus();
         bus.register([ActuatorActivated], msg => {
             const signal = msg.getSignal().getValue();
-            console.log(`Actuator activated with signal: ${signal}`);
+            process.stdout.write(`Actuator activated with signal: ${signal}`);
         });
         this._container.bind(MessageBus, bus);
 

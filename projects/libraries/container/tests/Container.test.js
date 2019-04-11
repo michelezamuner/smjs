@@ -70,10 +70,10 @@ test('creates object from bound callbacks', () => {
 test('fails if trying to make an unbound value', () => {
     const ref = 'unbound ref';
     expect(() => container.make(ref)).toThrow(ContainerException);
-    expect(() => container.make(ref)).toThrow(`Unbound reference "${ref}"`);
+    expect(() => container.make(ref)).toThrow(`Unbound reference "${ref}": ref is not a constructor`);
 });
 
 test('fails if trying to make an unbound interface', () => {
     expect(() => container.make(Interface)).toThrow(ContainerException);
-    expect(() => container.make(Interface)).toThrow(`Unbound reference "Interface"`);
+    expect(() => container.make(Interface)).toThrow(`Unbound reference "Interface": Cannot instantiate interface`);
 });
