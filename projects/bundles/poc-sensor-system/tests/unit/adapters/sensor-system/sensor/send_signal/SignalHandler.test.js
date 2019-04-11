@@ -1,6 +1,6 @@
 const SignalHandler = require('../../../../../../src/adapters/sensor-system/sensor/send_signal/SignalHandler');
 const Router = require('router').Router;
-const Input = require('router').Input;
+const Request = require('router').Request;
 
 /**
  * @type {Object|Router}
@@ -23,9 +23,9 @@ test('can be injected', () => {
 
 test('routes client signal', () => {
     const signal = 'signal';
-    const input = new Input('sensor-system/send_signal', { signal: signal });
+    const request = new Request('sensor-system/send_signal', { signal: signal });
 
     handler.handleData(signal);
 
-    expect(router.route.mock.calls[0][0]).toStrictEqual(input);
+    expect(router.route.mock.calls[0][0]).toStrictEqual(request);
 });
