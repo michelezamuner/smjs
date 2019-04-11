@@ -8,6 +8,7 @@ const config = {
         'Provider\.js',
         '/View\.js',
         'ErrorHandlerFailed\.js',
+        'RequestReceived\.js',
     ],
     coverageReporters: ['text'],
 };
