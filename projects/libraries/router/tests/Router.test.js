@@ -1,5 +1,4 @@
 const Router = require('../src/Router');
-const Observer = require('../src/Observer');
 const Input = require('../src/Input');
 const RouterException = require('../src/RouterException');
 const Container = require('container').Container;
@@ -8,11 +7,6 @@ const Container = require('container').Container;
  * @type {Object|Container}
  */
 const container = {};
-
-/**
- * @type {Object|Observer}
- */
-const observer = {};
 
 /**
  * @type {null|Router}
@@ -63,7 +57,6 @@ beforeEach(() => {
     controller.runProgram = jest.fn();
     container.make = ref => ref === controllerClass ? controller : null;
     container.bind = jest.fn();
-    observer.observe = jest.fn();
     config.routes = [
         {
             identifier: identifier,
@@ -71,11 +64,11 @@ beforeEach(() => {
             action: 'runProgram(architecture, program)',
         },
     ];
-    router = new Router(container, observer, config);
+    router = new Router(container, config);
 });
 
 test('can be injected', () => {
-    expect(Router.__DEPS__).toStrictEqual([ Container, Observer, 'router.config' ]);
+    expect(Router.__DEPS__).toStrictEqual([ Container, 'router.config' ]);
 });
 
 test('routes given input to proper controller action and view', () => {
@@ -83,17 +76,6 @@ test('routes given input to proper controller action and view', () => {
 
     expect(controller.runProgram.mock.calls[0][0]).toBe(architecture);
     expect(controller.runProgram.mock.calls[0][1]).toBe(program);
-    expect(observer.observe.mock.calls[0][0]).toBe(input);
-});
-
-test('calls observer before making controller', () => {
-    container.make = jest.fn();
-    observer.observe = () => {
-        throw new Error();
-    };
-
-    expect(() => router.route(input)).toThrow(Error);
-    expect(container.make).not.toBeCalled();
 });
 
 test('fails if identifier is not configured', () => {

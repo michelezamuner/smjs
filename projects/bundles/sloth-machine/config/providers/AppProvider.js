@@ -1,7 +1,5 @@
 const Provider = require('./Provider');
 const Container = require('container').Container;
-const RouterObserver = require('router').Observer;
-const ViewsProvider = require('./ViewsProvider');
 const Notifier = require('app/notifications').Notifier;
 const BusNotifier = require('adapters/bus-notifications').BusNotifier;
 const MessageBus = require('message-bus').MessageBus;
@@ -24,7 +22,6 @@ module.exports = class SlothMachine_Providers_AppProvider extends Provider {
         const config = require('../config');
 
         this._container.bind('config', config);
-        this._container.bind(RouterObserver, ViewsProvider);
         this._container.bind('router.config', config.router);
         this._container.bind(MessageBus, new MessageBus());
         this._container.bind(Notifier, this._container.make(BusNotifier));

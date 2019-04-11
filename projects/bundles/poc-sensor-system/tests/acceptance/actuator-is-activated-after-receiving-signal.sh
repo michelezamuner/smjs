@@ -4,7 +4,7 @@ IFS=$'\n\t'
 
 readonly node="$(which node)"
 readonly signalValue="signal"
-readonly actuatorFile="$($node -e "console.log(require('$SM_ROOT/config/config.js').file_actuator.output_file);")"
+readonly actuatorFile="$($node -e "process.stdout.write(require('$SM_ROOT/config/config.js').file_actuator.output_file);")"
 
 rm -f $actuatorFile
 

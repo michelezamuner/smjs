@@ -34,7 +34,7 @@ module.exports = class Container_Container {
         try {
             return new ref();
         } catch (e) {
-            throw new ContainerException(`Unbound reference "${ref.name || ref}"`);
+            throw new ContainerException(`Unbound reference "${ref.name || ref}": ${e.message ? e.message : e}`);
         }
     }
 

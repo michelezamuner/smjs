@@ -1,49 +1,64 @@
+const Provider = require('./Provider');
 const Container = require('container').Container;
-const RouterObserver = require('router').Observer;
-const Input = require('router').Input;
+const MessageBus = require('message-bus').MessageBus;
+const RequestReceived = require('../../src/RequestReceived');
+const ViewRegistered = require('../../src/ViewRegistered');
 
-module.exports = class SlothMachine_Providers_RoutesProvider extends RouterObserver {
-    static get __DEPS__() { return [Container]; }
+module.exports = class SlothMachine_Providers_UIProvider extends Provider {
+    static get __DEPS__() { return [ Container ]; }
 
     /**
-     *
-     * @param container
+     * @param {Container} container
      */
     constructor(container) {
         super();
         this._container = container;
-        this._useCases = this._container.make('config').ui.use_cases;
     }
 
     /**
      * @override
      */
-    observe(input) {
-        for (const useCase of this._useCases) {
-            this._provideUseCase(useCase, input);
-        }
+    register() {
+        const config = this._container.make('config');
+        const bus = this._container.make(MessageBus);
+
+        bus.register([RequestReceived], msg => {
+            const useCase = config.ui.use_cases[msg.getEndpoint()];
+            if (useCase === undefined) {
+                throw new Error(`Use case "${msg.getEndpoint()}" is not supported.`);
+            }
+
+            if (useCase.dependencies !== undefined) {
+                for (const dependency of useCase.dependencies) {
+                    this._bindComponents(config.ui.use_cases[dependency], msg.getRepresentation());
+                }
+            }
+            this._bindComponents(useCase, msg.getRepresentation());
+
+            bus.send(new ViewRegistered(msg.getEndpoint(), msg.getParameters()));
+        });
     }
 
     /**
      * @param {Object} useCase
-     * @param {Input} input
+     * @param {string} representation
      * @private
      */
-    _provideUseCase(useCase, input) {
-        const presenterInterface = useCase.presenter;
+    _bindComponents(useCase, representation) {
         for (const outputModel of useCase.output_models) {
-            const presenter = outputModel.presenter;
-            const viewInterface = outputModel.view;
-            for (const reference in outputModel.views) {
-                if (reference !== input.getRepresentation() && reference !== '*') {
+            for (const repr in outputModel.views) {
+                if (repr !== representation && repr !== '*') {
                     continue;
                 }
-                this._container.bind(presenterInterface, presenter);
-                const view = outputModel.views[reference];
+
+                this._container.bind(useCase.presenter, outputModel.presenter);
+
+                const view = outputModel.views[repr];
                 if (view === undefined) {
-                    throw new Error(`Representation "${input.getRepresentation()}" is not supported.`);
+                    throw new Error(`Representation "${representation}" is not supported.`);
                 }
-                this._container.bind(viewInterface, view);
+
+                this._container.bind(outputModel.view, view);
 
                 return;
             }
