@@ -1,27 +1,15 @@
 const SignalListener = require('../../../../../../src/adapters/sensor-system/sensor/send_signal/SignalListener');
-const ServerBuilder = require('../../../../../../src/adapters/sensor-system/sensor/send_signal/ServerBuilder');
-const SignalHandler = require('../../../../../../src/adapters/sensor-system/sensor/send_signal/SignalHandler');
-const Server = require('net').Server;
+const NativeServer = require('../../../../../../src/adapters/sensor-system/sensor/send_signal/NativeServer');
 
 /**
- * @type {Object|ServerBuilder}
+ * @type {Object|NativeServer}
  */
-const builder = {};
-
-/**
- * @type {Object|SignalHandler}
- */
-const handler = {};
+const server = {};
 
 /**
  * @type {null|SignalListener}
  */
 let listener = null;
-
-/**
- * @type {Object|Server}
- */
-const server = {};
 
 /**
  * @type {string}
@@ -34,13 +22,12 @@ const host = '127.0.0.1';
 const port = 1234;
 
 beforeEach(() => {
-    builder.build = hnd => hnd === handler ? server : null;
     server.listen = jest.fn();
-    listener = new SignalListener(builder, handler);
+    listener = new SignalListener(server);
 });
 
 test('can be injected', () => {
-    expect(SignalListener.__DEPS__).toStrictEqual([ ServerBuilder, SignalHandler ]);
+    expect(SignalListener.__DEPS__).toStrictEqual([ NativeServer ]);
 });
 
 test('listens to connections with given handler', () => {

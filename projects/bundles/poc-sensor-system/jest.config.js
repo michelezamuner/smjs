@@ -12,7 +12,7 @@ const config = {
         '/Signal\.js',
         'NativeWriter\.js',
         'Writer\.js',
-        'ServerBuilder\.js',
+        'NativeServer\.js',
         'Notifier\.js',
         'Request\.js',
     ],
