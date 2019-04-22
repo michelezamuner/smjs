@@ -5,6 +5,10 @@ const config = {
     coverageDirectory: '/tmp',
     coveragePathIgnorePatterns: [
         'acceptance/',
+        'api_gateway/search_books/Presenter\.js',
+        'api_gateway/search_books/Request\.js',
+        'api_gateway/search_books/Response\.js',
+        'clients/SearchBooksClient\.js'
     ],
     coverageReporters: ['text'],
 };
