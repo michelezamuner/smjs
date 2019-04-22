@@ -12,6 +12,20 @@ const router = {};
  */
 let handler = null;
 
+/**
+ * @type {string}
+ */
+const signal = 'signal';
+
+class StubClient {
+    on(event, callback) {
+        if (event !== 'data') {
+            return;
+        }
+        callback(signal);
+    }
+}
+
 beforeEach(() => {
     router.route = jest.fn();
     handler = new SignalHandler(router);
@@ -22,10 +36,9 @@ test('can be injected', () => {
 });
 
 test('routes client signal', () => {
-    const signal = 'signal';
     const request = new Request('sensor-system/send_signal', { signal: signal });
 
-    handler.handleData(signal);
+    handler.handle(new StubClient());
 
     expect(router.route.mock.calls[0][0]).toStrictEqual(request);
 });

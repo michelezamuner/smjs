@@ -1,16 +1,13 @@
-const ServerBuilder = require('./ServerBuilder');
-const SignalHandler = require('./SignalHandler');
+const NativeServer = require('./NativeServer');
 
 module.exports = class SensorSystem_Sensor_SendSignal_SignalListener {
-    static get __DEPS__() { return [ ServerBuilder, SignalHandler ]; }
+    static get __DEPS__() { return [ NativeServer ]; }
 
     /**
-     * @param {ServerBuilder} builder
-     * @param {SignalHandler} handler
+     * @param {NativeServer} server
      */
-    constructor(builder, handler) {
-        this._builder = builder;
-        this._handler = handler;
+    constructor(server) {
+        this._server = server;
     }
 
     /**
@@ -18,7 +15,6 @@ module.exports = class SensorSystem_Sensor_SendSignal_SignalListener {
      * @param {number} port
      */
     listen(host, port) {
-        const server = this._builder.build(this._handler);
-        server.listen(port, host);
+        this._server.listen(port, host);
     }
 };
