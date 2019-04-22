@@ -6,10 +6,10 @@ readonly search="$1"
 readonly expected="$2"
 readonly node="$(which node)"
 
-$SM_ROOT/bin/application/api-gateway >/dev/null &
+$SM_ROOT/bin/application-services/api-gateway >/dev/null &
 sleep 1
 
-readonly results="$($SM_ROOT/bin/adapters/search $search)"
+readonly results="$($SM_ROOT/bin/adapters-services/search $search)"
 
 ps aux | grep '[i]ntegration-bus' | awk '{ print $2 }' | xargs kill -9
 
