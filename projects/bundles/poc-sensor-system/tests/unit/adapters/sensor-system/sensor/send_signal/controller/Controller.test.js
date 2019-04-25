@@ -21,6 +21,10 @@ test('can be injected', () => {
     expect(Controller.__DEPS__).toStrictEqual([ SendSignal ]);
 });
 
+test('provides fqcn', () => {
+    expect(Controller.toString()).toBe('SensorSystem.SensorSystem.Sensor.SendSignal.Controller.Controller');
+});
+
 test('activates actuator', () => {
     const value = 'value';
 

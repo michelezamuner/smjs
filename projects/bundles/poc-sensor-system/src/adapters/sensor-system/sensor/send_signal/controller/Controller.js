@@ -1,8 +1,11 @@
+const _package = 'SensorSystem.SensorSystem.Sensor.SendSignal.Controller.';
+
 const SendSignal = require('../../../../../application/sensor/send_signal/SendSignal');
 const Request = require('./Request');
 
-module.exports = class SensorSystem_Sensor_SendSignal_Controller_Controller {
+module.exports = class Controller {
     static get __DEPS__() { return [ SendSignal ]; }
+    static toString() { return _package + Controller.name; }
 
     /**
      * @param {SendSignal} service

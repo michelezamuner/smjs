@@ -22,6 +22,10 @@ test('can be injected', () => {
     expect(Controller.__DEPS__).toStrictEqual([ RunProgram ]);
 });
 
+test('provides fqcn', () => {
+    expect(Controller.toString()).toBe('SlothMachine.SlothMachine.VirtualMachine.RunProgram.Controller.Controller');
+});
+
 test('calls service with proper request', () => {
     const architectureName = 'architecture';
     const programFile = 'file';

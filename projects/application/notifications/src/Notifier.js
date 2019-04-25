@@ -1,9 +1,13 @@
+const _package = 'SlothMachine.Notifications.';
+
 /**
  * @interface
  */
-module.exports = class Notifications_Notifier {
+module.exports = class Notifier {
+    static toString() { return _package + Notifier.name; }
+
     constructor() {
-        if (new.target === Notifications_Notifier) {
+        if (new.target === Notifier) {
             throw 'Cannot instantiate interface';
         }
     }

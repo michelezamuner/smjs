@@ -16,6 +16,14 @@ const data = new Data([
 
 const program = new Program(data);
 
+test('provides fqcn', () => {
+    expect(Program.toString()).toBe('SlothMachine.SlothMachineFramework.Program.Program');
+    expect(InvalidAddressException.toString())
+        .toBe('SlothMachine.SlothMachineFramework.Program.InvalidAddressException');
+    expect(ReadOutOfBoundsException.toString())
+        .toBe('SlothMachine.SlothMachineFramework.Program.ReadOutOfBoundsException');
+});
+
 test('can read chunks of data of given size at given address', () => {
     const reads = [
         {

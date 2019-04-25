@@ -1,11 +1,14 @@
-const SearchBooksRequest = require('../../../../../domain/api-gateway/SearchBooksRequest');
+const _package = 'FindBooks.ApiGateway.ApiGateway.SearchBooks.';
+
+const SearchBooksRequest = require('../../../../../domain/api/SearchBooksRequest');
 
 /**
  * @interface
  */
-module.exports = class ApiGateway_Application_ApiGateway_SearchBooks_Request {
+module.exports = class Request {
+    static toString() { return _package + Request.name; }
     constructor() {
-        if (new.target === ApiGateway_Application_ApiGateway_SearchBooks_Request) {
+        if (new.target === Request) {
             throw 'Cannot implement interface';
         }
     }

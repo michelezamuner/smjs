@@ -1,11 +1,15 @@
+const _package = 'SlothMachine.SlothMachine.VirtualMachine.RunProgram.Presenters.ConsolePresenter.';
+
 const ViewModel = require('./ViewModel');
 
 /**
  * @interface
  */
-module.exports = class SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_View {
+module.exports = class View {
+    static toString() { return _package + View.name; }
+
     constructor() {
-        if (new.target === SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_View) {
+        if (new.target === View) {
             throw 'Cannot instantiate interface';
         }
     }

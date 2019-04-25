@@ -1,6 +1,10 @@
+const _package = 'SlothMachine.SlothMachine.VirtualMachine.RunProgram.Controller.';
+
 const RequestInterface = require('app/virtual-machine').run_program.Request;
 
-module.exports = class SlothMachine_VirtualMachine_RunProgram_Controller_Request extends RequestInterface {
+module.exports = class Request extends RequestInterface {
+    static toString() { return _package + Request.name; }
+
     /**
      * @param {string} architectureName
      * @param {string} programReference

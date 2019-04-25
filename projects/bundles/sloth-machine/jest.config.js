@@ -9,6 +9,7 @@ const config = {
         '/View\.js',
         'ErrorHandlerFailed\.js',
         'RequestReceived\.js',
+        'ViewRegistered\.js',
     ],
     coverageReporters: ['text'],
 };

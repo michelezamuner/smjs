@@ -1,4 +1,8 @@
-module.exports = class SlothMachineFramework_Data_Integer {
+const _package = 'SlothMachine.SlothMachineFramework.Data.';
+
+module.exports = class Integer {
+    static toString() { return _package + Integer.name; }
+
     /**
      * @param {*} value
      */
@@ -26,7 +30,7 @@ module.exports = class SlothMachineFramework_Data_Integer {
      * @return {Integer}
      */
     add(integer) {
-        return new SlothMachineFramework_Data_Integer(this._value + integer._value);
+        return new Integer(this._value + integer._value);
     }
 
     /**
@@ -38,7 +42,7 @@ module.exports = class SlothMachineFramework_Data_Integer {
         if (!value) {
             return 0;
         }
-        if (value instanceof SlothMachineFramework_Data_Integer) {
+        if (value instanceof Integer) {
             return value._value;
         }
         return parseInt(value);

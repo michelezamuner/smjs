@@ -64,6 +64,11 @@ test('can be injected', () => {
     expect(Router.__DEPS__).toStrictEqual([ Container, 'router.config' ]);
 });
 
+test('provides fqcn', () => {
+    expect(Router.toString()).toBe('Router.Router');
+    expect(RouterException.toString()).toBe('Router.RouterException');
+});
+
 test('routes given request to proper controller action', () => {
     router.route(request);
 

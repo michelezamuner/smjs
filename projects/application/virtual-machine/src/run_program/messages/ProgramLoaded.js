@@ -1,6 +1,10 @@
+const _package = 'SlothMachine.VirtualMachine.RunProgram.Messages.';
+
 const Program = require('domain/sloth-machine-framework').program.Program;
 
-module.exports = class VirtualMachine_RunProgram_Messages_ProgramLoaded {
+module.exports = class ProgramLoaded {
+    static toString() { return _package + ProgramLoaded.name; }
+
     /**
      * @param {Program} program
      * @param {string} reference

@@ -1,9 +1,13 @@
+const _package = 'Logger.Handlers.';
+
 /**
  * @interface
  */
-module.exports = class Logger_Handlers_FileHandlerWriter {
+module.exports = class FileHandlerWriter {
+    static toString() { return _package + FileHandlerWriter.name; }
+
     constructor() {
-        if (new.target === Logger_Handlers_FileHandlerWriter) {
+        if (new.target === FileHandlerWriter) {
             throw 'Cannot instantiate interface';
         }
     }

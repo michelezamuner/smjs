@@ -12,6 +12,10 @@ beforeEach(() => {
     bus = new MessageBus();
 });
 
+test('provides fqcn', () => {
+    expect(MessageBus.toString()).toBe('MessageBus.MessageBus');
+});
+
 test('calls all registered handlers for types of sent messages', () => {
     const handler1 = jest.fn();
     const handler2 = jest.fn();

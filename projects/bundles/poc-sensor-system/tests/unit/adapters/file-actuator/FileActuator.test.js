@@ -2,6 +2,7 @@ const FileActuator = require('../../../../src/adapters/file-actuator/FileActuato
 const Actuator = require('../../../../src/application/actuator/Actuator');
 const Writer = require('../../../../src/adapters/file-actuator/Writer');
 const Signal = require('../../../../src/domain/signal/Signal');
+const NativeWriter = require('../../../../src/adapters/file-actuator/NativeWriter');
 
 /**
  * @type {Object|Writer}
@@ -29,6 +30,12 @@ test('implements interface', () => {
 
 test('can be injected', () => {
     expect(FileActuator.__DEPS__).toStrictEqual([ Writer, 'file_actuator.output_file' ]);
+});
+
+test('provides fqcn', () => {
+    expect(FileActuator.toString()).toBe('SensorSystem.FileActuator.FileActuator');
+    expect(NativeWriter.toString()).toBe('SensorSystem.FileActuator.NativeWriter');
+    expect(Writer.toString()).toBe('SensorSystem.FileActuator.Writer');
 });
 
 test('writes signal value to file', () => {

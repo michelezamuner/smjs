@@ -1,4 +1,8 @@
-module.exports = class SlothMachine_Core_HandleError_Presenters_SharedPresenter_Response {
+const _package = 'SlothMachine.SlothMachine.Core.HandleError.Presenters.SharedPresenter.';
+
+module.exports = class Response {
+    static toString() { return _package + Response.name; }
+
     /**
      * @param {Error} error
      */

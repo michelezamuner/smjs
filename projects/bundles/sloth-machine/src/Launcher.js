@@ -1,12 +1,15 @@
+const _package = 'SlothMachine.SlothMachine.';
+
 const Container = require('container').Container;
 const MessageBus = require('message-bus').MessageBus;
 const RequestReceived = require('./RequestReceived');
 const ErrorHandlerFailed = require('./ErrorHandlerFailed');
 const Parser = require('command-line-parser');
 
-module.exports = class SlothMachine_Launcher {
+module.exports = class Launcher {
     static get DEFAULT_REPRESENTATION() { return 'integrated'; }
     static get ARG_ARCHITECTURE() { return 'arc'; }
+    static toString() { return _package + Launcher.name; }
 
     /**
      * @param {Container} container
@@ -31,9 +34,9 @@ module.exports = class SlothMachine_Launcher {
             // @todo: allow different representations
             const message = new RequestReceived(
                 'sloth_machine/run_program',
-                SlothMachine_Launcher.DEFAULT_REPRESENTATION,
+                Launcher.DEFAULT_REPRESENTATION,
                 {
-                    architecture: parser.getArgument(SlothMachine_Launcher.ARG_ARCHITECTURE),
+                    architecture: parser.getArgument(Launcher.ARG_ARCHITECTURE),
                     file: parser.getArgument()
                 }
             );

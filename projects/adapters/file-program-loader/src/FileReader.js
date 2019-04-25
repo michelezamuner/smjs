@@ -1,11 +1,15 @@
+const _package = 'SlothMachine.FileProgramLoader.';
+
 const FileReaderException = require('./FileReaderException');
 
 /**
  * @interface
  */
-module.exports = class FileProgramLoader_FileReader {
+module.exports = class FileReader {
+    static toString() { return _package + FileReader.name; }
+
     constructor() {
-        if (new.target === FileProgramLoader_FileReader) {
+        if (new.target === FileReader) {
             throw 'Cannot instantiate interface';
         }
     }

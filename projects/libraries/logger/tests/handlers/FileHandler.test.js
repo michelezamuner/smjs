@@ -1,6 +1,7 @@
 const FileHandler = require('../../src/handlers/FileHandler');
 const Handler = require('../../src/Handler');
 const FileHandlerWriter = require('../../src/handlers/FileHandlerWriter');
+const FileHandlerNativeWriter = require('../../src/handlers/FileHandlerNativeWriter');
 
 /**
  * @type {Object|FileHandlerWriter}
@@ -24,6 +25,12 @@ beforeEach(() => {
 
 test('implements interface', () => {
     expect(handler).toBeInstanceOf(Handler);
+});
+
+test('provides fqcn', () => {
+    expect(FileHandler.toString()).toBe('Logger.Handlers.FileHandler');
+    expect(FileHandlerWriter.toString()).toBe('Logger.Handlers.FileHandlerWriter');
+    expect(FileHandlerNativeWriter.toString()).toBe('Logger.Handlers.FileHandlerNativeWriter');
 });
 
 test('uses default writer', () => {

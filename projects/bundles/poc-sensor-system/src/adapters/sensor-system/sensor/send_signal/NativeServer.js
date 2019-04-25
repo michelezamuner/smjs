@@ -1,8 +1,11 @@
+const _package = 'SensorSystem.SensorSystem.Sensor.SendSignal.';
+
 const SignalHandler = require('./SignalHandler');
 const net = require('net');
 
-module.exports = class SensorySystem_Sensor_SendSignal_NativeServer {
+module.exports = class NativeServer {
     static get __DEPS__() { return [ SignalHandler ]; }
+    static toString() { return _package + NativeServer.name; }
 
     /**
      * @param {SignalHandler} handler

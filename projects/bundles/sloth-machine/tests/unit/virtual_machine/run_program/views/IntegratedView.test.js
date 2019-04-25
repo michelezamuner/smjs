@@ -26,6 +26,10 @@ test('can be injected', () => {
     expect(IntegratedView.__DEPS__).toStrictEqual([Console]);
 });
 
+test('provides fqcn', () => {
+    expect(IntegratedView.toString()).toBe('SlothMachine.SlothMachine.VirtualMachine.RunProgram.Views.IntegratedView');
+});
+
 test('renders exit status', () => {
     const exitStatus = 100;
     const viewModel = new ViewModel(exitStatus);

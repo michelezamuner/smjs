@@ -1,11 +1,15 @@
+const _package = 'SlothMachine.SlothMachineFramework.Data.';
+
 const DataUnit = require('./DataUnit');
 
-module.exports = class SlothMachineFramework_Data_Data {
+module.exports = class Data {
+    static toString() { return _package + Data.name; }
+
     /**
      * @param {DataUnit[]} data
      */
     constructor(data = []) {
-        this._data = data instanceof SlothMachineFramework_Data_Data ? data._data : data;
+        this._data = data instanceof Data ? data._data : data;
     }
 
     /**

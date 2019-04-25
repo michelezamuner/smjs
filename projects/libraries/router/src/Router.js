@@ -1,9 +1,12 @@
+const _package = 'Router.';
+
 const RouterException = require('./RouterException');
 const Request = require('./Request');
 const Container = require('container').Container;
 
-module.exports = class Router_Router {
+module.exports = class Router {
     static get __DEPS__() { return [ Container, 'router.config' ]; }
+    static toString() { return _package + Router.name; }
 
     /**
      * @param {Container} container

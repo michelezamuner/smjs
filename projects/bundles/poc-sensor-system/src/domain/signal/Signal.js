@@ -1,4 +1,8 @@
-module.exports = class Signal_Signal {
+const _package = 'SensorSystem.Signal.';
+
+module.exports = class Signal {
+    static toString() { return _package + Signal.name; }
+
     /**
      * @param {string} value
      */

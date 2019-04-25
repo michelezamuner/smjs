@@ -1,11 +1,15 @@
+const _package = 'SlothMachine.VirtualMachine.RunProgram.';
+
 const Response = require('./Response');
 
 /**
  * @interface
  */
-module.exports = class VirtualMachine_RunProgram_Presenter {
+module.exports = class Presenter {
+    static toString() { return _package + Presenter.name; }
+
     constructor() {
-        if (new.target === VirtualMachine_RunProgram_Presenter) {
+        if (new.target === Presenter) {
             throw 'Cannot instantiate interface';
         }
     }

@@ -1,7 +1,11 @@
+const _package = 'SlothMachine.ArchitectureLoader.';
+
 /**
  * Thrown when the module that is being loaded is not a valid architecture.
  */
-module.exports = class ArchitectureLoader_InvalidArchitectureException extends Error {
+module.exports = class InvalidArchitectureException extends Error {
+    static toString() { return _package + InvalidArchitectureException.name; }
+
     /**
      * @param {string} architectureName
      */

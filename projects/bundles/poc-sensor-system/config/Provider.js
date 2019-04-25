@@ -1,3 +1,5 @@
+const _package = 'SensorSystem.Config.';
+
 const Container = require('container').Container;
 const Actuator = require('../src/application/actuator/Actuator');
 const FileActuator = require('../src/adapters/file-actuator/FileActuator');
@@ -10,6 +12,7 @@ const ActuatorActivated = require('../src/application/sensor/send_signal/message
 
 module.exports = class Provider {
     static get __DEPS__() { return [ Container ]; }
+    static toString() { return _package + Provider.name; }
 
     /**
      * @param {Container} container

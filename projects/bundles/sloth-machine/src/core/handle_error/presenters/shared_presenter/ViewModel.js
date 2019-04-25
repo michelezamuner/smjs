@@ -1,4 +1,8 @@
-module.exports = class SlothMachine_Core_HandleError_Presenters_SharedPresenter_ViewModel {
+const _package = 'SlothMachine.SlothMachine.Core.HandleError.Presenters.SharedPresenter.';
+
+module.exports = class ViewModel {
+    static toString() { return _package + ViewModel.name; }
+
     /**
      * @param {string} error
      */

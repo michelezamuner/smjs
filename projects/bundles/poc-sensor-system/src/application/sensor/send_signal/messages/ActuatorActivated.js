@@ -1,6 +1,10 @@
+const _package = 'SensorSystem.Sensor.SendSignal.Messages.';
+
 const Signal = require('../../../../domain/signal/Signal');
 
-module.exports = class Sensor_SendSignal_Messages_ActuatorActivated {
+module.exports = class ActuatorActivated {
+    static toString() { return _package + ActuatorActivated.name; }
+
     /**
      * @param {Signal} signal
      */

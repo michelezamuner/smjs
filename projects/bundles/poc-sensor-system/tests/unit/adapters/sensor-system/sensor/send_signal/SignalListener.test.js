@@ -30,6 +30,11 @@ test('can be injected', () => {
     expect(SignalListener.__DEPS__).toStrictEqual([ NativeServer ]);
 });
 
+test('provides fqcn', () => {
+    expect(SignalListener.toString()).toBe('SensorSystem.SensorSystem.Sensor.SendSignal.SignalListener');
+    expect(NativeServer.toString()).toBe('SensorSystem.SensorSystem.Sensor.SendSignal.NativeServer');
+});
+
 test('listens to connections with given handler', () => {
     listener.listen(host, port);
 

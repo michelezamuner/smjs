@@ -1,9 +1,12 @@
+const _package = 'SensorSystem.SensorSystem.Sensor.SendSignal.';
+
 const Router = require('router').Router;
 const Request = require('router').Request;
 const Socket = require('net').Socket;
 
-module.exports = class SensorSystem_Sensor_SendSignal_SignalHandler {
+module.exports = class SignalHandler {
     static get __DEPS__() { return [ Router ]; }
+    static toString() { return _package + SignalHandler.name; }
 
     /**
      * @param {Router} router

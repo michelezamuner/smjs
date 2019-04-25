@@ -1,7 +1,11 @@
+const _package = 'SlothMachine.SlothMachineFramework.Interpreter.';
+
 const Address = require('../data/Address');
 const ExitStatus = require('./ExitStatus');
 
-module.exports = class SlothMachineFramework_Interpreter_Status {
+module.exports = class Status {
+    static toString() { return _package + Status.name; }
+
     /**
      * @param {Address|null} jumpAddress
      * @param {ExitStatus|null} exitStatus

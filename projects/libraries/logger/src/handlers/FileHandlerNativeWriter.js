@@ -1,7 +1,11 @@
+const _package = 'Logger.Handlers.';
+
 const FileHandlerWriter = require('./FileHandlerWriter');
 const fs = require('fs');
 
-module.exports = class Logger_Handlers_FileHandlerNativeWriter extends FileHandlerWriter {
+module.exports = class FileHandlerNativeWriter extends FileHandlerWriter {
+    static toString() { return _package + FileHandlerNativeWriter.name; }
+
     /**
      * @override
      */

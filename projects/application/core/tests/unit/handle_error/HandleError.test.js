@@ -1,9 +1,9 @@
-const HandleError = require('../../src/handle_error/HandleError');
-const Presenter = require('../../src/handle_error/Presenter');
+const HandleError = require('../../../src/handle_error/HandleError');
+const Presenter = require('../../../src/handle_error/Presenter');
 const Notifier = require('app/notifications').Notifier;
-const Request = require('../../src/handle_error/Request');
-const Response = require('../../src/handle_error/Response');
-const ErrorReceived = require('../../src/handle_error/messages/ErrorReceived');
+const Request = require('../../../src/handle_error/Request');
+const Response = require('../../../src/handle_error/Response');
+const ErrorReceived = require('../../../src/handle_error/messages/ErrorReceived');
 
 /**
  * @type {Object|Presenter}
@@ -39,6 +39,14 @@ beforeEach(() => {
 
 test('can be injected', () => {
     expect(HandleError.__DEPS__).toStrictEqual([ Presenter, Notifier ]);
+});
+
+test('provides fqcn', () => {
+    expect(HandleError.toString()).toBe('SlothMachine.Core.HandleError.HandleError');
+    expect(Presenter.toString()).toBe('SlothMachine.Core.HandleError.Presenter');
+    expect(Request.toString()).toBe('SlothMachine.Core.HandleError.Request');
+    expect(Response.toString()).toBe('SlothMachine.Core.HandleError.Response');
+    expect(ErrorReceived.toString()).toBe('SlothMachine.Core.HandleError.Messages.ErrorReceived');
 });
 
 test('uses given presenter to present given errors', () => {

@@ -1,3 +1,5 @@
+const _package = 'SlothMachine.SlothMachineFramework.Architecture.';
+
 const Integer = require('../data/Integer');
 const Data = require('../data/Data');
 const Size = require('../data/Size');
@@ -5,9 +7,11 @@ const Size = require('../data/Size');
 /**
  * @interface
  */
-module.exports = class SlothMachineFramework_Architecture_System {
+module.exports = class System {
+    static toString() { return _package + System.name; }
+
     constructor() {
-        if (new.target === SlothMachineFramework_Architecture_System) {
+        if (new.target === System) {
             throw 'Cannot instantiate interface';
         }
     }

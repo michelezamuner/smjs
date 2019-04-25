@@ -1,9 +1,12 @@
+const _package = 'SlothMachine.OSSystem.';
+
 const System = require('app/system').System;
 const Filesystem = require('./Filesystem');
 const Size = require('domain/sloth-machine-framework').data.Size;
 
-module.exports = class OSSystem_OSSystem extends System {
+module.exports = class OSSystem extends System {
     static get __DEPS__() { return [Filesystem]; }
+    static toString() { return _package + OSSystem.name; }
 
     /**
      * @param {Filesystem} filesystem

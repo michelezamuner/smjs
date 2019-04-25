@@ -1,4 +1,8 @@
-module.exports = class SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_ViewModel {
+const _package = 'SlothMachine.SlothMachine.VirtualMachine.RunProgram.Presenters.ConsolePresenter.';
+
+module.exports = class ViewModel {
+    static toString() { return _package + ViewModel.name; }
+
     /**
      * @param {number} exitStatus
      */

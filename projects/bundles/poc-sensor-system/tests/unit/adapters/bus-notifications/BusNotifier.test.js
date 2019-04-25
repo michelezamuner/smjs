@@ -25,6 +25,10 @@ test('can be injected', () => {
     expect(BusNotifier.__DEPS__).toStrictEqual([ MessageBus ]);
 });
 
+test('provides fqcn', () => {
+    expect(BusNotifier.toString()).toBe('SensorSystem.BusNotifications.BusNotifier');
+});
+
 test('sends notification through message bus', () => {
     const message = 'message';
 

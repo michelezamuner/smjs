@@ -1,3 +1,5 @@
+const _package = 'SlothMachine.SlothMachine.Config.Providers.';
+
 const Provider = require('./Provider');
 const Container = require('container').Container;
 const MessageBus = require('message-bus').MessageBus;
@@ -5,8 +7,9 @@ const Router = require('router').Router;
 const Request = require('router').Request;
 const ViewRegistered = require('../../src/ViewRegistered');
 
-module.exports = class SlothMachine_Providers_RouterProvider extends Provider {
+module.exports = class RouterProvider extends Provider {
     static get __DEPS__() { return [ Container ]; }
+    static toString() { return _package + RouterProvider.name; }
 
     /**
      * @param {Container} container

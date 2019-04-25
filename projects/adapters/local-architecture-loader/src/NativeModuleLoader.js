@@ -1,7 +1,11 @@
+const _package = 'SlothMachine.LocalArchitectureLoader.';
+
 const ModuleLoader = require('./ModuleLoader');
 const CannotFindModuleException = require('./CannotFindModuleException');
 
-module.exports = class LocalArchitectureLoader_NativeModuleLoader extends ModuleLoader {
+module.exports = class NativeModuleLoader extends ModuleLoader {
+    static toString() { return _package + NativeModuleLoader.name; }
+
     /**
      * @override
      */

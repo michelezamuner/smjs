@@ -1,3 +1,5 @@
+const _package = 'SlothMachine.LocalArchitectureLoader.';
+
 const ArchitectureLoader = require('app/architecture-loader').ArchitectureLoader;
 const Architecture = require('domain/sloth-machine-framework').architecture.Architecture;
 const InvalidArchitectureException = require('app/architecture-loader').InvalidArchitectureException;
@@ -5,8 +7,9 @@ const UnsupportedArchitectureException = require('app/architecture-loader').Unsu
 const ModuleLoader = require('./ModuleLoader');
 const CannotFindModuleException = require('./CannotFindModuleException');
 
-module.exports = class LocalArchitectureLoader_LocalArchitectureLoader extends ArchitectureLoader {
+module.exports = class LocalArchitectureLoader extends ArchitectureLoader {
     static get __DEPS__() { return [ModuleLoader, 'adapters.local_architecture_loader.path']; }
+    static toString() { return _package + LocalArchitectureLoader.name; }
 
     /**
      * @param {ModuleLoader} moduleLoader

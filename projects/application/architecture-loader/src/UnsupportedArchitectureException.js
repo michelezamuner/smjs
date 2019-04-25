@@ -1,7 +1,11 @@
+const _package = 'SlothMachine.ArchitectureLoader.';
+
 /**
  * Thrown when trying to load an architecture that is not supported.
  */
-module.exports = class ArchitectureLoader_UnsupportedArchitectureException extends Error {
+module.exports = class UnsupportedArchitectureException extends Error {
+    static toString() { return _package + UnsupportedArchitectureException.name; }
+
     /**
      * @param {string} architectureName
      */

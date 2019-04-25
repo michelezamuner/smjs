@@ -35,6 +35,10 @@ test('can be injected', () => {
     expect(SignalHandler.__DEPS__).toStrictEqual([ Router ]);
 });
 
+test('provides fqcn', () => {
+    expect(SignalHandler.toString()).toBe('SensorSystem.SensorSystem.Sensor.SendSignal.SignalHandler');
+});
+
 test('routes client signal', () => {
     const request = new Request('sensor-system/send_signal', { signal: signal });
 

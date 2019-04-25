@@ -55,6 +55,11 @@ beforeEach(() => {
     launcher = new Launcher(container, config);
 });
 
+test('provides fqcn', () => {
+    expect(Launcher.toString()).toBe('SensorSystem.Launcher');
+    expect(Provider.toString()).toBe('SensorSystem.Config.Provider');
+});
+
 test('registers provider', () => {
     launcher.launch();
 

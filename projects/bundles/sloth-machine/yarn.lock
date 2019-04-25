@@ -360,26 +360,26 @@ acorn@^6.0.1:
 "adapters/bus-notifications@file:../../adapters/bus-notifications":
   version "0.0.0"
   dependencies:
-    app/notifications "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-bus-notifications-0.0.0-4ac87c8a-18cc-49a2-9f4d-f6f2f999f7ce-1555000922239/node_modules/application/notifications"
-    message-bus "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-bus-notifications-0.0.0-4ac87c8a-18cc-49a2-9f4d-f6f2f999f7ce-1555000922239/node_modules/libraries/message-bus"
+    app/notifications "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-bus-notifications-0.0.0-0d6e06ae-aaa4-4001-a0a9-5bf2123c2e4a-1556178595793/node_modules/application/notifications"
+    message-bus "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-bus-notifications-0.0.0-0d6e06ae-aaa4-4001-a0a9-5bf2123c2e4a-1556178595793/node_modules/libraries/message-bus"
 
 "adapters/file-program-loader@file:../../adapters/file-program-loader":
   version "0.0.0"
   dependencies:
-    app/program-loader "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-file-program-loader-0.0.0-9edccc1d-09f6-4c9e-bda9-b9bcd6e41037-1555000922255/node_modules/application/program-loader"
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-file-program-loader-0.0.0-9edccc1d-09f6-4c9e-bda9-b9bcd6e41037-1555000922255/node_modules/domain/sloth-machine-framework"
+    app/program-loader "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-file-program-loader-0.0.0-646caa1c-7c66-4b99-9dbc-e7e3ab6ced22-1556178595810/node_modules/application/program-loader"
+    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-file-program-loader-0.0.0-646caa1c-7c66-4b99-9dbc-e7e3ab6ced22-1556178595810/node_modules/domain/sloth-machine-framework"
 
 "adapters/local-architecture-loader@file:../../adapters/local-architecture-loader":
   version "0.0.0"
   dependencies:
-    app/architecture-loader "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-local-architecture-loader-0.0.0-a146c945-3fed-4fc9-95c8-0b28446e9106-1555000922269/node_modules/application/architecture-loader"
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-local-architecture-loader-0.0.0-a146c945-3fed-4fc9-95c8-0b28446e9106-1555000922269/node_modules/domain/sloth-machine-framework"
+    app/architecture-loader "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-local-architecture-loader-0.0.0-2e611355-4fbf-46d9-8986-aadfb6173cf4-1556178595827/node_modules/application/architecture-loader"
+    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-local-architecture-loader-0.0.0-2e611355-4fbf-46d9-8986-aadfb6173cf4-1556178595827/node_modules/domain/sloth-machine-framework"
 
 "adapters/os-system@file:../../adapters/os-system":
   version "0.0.0"
   dependencies:
-    app/system "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-os-system-0.0.0-cc91d33a-6078-4f31-b004-76db84f398c6-1555000922280/node_modules/application/system"
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-os-system-0.0.0-cc91d33a-6078-4f31-b004-76db84f398c6-1555000922280/node_modules/domain/sloth-machine-framework"
+    app/system "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-os-system-0.0.0-00112977-15f0-449a-8bce-46a364f51fea-1556178595842/node_modules/application/system"
+    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-adapters-os-system-0.0.0-00112977-15f0-449a-8bce-46a364f51fea-1556178595842/node_modules/domain/sloth-machine-framework"
 
 ajv@^6.5.5:
   version "6.10.0"
@@ -429,12 +429,12 @@ anymatch@^2.0.0:
 "app/architecture-loader@file:../../application/architecture-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-architecture-loader-0.0.0-9df40e98-3bcd-43e5-9350-87866a5077c9-1555000922275/node_modules/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-architecture-loader-0.0.0-3b106a97-4172-4197-a41c-51d99f1745b5-1556178595836/node_modules/domain/sloth-machine-framework"
 
 "app/core@file:../../application/core":
   version "0.0.0"
   dependencies:
-    app/notifications "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-core-0.0.0-3d7d9b97-a5ac-43a0-9727-48fc976ea8fa-1555000922296/node_modules/app/notifications"
+    app/notifications "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-core-0.0.0-c2d0dd4b-0cf0-4f67-bfe9-dda426d98eae-1556178595865/node_modules/app/notifications"
 
 "app/notifications@file:../../application/notifications":
   version "0.0.0"
@@ -442,21 +442,21 @@ anymatch@^2.0.0:
 "app/program-loader@file:../../application/program-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-program-loader-0.0.0-41debf3b-98b5-4b59-8d0f-4859844818b1-1555000922262/node_modules/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-program-loader-0.0.0-502cb304-e678-48c0-815e-8a2d86f3dd96-1556178595819/node_modules/domain/sloth-machine-framework"
 
 "app/system@file:../../application/system":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-system-0.0.0-f08091a0-13a7-49a7-8568-58b44fda894e-1555000922285/node_modules/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-system-0.0.0-93bb7b22-aa28-401a-a497-4fcda854344c-1556178595849/node_modules/domain/sloth-machine-framework"
 
 "app/virtual-machine@file:../../application/virtual-machine":
   version "0.0.0"
   dependencies:
-    app/architecture-loader "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-virtual-machine-0.0.0-cbc7f0bf-017a-4085-9a44-909bcb4ea7e8-1555000922303/node_modules/app/architecture-loader"
-    app/notifications "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-virtual-machine-0.0.0-cbc7f0bf-017a-4085-9a44-909bcb4ea7e8-1555000922303/node_modules/app/notifications"
-    app/program-loader "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-virtual-machine-0.0.0-cbc7f0bf-017a-4085-9a44-909bcb4ea7e8-1555000922303/node_modules/app/program-loader"
-    app/system "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-virtual-machine-0.0.0-cbc7f0bf-017a-4085-9a44-909bcb4ea7e8-1555000922303/node_modules/app/system"
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-virtual-machine-0.0.0-cbc7f0bf-017a-4085-9a44-909bcb4ea7e8-1555000922303/node_modules/domain/sloth-machine-framework"
+    app/architecture-loader "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-virtual-machine-0.0.0-367145be-88f7-4f87-b6c7-ac5575a15f59-1556178595875/node_modules/app/architecture-loader"
+    app/notifications "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-virtual-machine-0.0.0-367145be-88f7-4f87-b6c7-ac5575a15f59-1556178595875/node_modules/app/notifications"
+    app/program-loader "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-virtual-machine-0.0.0-367145be-88f7-4f87-b6c7-ac5575a15f59-1556178595875/node_modules/app/program-loader"
+    app/system "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-virtual-machine-0.0.0-367145be-88f7-4f87-b6c7-ac5575a15f59-1556178595875/node_modules/app/system"
+    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-virtual-machine-0.0.0-367145be-88f7-4f87-b6c7-ac5575a15f59-1556178595875/node_modules/domain/sloth-machine-framework"
 
 append-transform@^1.0.0:
   version "1.0.0"
@@ -2167,7 +2167,7 @@ lodash@^4.17.11:
 "logger@file:../../libraries/logger":
   version "0.0.0"
   dependencies:
-    console-wrapper "file:../../../../usr/local/share/.cache/yarn/v4/npm-logger-0.0.0-0c68a0a5-fac5-4b00-872a-694cd1be09f8-1555000922322/node_modules/console-wrapper"
+    console-wrapper "file:../../../../usr/local/share/.cache/yarn/v4/npm-logger-0.0.0-89a0b70a-75dc-42a3-a312-2969f5650ad0-1556178595895/node_modules/console-wrapper"
 
 loose-envify@^1.0.0:
   version "1.4.0"
@@ -2820,7 +2820,7 @@ rimraf@^2.5.4, rimraf@^2.6.2:
 "router@file:../../libraries/router":
   version "0.0.0"
   dependencies:
-    container "file:../../../../usr/local/share/.cache/yarn/v4/npm-router-0.0.0-b97263a6-a2e0-46d1-8017-17d9b81ed052-1555000922328/node_modules/container"
+    container "file:../../../../usr/local/share/.cache/yarn/v4/npm-router-0.0.0-8760b778-ac88-4976-9ef1-02c827d54b57-1556178595904/node_modules/container"
 
 rsvp@^4.8.4:
   version "4.8.4"

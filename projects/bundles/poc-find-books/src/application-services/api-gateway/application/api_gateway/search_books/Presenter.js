@@ -1,11 +1,14 @@
+const _package = 'FindBooks.ApiGateway.ApiGateway.SearchBooks.';
+
 const Response = require('./Response');
 
 /**
  * @interface
  */
-module.exports = class ApiGateway_Application_ApiGateway_SearchBooks_Presenter {
+module.exports = class Presenter {
+    static toString() { return _package + Presenter.name; }
     constructor() {
-        if (new.target === ApiGateway_Application_ApiGateway_SearchBooks_Presenter) {
+        if (new.target === Presenter) {
             throw 'Cannot instantiate interface';
         }
     }

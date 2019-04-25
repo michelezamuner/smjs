@@ -11,6 +11,8 @@ const ArchitectureLoaded = require('../../../src/run_program/messages/Architectu
 const ProgramLoaded = require('../../../src/run_program/messages/ProgramLoaded');
 const ExecutionTerminated = require('../../../src/run_program/messages/ExecutionTerminated');
 const ApplicationFailed = require('../../../src/run_program/messages/ApplicationFailed');
+const Request = require('../../../src/run_program/Request');
+const Presenter = require('../../../src/run_program/Presenter');
 
 /**
  * @type {Object|ProcessorFactory}
@@ -119,6 +121,19 @@ beforeEach(() => {
 
 test('can be injected', () => {
     expect(RunProgram.__DEPS__).toStrictEqual([AdapterDependencies, ProcessorFactory]);
+});
+
+test('provides fqcn', () => {
+    expect(RunProgram.toString()).toBe('SlothMachine.VirtualMachine.RunProgram.RunProgram');
+    expect(MissingProgramReferenceException.toString())
+        .toBe('SlothMachine.VirtualMachine.RunProgram.MissingProgramReferenceException');
+    expect(Presenter.toString()).toBe('SlothMachine.VirtualMachine.RunProgram.Presenter');
+    expect(Request.toString()).toBe('SlothMachine.VirtualMachine.RunProgram.Request');
+    expect(Response.toString()).toBe('SlothMachine.VirtualMachine.RunProgram.Response');
+    expect(ApplicationFailed.toString()).toBe('SlothMachine.VirtualMachine.RunProgram.Messages.ApplicationFailed');
+    expect(ArchitectureLoaded.toString()).toBe('SlothMachine.VirtualMachine.RunProgram.Messages.ArchitectureLoaded');
+    expect(ExecutionTerminated.toString()).toBe('SlothMachine.VirtualMachine.RunProgram.Messages.ExecutionTerminated');
+    expect(ProgramLoaded.toString()).toBe('SlothMachine.VirtualMachine.RunProgram.Messages.ProgramLoaded');
 });
 
 test('runs loaded program with loaded architecture and sends proper response to given presenter', () => {

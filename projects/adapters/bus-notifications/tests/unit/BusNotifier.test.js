@@ -1,4 +1,4 @@
-const BusNotifier = require('../src/BusNotifier');
+const BusNotifier = require('../../src/BusNotifier');
 const Notifier = require('app/notifications').Notifier;
 const MessageBus = require('message-bus').MessageBus;
 
@@ -24,6 +24,11 @@ test('implements interface', () => {
 test('can be injected', () => {
     expect(BusNotifier.__DEPS__).toStrictEqual([ MessageBus ]);
 });
+
+test('provides fqcn', () => {
+    expect(BusNotifier.toString()).toBe('SlothMachine.BusNotifications.BusNotifier');
+});
+
 
 test('delegates to bus', () => {
     const message = 'message';

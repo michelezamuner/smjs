@@ -1,8 +1,11 @@
+const _package = 'SlothMachine.SlothMachine.Core.HandleError.Views.';
+
 const View = require('../presenters/shared_presenter/View');
 const Console = require('console-wrapper').Console;
 
-module.exports = class SlothMachine_Core_HandleError_Views_ErrorView extends View {
+module.exports = class ErrorView extends View {
     static get __DEPS__() { return [Console]; }
+    static toString() { return _package + ErrorView.name; }
 
     /**
      * @param {Console} console

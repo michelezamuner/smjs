@@ -22,6 +22,10 @@ test('can be injected', () => {
     expect(Controller.__DEPS__).toStrictEqual([ HandleError ]);
 });
 
+test('provides fqcn', () => {
+    expect(Controller.toString()).toBe('SlothMachine.SlothMachine.Core.HandleError.Controller.Controller');
+});
+
 test('calls service with proper request', () => {
     const error = new Error();
     const request = new Request(error);

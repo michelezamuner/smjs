@@ -17,6 +17,10 @@ test('implements interface', () => {
     expect(new ConsoleHandler(console)).toBeInstanceOf(Handler);
 });
 
+test('provides fqcn', () => {
+    expect(ConsoleHandler.toString()).toBe('Logger.Handlers.ConsoleHandler');
+});
+
 test('defaults to write message to STDOUT', () => {
     const handler = new ConsoleHandler(console);
     const message = 'message';

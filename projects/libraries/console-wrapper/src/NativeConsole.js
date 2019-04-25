@@ -1,6 +1,10 @@
+const _package = 'ConsoleWrapper.';
+
 const Console = require('./Console');
 
-module.exports = class Console_NativeConsole extends Console {
+module.exports = class NativeConsole extends Console {
+    static toString() { return _package + NativeConsole.name; }
+
     /**
      * @override
      */

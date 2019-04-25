@@ -2,6 +2,10 @@ const Address = require('../../../src/data/Address');
 const Integer = require('../../../src/data/Integer');
 const random = require('lib/random');
 
+test('provides fqcn', () => {
+    expect(Address.toString()).toBe('SlothMachine.SlothMachineFramework.Data.Address');
+});
+
 test('extends integer', () => {
     const address = new Address();
 

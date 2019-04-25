@@ -1,69 +1,93 @@
+const _package = 'Container.';
+
 const ContainerException = require('./ContainerException');
 
-module.exports = class Container_Container {
+module.exports = class Container {
+    static toString() { return _package + Container.name; }
+
     constructor() {
-        this._bound = {};
+        this._bound = new Map();
     }
 
     /**
-     * @param ref
-     * @param object
+     * @param {Object} ref
+     * @param {Object} bound
      */
-    bind(ref, object) {
-        this._bound[ref] = object;
+    bind(ref, bound) {
+        this._bound.set(ref, bound);
     }
 
     /**
-     * @param ref
-     * @return {*}
+     * @param {Object} ref
+     * @return {Object}
      * @throws {ContainerException}
      */
     make(ref) {
-        if (ref === Container_Container) {
+        if (ref === Container) {
             return this;
         }
 
-        if (ref in this._bound) {
+        if (this._bound.has(ref)) {
             return this._makeBound(ref);
         }
 
         if (ref.__DEPS__ !== undefined) {
-            return this._makeUnbound(ref);
+            return this._makeDependent(ref);
         }
 
-        try {
-            return new ref();
-        } catch (e) {
-            throw new ContainerException(`Unbound reference "${ref.name || ref}": ${e.message ? e.message : e}`);
-        }
+        return this._makeBare(ref);
     }
 
     /**
-     * @param ref
-     * @return {*}
+     * @param {Object} ref
+     * @return {Object}
+     * @throws {ContainerException}
      * @private
      */
     _makeBound(ref) {
-        // instance
-        if (this._bound[ref].constructor === undefined || this._bound[ref].constructor.name !== 'Function') {
-            return this._bound[ref];
-        }
+        const bound = this._bound.get(ref);
+        try {
+            // instance
+            if (bound.constructor === undefined || bound.constructor.name !== 'Function') {
+                return bound;
+            }
 
-        // type
-        if (this._bound[ref].prototype !== undefined) {
-            return this.make(this._bound[ref]);
-        }
+            // type
+            if (bound.prototype !== undefined) {
+                return this.make(bound);
+            }
 
-        // callback
-        return this._bound[ref]();
+            // callback
+            return bound();
+        } catch (e) {
+            throw new ContainerException(`Error making bound reference "${ref}": ${e.message || e}`);
+        }
     }
 
     /**
-     * @param ref
-     * @return {*}
+     * @param {Function} ref
+     * @return {Object}
+     * @throws {ContainerException}
      * @private
      */
-    _makeUnbound(ref) {
-        return new ref(...ref.__DEPS__.map(dep => this.make(dep)));
+    _makeDependent(ref) {
+        try {
+            return new ref(...ref.__DEPS__.map(dep => this.make(dep)));
+        } catch (e) {
+            throw new ContainerException(`Error making reference with dependencies "${ref}": ${e.message || e}`);
+        }
+    }
+
+    /**
+     * @param {Function} ref
+     * @return {Object}
+     * @private
+     */
+    _makeBare(ref) {
+        try {
+            return new ref();
+        } catch (e) {
+            throw new ContainerException(`Error making unbound reference "${ref}": ${e.message || e}`);
+        }
     }
 };

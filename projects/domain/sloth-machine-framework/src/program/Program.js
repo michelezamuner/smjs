@@ -1,10 +1,14 @@
+const _package = 'SlothMachine.SlothMachineFramework.Program.';
+
 const Address = require('../data/Address');
 const Size = require('../data/Size');
 const Data = require('../data/Data');
 const InvalidAddressException = require('./InvalidAddressException');
 const ReadOutOfBoundsException = require('./ReadOutOfBoundsException');
 
-module.exports = class SlothMachineFramework_Program_Program {
+module.exports = class Program {
+    static toString() { return _package + Program.name; }
+
     /**
      * @param {Data} data
      */

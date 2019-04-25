@@ -1,9 +1,13 @@
+const _package = 'Logger.';
+
 const Handler = require('./Handler');
 const LoggerException = require('./LoggerException');
 const TimeProvider = require('./TimeProvider');
 const SimpleTimeProvider = require('./SimpleTimeProvider');
 
-module.exports = class Logger_Logger {
+module.exports = class Logger {
+    static toString() { return _package + Logger.name; }
+
     /**
      * @param {TimeProvider} time
      */

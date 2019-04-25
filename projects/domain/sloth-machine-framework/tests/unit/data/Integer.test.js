@@ -1,6 +1,10 @@
 const Integer = require('../../../src/data/Integer');
 const random = require('lib/random');
 
+test('provides fqcn', () => {
+    expect(Integer.toString()).toBe('SlothMachine.SlothMachineFramework.Data.Integer');
+});
+
 test('defaults to zero', () => {
     const integer = new Integer();
 

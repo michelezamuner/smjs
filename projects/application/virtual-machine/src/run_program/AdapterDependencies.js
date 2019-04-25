@@ -1,11 +1,14 @@
+const _package = 'SlothMachine.VirtualMachine.RunProgram.';
+
 const Presenter = require('./Presenter');
 const ArchitectureLoader = require('app/architecture-loader').ArchitectureLoader;
 const ProgramLoader = require('app/program-loader').ProgramLoader;
 const System = require('app/system').System;
 const Notifier = require('app/notifications').Notifier;
 
-module.exports = class VirtualMachine_RunProgram_AdapterDependencies {
+module.exports = class AdapterDependencies {
     static get __DEPS__() { return [Presenter, ArchitectureLoader, ProgramLoader, System, Notifier]; }
+    static toString() { return _package + AdapterDependencies.name; }
 
     /**
      * @param {Presenter} presenter

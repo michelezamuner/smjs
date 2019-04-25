@@ -27,6 +27,11 @@ test('can be injected', () => {
     expect(Presenter.__DEPS__).toStrictEqual([SharedPresenter]);
 });
 
+test('provides fqcn', () => {
+    expect(Presenter.toString())
+        .toBe('SlothMachine.SlothMachine.Core.HandleError.Presenters.ConsolePresenter.Presenter');
+});
+
 test('renders errors delegating to the shared presenter', () => {
     const error = new Error();
     const response = new Response(error);

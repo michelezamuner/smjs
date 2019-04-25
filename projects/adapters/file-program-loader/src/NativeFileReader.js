@@ -1,8 +1,12 @@
+const _package = 'SlothMachine.FileProgramLoader.';
+
 const FileReader = require('./FileReader');
 const FileReaderException = require('./FileReaderException');
 const fs = require('fs');
 
-module.exports = class FileProgramLoader_NativeFileReader extends FileReader {
+module.exports = class NativeFileReader extends FileReader {
+    static toString() { return _package + NativeFileReader.name; }
+
     /**
      * @override
      */

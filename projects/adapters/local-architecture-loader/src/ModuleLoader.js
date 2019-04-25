@@ -1,11 +1,15 @@
+const _package = 'SlothMachine.LocalArchitectureLoader.';
+
 const CannotFindModuleException = require('./CannotFindModuleException');
 
 /**
  * @interface
  */
-module.exports = class LocalArchitectureLoader_ModuleLoader {
+module.exports = class ModuleLoader {
+    static toString() { return _package + ModuleLoader.name; }
+
     constructor() {
-        if (new.target === LocalArchitectureLoader_ModuleLoader) {
+        if (new.target === ModuleLoader) {
             throw 'Cannot instantiate interface';
         }
     }

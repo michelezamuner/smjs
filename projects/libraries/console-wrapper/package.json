@@ -9,10 +9,11 @@
   "dependencies": {
   },
   "devDependencies": {
+    "jest": "^24.1.0"
   },
   "scripts": {
-    "test": "true",
-    "coverage": "true",
-    "ci": "true"
+    "test": "node --use_strict ./node_modules/.bin/jest",
+    "coverage": "node --use_strict ./node_modules/.bin/jest --coverage",
+    "ci": "JEST_ENV=ci node --use_strict ./node_modules/.bin/jest --coverage"
   }
 }

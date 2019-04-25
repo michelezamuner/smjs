@@ -6,6 +6,10 @@ test('implements interface', () => {
     expect(new Request('value')).toBeInstanceOf(RequestInterface);
 });
 
+test('provides fqcn', () => {
+    expect(Request.toString()).toBe('SensorSystem.SensorSystem.Sensor.SendSignal.Controller.Request');
+});
+
 test('exposes properties', () => {
     const value = 'value';
     const request = new Request(value);

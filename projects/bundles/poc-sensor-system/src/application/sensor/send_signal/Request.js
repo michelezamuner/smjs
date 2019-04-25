@@ -1,11 +1,15 @@
+const _package = 'SensorSystem.Sensor.SendSignal.';
+
 const Signal = require('../../../domain/signal/Signal');
 
 /**
  * @interface
  */
-module.exports = class Sensor_SendSignal_Request {
+module.exports = class Request {
+    static toString() { return _package + Request.name; }
+
     constructor() {
-        if (new.target === Sensor_SendSignal_Request) {
+        if (new.target === Request) {
             throw 'Cannot instantiate interface';
         }
     }

@@ -2,12 +2,13 @@ const FileProgramLoader = require('../../src/FileProgramLoader');
 const InvalidProgramException = require('app/program-loader').InvalidProgramException;
 const FileReader = require('../../src/FileReader');
 const FileReaderException = require('../../src/FileReaderException');
+const NativeFileReader = require('../../src/NativeFileReader');
 const Program = require('domain/sloth-machine-framework').program.Program;
 const Data = require('domain/sloth-machine-framework').data.Data;
 const DataUnit = require('domain/sloth-machine-framework').data.DataUnit;
 
 /**
- * @type {Object}
+ * @type {Object|FileReader}
  */
 const fileReader = {};
 
@@ -50,6 +51,14 @@ beforeEach(() => {
 test('can be injected', () => {
     expect(FileProgramLoader.__DEPS__).toStrictEqual([FileReader]);
 });
+
+test('provide fqcn', () => {
+    expect(FileProgramLoader.toString()).toBe('SlothMachine.FileProgramLoader.FileProgramLoader');
+    expect(FileReader.toString()).toBe('SlothMachine.FileProgramLoader.FileReader');
+    expect(FileReaderException.toString()).toBe('SlothMachine.FileProgramLoader.FileReaderException');
+    expect(NativeFileReader.toString()).toBe('SlothMachine.FileProgramLoader.NativeFileReader');
+});
+
 
 test('loads binary program from given file', () => {
     const program = loader.load(file);

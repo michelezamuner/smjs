@@ -1,6 +1,10 @@
+const _package = 'SlothMachine.VirtualMachine.RunProgram.';
+
 const ExitStatus = require('domain/sloth-machine-framework').interpreter.ExitStatus;
 
-module.exports = class VirtualMachine_RunProgram_Response {
+module.exports = class Response {
+    static toString() { return _package + Response.name; }
+
     /**
      * @param {ExitStatus|null} exitStatus
      * @param {Error|null} error

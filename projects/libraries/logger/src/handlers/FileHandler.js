@@ -1,8 +1,12 @@
+const _package = 'Logger.Handlers.';
+
 const Handler = require('../Handler');
 const FileHandlerWriter = require('./FileHandlerWriter');
 const FileHandlerNativeWriter = require('./FileHandlerNativeWriter');
 
-module.exports = class Logger_Handlers_FileHandler extends Handler {
+module.exports = class FileHandler extends Handler {
+    static toString() { return _package + FileHandler.name; }
+
     /**
      * @param {string} file
      * @param {FileHandlerWriter} writer

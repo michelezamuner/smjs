@@ -1,9 +1,13 @@
+const _package = 'Logger.';
+
 /**
  * @interface
  */
-module.exports = class Logger_Handler {
+module.exports = class Handler {
+    static toString() { return _package + Handler.name; }
+
     constructor() {
-        if (new.target === Logger_Handler) {
+        if (new.target === Handler) {
             throw 'Cannot instantiate interface';
         }
     }

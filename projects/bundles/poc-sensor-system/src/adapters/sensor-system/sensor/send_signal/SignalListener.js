@@ -1,7 +1,10 @@
+const _package = 'SensorSystem.SensorSystem.Sensor.SendSignal.';
+
 const NativeServer = require('./NativeServer');
 
-module.exports = class SensorSystem_Sensor_SendSignal_SignalListener {
+module.exports = class SignalListener {
     static get __DEPS__() { return [ NativeServer ]; }
+    static toString() { return _package + SignalListener.name; }
 
     /**
      * @param {NativeServer} server

@@ -5,6 +5,10 @@ test('implements interface', () => {
     expect(new Request('architecture', 'program')).toBeInstanceOf(RequestInterface);
 });
 
+test('provides fqcn', () => {
+    expect(Request.toString()).toBe('SlothMachine.SlothMachine.VirtualMachine.RunProgram.Controller.Request');
+});
+
 test('exposes properties', () => {
     const architecture = 'architecture';
     const program = 'program';

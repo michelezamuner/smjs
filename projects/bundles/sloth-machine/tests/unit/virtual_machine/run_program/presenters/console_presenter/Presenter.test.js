@@ -41,6 +41,15 @@ test('can be injected', () => {
     expect(Presenter.__DEPS__).toStrictEqual([View, ErrorPresenter]);
 });
 
+test('provides fqcn', () => {
+    expect(Presenter.toString())
+        .toBe('SlothMachine.SlothMachine.VirtualMachine.RunProgram.Presenters.ConsolePresenter.Presenter');
+    expect(View.toString())
+        .toBe('SlothMachine.SlothMachine.VirtualMachine.RunProgram.Presenters.ConsolePresenter.View');
+    expect(ViewModel.toString())
+        .toBe('SlothMachine.SlothMachine.VirtualMachine.RunProgram.Presenters.ConsolePresenter.ViewModel');
+});
+
 test('handles success response', () => {
     const value = random(255);
     const response = new Response(new ExitStatus(value));

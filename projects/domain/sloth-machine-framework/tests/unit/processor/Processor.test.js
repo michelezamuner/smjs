@@ -113,6 +113,11 @@ beforeEach(() => {
     processor = new Processor(interpreter);
 });
 
+test('provides fqcn', () => {
+    expect(Processor.toString()).toBe('SlothMachine.SlothMachineFramework.Processor.Processor');
+    expect(ProcessorException.toString()).toBe('SlothMachine.SlothMachineFramework.Processor.ProcessorException');
+});
+
 test('executes the given instructions in sequence and exits with given exit code', () => {
     expect(processor.run(program)).toBe(expectedExitStatus);
 });

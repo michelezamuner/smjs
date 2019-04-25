@@ -1,9 +1,13 @@
+const _package = 'SlothMachine.OSSystem.';
+
 /**
  * @interface
  */
-module.exports = class OSSystem_Filesystem {
+module.exports = class Filesystem {
+    static toString() { return _package + Filesystem.name; }
+
     constructor() {
-        if (new.target === OSSystem_Filesystem) {
+        if (new.target === Filesystem) {
             throw 'Cannot instantiate interface';
         }
     }
