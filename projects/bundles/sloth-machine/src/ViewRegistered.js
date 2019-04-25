@@ -1,4 +1,8 @@
-module.exports = class SlothMachine_ViewRegistered {
+const _package = 'SlothMachine.SlothMachine.';
+
+module.exports = class ViewRegistered {
+    static toString() { return _package + ViewRegistered.name; }
+
     /**
      * @param {string} endpoint
      * @param {Object} parameters

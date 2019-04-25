@@ -22,6 +22,15 @@ test('can be injected', () => {
     expect(Presenter.__DEPS__).toStrictEqual([View]);
 });
 
+test('provides fqcn', () => {
+    expect(Presenter.toString())
+        .toBe('SlothMachine.SlothMachine.Core.HandleError.Presenters.SharedPresenter.Presenter');
+    expect(Response.toString()).toBe('SlothMachine.SlothMachine.Core.HandleError.Presenters.SharedPresenter.Response');
+    expect(View.toString()).toBe('SlothMachine.SlothMachine.Core.HandleError.Presenters.SharedPresenter.View');
+    expect(ViewModel.toString())
+        .toBe('SlothMachine.SlothMachine.Core.HandleError.Presenters.SharedPresenter.ViewModel');
+});
+
 test('renders given error', () => {
     const message = 'error message';
     const response = new Response(new Error(message));

@@ -1,6 +1,8 @@
 const Logger = require('../src/Logger');
 const LoggerException = require('../src/LoggerException');
 const TimeProvider = require('../src/TimeProvider');
+const SimpleTimeProvider = require('../src/SimpleTimeProvider');
+const Handler = require('../src/Handler');
 
 /**
  * @type {TimeProvider}
@@ -20,6 +22,14 @@ const now = '2000-01-01T00:00:00.000Z';
 beforeEach(() => {
     time.now = () => new Date(now);
     logger = new Logger(time);
+});
+
+test('provides fqcn', () => {
+    expect(Logger.toString()).toBe('Logger.Logger');
+    expect(Handler.toString()).toBe('Logger.Handler');
+    expect(LoggerException.toString()).toBe('Logger.LoggerException');
+    expect(TimeProvider.toString()).toBe('Logger.TimeProvider');
+    expect(SimpleTimeProvider.toString()).toBe('Logger.SimpleTimeProvider');
 });
 
 test('uses default time provider', () => {

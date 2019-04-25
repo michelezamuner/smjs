@@ -1,3 +1,5 @@
+const _package = 'SlothMachine.SlothMachine.Config.Providers.';
+
 const Provider = require('./Provider');
 const Container = require('container').Container;
 const Console = require('console-wrapper').Console;
@@ -15,8 +17,9 @@ const OSSystem = require('adapters/os-system').OSSystem;
 const Filesystem = require('adapters/os-system').Filesystem;
 const NativeFilesystem = require('adapters/os-system').NativeFilesystem;
 
-module.exports = class SlothMachine_Providers_SlothMachineProvider extends Provider {
+module.exports = class SlothMachineProvider extends Provider {
     static get __DEPS__() { return [ Container ]; }
+    static toString() { return _package + SlothMachineProvider.name; }
 
     /**
      * @param {Container} container

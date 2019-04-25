@@ -5,6 +5,7 @@ const UnsupportedArchitectureException = require('app/architecture-loader').Unsu
 const InvalidArchitectureException = require('app/architecture-loader').InvalidArchitectureException;
 const ModuleLoader = require('../../src/ModuleLoader');
 const CannotFindModuleException = require('../../src/CannotFindModuleException');
+const NativeModuleLoader = require('../../src/NativeModuleLoader');
 
 /**
  * @type {Object|ModuleLoader}
@@ -44,6 +45,13 @@ test('can be injected', () => {
         ModuleLoader,
         'adapters.local_architecture_loader.path',
     ]);
+});
+
+test('provides fqcn', () => {
+    expect(CannotFindModuleException.toString()).toBe('SlothMachine.LocalArchitectureLoader.CannotFindModuleException');
+    expect(LocalArchitectureLoader.toString()).toBe('SlothMachine.LocalArchitectureLoader.LocalArchitectureLoader');
+    expect(ModuleLoader.toString()).toBe('SlothMachine.LocalArchitectureLoader.ModuleLoader');
+    expect(NativeModuleLoader.toString()).toBe('SlothMachine.LocalArchitectureLoader.NativeModuleLoader');
 });
 
 test('loads requested architecture', () => {

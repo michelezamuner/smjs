@@ -1,10 +1,13 @@
 const SearchBooks = require('../../../../../../../src/application-services/api-gateway/application/api_gateway/search_books/SearchBooks');
-const SearchBooksPresenter = require('../../../../../../../src/application-services/api-gateway/application/api_gateway/search_books/Presenter');
+const Presenter = require('../../../../../../../src/application-services/api-gateway/application/api_gateway/search_books/Presenter');
 const SearchBooksClient = require('../../../../../../../src/application-services/api-gateway/application/clients/SearchBooksClient');
 const Response = require('../../../../../../../src/application-services/api-gateway/application/api_gateway/search_books/Response');
+const Request = require('../../../../../../../src/application-services/api-gateway/application/api_gateway/search_books/Request');
+const SearchBooksRequest = require('../../../../../../../src/domain/api/SearchBooksRequest');
+const SearchBooksResponse = require('../../../../../../../src/domain/api/SearchBooksResponse');
 
 /**
- * @type {Object|SearchBooksPresenter}
+ * @type {Object|Presenter}
  */
 const presenter = {};
 
@@ -35,7 +38,17 @@ beforeEach(() => {
 });
 
 test('can be injected', () => {
-    expect(SearchBooks.__DEPS__).toStrictEqual([ SearchBooksPresenter, SearchBooksClient ]);
+    expect(SearchBooks.__DEPS__).toStrictEqual([ Presenter, SearchBooksClient ]);
+});
+
+test('provides fqcn', () => {
+    expect(SearchBooks.toString()).toBe('FindBooks.ApiGateway.ApiGateway.SearchBooks.SearchBooks');
+    expect(Presenter.toString()).toBe('FindBooks.ApiGateway.ApiGateway.SearchBooks.Presenter');
+    expect(Request.toString()).toBe('FindBooks.ApiGateway.ApiGateway.SearchBooks.Request');
+    expect(Response.toString()).toBe('FindBooks.ApiGateway.ApiGateway.SearchBooks.Response');
+    expect(SearchBooksClient.toString()).toBe('FindBooks.ApiGateway.Clients.SearchBooksClient');
+    expect(SearchBooksRequest.toString()).toBe('FindBooks.Api.SearchBooksRequest');
+    expect(SearchBooksResponse.toString()).toBe('FindBooks.Api.SearchBooksResponse');
 });
 
 test('sends request to client', () => {

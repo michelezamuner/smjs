@@ -1,4 +1,8 @@
-module.exports = class Core_HandleError_Response {
+const _package = 'SlothMachine.Core.HandleError.';
+
+module.exports = class Response {
+    static toString() { return _package + Response.name; }
+
     /**
      * @param {Error} error
      */

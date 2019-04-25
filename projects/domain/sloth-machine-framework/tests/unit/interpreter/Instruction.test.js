@@ -5,6 +5,10 @@ const Opcode = require('../../../src/interpreter/Opcode');
 const Operands = require('../../../src/interpreter/Operands');
 const random = require('lib/random');
 
+test('provides fqcn', () => {
+    expect(Instruction.toString()).toBe('SlothMachine.SlothMachineFramework.Interpreter.Instruction');
+});
+
 test('implements instruction details', () => {
     const address = new Address(random(100));
     const opcode = new Opcode([new DataUnit(random(100)), new DataUnit(random(100))]);

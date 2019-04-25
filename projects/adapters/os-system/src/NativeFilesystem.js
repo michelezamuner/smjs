@@ -1,7 +1,11 @@
+const _package = 'SlothMachine.OSSystem.';
+
 const Filesystem = require('./Filesystem');
 const fs = require('fs');
 
-module.exports = class OSSystem_NativeFilesystem extends Filesystem {
+module.exports = class NativeFilesystem extends Filesystem {
+    static toString() { return _package + NativeFilesystem.name; }
+
     /**
      * @override
      */

@@ -3,6 +3,7 @@ const Actuator = require('../../../../../src/application/actuator/Actuator');
 const Notifier = require('../../../../../src/application/notifications/Notifier');
 const Signal = require('../../../../../src/domain/signal/Signal');
 const ActuatorActivated = require('../../../../../src/application/sensor/send_signal/messages/ActuatorActivated');
+const Request = require('../../../../../src/application/sensor/send_signal/Request');
 
 /**
  * @type {Object|Actuator}
@@ -27,6 +28,14 @@ beforeEach(() => {
 
 test('can be injected', () => {
     expect(SendSignal.__DEPS__).toStrictEqual([ Actuator, Notifier ]);
+});
+
+test('provides fqcn', () => {
+    expect(SendSignal.toString()).toBe('SensorSystem.Sensor.SendSignal.SendSignal');
+    expect(Actuator.toString()).toBe('SensorSystem.Actuator.Actuator');
+    expect(Notifier.toString()).toBe('SensorSystem.Notifications.Notifier');
+    expect(ActuatorActivated.toString()).toBe('SensorSystem.Sensor.SendSignal.Messages.ActuatorActivated');
+    expect(Request.toString()).toBe('SensorSystem.Sensor.SendSignal.Request');
 });
 
 test('activates actuator after receiving sensor signal', () => {

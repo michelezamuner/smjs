@@ -1,8 +1,11 @@
+const _package = 'SlothMachine.SlothMachine.VirtualMachine.RunProgram.Views.';
+
 const View = require('../presenters/console_presenter/View');
 const Console = require('console-wrapper').Console;
 
-module.exports = class SlothMachine_VirtualMachine_RunProgram_Views_IntegratedView extends View {
+module.exports = class IntegratedView extends View {
     static get __DEPS__() { return [Console]; }
+    static toString() { return _package + IntegratedView.name; }
 
     /**
      * @param {Console} console

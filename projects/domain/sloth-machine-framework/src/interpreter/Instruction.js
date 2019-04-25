@@ -1,8 +1,12 @@
+const _package = 'SlothMachine.SlothMachineFramework.Interpreter.';
+
 const Address = require('../data/Address');
 const Opcode = require('./Opcode');
 const Operands = require('./Operands');
 
-module.exports = class SlothMachineFramework_Interpreter_Instruction {
+module.exports = class Instruction {
+    static toString() { return _package + Instruction.name; }
+
     /**
      * @param {Address} address
      * @param {Opcode} opcode

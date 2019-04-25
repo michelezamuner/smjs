@@ -1,9 +1,13 @@
+const _package = 'SensorSystem.FileActuator.';
+
 /**
  * @interface
  */
-module.exports = class FileActuator_Writer {
+module.exports = class Writer {
+    static toString() { return _package + Writer.name; }
+
     constructor() {
-        if (new.target === FileActuator_Writer) {
+        if (new.target === Writer) {
             throw 'Cannot instantiate interface';
         }
     }

@@ -1,4 +1,8 @@
-module.exports = class SlothMachineFramework_Data_DataUnit {
+const _package = 'SlothMachine.SlothMachineFramework.Data.';
+
+module.exports = class DataUnit {
+    static toString() { return _package + DataUnit.name; }
+
     /**
      * @param {number} value
      */

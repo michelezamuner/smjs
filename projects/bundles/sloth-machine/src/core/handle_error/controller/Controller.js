@@ -1,8 +1,11 @@
+const _package = 'SlothMachine.SlothMachine.Core.HandleError.Controller.';
+
 const HandleError = require('app/core').handle_error.HandleError;
 const Request = require('./Request');
 
-module.exports = class SlothMachine_Core_HandleError_Controller_Controller {
+module.exports = class Controller {
     static get __DEPS__() { return [ HandleError ]; }
+    static toString() { return _package + Controller.name; }
 
     /**
      * @param {HandleError} service

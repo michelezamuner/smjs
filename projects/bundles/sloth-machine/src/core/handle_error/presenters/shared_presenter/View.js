@@ -1,13 +1,16 @@
+const _package = 'SlothMachine.SlothMachine.Core.HandleError.Presenters.SharedPresenter.';
+
 const ViewModel = require('./ViewModel');
 
 /**
  * @interface
  */
-module.exports = class SlothMachine_Core_HandleError_Presenters_SharedPresenter_View {
+module.exports = class View {
     static get ERROR_EXIT_STATUS() { return 127; }
+    static toString() { return _package + View.name; }
 
     constructor() {
-        if (new.target === SlothMachine_Core_HandleError_Presenters_SharedPresenter_View) {
+        if (new.target === View) {
             throw 'Cannot instantiate interface';
         }
     }

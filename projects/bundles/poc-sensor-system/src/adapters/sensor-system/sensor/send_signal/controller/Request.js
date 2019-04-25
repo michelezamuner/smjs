@@ -1,7 +1,11 @@
+const _package = 'SensorSystem.SensorSystem.Sensor.SendSignal.Controller.';
+
 const RequestInterface = require('../../../../../application/sensor/send_signal/Request');
 const Signal = require('../../../../../domain/signal/Signal');
 
-module.exports = class SensorSystem_Sensor_SendSignal_Controller_Request extends RequestInterface {
+module.exports = class Request extends RequestInterface {
+    static toString() { return _package + Request.name; }
+
     /**
      * @param {string} value
      */

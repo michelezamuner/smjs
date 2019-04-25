@@ -1,11 +1,15 @@
+const _package = 'SensorSystem.Actuator.';
+
 const Signal = require('../../domain/signal/Signal');
 
 /**
  * @interface
  */
-module.exports = class Actuator_Actuator {
+module.exports = class Actuator {
+    static toString() { return _package + Actuator.name; }
+
     constructor() {
-        if (new.target === Actuator_Actuator) {
+        if (new.target === Actuator) {
             throw 'Cannot instantiate interface';
         }
     }

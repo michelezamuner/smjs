@@ -3,6 +3,7 @@ const ErrorHandlerFailed = require('../../src/ErrorHandlerFailed');
 const Container = require('container').Container;
 const RequestReceived = require('../../src/RequestReceived');
 const MessageBus = require('message-bus').MessageBus;
+const ViewRegistered = require('../../src/ViewRegistered');
 
 /**
  * @type {Object|Container}
@@ -67,6 +68,13 @@ beforeEach(() => {
     launcher = new Launcher(container, config);
 
     parser.getArgument = arg => arg === Launcher.ARG_ARCHITECTURE ? architecture : file;
+});
+
+test('provides fqcn', () => {
+    expect(Launcher.toString()).toBe('SlothMachine.SlothMachine.Launcher');
+    expect(ErrorHandlerFailed.toString()).toBe('SlothMachine.SlothMachine.ErrorHandlerFailed');
+    expect(RequestReceived.toString()).toBe('SlothMachine.SlothMachine.RequestReceived');
+    expect(ViewRegistered.toString()).toBe('SlothMachine.SlothMachine.ViewRegistered');
 });
 
 test('registers config', () => {

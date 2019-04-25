@@ -1,9 +1,13 @@
+const _package = 'SlothMachine.Core.HandleError.';
+
 /**
  * @interface
  */
-module.exports = class Core_HandleError_Request {
+module.exports = class Request {
+    static toString() { return _package + Request.name; }
+
     constructor() {
-        if (new.target === Core_HandleError_Request) {
+        if (new.target === Request) {
             throw 'Cannot instantiate interface';
         }
     }

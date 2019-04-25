@@ -1,4 +1,8 @@
-module.exports = class VirtualMachine_RunProgram_Messages_ApplicationFailed {
+const _package = 'SlothMachine.VirtualMachine.RunProgram.Messages.';
+
+module.exports = class ApplicationFailed {
+    static toString() { return _package + ApplicationFailed.name; }
+
     /**
      * @param {Error} error
      */

@@ -43,6 +43,10 @@ test('can be injected', () => {
     expect(AdapterDependencies.__DEPS__).toStrictEqual([Presenter, ArchitectureLoader, ProgramLoader, System, Notifier]);
 });
 
+test('provides fqcn', () => {
+    expect(AdapterDependencies.toString()).toBe('SlothMachine.VirtualMachine.RunProgram.AdapterDependencies');
+});
+
 test('provides dependencies', () => {
     expect(adapter.getPresenter()).toBe(presenter);
     expect(adapter.getArchitectureLoader()).toBe(architectureLoader);

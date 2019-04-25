@@ -1,3 +1,5 @@
+const _package = 'SlothMachine.FileProgramLoader.';
+
 const ProgramLoader = require('app/program-loader').ProgramLoader;
 const InvalidProgramException = require('app/program-loader').InvalidProgramException;
 const FileReader = require('./FileReader');
@@ -6,8 +8,9 @@ const Program = require('domain/sloth-machine-framework').program.Program;
 const Data = require('domain/sloth-machine-framework').data.Data;
 const DataUnit = require('domain/sloth-machine-framework').data.DataUnit;
 
-module.exports = class FileProgramLoader_FileProgramLoader extends ProgramLoader {
+module.exports = class FileProgramLoader extends ProgramLoader {
     static get __DEPS__() { return [ FileReader ]; }
+    static toString() { return _package + FileProgramLoader.name; }
 
     /**
      * @param {FileReader} fileReader

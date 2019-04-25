@@ -23,6 +23,11 @@ beforeEach(() => {
     parser = new Parser(args);
 });
 
+test('provides fqcn', () => {
+    expect(Parser.toString()).toBe('CommandLineParser.Parser');
+    expect(MalformedArgsException.toString()).toBe('CommandLineParser.MalformedArgsException');
+});
+
 test('parse unnamed arguments', () => {
     expect(parser.getArgument()).toBe('some');
     expect(parser.getArgument(0)).toBe('some');

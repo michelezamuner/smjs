@@ -1,5 +1,9 @@
 const Request = require('../src/Request');
 
+test('provides fqcn', () => {
+    expect(Request.toString()).toBe('Router.Request');
+});
+
 test('stores request information', () => {
     const endpoint = 'endpoint';
     const params = {some: 'param', other: 'value'};

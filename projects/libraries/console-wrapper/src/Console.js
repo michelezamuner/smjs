@@ -1,9 +1,13 @@
+const _package = 'ConsoleWrapper.';
+
 /**
  * @interface
  */
-module.exports = class Console_Console {
+module.exports = class Console {
+    static toString() { return _package + Console.name; }
+
     constructor() {
-        if (new.target === Console_Console) {
+        if (new.target === Console) {
             throw 'Cannot instantiate interface';
         }
     }

@@ -1,4 +1,8 @@
-module.exports = class SlothMachine_ErrorHandlerFailed {
+const _package = 'SlothMachine.SlothMachine.';
+
+module.exports = class ErrorHandlerFailed {
+    static toString() { return _package + ErrorHandlerFailed.name; }
+
     /**
      * @param {Error} error
      */

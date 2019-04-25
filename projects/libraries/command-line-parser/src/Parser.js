@@ -1,6 +1,10 @@
+const _package = 'CommandLineParser.';
+
 const MalformedArgsException = require('./MalformedArgsException');
 
-module.exports = class CommandLineParser_Parser {
+module.exports = class Parser {
+    static toString() { return _package + Parser.name; }
+
     /**
      * @param {string[]} args
      * @throws {MalformedArgsException}

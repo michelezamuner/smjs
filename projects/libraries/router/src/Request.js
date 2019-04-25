@@ -1,4 +1,8 @@
-module.exports = class Router_Request {
+const _package = 'Router.';
+
+module.exports = class Request {
+    static toString() { return _package + Request.name; }
+
     /**
      * @param {string} endpoint
      * @param {Object} parameters

@@ -1,3 +1,5 @@
+const _package = 'SlothMachine.SlothMachine.VirtualMachine.RunProgram.Presenters.ConsolePresenter.';
+
 const PresenterInterface = require('app/virtual-machine').run_program.Presenter;
 const ErrorPresenter = require('../../../../core/handle_error/presenters/shared_presenter/Presenter');
 const ErrorResponse = require('../../../../core/handle_error/presenters/shared_presenter/Response');
@@ -9,13 +11,12 @@ const UnsupportedArchitectureException = require('app/architecture-loader').Unsu
 const InvalidArchitectureException = require('app/architecture-loader').InvalidArchitectureException;
 const InvalidProgramException = require('app/program-loader').InvalidProgramException;
 
-module.exports = class SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_Presenter extends PresenterInterface {
+module.exports = class Presenter extends PresenterInterface {
     static get __DEPS__() { return [View, ErrorPresenter]; }
     static get MIN_EXIT_STATUS() { return 0; }
     static get MAX_EXIT_STATUS() { return 255; }
-    static get DEFAULT_EXIT_STATUS() {
-        return SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_Presenter.MAX_EXIT_STATUS;
-    }
+    static get DEFAULT_EXIT_STATUS() { return Presenter.MAX_EXIT_STATUS; }
+    static toString() { return _package + Presenter.name; }
 
     /**
      * @param {View} view
@@ -50,10 +51,8 @@ module.exports = class SlothMachine_VirtualMachine_RunProgram_Presenters_Console
      */
     _parseExitStatus(exitStatus) {
         const value = parseInt(exitStatus.format());
-        const min = SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_Presenter.MIN_EXIT_STATUS;
-        const max = SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_Presenter.MAX_EXIT_STATUS;
-        if (value < min || value > max) {
-            return SlothMachine_VirtualMachine_RunProgram_Presenters_ConsolePresenter_Presenter.DEFAULT_EXIT_STATUS;
+        if (value < Presenter.MIN_EXIT_STATUS || value > Presenter.MAX_EXIT_STATUS) {
+            return Presenter.DEFAULT_EXIT_STATUS;
         }
 
         return value;

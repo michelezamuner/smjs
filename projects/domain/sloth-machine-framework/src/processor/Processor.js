@@ -1,3 +1,5 @@
+const _package = 'SlothMachine.SlothMachineFramework.Processor.';
+
 const Program = require('../program/Program');
 const InvalidAddressException = require('../program/InvalidAddressException');
 const ReadOutOfBoundsException = require('../program/ReadOutOfBoundsException');
@@ -9,7 +11,9 @@ const Opcode = require('../interpreter/Opcode');
 const Operands = require('../interpreter/Operands');
 const Instruction = require('../interpreter/Instruction');
 
-module.exports = class SlothMachineFramework_Processor_Processor {
+module.exports = class Processor {
+    static toString() { return _package + Processor.name; }
+
     /**
      * @param {Interpreter} interpreter
      */

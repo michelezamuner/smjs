@@ -1,11 +1,14 @@
+const _package = 'SlothMachine.Core.HandleError.';
+
 const Presenter = require('./Presenter');
 const Notifier = require('app/notifications').Notifier;
 const Request = require('./Request');
 const Response = require('./Response');
 const ErrorReceived = require('./messages/ErrorReceived');
 
-module.exports = class Core_HandleError_HandleError {
+module.exports = class HandleError {
     static get __DEPS__() { return [ Presenter, Notifier ]; }
+    static toString() { return _package + HandleError.name; }
 
     /**
      * @param {Presenter} presenter

@@ -2,6 +2,10 @@ const Data = require('../../../src/data/Data');
 const DataUnit = require('../../../src/data/DataUnit');
 const random = require('lib/random');
 
+test('provides fqcn', () => {
+    expect(Data.toString()).toBe('SlothMachine.SlothMachineFramework.Data.Data');
+});
+
 test('defaults to empty set', () => {
     const data = new Data();
 

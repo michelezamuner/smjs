@@ -1,6 +1,10 @@
-const SearchBookResponse = require('../../../../../domain/api-gateway/SearchBooksResponse');
+const _package = 'FindBooks.ApiGateway.ApiGateway.SearchBooks.';
 
-module.exports = class ApiGateway_Application_ApiGateway_SearchBooks_Response {
+const SearchBookResponse = require('../../../../../domain/api/SearchBooksResponse');
+
+module.exports = class Response {
+    static toString() { return _package + Response.name; }
+
     /**
      * @param {SearchBookResponse} response
      */

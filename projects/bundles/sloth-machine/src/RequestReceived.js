@@ -1,4 +1,8 @@
-module.exports = class SlothMachine_RequestReceived {
+const _package = 'SlothMachine.SlothMachine.';
+
+module.exports = class RequestReceived {
+    static toString() { return _package + RequestReceived.name; }
+
     /**
      * @param {string} endpoint
      * @param {string} representation

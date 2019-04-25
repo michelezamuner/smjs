@@ -5,6 +5,10 @@ test('implements interface', () => {
     expect(new Request(new Error())).toBeInstanceOf(RequestInterface);
 });
 
+test('provides fqcn', () => {
+    expect(Request.toString()).toBe('SlothMachine.SlothMachine.Core.HandleError.Controller.Request');
+});
+
 test('exposes properties', () => {
     const error = new Error();
     const request = new Request(error);

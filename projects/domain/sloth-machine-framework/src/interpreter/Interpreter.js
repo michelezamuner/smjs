@@ -1,3 +1,5 @@
+const _package = 'SlothMachine.SlothMachineFramework.Interpreter.';
+
 const Size = require('../data/Size');
 const Opcode = require('./Opcode');
 const Instruction = require('./Instruction');
@@ -7,9 +9,11 @@ const InterpreterException = require('./InterpreterException');
 /**
  * @interface
  */
-module.exports = class SlothMachineFramework_Interpreter_Interpreter {
+module.exports = class Interpreter {
+    static toString() { return _package + Interpreter.name; }
+
     constructor() {
-        if (new.target === SlothMachineFramework_Interpreter_Interpreter) {
+        if (new.target === Interpreter) {
             throw 'Cannot instantiate interface';
         }
     }

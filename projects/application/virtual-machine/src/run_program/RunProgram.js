@@ -1,3 +1,5 @@
+const _package = 'SlothMachine.VirtualMachine.RunProgram.';
+
 const MissingProgramReferenceException = require('./MissingProgramReferenceException');
 const ProcessorFactory = require('./ProcessorFactory');
 const AdapterDependencies = require('./AdapterDependencies');
@@ -12,8 +14,9 @@ const ProgramLoaded = require('./messages/ProgramLoaded');
 const ExecutionTerminated = require('./messages/ExecutionTerminated');
 const ApplicationFailed = require('./messages/ApplicationFailed');
 
-module.exports = class VirtualMachine_RunProgram_RunProgram {
+module.exports = class RunProgram {
     static get __DEPS__() { return [ AdapterDependencies, ProcessorFactory ]; }
+    static toString() { return _package + RunProgram.name; }
 
     /**
      * @param {AdapterDependencies} adapter

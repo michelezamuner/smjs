@@ -1,5 +1,9 @@
 const Status = require('../../../src/interpreter/Status');
 
+test('provides fqcn', () => {
+    expect(Status.toString()).toBe('SlothMachine.SlothMachineFramework.Interpreter.Status');
+});
+
 test('defaults to no jump no exit', () => {
     const status = new Status();
 

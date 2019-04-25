@@ -1,6 +1,10 @@
 const DataUnit = require('../../../src/data/DataUnit');
 const random = require('lib/random');
 
+test('provides fqcn', () => {
+    expect(DataUnit.toString()).toBe('SlothMachine.SlothMachineFramework.Data.DataUnit');
+});
+
 test('supports equals', () => {
     const value = random(100);
     const first = new DataUnit(value);

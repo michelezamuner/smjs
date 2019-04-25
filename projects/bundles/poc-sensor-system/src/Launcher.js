@@ -1,8 +1,12 @@
+const _package = 'SensorSystem.';
+
 const Container = require('container').Container;
 const Provider = require('../config/Provider');
 const SignalListener = require('./adapters/sensor-system/sensor/send_signal/SignalListener');
 
 module.exports = class Launcher {
+    static toString() { return _package + Launcher.name; }
+
     /**
      * @param {Container} container
      * @param {Object} config

@@ -1,4 +1,8 @@
-module.exports = class MessageBus_MessageBus {
+const _package = 'MessageBus.';
+
+module.exports = class MessageBus {
+    static toString() { return _package + MessageBus.name; }
+
     constructor() {
         this._handlers = {};
     }
