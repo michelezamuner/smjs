@@ -1,6 +1,6 @@
 const _package = 'FindBooks.ServiceApplication.Application.';
 
-const MessageBusFactory = require('./MessageBusFactory');
+const MessageBus = require('message-bus').MessageBus;
 const WidgetFactory = require('./WidgetFactory');
 const InputParser = require('../input-parser/InputParser');
 const Connection = require('../server/Connection');
@@ -9,16 +9,16 @@ const SendData = require('../messages/SendData');
 const RequestReceived = require('../messages/RequestReceived');
 
 module.exports = class Application {
-    static get __DEPS__() { return [ MessageBusFactory, WidgetFactory, InputParser ] };
+    static get __DEPS__() { return [ MessageBus, WidgetFactory, InputParser ] };
     static toString() { return _package + Application.name; }
 
     /**
-     * @param {MessageBusFactory} busFactory
+     * @param {MessageBus} bus
      * @param {WidgetFactory} widgetFactory
      * @param {InputParser} parser
      */
-    constructor(busFactory, widgetFactory, parser) {
-        this._bus = busFactory.create();
+    constructor(bus, widgetFactory, parser) {
+        this._bus = bus;
         this._widgetFactory = widgetFactory;
         this._parser = parser;
         this._widgets = {};

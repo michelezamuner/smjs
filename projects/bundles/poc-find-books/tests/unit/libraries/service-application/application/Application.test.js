@@ -1,5 +1,4 @@
 const Application = require('../../../../../src/libraries/service-application/application/Application');
-const MessageBusFactory = require('../../../../../src/libraries/service-application/application/MessageBusFactory');
 const WidgetFactory = require('../../../../../src/libraries/service-application/application/WidgetFactory');
 const ApplicationFactory = require('../../../../../src/libraries/service-application/application/ApplicationFactory');
 const InputParser = require('../../../../../src/libraries/service-application/input-parser/InputParser');
@@ -10,9 +9,9 @@ const SendData = require('../../../../../src/libraries/service-application/messa
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');
 
 /**
- * @type {Object|MessageBusFactory}
+ * @type {Object|MessageBus}
  */
-const busFactory = {};
+const bus = {};
 
 /**
  * @type {Object|WidgetFactory}
@@ -30,17 +29,11 @@ const parser = {};
 let application = null;
 
 /**
- * @type {Object|MessageBus}
- */
-const bus = {};
-
-/**
  * @type {Object|Connection}
  */
 const connection = {};
 
 beforeEach(() => {
-    busFactory.create = () => bus;
     bus.callbacks = {};
     bus.register = (types, callback) => bus.callbacks[types[0]] = callback;
     bus.send = jest.fn(msg => {
@@ -53,18 +46,16 @@ beforeEach(() => {
     connection.write = jest.fn();
     connection.on = () => {};
 
-    application = new Application(busFactory, widgetFactory, parser);
+    application = new Application(bus, widgetFactory, parser);
 });
 
 test('can be injected', () => {
-    expect(Application.__DEPS__).toStrictEqual([ MessageBusFactory, WidgetFactory, InputParser]);
+    expect(Application.__DEPS__).toStrictEqual([ MessageBus, WidgetFactory, InputParser ]);
 });
 
 test('provides fqcn', () => {
     expect(Application.toString()).toBe('FindBooks.ServiceApplication.Application.Application');
-    expect(MessageBusFactory.toString()).toBe('FindBooks.ServiceApplication.Application.MessageBusFactory');
     expect(WidgetFactory.toString()).toBe('FindBooks.ServiceApplication.Application.WidgetFactory');
-    expect(ApplicationFactory.toString()).toBe('FindBooks.ServiceApplication.Application.ApplicationFactory');
     expect(SendResponse.toString()).toBe('FindBooks.ServiceApplication.Messages.SendResponse');
     expect(SendData.toString()).toBe('FindBooks.ServiceApplication.Messages.SendData');
     expect(RequestReceived.toString()).toBe('FindBooks.ServiceApplication.Messages.RequestReceived');
