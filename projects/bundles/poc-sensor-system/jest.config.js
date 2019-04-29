@@ -13,6 +13,7 @@ const config = {
         'NativeWriter\.js',
         'Writer\.js',
         'NativeServer\.js',
+        'NativeServerHandler\.js',
         'Notifier\.js',
         'Request\.js',
     ],

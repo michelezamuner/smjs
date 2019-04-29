@@ -1,4 +1,5 @@
 const SignalHandler = require('../../../../../../src/adapters/sensor-system/sensor/send_signal/SignalHandler');
+const NativeServerHandler = require('../../../../../../src/adapters/sensor-system/sensor/send_signal/NativeServerHandler');
 const Router = require('router').Router;
 const Request = require('router').Request;
 
@@ -31,12 +32,17 @@ beforeEach(() => {
     handler = new SignalHandler(router);
 });
 
+test('implements native handler', () => {
+    expect(handler).toBeInstanceOf(NativeServerHandler);
+});
+
 test('can be injected', () => {
     expect(SignalHandler.__DEPS__).toStrictEqual([ Router ]);
 });
 
 test('provides fqcn', () => {
     expect(SignalHandler.toString()).toBe('SensorSystem.SensorSystem.Sensor.SendSignal.SignalHandler');
+    expect(NativeServerHandler.toString()).toBe('SensorSystem.SensorSystem.Sensor.SendSignal.NativeServerHandler');
 });
 
 test('routes client signal', () => {

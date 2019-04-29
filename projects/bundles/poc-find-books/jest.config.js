@@ -8,7 +8,14 @@ const config = {
         'api_gateway/search_books/Presenter\.js',
         'api_gateway/search_books/Request\.js',
         'api_gateway/search_books/Response\.js',
-        'clients/SearchBooksClient\.js'
+        'clients/SearchBooksClient\.js',
+        'service-application/application/MessageBusFactory\.js',
+        'service-application/application/WidgetFactory\.js',
+        'service-application/input-parser/InputParser\.js',
+        'service-application/input-parser/ServiceRequest\.js',
+        'service-application/server/Connection\.js',
+        'service-application/server/Server\.js',
+        'service-application/server/ServerFactory\.js',
     ],
     coverageReporters: ['text'],
 };

@@ -11,7 +11,7 @@ sleep 1
 
 readonly results="$($SM_ROOT/bin/adapters-services/search $search)"
 
-ps aux | grep '[i]ntegration-bus' | awk '{ print $2 }' | xargs kill -9
+ps aux | grep '[a]pi-gateway' | awk '{ print $2 }' | xargs kill -9
 
 if [ "$results" != "$expected" ]; then
     >&2 echo "Wrong results: expected $expected, got $results"
