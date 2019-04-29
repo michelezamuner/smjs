@@ -15,7 +15,11 @@ sleep 1
 readonly output1="$(${node} ${stubs}/client-stub.js ${input})"
 readonly output2="$(${node} ${stubs}/client-stub.js ${input})"
 
-ps aux | grep '[a]pplication-stub' | awk '{ print $2 }' | xargs kill -9 >/dev/null
+ps aux | grep '[a]pplication-stub' | awk '{ print $2 }' | xargs kill -9 >/dev/null 2>&1
+if [[ $? != 0 ]]; then
+    >&2 echo Failed killing service process
+    exit 1
+fi
 
 if [[ "${output1}" != "${response}" ]]; then
     >&2 echo "Wrong results: expected ${response}, got ${output1}"

@@ -11,7 +11,11 @@ sleep 1
 
 readonly results="$($SM_ROOT/bin/adapters-services/search $search)"
 
-ps aux | grep '[a]pi-gateway' | awk '{ print $2 }' | xargs kill -9
+ps aux | grep '[a]pi-gateway' | awk '{ print $2 }' | xargs kill -9 >/dev/null 2>&1
+if [[ $? != 0 ]]; then
+    >&2 echo Failed killing service process
+    exit 1
+fi
 
 if [ "$results" != "$expected" ]; then
     >&2 echo "Wrong results: expected $expected, got $results"
