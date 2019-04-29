@@ -2,9 +2,9 @@ const _package = 'SensorSystem.SensorSystem.Sensor.SendSignal.';
 
 const Router = require('router').Router;
 const Request = require('router').Request;
-const Socket = require('net').Socket;
+const NativeServerHandler = require('./NativeServerHandler');
 
-module.exports = class SignalHandler {
+module.exports = class SignalHandler extends NativeServerHandler {
     static get __DEPS__() { return [ Router ]; }
     static toString() { return _package + SignalHandler.name; }
 
@@ -12,11 +12,12 @@ module.exports = class SignalHandler {
      * @param {Router} router
      */
     constructor(router) {
+        super();
         this._router = router;
     }
 
     /**
-     * @param {Socket} client
+     * @override
      */
     handle(client) {
         client.on('data', signal => {
