@@ -44,7 +44,7 @@ beforeEach(() => {
     };
     bus.send = msg => bus.callback(msg);
     serverFactory.create = () => server;
-    applicationFactory.create = () => app;
+    applicationFactory.create = jest.fn(() => app);
     server.listen = jest.fn();
     app.addWidget = jest.fn();
     app.connect = jest.fn();
@@ -109,13 +109,5 @@ test('adds registered widgets to application on connection', () => {
     application.run('host', 1234);
     bus.send(new ConnectionEstablished(''));
 
-    expect(app.addWidget.mock.calls[0][0]).toBe(widgets[0].name);
-    expect(app.addWidget.mock.calls[0][1]).toBe(widgets[0].type);
-    expect(app.addWidget.mock.calls[0][2]).toStrictEqual(widgets[0].args);
-    expect(app.addWidget.mock.calls[1][0]).toBe(widgets[1].name);
-    expect(app.addWidget.mock.calls[1][1]).toBe(widgets[1].type);
-    expect(app.addWidget.mock.calls[1][2]).toStrictEqual(widgets[1].args);
-    expect(app.addWidget.mock.calls[2][0]).toBe(widgets[2].name);
-    expect(app.addWidget.mock.calls[2][1]).toBe(widgets[2].type);
-    expect(app.addWidget.mock.calls[2][2]).toStrictEqual(widgets[2].args);
+    expect(applicationFactory.create.mock.calls[0][0]).toStrictEqual(widgets);
 });

@@ -9,13 +9,13 @@ readonly endpoint="$1"
 readonly input="$2"
 readonly response="$3"
 
-${node} "${stubs}/application-stub.js" "${endpoint}" "${response}" >/dev/null 2>&1 &
+${node} "${stubs}/application-stub.js" "${endpoint}" "${response}" >/dev/null 2>&1 & disown
 sleep 1
 
 readonly output1="$(${node} ${stubs}/client-stub.js ${input})"
 readonly output2="$(${node} ${stubs}/client-stub.js ${input})"
 
-ps aux | grep '[a]pplication-stub' | awk '{ print $2 }' | xargs kill -9 >/dev/null 2>&1
+ps aux | grep '[a]pplication-stub' | awk '{ print $2 }' | xargs kill -9
 if [[ $? != 0 ]]; then
     >&2 echo Failed killing service process
     exit 1
