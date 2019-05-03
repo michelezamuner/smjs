@@ -19,9 +19,27 @@ module.exports = class ApplicationFactory {
     }
 
     /**
+     * @param {{name: {string}, type: {Function}, args: {array}}[]} widgets
      * @return {Application}
      */
-    create() {
-        return new Application(new MessageBus(), this._widgetFactory, this._parser);
+    create(widgets) {
+        const bus = new MessageBus();
+
+        return new Application(bus, this._parser, this._createWidgets(bus, widgets));
+    }
+
+    /**
+     * @param {MessageBus} bus
+     * @param {{name: {string}, type: {Function}, args: {array}}[]} widgets
+     * @return {Object}
+     * @private
+     */
+    _createWidgets(bus, widgets) {
+        let widgetObjects = {};
+        for (const widget of widgets) {
+            widgetObjects[widget.name] = this._widgetFactory.create(widget.type, bus, widget.args);
+        }
+
+        return widgetObjects;
     }
 };

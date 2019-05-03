@@ -1,7 +1,6 @@
 const _package = 'FindBooks.ServiceApplication.Application.';
 
 const MessageBus = require('message-bus').MessageBus;
-const WidgetFactory = require('./WidgetFactory');
 const InputParser = require('../input-parser/InputParser');
 const Connection = require('../server/Connection');
 const SendResponse = require('../messages/SendResponse');
@@ -9,19 +8,18 @@ const SendData = require('../messages/SendData');
 const RequestReceived = require('../messages/RequestReceived');
 
 module.exports = class Application {
-    static get __DEPS__() { return [ MessageBus, WidgetFactory, InputParser ] };
     static toString() { return _package + Application.name; }
 
     /**
      * @param {MessageBus} bus
-     * @param {WidgetFactory} widgetFactory
      * @param {InputParser} parser
+     * @param {Object} widgets
      */
-    constructor(bus, widgetFactory, parser) {
+    constructor(bus, parser, widgets) {
         this._bus = bus;
-        this._widgetFactory = widgetFactory;
         this._parser = parser;
         this._widgets = {};
+        this._widgets = widgets;
     }
 
     /**
@@ -32,15 +30,6 @@ module.exports = class Application {
         this._bus.register([SendData], msg => this._sendData(connection, msg));
 
         connection.on('data', data => this._onData(data));
-    }
-
-    /**
-     * @param {string} name
-     * @param {Function} type
-     * @param {Array} args
-     */
-    addWidget(name, type, args) {
-        this._widgets[name] = this._widgetFactory.create(type, this._bus, args);
     }
 
     /**

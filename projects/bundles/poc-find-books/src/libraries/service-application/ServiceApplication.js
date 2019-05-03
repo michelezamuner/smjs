@@ -47,10 +47,7 @@ module.exports = class ServiceApplication {
      * @private
      */
     _onConnection(event) {
-        const app = this._applicationFactory.create();
-        for (const widget of this._widgets) {
-            app.addWidget(widget.name, widget.type, widget.args);
-        }
+        const app = this._applicationFactory.create(this._widgets);
         app.connect(event.getConnection());
     }
 };

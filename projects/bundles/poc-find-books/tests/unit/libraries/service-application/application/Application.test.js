@@ -1,6 +1,4 @@
 const Application = require('../../../../../src/libraries/service-application/application/Application');
-const WidgetFactory = require('../../../../../src/libraries/service-application/application/WidgetFactory');
-const ApplicationFactory = require('../../../../../src/libraries/service-application/application/ApplicationFactory');
 const InputParser = require('../../../../../src/libraries/service-application/input-parser/InputParser');
 const MessageBus = require('message-bus').MessageBus;
 const Connection = require('../../../../../src/libraries/service-application/server/Connection');
@@ -14,14 +12,14 @@ const RequestReceived = require('../../../../../src/libraries/service-applicatio
 const bus = {};
 
 /**
- * @type {Object|WidgetFactory}
- */
-const widgetFactory = {};
-
-/**
  * @type {Object|InputParser}
  */
 const parser = {};
+
+/**
+ * @type {Object}
+ */
+const widgets = {widget: 'my-widget'};
 
 /**
  * @type {null|Application}
@@ -46,39 +44,14 @@ beforeEach(() => {
     connection.write = jest.fn();
     connection.on = () => {};
 
-    application = new Application(bus, widgetFactory, parser);
-});
-
-test('can be injected', () => {
-    expect(Application.__DEPS__).toStrictEqual([ MessageBus, WidgetFactory, InputParser ]);
+    application = new Application(bus, parser, widgets);
 });
 
 test('provides fqcn', () => {
     expect(Application.toString()).toBe('FindBooks.ServiceApplication.Application.Application');
-    expect(WidgetFactory.toString()).toBe('FindBooks.ServiceApplication.Application.WidgetFactory');
     expect(SendResponse.toString()).toBe('FindBooks.ServiceApplication.Messages.SendResponse');
     expect(SendData.toString()).toBe('FindBooks.ServiceApplication.Messages.SendData');
     expect(RequestReceived.toString()).toBe('FindBooks.ServiceApplication.Messages.RequestReceived');
-});
-
-test('creates widgets with own bus', () => {
-    const type = 'type';
-    const arg1 = 'arg1';
-    const arg2 = 'arg2';
-    const widgetName = 'widget';
-    const widget = {};
-
-    widgetFactory.create = (typeArg, busArg, args) => {
-        if (typeArg !== type || busArg !== bus || args[0] !== arg1 || args[1] !== arg2) {
-            return null;
-        }
-
-        return widget;
-    };
-
-    application.addWidget(widgetName, type, [arg1, arg2]);
-
-    expect(application.getWidget(widgetName)).toBe(widget);
 });
 
 test('handles ending connection on response', () => {
@@ -109,4 +82,8 @@ test('handles data input', () => {
     application.connect(connection);
 
     expect(bus.send.mock.calls[0][0]).toStrictEqual(new RequestReceived(request));
+});
+
+test('provides widgets', () => {
+    expect(application.getWidget('widget')).toBe('my-widget');
 });
