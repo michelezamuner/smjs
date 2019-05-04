@@ -1,14 +1,8 @@
 const ServiceApplication = require('../../../../src/libraries/service-application/ServiceApplication');
-const MessageBus = require('message-bus').MessageBus;
+const ConnectionListener = require('../../../../src/libraries/service-application/server/ConnectionListener');
 const ServerFactory = require('../../../../src/libraries/service-application/server/ServerFactory');
 const ApplicationFactory = require('../../../../src/libraries/service-application/application/ApplicationFactory');
 const Server = require('../../../../src/libraries/service-application/server/Server');
-const ConnectionEstablished = require('../../../../src/libraries/service-application/messages/ConnectionEstablished');
-
-/**
- * @type {Object|MessageBus}
- */
-const bus = {};
 
 /**
  * @type {Object|ServerFactory}
@@ -36,25 +30,22 @@ const server = {};
 const app = {};
 
 beforeEach(() => {
-    bus.register = (types, callback) => {
-        if (types[0] !== ConnectionEstablished) {
-            return null;
-        }
-        bus.callback = callback;
-    };
-    bus.send = msg => bus.callback(msg);
-    serverFactory.create = () => server;
     applicationFactory.create = jest.fn(() => app);
-    server.listen = jest.fn();
     app.addWidget = jest.fn();
     app.connect = jest.fn();
 
-    application = new ServiceApplication(bus, serverFactory, applicationFactory);
+    application = new ServiceApplication(serverFactory, applicationFactory);
+
+    serverFactory.create = listener => listener === application ? server : null;
+    server.listen = jest.fn();
+});
+
+test('implements interface', () => {
+    expect(application).toBeInstanceOf(ConnectionListener);
 });
 
 test('can be injected', () => {
-    expect(ServiceApplication.__DEPS__).toStrictEqual([ MessageBus, ServerFactory, ApplicationFactory ]);
-    expect(ConnectionEstablished.toString()).toBe('FindBooks.ServiceApplication.Messages.ConnectionEstablished');
+    expect(ServiceApplication.__DEPS__).toStrictEqual([ ServerFactory, ApplicationFactory ]);
 });
 
 test('provides fqcn', () => {
@@ -78,12 +69,13 @@ test('connects different application at every connection', () => {
     const connection2 = 'connection2';
     let call = 0;
 
+    server.listen = () => {
+        application.listen(connection1);
+        application.listen(connection2);
+    };
     applicationFactory.create = jest.fn(() => call++ ? app2 : app1);
     
     application.run('host', 1234);
-
-    bus.send(new ConnectionEstablished(connection1));
-    bus.send(new ConnectionEstablished(connection2));
 
     expect(applicationFactory.create.mock.calls[0][1]).toBe(connection1);
     expect(applicationFactory.create.mock.calls[1][1]).toBe(connection2);
@@ -97,13 +89,15 @@ test('adds registered widgets to application on connection', () => {
         {name: 'w2', type: 'type2', args: ['arg21']},
         {name: 'w3', type: 'type1', args: []},
     ];
+    const connection = {};
 
+    server.listen = () => application.listen(connection);
     for (const widget of widgets) {
         application.addWidget(widget.name, widget.type, ...widget.args);
     }
 
     application.run('host', 1234);
-    bus.send(new ConnectionEstablished(''));
 
     expect(applicationFactory.create.mock.calls[0][0]).toStrictEqual(widgets);
+    expect(applicationFactory.create.mock.calls[0][1]).toStrictEqual(connection);
 });

@@ -1,23 +1,23 @@
 const _package = 'FindBooks.ServiceApplication.Server.';
 
-const MessageBus = require('message-bus').MessageBus;
-const ConnectionEstablished = require('../messages/ConnectionEstablished');
+const Connection = require('./Connection');
 
+/**
+ * @interface
+ */
 module.exports = class ConnectionListener {
-    static get __DEPS__() { return [ MessageBus ]; }
     static toString() { return _package + ConnectionListener.name; }
 
-    /**
-     * @param {MessageBus} bus
-     */
-    constructor(bus) {
-        this._bus = bus;
+    constructor() {
+        if (new.target === ConnectionListener) {
+            throw 'Cannot instantiate interface';
+        }
     }
 
     /**
-     * @override
+     * @param {Connection} connection
      */
     listen(connection) {
-        this._bus.send(new ConnectionEstablished(connection));
+        throw 'Not implemented';
     };
 };
