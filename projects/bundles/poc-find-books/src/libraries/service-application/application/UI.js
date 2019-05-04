@@ -1,6 +1,6 @@
 const _package = 'FindBooks.ServiceApplication.Application.';
 
-const Widget = require('./Widget');
+const Widget = require('../widgets/Widget');
 
 module.exports = class UI {
     static toString() { return _package + UI.name; }

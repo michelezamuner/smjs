@@ -20,13 +20,14 @@ test('creates application and widgets', () => {
         build: jest.fn()
     };
     const parser = {};
+    const connection = {};
     const widgets = [
         {name: 'name1', type: 'type1', args: 'args1'},
         {name: 'name2', type: 'type2', args: 'args2'},
     ];
     const factory = new ApplicationFactory(builder, parser);
 
-    const app = factory.create(widgets);
+    const app = factory.create(widgets, connection);
 
     expect(app).toBeInstanceOf(Application);
     expect(builder.setMessageBus.mock.calls[0][0]).toBeInstanceOf(MessageBus);

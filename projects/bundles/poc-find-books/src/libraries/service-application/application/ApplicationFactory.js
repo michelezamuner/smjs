@@ -5,6 +5,8 @@ const InputParser = require('../input-parser/InputParser');
 const Application = require('./Application');
 const MessageBus = require('message-bus').MessageBus;
 const UI = require('./UI');
+const ApplicationParams = require('./ApplicationParams');
+const Connection = require('../server/Connection');
 
 module.exports = class ApplicationFactory {
     static get __DEPS__() { return [ WidgetBuilder, InputParser ]; }
@@ -21,9 +23,10 @@ module.exports = class ApplicationFactory {
 
     /**
      * @param {{name: {string}, type: {Function}, args: {array}}[]} widgets
+     * @param {Connection} connection
      * @return {Application}
      */
-    create(widgets) {
+    create(widgets, connection) {
         const bus = new MessageBus();
         const ui = new UI();
         this._builder.setMessageBus(bus);
@@ -33,6 +36,8 @@ module.exports = class ApplicationFactory {
             this._builder.build(widget.name, widget.type, widget.args);
         }
 
-        return new Application(bus, ui, this._parser);
+        const params = new ApplicationParams(connection, this._parser);
+
+        return new Application(bus, ui, params);
     }
 };

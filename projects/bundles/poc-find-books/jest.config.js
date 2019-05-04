@@ -10,6 +10,7 @@ const config = {
         'api_gateway/search_books/Response\.js',
         'clients/SearchBooksClient\.js',
         'service-application/application/UI\.js',
+        'service-application/application/ApplicationParams\.js',
         'service-application/input-parser/InputParser\.js',
         'service-application/input-parser/ServiceRequest\.js',
         'service-application/server/Connection\.js',
