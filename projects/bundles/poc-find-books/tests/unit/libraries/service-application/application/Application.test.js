@@ -5,6 +5,7 @@ const Connection = require('../../../../../src/libraries/service-application/ser
 const SendResponse = require('../../../../../src/libraries/service-application/messages/SendResponse');
 const SendData = require('../../../../../src/libraries/service-application/messages/SendData');
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');
+const UI = require('../../../../../src/libraries/service-application/application/UI');
 
 /**
  * @type {Object|MessageBus}
@@ -12,14 +13,14 @@ const RequestReceived = require('../../../../../src/libraries/service-applicatio
 const bus = {};
 
 /**
+ * @type {Object|UI}
+ */
+const ui = {};
+
+/**
  * @type {Object|InputParser}
  */
 const parser = {};
-
-/**
- * @type {Object}
- */
-const widgets = {widget: 'my-widget'};
 
 /**
  * @type {null|Application}
@@ -31,6 +32,14 @@ let application = null;
  */
 const connection = {};
 
+/**
+ * @type {Object[]}
+ */
+const widgets = [
+    {connect: jest.fn()},
+    {connect: jest.fn()},
+];
+
 beforeEach(() => {
     bus.callbacks = {};
     bus.register = (types, callback) => bus.callbacks[types[0]] = callback;
@@ -40,11 +49,12 @@ beforeEach(() => {
         }
         bus.callbacks[msg.constructor](msg)
     });
+    ui.getWidgets = () => widgets;
     connection.end = jest.fn();
     connection.write = jest.fn();
     connection.on = () => {};
 
-    application = new Application(bus, parser, widgets);
+    application = new Application(bus, ui, parser);
 });
 
 test('provides fqcn', () => {
@@ -52,6 +62,17 @@ test('provides fqcn', () => {
     expect(SendResponse.toString()).toBe('FindBooks.ServiceApplication.Messages.SendResponse');
     expect(SendData.toString()).toBe('FindBooks.ServiceApplication.Messages.SendData');
     expect(RequestReceived.toString()).toBe('FindBooks.ServiceApplication.Messages.RequestReceived');
+    expect(UI.toString()).toBe('FindBooks.ServiceApplication.Application.UI');
+});
+
+test('connects all children widgets as well', () => {
+    application.connect(connection);
+
+    for (const widget of widgets) {
+        expect(widget.connect).toBeCalled();
+    }
+
+    expect.assertions(widgets.length);
 });
 
 test('handles ending connection on response', () => {
@@ -82,8 +103,4 @@ test('handles data input', () => {
     application.connect(connection);
 
     expect(bus.send.mock.calls[0][0]).toStrictEqual(new RequestReceived(request));
-});
-
-test('provides widgets', () => {
-    expect(application.getWidget('widget')).toBe('my-widget');
 });

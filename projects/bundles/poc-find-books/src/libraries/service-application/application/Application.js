@@ -1,6 +1,7 @@
 const _package = 'FindBooks.ServiceApplication.Application.';
 
 const MessageBus = require('message-bus').MessageBus;
+const UI = require('./UI');
 const InputParser = require('../input-parser/InputParser');
 const Connection = require('../server/Connection');
 const SendResponse = require('../messages/SendResponse');
@@ -12,14 +13,13 @@ module.exports = class Application {
 
     /**
      * @param {MessageBus} bus
+     * @param {UI} ui
      * @param {InputParser} parser
-     * @param {Object} widgets
      */
-    constructor(bus, parser, widgets) {
+    constructor(bus, ui, parser) {
         this._bus = bus;
+        this._ui = ui;
         this._parser = parser;
-        this._widgets = {};
-        this._widgets = widgets;
     }
 
     /**
@@ -30,14 +30,10 @@ module.exports = class Application {
         this._bus.register([SendData], msg => this._sendData(connection, msg));
 
         connection.on('data', data => this._onData(data));
-    }
 
-    /**
-     * @param {string} name
-     * @return {Object}
-     */
-    getWidget(name) {
-        return this._widgets[name];
+        for (const widget of this._ui.getWidgets()) {
+            widget.connect();
+        }
     }
 
     /**
