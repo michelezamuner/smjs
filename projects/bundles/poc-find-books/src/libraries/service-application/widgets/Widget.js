@@ -1,4 +1,4 @@
-const _package = 'FindBooks.ServiceApplication.Application.';
+const _package = 'FindBooks.ServiceApplication.Widgets.';
 
 const MessageBus = require('message-bus').MessageBus;
 const UI = require('../application/UI');

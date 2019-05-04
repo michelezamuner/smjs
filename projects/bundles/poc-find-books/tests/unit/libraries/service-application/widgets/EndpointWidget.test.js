@@ -1,5 +1,5 @@
 const EndpointWidget = require('../../../../../src/libraries/service-application/widgets/EndpointWidget');
-const Widget = require('../../../../../src/libraries/service-application/application/Widget');
+const Widget = require('../../../../../src/libraries/service-application/widgets/Widget');
 const MessageBus = require('message-bus').MessageBus;
 const UI = require('../../../../../src/libraries/service-application/application/UI');
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');

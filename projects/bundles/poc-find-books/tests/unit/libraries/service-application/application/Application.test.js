@@ -1,11 +1,12 @@
 const Application = require('../../../../../src/libraries/service-application/application/Application');
-const InputParser = require('../../../../../src/libraries/service-application/input-parser/InputParser');
 const MessageBus = require('message-bus').MessageBus;
+const UI = require('../../../../../src/libraries/service-application/application/UI');
+const ApplicationParams = require('../../../../../src/libraries/service-application/application/ApplicationParams');
+const InputParser = require('../../../../../src/libraries/service-application/input-parser/InputParser');
 const Connection = require('../../../../../src/libraries/service-application/server/Connection');
 const SendResponse = require('../../../../../src/libraries/service-application/messages/SendResponse');
 const SendData = require('../../../../../src/libraries/service-application/messages/SendData');
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');
-const UI = require('../../../../../src/libraries/service-application/application/UI');
 
 /**
  * @type {Object|MessageBus}
@@ -18,9 +19,9 @@ const bus = {};
 const ui = {};
 
 /**
- * @type {Object|InputParser}
+ * @type {Object|ApplicationParams}
  */
-const parser = {};
+const params = {};
 
 /**
  * @type {null|Application}
@@ -31,6 +32,11 @@ let application = null;
  * @type {Object|Connection}
  */
 const connection = {};
+
+/**
+ * @type {Object|InputParser}
+ */
+const parser = {};
 
 /**
  * @type {Object[]}
@@ -50,11 +56,13 @@ beforeEach(() => {
         bus.callbacks[msg.constructor](msg)
     });
     ui.getWidgets = () => widgets;
+    params.getConnection = () => connection;
+    params.getParser = () => parser;
     connection.end = jest.fn();
     connection.write = jest.fn();
     connection.on = () => {};
 
-    application = new Application(bus, ui, parser);
+    application = new Application(bus, ui, params);
 });
 
 test('provides fqcn', () => {
@@ -63,10 +71,11 @@ test('provides fqcn', () => {
     expect(SendData.toString()).toBe('FindBooks.ServiceApplication.Messages.SendData');
     expect(RequestReceived.toString()).toBe('FindBooks.ServiceApplication.Messages.RequestReceived');
     expect(UI.toString()).toBe('FindBooks.ServiceApplication.Application.UI');
+    expect(ApplicationParams.toString()).toBe('FindBooks.ServiceApplication.Application.ApplicationParams');
 });
 
 test('connects all children widgets as well', () => {
-    application.connect(connection);
+    application.connect();
 
     for (const widget of widgets) {
         expect(widget.connect).toBeCalled();
@@ -78,7 +87,7 @@ test('connects all children widgets as well', () => {
 test('handles ending connection on response', () => {
     const response = 'response';
 
-    application.connect(connection);
+    application.connect();
     bus.send(new SendResponse(response));
 
     expect(connection.end.mock.calls[0][0]).toBe(response);
@@ -87,7 +96,7 @@ test('handles ending connection on response', () => {
 test('handles sending data', () => {
     const data = 'data';
 
-    application.connect(connection);
+    application.connect();
     bus.send(new SendData(data));
 
     expect(connection.write.mock.calls[0][0]).toBe(data);
@@ -100,7 +109,7 @@ test('handles data input', () => {
     connection.on = (event, callback) => { callback(input); }
     parser.parse = arg => arg === input ? request : null;
 
-    application.connect(connection);
+    application.connect();
 
     expect(bus.send.mock.calls[0][0]).toStrictEqual(new RequestReceived(request));
 });

@@ -2,6 +2,7 @@ const _package = 'FindBooks.ServiceApplication.Application.';
 
 const MessageBus = require('message-bus').MessageBus;
 const UI = require('./UI');
+const Widget = require('../widgets/Widget');
 const ServiceApplicationException = require('../ServiceApplicationException');
 
 module.exports = class WidgetBuilder {
@@ -30,7 +31,7 @@ module.exports = class WidgetBuilder {
      * @param {string} name
      * @param {Function} type
      * @param {Array} args
-     * @return {Object}
+     * @return {Widget}
      * @throws ServiceApplicationException
      */
     build(name, type, args = []) {
@@ -42,6 +43,10 @@ module.exports = class WidgetBuilder {
         }
 
         const widget = new type(this._bus, this._ui, ...args);
+        if (!(widget instanceof Widget)) {
+            throw new ServiceApplicationException(`${type} does not extend Widget`);
+        }
+
         this._ui.addWidget(name, widget);
 
         return widget;

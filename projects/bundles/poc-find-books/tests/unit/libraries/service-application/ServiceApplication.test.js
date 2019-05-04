@@ -78,21 +78,17 @@ test('connects different application at every connection', () => {
     const connection2 = 'connection2';
     let call = 0;
 
-    applicationFactory.create = () => {
-        if (call === 0) {
-            call = 1;
-            return app1;
-        }
-
-        return app2;
-    };
+    applicationFactory.create = jest.fn(() => call++ ? app2 : app1);
+    
     application.run('host', 1234);
 
     bus.send(new ConnectionEstablished(connection1));
     bus.send(new ConnectionEstablished(connection2));
 
-    expect(app1.connect.mock.calls[0][0]).toBe(connection1);
-    expect(app2.connect.mock.calls[0][0]).toBe(connection2);
+    expect(applicationFactory.create.mock.calls[0][1]).toBe(connection1);
+    expect(applicationFactory.create.mock.calls[1][1]).toBe(connection2);
+    expect(app1.connect).toBeCalled();
+    expect(app2.connect).toBeCalled();
 });
 
 test('adds registered widgets to application on connection', () => {
