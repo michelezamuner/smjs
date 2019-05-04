@@ -1,25 +1,22 @@
 const _package = 'FindBooks.ServiceApplication.';
 
-const MessageBus = require('message-bus').MessageBus;
+const ConnectionListener = require('./server/ConnectionListener');
 const ServerFactory = require('./server/ServerFactory');
 const ApplicationFactory = require('./application/ApplicationFactory');
-const ConnectionEstablished = require('./messages/ConnectionEstablished');
 
-module.exports = class ServiceApplication {
-    static get __DEPS__() { return [ MessageBus, ServerFactory, ApplicationFactory ]; }
+module.exports = class ServiceApplication extends ConnectionListener {
+    static get __DEPS__() { return [ ServerFactory, ApplicationFactory ]; }
     static toString() { return _package + ServiceApplication.name; }
 
     /**
-     * @param {MessageBus} bus
      * @param {ServerFactory} serverFactory
      * @param {ApplicationFactory} applicationFactory
      */
-    constructor(bus, serverFactory, applicationFactory) {
+    constructor(serverFactory, applicationFactory) {
+        super();
         this._serverFactory = serverFactory;
         this._applicationFactory = applicationFactory;
         this._widgets = [];
-
-        bus.register([ConnectionEstablished], event => this._onConnection(event));
     }
 
     /**
@@ -27,7 +24,7 @@ module.exports = class ServiceApplication {
      * @param {number} port
      */
     run(host, port) {
-        const server = this._serverFactory.create();
+        const server = this._serverFactory.create(this);
         server.listen(host, port);
     }
 
@@ -43,11 +40,10 @@ module.exports = class ServiceApplication {
     }
 
     /**
-     * @param {ConnectionEstablished} event
-     * @private
+     * @override
      */
-    _onConnection(event) {
-        const app = this._applicationFactory.create(this._widgets, event.getConnection());
+    listen(connection) {
+        const app = this._applicationFactory.create(this._widgets, connection);
         app.connect();
     }
 };

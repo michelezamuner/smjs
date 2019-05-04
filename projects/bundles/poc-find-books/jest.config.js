@@ -14,6 +14,7 @@ const config = {
         'service-application/input-parser/InputParser\.js',
         'service-application/input-parser/ServiceRequest\.js',
         'service-application/server/Connection\.js',
+        'service-application/server/ConnectionListener\.js',
         'service-application/server/Server\.js',
         'service-application/server/ServerFactory\.js',
     ],

@@ -6,13 +6,9 @@ const BasicInputParser = require('../../../../../src/libraries/service-applicati
 const EndpointWidget = require('../../../../../src/libraries/service-application/widgets/EndpointWidget');
 
 const container = new Container();
-const bus = new MessageBus();
 const args = process.argv.slice(2);
 const endpoint = args[0];
 const response = args[1];
-
-container.bind(MessageBus, bus);
-container.bind(InputParser, BasicInputParser);
 
 class StubWidget extends EndpointWidget {
     /**
@@ -23,7 +19,24 @@ class StubWidget extends EndpointWidget {
     }
 }
 
-const app = container.make(ServiceApplication);
+class Application {
+    static get __DEPS__() { return [ Container ]; }
 
-app.addWidget(endpoint, StubWidget, endpoint);
-app.run('127.0.0.1', 2222);
+    /**
+     * @param {Container} container
+     */
+    constructor(container) {
+        const bus = new MessageBus();
+        container.bind(MessageBus, bus);
+        container.bind(InputParser, BasicInputParser);
+        this._app = container.make(ServiceApplication);
+        // TODO: change this
+        this._app.addWidget(endpoint, StubWidget, endpoint);
+    }
+
+    run() {
+        this._app.run('127.0.0.1', 2222);
+    }
+}
+
+container.make(Application).run();
