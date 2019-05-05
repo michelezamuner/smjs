@@ -3,8 +3,8 @@ const _package = 'FindBooks.ServiceApplication.Application.';
 const Connection = require('../server/Connection');
 const InputParser = require('../input-parser/InputParser');
 
-module.exports = class ApplicationParams {
-    static toString() { return _package + ApplicationParams.name; }
+module.exports = class ApplicationWidgetDeps {
+    static toString() { return _package + ApplicationWidgetDeps.name; }
 
     /**
      * @param {Connection} connection

@@ -1,8 +1,10 @@
 const ServiceApplication = require('../../../../src/libraries/service-application/ServiceApplication');
 const ConnectionListener = require('../../../../src/libraries/service-application/server/ConnectionListener');
 const ServerFactory = require('../../../../src/libraries/service-application/server/ServerFactory');
-const ApplicationFactory = require('../../../../src/libraries/service-application/application/ApplicationFactory');
+const ApplicationWidgetFactory = require('../../../../src/libraries/service-application/application/ApplicationWidgetFactory');
 const Server = require('../../../../src/libraries/service-application/server/Server');
+const ServiceApplicationException = require('../../../../src/libraries/service-application/ServiceApplicationException');
+const Application = require('../../../../src/libraries/service-application/application/Application');
 
 /**
  * @type {Object|ServerFactory}
@@ -10,9 +12,9 @@ const Server = require('../../../../src/libraries/service-application/server/Ser
 const serverFactory = {};
 
 /**
- * @type {Object|ApplicationFactory}
+ * @type {Object|ApplicationWidgetFactory}
  */
-const applicationFactory = {};
+const applicationWidgetFactory = {};
 
 /**
  * @type {null|ServiceApplication}
@@ -30,14 +32,14 @@ const server = {};
 const app = {};
 
 beforeEach(() => {
-    applicationFactory.create = jest.fn(() => app);
+    applicationWidgetFactory.create = jest.fn(() => app);
     app.addWidget = jest.fn();
     app.connect = jest.fn();
 
-    application = new ServiceApplication(serverFactory, applicationFactory);
+    application = new ServiceApplication(serverFactory, applicationWidgetFactory);
 
     serverFactory.create = listener => listener === application ? server : null;
-    server.listen = jest.fn();
+    server.listen = jest.fn(() => application.listen({}));
 });
 
 test('implements interface', () => {
@@ -45,7 +47,7 @@ test('implements interface', () => {
 });
 
 test('can be injected', () => {
-    expect(ServiceApplication.__DEPS__).toStrictEqual([ ServerFactory, ApplicationFactory ]);
+    expect(ServiceApplication.__DEPS__).toStrictEqual([ ServerFactory, ApplicationWidgetFactory ]);
 });
 
 test('provides fqcn', () => {
@@ -62,7 +64,22 @@ test('starts server when run', () => {
     expect(server.listen.mock.calls[0][1]).toBe(port);
 });
 
-test('connects different application at every connection', () => {
+test('uses default application widget class', () => {
+    application.run('host', 1234);
+
+    expect(applicationWidgetFactory.create.mock.calls[0][0]).toBe(Application);
+});
+
+test('overrides application widget class', () => {
+    class StubApplication extends Application {}
+
+    application.setApplicationWidgetClass(StubApplication);
+    application.run('host', 1234);
+
+    expect(applicationWidgetFactory.create.mock.calls[0][0]).toBe(StubApplication);
+});
+
+test('connects a different application at every connection', () => {
     const app1 = { connect: jest.fn(), addWidget: () => {} };
     const connection1 = 'connection1';
     const app2 = { connect: jest.fn(), addWidget: () => {} };
@@ -73,31 +90,29 @@ test('connects different application at every connection', () => {
         application.listen(connection1);
         application.listen(connection2);
     };
-    applicationFactory.create = jest.fn(() => call++ ? app2 : app1);
-    
+    applicationWidgetFactory.create = jest.fn(() => call++ ? app2 : app1);
+
     application.run('host', 1234);
 
-    expect(applicationFactory.create.mock.calls[0][1]).toBe(connection1);
-    expect(applicationFactory.create.mock.calls[1][1]).toBe(connection2);
+    expect(applicationWidgetFactory.create.mock.calls[0][2]).toBe(connection1);
+    expect(applicationWidgetFactory.create.mock.calls[1][2]).toBe(connection2);
     expect(app1.connect).toBeCalled();
     expect(app2.connect).toBeCalled();
 });
 
 test('adds registered widgets to application on connection', () => {
     const widgets = [
-        {name: 'w1', type: 'type1', args: ['arg11', 'arg12']},
-        {name: 'w2', type: 'type2', args: ['arg21']},
-        {name: 'w3', type: 'type1', args: []},
+        {name: 'w1', type: 'type1', params: {}},
+        {name: 'w2', type: 'type2', params: {}},
+        {name: 'w3', type: 'type1', params: {}},
     ];
-    const connection = {};
 
-    server.listen = () => application.listen(connection);
+
     for (const widget of widgets) {
-        application.addWidget(widget.name, widget.type, ...widget.args);
+        application.addWidget(widget.name, widget.type, widget.params);
     }
 
     application.run('host', 1234);
 
-    expect(applicationFactory.create.mock.calls[0][0]).toStrictEqual(widgets);
-    expect(applicationFactory.create.mock.calls[0][1]).toStrictEqual(connection);
+    expect(applicationWidgetFactory.create.mock.calls[0][1]).toStrictEqual(widgets);
 });

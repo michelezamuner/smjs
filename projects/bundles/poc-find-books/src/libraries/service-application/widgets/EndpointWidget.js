@@ -1,8 +1,7 @@
 const _package = 'FindBooks.ServiceApplication.Widgets.';
 
 const Widget = require('./Widget');
-const MessageBus = require('message-bus').MessageBus;
-const UI = require('../application/UI');
+const WidgetDeps = require('./WidgetDeps');
 const RequestReceived = require('../messages/RequestReceived');
 const SendResponse = require('../messages/SendResponse');
 
@@ -13,19 +12,18 @@ module.exports = class EndpointWidget extends Widget {
     static toString() { return _package + EndpointWidget.name; }
 
     /**
-     * @param {MessageBus} bus
-     * @param {UI} ui
-     * @param {string} endpoint
+     * @param {WidgetDeps} deps
      */
-    constructor(bus, ui, endpoint) {
-        super(bus, ui);
-        this._endpoint = endpoint;
+    constructor(deps) {
+        super(deps);
+        this._endpoint = deps.getParams().endpoint;
     }
 
     /**
      * @override
      */
     connect() {
+        super.connect();
         this._bus.register([RequestReceived], event => this._onRequest(event));
     }
 

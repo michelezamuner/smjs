@@ -2,7 +2,7 @@ const _package = 'FindBooks.ServiceApplication.Application.';
 
 const MessageBus = require('message-bus').MessageBus;
 const UI = require('./UI');
-const ApplicationParams = require('./ApplicationParams');
+const ApplicationWidgetDeps = require('./ApplicationWidgetDeps');
 const SendResponse = require('../messages/SendResponse');
 const SendData = require('../messages/SendData');
 const RequestReceived = require('../messages/RequestReceived');
@@ -13,13 +13,13 @@ module.exports = class Application {
     /**
      * @param {MessageBus} bus
      * @param {UI} ui
-     * @param {ApplicationParams} params
+     * @param {ApplicationWidgetDeps} deps
      */
-    constructor(bus, ui, params) {
+    constructor(bus, ui, deps) {
         this._bus = bus;
         this._ui = ui;
-        this._connection = params.getConnection();
-        this._parser = params.getParser();
+        this._connection = deps.getConnection();
+        this._parser = deps.getParser();
     }
 
     connect() {

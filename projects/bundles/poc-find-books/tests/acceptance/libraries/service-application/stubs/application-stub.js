@@ -31,7 +31,7 @@ class Application {
         container.bind(InputParser, BasicInputParser);
         this._app = container.make(ServiceApplication);
         // TODO: change this
-        this._app.addWidget(endpoint, StubWidget, endpoint);
+        this._app.addWidget(endpoint, StubWidget, {endpoint: endpoint});
     }
 
     run() {
