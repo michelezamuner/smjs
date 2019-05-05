@@ -2,21 +2,30 @@ const _package = 'FindBooks.ServiceApplication.';
 
 const ConnectionListener = require('./server/ConnectionListener');
 const ServerFactory = require('./server/ServerFactory');
-const ApplicationFactory = require('./application/ApplicationFactory');
+const ApplicationWidgetFactory = require('./application/ApplicationWidgetFactory');
+const Application = require('./application/Application');
 
 module.exports = class ServiceApplication extends ConnectionListener {
-    static get __DEPS__() { return [ ServerFactory, ApplicationFactory ]; }
+    static get __DEPS__() { return [ ServerFactory, ApplicationWidgetFactory ]; }
     static toString() { return _package + ServiceApplication.name; }
 
     /**
      * @param {ServerFactory} serverFactory
-     * @param {ApplicationFactory} applicationFactory
+     * @param {ApplicationWidgetFactory} applicationWidgetFactory
      */
-    constructor(serverFactory, applicationFactory) {
+    constructor(serverFactory, applicationWidgetFactory) {
         super();
         this._serverFactory = serverFactory;
-        this._applicationFactory = applicationFactory;
+        this._applicationWidgetFactory = applicationWidgetFactory;
+        this._applicationWidgetClass = Application;
         this._widgets = [];
+    }
+
+    /**
+     * @param {Function} applicationWidgetClass
+     */
+    setApplicationWidgetClass(applicationWidgetClass) {
+        this._applicationWidgetClass = applicationWidgetClass;
     }
 
     /**
@@ -31,19 +40,19 @@ module.exports = class ServiceApplication extends ConnectionListener {
     /**
      * @param {string} name
      * @param {Function} type
-     * @param {*} args
+     * @param {Object} params
      * @return {EndpointWidget}
      * @protected
      */
-    addWidget(name, type, ...args) {
-        this._widgets.push({name: name, type: type, args: args});
+    addWidget(name, type, params) {
+        this._widgets.push({name: name, type: type, params: params});
     }
 
     /**
      * @override
      */
     listen(connection) {
-        const app = this._applicationFactory.create(this._widgets, connection);
+        const app = this._applicationWidgetFactory.create(this._applicationWidgetClass, this._widgets, connection);
         app.connect();
     }
 };

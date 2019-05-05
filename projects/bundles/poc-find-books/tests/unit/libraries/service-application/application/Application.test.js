@@ -1,7 +1,7 @@
 const Application = require('../../../../../src/libraries/service-application/application/Application');
 const MessageBus = require('message-bus').MessageBus;
 const UI = require('../../../../../src/libraries/service-application/application/UI');
-const ApplicationParams = require('../../../../../src/libraries/service-application/application/ApplicationParams');
+const ApplicationWidgetDeps = require('../../../../../src/libraries/service-application/application/ApplicationWidgetDeps');
 const InputParser = require('../../../../../src/libraries/service-application/input-parser/InputParser');
 const Connection = require('../../../../../src/libraries/service-application/server/Connection');
 const SendResponse = require('../../../../../src/libraries/service-application/messages/SendResponse');
@@ -19,9 +19,9 @@ const bus = {};
 const ui = {};
 
 /**
- * @type {Object|ApplicationParams}
+ * @type {Object|ApplicationWidgetDeps}
  */
-const params = {};
+const deps = {};
 
 /**
  * @type {null|Application}
@@ -56,13 +56,13 @@ beforeEach(() => {
         bus.callbacks[msg.constructor](msg)
     });
     ui.getWidgets = () => widgets;
-    params.getConnection = () => connection;
-    params.getParser = () => parser;
+    deps.getConnection = () => connection;
+    deps.getParser = () => parser;
     connection.end = jest.fn();
     connection.write = jest.fn();
     connection.on = () => {};
 
-    application = new Application(bus, ui, params);
+    application = new Application(bus, ui, deps);
 });
 
 test('provides fqcn', () => {
@@ -71,7 +71,7 @@ test('provides fqcn', () => {
     expect(SendData.toString()).toBe('FindBooks.ServiceApplication.Messages.SendData');
     expect(RequestReceived.toString()).toBe('FindBooks.ServiceApplication.Messages.RequestReceived');
     expect(UI.toString()).toBe('FindBooks.ServiceApplication.Application.UI');
-    expect(ApplicationParams.toString()).toBe('FindBooks.ServiceApplication.Application.ApplicationParams');
+    expect(ApplicationWidgetDeps.toString()).toBe('FindBooks.ServiceApplication.Application.ApplicationWidgetDeps');
 });
 
 test('connects all children widgets as well', () => {

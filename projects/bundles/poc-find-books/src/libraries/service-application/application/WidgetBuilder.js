@@ -1,8 +1,8 @@
 const _package = 'FindBooks.ServiceApplication.Application.';
 
 const MessageBus = require('message-bus').MessageBus;
-const UI = require('./UI');
 const Widget = require('../widgets/Widget');
+const WidgetDeps = require('../widgets/WidgetDeps');
 const ServiceApplicationException = require('../ServiceApplicationException');
 
 module.exports = class WidgetBuilder {
@@ -10,7 +10,6 @@ module.exports = class WidgetBuilder {
 
     constructor() {
         this._bus = null;
-        this._ui = null;
     }
 
     /**
@@ -21,33 +20,21 @@ module.exports = class WidgetBuilder {
     }
 
     /**
-     * @param {UI} ui
-     */
-    setUI(ui) {
-        this._ui = ui;
-    }
-
-    /**
-     * @param {string} name
      * @param {Function} type
-     * @param {Array} args
+     * @param {Object} params
      * @return {Widget}
      * @throws ServiceApplicationException
      */
-    build(name, type, args = []) {
+    build(type, params = {}) {
         if (this._bus === null) {
             throw new ServiceApplicationException('Cannot build widgets with no message bus set');
         }
-        if (this._ui === null) {
-            throw new ServiceApplicationException('Cannot build widgets with no UI set');
-        }
 
-        const widget = new type(this._bus, this._ui, ...args);
+        const deps = new WidgetDeps(this._bus, {}, params);
+        const widget = new type(deps);
         if (!(widget instanceof Widget)) {
             throw new ServiceApplicationException(`${type} does not extend Widget`);
         }
-
-        this._ui.addWidget(name, widget);
 
         return widget;
     }

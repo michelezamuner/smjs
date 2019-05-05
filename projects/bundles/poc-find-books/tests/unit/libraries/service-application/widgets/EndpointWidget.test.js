@@ -1,10 +1,11 @@
 const EndpointWidget = require('../../../../../src/libraries/service-application/widgets/EndpointWidget');
 const Widget = require('../../../../../src/libraries/service-application/widgets/Widget');
 const MessageBus = require('message-bus').MessageBus;
-const UI = require('../../../../../src/libraries/service-application/application/UI');
+const Application = require('../../../../../src/libraries/service-application/application/Application');
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');
 const SendResponse = require('../../../../../src/libraries/service-application/messages/SendResponse');
 const ServiceRequest = require('../../../../../src/libraries/service-application/input-parser/ServiceRequest');
+const WidgetDeps = require('../../../../../src/libraries/service-application/widgets/WidgetDeps');
 
 /**
  * @type {Object|MessageBus}
@@ -12,14 +13,19 @@ const ServiceRequest = require('../../../../../src/libraries/service-application
 const bus = {};
 
 /**
- * @type {Object|UI}
+ * @type {Object|Application}
  */
-const ui = {};
+const app = {};
 
 /**
  * @type {string}
  */
 const endpoint = 'endpoint';
+
+/**
+ * @type {WidgetDeps}
+ */
+const deps = new WidgetDeps(bus, app, {endpoint: endpoint});
 
 /**
  * @type {null|EndpointWidget}
@@ -31,6 +37,9 @@ let widget = null;
  */
 const params = {};
 
+/**
+ * @type {ServiceRequest}
+ */
 const request = new ServiceRequest(endpoint, params);
 
 beforeEach(() => {
@@ -40,7 +49,7 @@ beforeEach(() => {
     };
     bus.send = jest.fn(event => event instanceof RequestReceived ? bus.callback(event) : null);
 
-    widget = new EndpointWidget(bus, ui, endpoint);
+    widget = new EndpointWidget(deps);
 });
 
 test('extends widget', () => {
@@ -55,6 +64,15 @@ test('must implement receive method', () => {
     expect(() => widget.receive({})).toThrow('Not implemented');
 });
 
+test('calls parent connect', () => {
+    const child = { connect: jest.fn() };
+
+    widget.addWidget(child);
+    widget.connect();
+
+    expect(child.connect).toBeCalled();
+});
+
 test('calls receive method on input', () => {
     class StubWidget extends EndpointWidget {
         receive(arg) {
@@ -62,7 +80,7 @@ test('calls receive method on input', () => {
         }
     }
 
-    const widget = new StubWidget(bus, ui, endpoint);
+    const widget = new StubWidget(deps);
     widget.connect();
 
     bus.send(new RequestReceived(request));
@@ -77,7 +95,7 @@ test('ignores events with different endpoints', () => {
         }
     }
 
-    const widget = new StubWidget(bus, ui, 'different-endpoint');
+    const widget = new StubWidget(new WidgetDeps(bus, app, {endpoint: 'different-endpoint'}));
     widget.connect();
 
     bus.send(new RequestReceived(request));
@@ -92,21 +110,4 @@ test('sends responses', () => {
     widget.respond(response);
 
     expect(bus.send.mock.calls[0][0]).toStrictEqual(command);
-});
-
-test('has access to other widgets', () => {
-    ui.getWidget = () => 'widget';
-
-    class StubWidget extends EndpointWidget {
-        receive(arg) {
-            expect(this._ui.getWidget()).toBe('widget');
-        }
-    }
-
-    const widget = new StubWidget(bus, ui, endpoint);
-    widget.connect();
-
-    bus.send(new RequestReceived(request));
-
-    expect.assertions(1);
 });
