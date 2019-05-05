@@ -1,7 +1,6 @@
 const _package = 'FindBooks.ServiceApplication.Widgets.';
 
 const MessageBus = require('message-bus').MessageBus;
-const WidgetDeps = require('./WidgetDeps');
 
 /**
  * @abstract
@@ -10,19 +9,27 @@ module.exports = class Widget {
     static toString() { return _package + Widget.name; }
 
     /**
-     * @param {WidgetDeps} deps
+     * @param {MessageBus} bus
      */
-    constructor(deps) {
-        this._bus = deps.getBus();
-        this._app = deps.getApp();
-        this._widgets = [];
+    constructor(bus) {
+        this._bus = bus;
+        this._widgets = new Map();
     }
 
     /**
+     * @param {string} name
      * @param {Widget} widget
      */
-    addWidget(widget) {
-        this._widgets.push(widget);
+    addWidget(name, widget) {
+        this._widgets.set(name, widget);
+    }
+
+    /**
+     * @param {string} name
+     * @return {Widget}
+     */
+    getWidget(name) {
+        return this._widgets.get(name);
     }
 
     connect() {

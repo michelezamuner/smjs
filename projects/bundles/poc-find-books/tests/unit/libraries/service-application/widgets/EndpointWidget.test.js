@@ -1,5 +1,5 @@
 const EndpointWidget = require('../../../../../src/libraries/service-application/widgets/EndpointWidget');
-const Widget = require('../../../../../src/libraries/service-application/widgets/Widget');
+const StandardWidget = require('../../../../../src/libraries/service-application/widgets/StandardWidget');
 const MessageBus = require('message-bus').MessageBus;
 const Application = require('../../../../../src/libraries/service-application/application/Application');
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');
@@ -52,8 +52,8 @@ beforeEach(() => {
     widget = new EndpointWidget(deps);
 });
 
-test('extends widget', () => {
-    expect(widget).toBeInstanceOf(Widget);
+test('extends standard widget', () => {
+    expect(widget).toBeInstanceOf(StandardWidget);
 });
 
 test('provides fqcn', () => {
@@ -67,7 +67,7 @@ test('must implement receive method', () => {
 test('calls parent connect', () => {
     const child = { connect: jest.fn() };
 
-    widget.addWidget(child);
+    widget.addWidget('name', child);
     widget.connect();
 
     expect(child.connect).toBeCalled();

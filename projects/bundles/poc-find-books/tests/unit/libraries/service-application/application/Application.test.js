@@ -1,6 +1,6 @@
 const Application = require('../../../../../src/libraries/service-application/application/Application');
+const Widget = require('../../../../../src/libraries/service-application/widgets/Widget');
 const MessageBus = require('message-bus').MessageBus;
-const UI = require('../../../../../src/libraries/service-application/application/UI');
 const ApplicationWidgetDeps = require('../../../../../src/libraries/service-application/application/ApplicationWidgetDeps');
 const InputParser = require('../../../../../src/libraries/service-application/input-parser/InputParser');
 const Connection = require('../../../../../src/libraries/service-application/server/Connection');
@@ -12,11 +12,6 @@ const RequestReceived = require('../../../../../src/libraries/service-applicatio
  * @type {Object|MessageBus}
  */
 const bus = {};
-
-/**
- * @type {Object|UI}
- */
-const ui = {};
 
 /**
  * @type {Object|ApplicationWidgetDeps}
@@ -42,8 +37,8 @@ const parser = {};
  * @type {Object[]}
  */
 const widgets = [
-    {connect: jest.fn()},
-    {connect: jest.fn()},
+    {name: 'w1', widget: {connect: jest.fn()}},
+    {name: 'w2', widget: {connect: jest.fn()}},
 ];
 
 beforeEach(() => {
@@ -55,14 +50,19 @@ beforeEach(() => {
         }
         bus.callbacks[msg.constructor](msg)
     });
-    ui.getWidgets = () => widgets;
+    deps.getBus = () => bus;
     deps.getConnection = () => connection;
     deps.getParser = () => parser;
     connection.end = jest.fn();
     connection.write = jest.fn();
     connection.on = () => {};
 
-    application = new Application(bus, ui, deps);
+    application = new Application(deps);
+    widgets.forEach(w => application.addWidget(w.name, w.widget));
+});
+
+test('extends widget', () => {
+    expect(application).toBeInstanceOf(Widget);
 });
 
 test('provides fqcn', () => {
@@ -70,18 +70,13 @@ test('provides fqcn', () => {
     expect(SendResponse.toString()).toBe('FindBooks.ServiceApplication.Messages.SendResponse');
     expect(SendData.toString()).toBe('FindBooks.ServiceApplication.Messages.SendData');
     expect(RequestReceived.toString()).toBe('FindBooks.ServiceApplication.Messages.RequestReceived');
-    expect(UI.toString()).toBe('FindBooks.ServiceApplication.Application.UI');
     expect(ApplicationWidgetDeps.toString()).toBe('FindBooks.ServiceApplication.Application.ApplicationWidgetDeps');
 });
 
-test('connects all children widgets as well', () => {
+test('calls parent connect', () => {
     application.connect();
 
-    for (const widget of widgets) {
-        expect(widget.connect).toBeCalled();
-    }
-
-    expect.assertions(widgets.length);
+    widgets.forEach(w => expect(w.widget.connect).toBeCalled());
 });
 
 test('handles ending connection on response', () => {

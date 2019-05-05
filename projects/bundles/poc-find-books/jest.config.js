@@ -9,7 +9,6 @@ const config = {
         'api_gateway/search_books/Request\.js',
         'api_gateway/search_books/Response\.js',
         'clients/SearchBooksClient\.js',
-        'service-application/application/UI\.js',
         'service-application/application/ApplicationWidgetDeps\.js',
         'service-application/input-parser/InputParser\.js',
         'service-application/input-parser/ServiceRequest\.js',
@@ -17,7 +16,7 @@ const config = {
         'service-application/server/ConnectionListener\.js',
         'service-application/server/Server\.js',
         'service-application/server/ServerFactory\.js',
-        'service-application/widget/WidgetDeps\.js',
+        'service-application/widgets/WidgetDeps\.js',
     ],
     coverageReporters: ['text'],
 };

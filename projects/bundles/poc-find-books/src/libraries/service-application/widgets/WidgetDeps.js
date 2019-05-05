@@ -11,7 +11,7 @@ module.exports = class WidgetDeps {
      * @param {Application} app
      * @param {Object} params
      */
-    constructor(bus, app, params) {
+    constructor(bus, app, params = {}) {
         this._bus = bus;
         this._app = app;
         this._params = params;

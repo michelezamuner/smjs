@@ -1,36 +1,32 @@
 const _package = 'FindBooks.ServiceApplication.Application.';
 
-const MessageBus = require('message-bus').MessageBus;
-const UI = require('./UI');
+const Widget = require('../widgets/Widget');
 const ApplicationWidgetDeps = require('./ApplicationWidgetDeps');
 const SendResponse = require('../messages/SendResponse');
 const SendData = require('../messages/SendData');
 const RequestReceived = require('../messages/RequestReceived');
 
-module.exports = class Application {
+module.exports = class Application extends Widget {
     static toString() { return _package + Application.name; }
 
     /**
-     * @param {MessageBus} bus
-     * @param {UI} ui
      * @param {ApplicationWidgetDeps} deps
      */
-    constructor(bus, ui, deps) {
-        this._bus = bus;
-        this._ui = ui;
+    constructor(deps) {
+        super(deps.getBus());
         this._connection = deps.getConnection();
         this._parser = deps.getParser();
     }
 
+    /**
+     * @override
+     */
     connect() {
+        super.connect();
         this._bus.register([SendResponse], msg => this._sendResponse(msg));
         this._bus.register([SendData], msg => this._sendData(msg));
 
         this._connection.on('data', data => this._onData(data));
-
-        for (const widget of this._ui.getWidgets()) {
-            widget.connect();
-        }
     }
 
     /**
