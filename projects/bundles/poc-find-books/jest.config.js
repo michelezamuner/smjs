@@ -9,8 +9,7 @@ const config = {
         'api_gateway/search_books/Request\.js',
         'api_gateway/search_books/Response\.js',
         'clients/SearchBooksClient\.js',
-        'service-application/application/ApplicationWidgetDeps\.js',
-        'service-application/application/ApplicationWidgetFactory\.js',
+        'service-application/ApplicationWidgetFactory\.js',
         'service-application/input-parser/InputParser\.js',
         'service-application/input-parser/ServiceRequest\.js',
         'service-application/server/Connection\.js',
@@ -18,6 +17,7 @@ const config = {
         'service-application/server/Server\.js',
         'service-application/server/ServerFactory\.js',
         'service-application/widgets/WidgetDeps\.js',
+        'service-application/widgets/ApplicationWidgetDeps\.js',
     ],
     coverageReporters: ['text'],
 };

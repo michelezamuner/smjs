@@ -1,7 +1,7 @@
 const EndpointWidget = require('../../../../../src/libraries/service-application/widgets/EndpointWidget');
 const StandardWidget = require('../../../../../src/libraries/service-application/widgets/StandardWidget');
 const MessageBus = require('message-bus').MessageBus;
-const Application = require('../../../../../src/libraries/service-application/application/Application');
+const ApplicationWidget = require('../../../../../src/libraries/service-application/widgets/ApplicationWidget');
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');
 const SendResponse = require('../../../../../src/libraries/service-application/messages/SendResponse');
 const ServiceRequest = require('../../../../../src/libraries/service-application/input-parser/ServiceRequest');
@@ -13,7 +13,7 @@ const WidgetDeps = require('../../../../../src/libraries/service-application/wid
 const bus = {};
 
 /**
- * @type {Object|Application}
+ * @type {Object|ApplicationWidget}
  */
 const app = {};
 

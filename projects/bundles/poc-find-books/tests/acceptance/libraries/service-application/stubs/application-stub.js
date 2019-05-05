@@ -4,8 +4,8 @@ const ServiceApplication = require('../../../../../src/libraries/service-applica
 const InputParser=  require('../../../../../src/libraries/service-application/input-parser/InputParser');
 const BasicInputParser = require('../../../../../src/libraries/service-application/input-parser/BasicInputParser');
 const EndpointWidget = require('../../../../../src/libraries/service-application/widgets/EndpointWidget');
-const Application = require('../../../../../src/libraries/service-application/application/Application');
-const ApplicationWidgetDeps = require('../../../../../src/libraries/service-application/application/ApplicationWidgetDeps');
+const ApplicationWidget = require('../../../../../src/libraries/service-application/widgets/ApplicationWidget');
+const ApplicationWidgetDeps = require('../../../../../src/libraries/service-application/widgets/ApplicationWidgetDeps');
 
 const container = new Container();
 const args = process.argv.slice(2);
@@ -21,7 +21,7 @@ class StubWidget extends EndpointWidget {
     }
 }
 
-class StubApplicationWidget extends Application {
+class StubApplicationWidget extends ApplicationWidget {
     /**
      * @param {ApplicationWidgetDeps} deps
      */
@@ -31,7 +31,7 @@ class StubApplicationWidget extends Application {
     }
 }
 
-class App {
+class Application {
     static get __DEPS__() { return [ Container ]; }
 
     /**
@@ -50,4 +50,4 @@ class App {
     }
 }
 
-container.make(App).run();
+container.make(Application).run();

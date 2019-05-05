@@ -1,9 +1,9 @@
-const _package = 'FindBooks.ServiceApplication.Application.';
+const _package = 'FindBooks.ServiceApplication.';
 
-const InputParser = require('../input-parser/InputParser');
+const InputParser = require('./input-parser/InputParser');
 const MessageBus = require('message-bus').MessageBus;
-const ApplicationWidgetDeps = require('./ApplicationWidgetDeps');
-const Connection = require('../server/Connection');
+const ApplicationWidgetDeps = require('./widgets/ApplicationWidgetDeps');
+const Connection = require('./server/Connection');
 
 module.exports = class ApplicationWidgetFactory {
     static get __DEPS__() { return [ InputParser ]; }
