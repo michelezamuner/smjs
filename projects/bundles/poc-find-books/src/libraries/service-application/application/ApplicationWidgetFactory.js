@@ -1,22 +1,19 @@
 const _package = 'FindBooks.ServiceApplication.Application.';
 
-const WidgetBuilder = require('./WidgetBuilder');
 const InputParser = require('../input-parser/InputParser');
 const MessageBus = require('message-bus').MessageBus;
 const ApplicationWidgetDeps = require('./ApplicationWidgetDeps');
 const Connection = require('../server/Connection');
-const UI = require('./UI');
+const WidgetDeps = require('../widgets/WidgetDeps');
 
 module.exports = class ApplicationWidgetFactory {
-    static get __DEPS__() { return [ WidgetBuilder, InputParser ]; }
+    static get __DEPS__() { return [ InputParser ]; }
     static toString() { return _package + ApplicationWidgetFactory.name; }
 
     /**
-     * @param {WidgetBuilder} builder
      * @param {InputParser} parser
      */
-    constructor(builder, parser) {
-        this._builder = builder;
+    constructor(parser) {
         this._parser = parser;
     }
 
@@ -28,16 +25,14 @@ module.exports = class ApplicationWidgetFactory {
      */
     create(applicationWidgetClass, widgets, connection) {
         const bus = new MessageBus();
-        const ui = new UI();
-        this._builder.setMessageBus(bus);
+        const deps = new ApplicationWidgetDeps(bus, connection, this._parser);
+        const app = new applicationWidgetClass(deps);
 
-        for (const conf of widgets) {
-            const widget = this._builder.build(conf.type, conf.params);
-            ui.addWidget(conf.name, widget);
+        for (const widget of widgets) {
+            const deps = new WidgetDeps(bus, app, widget.params);
+            app.addWidget(widget.name, new widget.type(deps));
         }
 
-        const params = new ApplicationWidgetDeps(connection, this._parser);
-
-        return new applicationWidgetClass(bus, ui, params);
+        return app;
     }
 };

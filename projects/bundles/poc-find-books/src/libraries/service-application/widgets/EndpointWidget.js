@@ -1,6 +1,6 @@
 const _package = 'FindBooks.ServiceApplication.Widgets.';
 
-const Widget = require('./Widget');
+const StandardWidget = require('./StandardWidget');
 const WidgetDeps = require('./WidgetDeps');
 const RequestReceived = require('../messages/RequestReceived');
 const SendResponse = require('../messages/SendResponse');
@@ -8,7 +8,7 @@ const SendResponse = require('../messages/SendResponse');
 /**
  * @abstract
  */
-module.exports = class EndpointWidget extends Widget {
+module.exports = class EndpointWidget extends StandardWidget {
     static toString() { return _package + EndpointWidget.name; }
 
     /**
