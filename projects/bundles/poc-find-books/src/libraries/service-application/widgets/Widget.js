@@ -18,10 +18,11 @@ module.exports = class Widget {
 
     /**
      * @param {string} name
-     * @param {Widget} widget
+     * @param {Function} type
+     * @param {Object} params
      */
-    addWidget(name, widget) {
-        this._widgets.set(name, widget);
+    addWidget(name, type, params) {
+        throw 'Not implemented';
     }
 
     /**
