@@ -20,7 +20,6 @@ test('provides fqcn', () => {
     expect(InputParser.toString()).toBe('FindBooks.ServiceApplication.InputParser.InputParser');
     expect(BasicInputParser.toString()).toBe('FindBooks.ServiceApplication.InputParser.BasicInputParser');
     expect(ServiceRequest.toString()).toBe('FindBooks.ServiceApplication.InputParser.ServiceRequest');
-    expect(ServiceApplicationException.toString()).toBe('FindBooks.ServiceApplication.ServiceApplicationException');
 });
 
 test('parses valid input into request', () => {

@@ -1,10 +1,10 @@
 const ServiceApplication = require('../../../../src/libraries/service-application/ServiceApplication');
 const ConnectionListener = require('../../../../src/libraries/service-application/server/ConnectionListener');
 const ServerFactory = require('../../../../src/libraries/service-application/server/ServerFactory');
-const ApplicationWidgetFactory = require('../../../../src/libraries/service-application/application/ApplicationWidgetFactory');
+const ApplicationWidgetFactory = require('../../../../src/libraries/service-application/ApplicationWidgetFactory');
 const Server = require('../../../../src/libraries/service-application/server/Server');
+const ApplicationWidget = require('../../../../src/libraries/service-application/widgets/ApplicationWidget');
 const ServiceApplicationException = require('../../../../src/libraries/service-application/ServiceApplicationException');
-const Application = require('../../../../src/libraries/service-application/application/Application');
 
 /**
  * @type {Object|ServerFactory}
@@ -27,7 +27,7 @@ let application = null;
 const server = {};
 
 /**
- * @type {Object|Application}
+ * @type {Object|ApplicationWidget}
  */
 const app = {};
 
@@ -52,6 +52,8 @@ test('can be injected', () => {
 
 test('provides fqcn', () => {
     expect(ServiceApplication.toString()).toBe('FindBooks.ServiceApplication.ServiceApplication');
+    expect(ApplicationWidgetFactory.toString()).toBe('FindBooks.ServiceApplication.ApplicationWidgetFactory');
+    expect(ServiceApplicationException.toString()).toBe('FindBooks.ServiceApplication.ServiceApplicationException');
 });
 
 test('starts server when run', () => {
@@ -67,11 +69,11 @@ test('starts server when run', () => {
 test('uses default application widget class', () => {
     application.run('host', 1234);
 
-    expect(applicationWidgetFactory.create.mock.calls[0][0]).toBe(Application);
+    expect(applicationWidgetFactory.create.mock.calls[0][0]).toBe(ApplicationWidget);
 });
 
 test('overrides application widget class', () => {
-    class StubApplication extends Application {}
+    class StubApplication extends ApplicationWidget {}
 
     application.setApplicationWidgetClass(StubApplication);
     application.run('host', 1234);

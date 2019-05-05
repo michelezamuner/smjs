@@ -1,14 +1,14 @@
-const _package = 'FindBooks.ServiceApplication.Application.';
+const _package = 'FindBooks.ServiceApplication.Widgets.';
 
-const Widget = require('../widgets/Widget');
-const WidgetDeps = require('../widgets/WidgetDeps');
+const Widget = require('./Widget');
+const WidgetDeps = require('./WidgetDeps');
 const ApplicationWidgetDeps = require('./ApplicationWidgetDeps');
 const SendResponse = require('../messages/SendResponse');
 const SendData = require('../messages/SendData');
 const RequestReceived = require('../messages/RequestReceived');
 
-module.exports = class Application extends Widget {
-    static toString() { return _package + Application.name; }
+module.exports = class ApplicationWidget extends Widget {
+    static toString() { return _package + ApplicationWidget.name; }
 
     /**
      * @param {ApplicationWidgetDeps} deps

@@ -1,8 +1,8 @@
-const Application = require('../../../../../src/libraries/service-application/application/Application');
+const ApplicationWidget = require('../../../../../src/libraries/service-application/widgets/ApplicationWidget');
 const Widget = require('../../../../../src/libraries/service-application/widgets/Widget');
 const MessageBus = require('message-bus').MessageBus;
-const ApplicationWidgetDeps = require('../../../../../src/libraries/service-application/application/ApplicationWidgetDeps');
-const ApplicationWidgetFactory = require('../../../../../src/libraries/service-application/application/ApplicationWidgetFactory');
+const ApplicationWidgetDeps = require('../../../../../src/libraries/service-application/widgets/ApplicationWidgetDeps');
+const ApplicationWidgetFactory = require('../../../../../src/libraries/service-application/ApplicationWidgetFactory');
 const InputParser = require('../../../../../src/libraries/service-application/input-parser/InputParser');
 const Connection = require('../../../../../src/libraries/service-application/server/Connection');
 const SendResponse = require('../../../../../src/libraries/service-application/messages/SendResponse');
@@ -106,7 +106,7 @@ beforeEach(() => {
     connection.write = jest.fn();
     connection.on = () => {};
 
-    application = new Application(deps);
+    application = new ApplicationWidget(deps);
     widgets.forEach(w => application.addWidget(w.name, w.type, w.params));
 });
 
@@ -115,12 +115,12 @@ test('extends widget', () => {
 });
 
 test('provides fqcn', () => {
-    expect(Application.toString()).toBe('FindBooks.ServiceApplication.Application.Application');
+    expect(ApplicationWidget.toString()).toBe('FindBooks.ServiceApplication.Widgets.ApplicationWidget');
     expect(SendResponse.toString()).toBe('FindBooks.ServiceApplication.Messages.SendResponse');
     expect(SendData.toString()).toBe('FindBooks.ServiceApplication.Messages.SendData');
     expect(RequestReceived.toString()).toBe('FindBooks.ServiceApplication.Messages.RequestReceived');
-    expect(ApplicationWidgetDeps.toString()).toBe('FindBooks.ServiceApplication.Application.ApplicationWidgetDeps');
-    expect(ApplicationWidgetFactory.toString()).toBe('FindBooks.ServiceApplication.Application.ApplicationWidgetFactory');
+    expect(ApplicationWidgetDeps.toString()).toBe('FindBooks.ServiceApplication.Widgets.ApplicationWidgetDeps');
+    expect(ApplicationWidgetFactory.toString()).toBe('FindBooks.ServiceApplication.ApplicationWidgetFactory');
 });
 
 test('adds widget with self as app', () => {

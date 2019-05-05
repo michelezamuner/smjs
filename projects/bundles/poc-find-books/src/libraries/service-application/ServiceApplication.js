@@ -2,8 +2,8 @@ const _package = 'FindBooks.ServiceApplication.';
 
 const ConnectionListener = require('./server/ConnectionListener');
 const ServerFactory = require('./server/ServerFactory');
-const ApplicationWidgetFactory = require('./application/ApplicationWidgetFactory');
-const Application = require('./application/Application');
+const ApplicationWidgetFactory = require('./ApplicationWidgetFactory');
+const ApplicationWidget = require('./widgets/ApplicationWidget');
 
 module.exports = class ServiceApplication extends ConnectionListener {
     static get __DEPS__() { return [ ServerFactory, ApplicationWidgetFactory ]; }
@@ -17,7 +17,7 @@ module.exports = class ServiceApplication extends ConnectionListener {
         super();
         this._serverFactory = serverFactory;
         this._applicationWidgetFactory = applicationWidgetFactory;
-        this._applicationWidgetClass = Application;
+        this._applicationWidgetClass = ApplicationWidget;
         this._widgets = [];
     }
 
