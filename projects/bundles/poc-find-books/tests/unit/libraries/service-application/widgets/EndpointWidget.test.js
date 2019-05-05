@@ -25,7 +25,7 @@ const endpoint = 'endpoint';
 /**
  * @type {WidgetDeps}
  */
-const deps = new WidgetDeps(bus, app, {endpoint: endpoint});
+const deps = new WidgetDeps(bus, app, { endpoint: endpoint });
 
 /**
  * @type {null|EndpointWidget}
@@ -65,12 +65,34 @@ test('must implement receive method', () => {
 });
 
 test('calls parent connect', () => {
-    const child = { connect: jest.fn() };
+    class StubWidget extends StandardWidget {
+        /**
+         * @param {WidgetDeps} deps
+         */
+        constructor(deps) {
+            super(deps);
+            this._isConnected = false;
+        }
 
-    widget.addWidget('name', child);
+        /**
+         * @override
+         */
+        connect() {
+            this._isConnected = true;
+        }
+
+        /**
+         * @return {boolean}
+         */
+        isConnected() {
+            return this._isConnected;
+        }
+    }
+
+    widget.addWidget('name', StubWidget);
     widget.connect();
 
-    expect(child.connect).toBeCalled();
+    expect(widget.getWidget('name').isConnected()).toBe(true);
 });
 
 test('calls receive method on input', () => {

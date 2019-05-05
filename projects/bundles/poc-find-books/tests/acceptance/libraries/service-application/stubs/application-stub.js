@@ -4,6 +4,8 @@ const ServiceApplication = require('../../../../../src/libraries/service-applica
 const InputParser=  require('../../../../../src/libraries/service-application/input-parser/InputParser');
 const BasicInputParser = require('../../../../../src/libraries/service-application/input-parser/BasicInputParser');
 const EndpointWidget = require('../../../../../src/libraries/service-application/widgets/EndpointWidget');
+const Application = require('../../../../../src/libraries/service-application/application/Application');
+const ApplicationWidgetDeps = require('../../../../../src/libraries/service-application/application/ApplicationWidgetDeps');
 
 const container = new Container();
 const args = process.argv.slice(2);
@@ -19,7 +21,17 @@ class StubWidget extends EndpointWidget {
     }
 }
 
-class Application {
+class StubApplicationWidget extends Application {
+    /**
+     * @param {ApplicationWidgetDeps} deps
+     */
+    constructor(deps) {
+        super(deps);
+        this.addWidget('endpoint-widget', StubWidget, { endpoint: endpoint });
+    }
+}
+
+class App {
     static get __DEPS__() { return [ Container ]; }
 
     /**
@@ -30,8 +42,7 @@ class Application {
         container.bind(MessageBus, bus);
         container.bind(InputParser, BasicInputParser);
         this._app = container.make(ServiceApplication);
-        // TODO: change this
-        this._app.addWidget(endpoint, StubWidget, {endpoint: endpoint});
+        this._app.setApplicationWidgetClass(StubApplicationWidget);
     }
 
     run() {
@@ -39,4 +50,4 @@ class Application {
     }
 }
 
-container.make(Application).run();
+container.make(App).run();

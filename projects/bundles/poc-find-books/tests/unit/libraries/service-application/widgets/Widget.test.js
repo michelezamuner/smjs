@@ -1,44 +1,76 @@
 const Widget = require('../../../../../src/libraries/service-application/widgets/Widget');
+const MessageBus = require('message-bus').MessageBus;
+
+class StubWidget extends Widget {
+    /**
+     * @param {MessageBus} bus
+     */
+    constructor(bus) {
+        super(bus);
+    }
+
+    /**
+     * @override
+     */
+    addWidget(name, type, params) {
+        this._widgets.set(name, params.widget);
+    }
+
+    /**
+     * @return {MessageBus}
+     */
+    getBus() {
+        return this._bus;
+    }
+}
+
+/**
+ * @type {Object|MessageBus}
+ */
+const bus = {};
+
+/**
+ * @type {null|StubWidget}
+ */
+let widget = null;
+
+/**
+ * @type {Object[]}
+ */
+const children = [
+    { name: 'w1', widget: { connect: jest.fn() } },
+    { name: 'w2', widget: { connect: jest.fn() } },
+];
+
+beforeEach(() => {
+    widget = new StubWidget(bus);
+    for (const child of children) {
+        widget.addWidget(child.name, null, child);
+    }
+});
 
 test('provides fqcn', () => {
     expect(Widget.toString()).toBe('FindBooks.ServiceApplication.Widgets.Widget');
 });
 
 test('provides bus', () => {
-    const bus = {};
-    class StubWidget extends Widget {
-        constructor(busArg) {
-            super(busArg);
-            expect(this._bus).toBe(bus);
-        }
+    expect(widget.getBus()).toBe(bus);
+});
+
+test('must implement add widget', () => {
+    expect(() => new Widget().addWidget()).toThrow('Not implemented');
+});
+
+test('provides children widgets', () => {
+    for (const child of children) {
+        expect(widget.getWidget(child.name)).toBe(child.widget);
     }
-
-    new StubWidget(bus);
-
-    expect.assertions(1);
 });
 
 test('connects children widgets', () => {
-    const widget = new Widget();
-    const widgets = [
-        { name: 'w1', widget: { connect: jest.fn() }},
-        { name: 'w2', widget: { connect: jest.fn() }},
-    ];
-
-    widgets.forEach(w => widget.addWidget(w.name, w.widget));
-
     widget.connect();
 
-    widgets.forEach(w => expect(w.widget.connect).toBeCalled());
-});
-
-test('provides children widget', () => {
-    const widget = new Widget();
-    const widgets = [
-        { name: 'w1', widget: { connect: jest.fn() }},
-        { name: 'w2', widget: { connect: jest.fn() }},
-    ];
-
-    widgets.forEach(w => widget.addWidget(w.name, w.widget));
-    widgets.forEach(w => expect(widget.getWidget(w.name)).toBe(w.widget));
+    for (const child of children) {
+        expect(child.widget.connect).toBeCalled();
+    }
 });

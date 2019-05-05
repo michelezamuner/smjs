@@ -16,4 +16,11 @@ module.exports = class StandardWidget extends Widget {
         super(deps.getBus());
         this._app = deps.getApp();
     }
+
+    /**
+     * @override
+     */
+    addWidget(name, type, params) {
+        this._widgets.set(name, new type(new WidgetDeps(this._bus, this._app, params)));
+    }
 };

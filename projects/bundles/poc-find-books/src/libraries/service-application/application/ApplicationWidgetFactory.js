@@ -4,7 +4,6 @@ const InputParser = require('../input-parser/InputParser');
 const MessageBus = require('message-bus').MessageBus;
 const ApplicationWidgetDeps = require('./ApplicationWidgetDeps');
 const Connection = require('../server/Connection');
-const WidgetDeps = require('../widgets/WidgetDeps');
 
 module.exports = class ApplicationWidgetFactory {
     static get __DEPS__() { return [ InputParser ]; }
@@ -24,15 +23,8 @@ module.exports = class ApplicationWidgetFactory {
      * @return {Application}
      */
     create(applicationWidgetClass, widgets, connection) {
-        const bus = new MessageBus();
-        const deps = new ApplicationWidgetDeps(bus, connection, this._parser);
-        const app = new applicationWidgetClass(deps);
+        const deps = new ApplicationWidgetDeps(new MessageBus(), connection, this._parser);
 
-        for (const widget of widgets) {
-            const deps = new WidgetDeps(bus, app, widget.params);
-            app.addWidget(widget.name, new widget.type(deps));
-        }
-
-        return app;
+        return new applicationWidgetClass(deps);
     }
 };

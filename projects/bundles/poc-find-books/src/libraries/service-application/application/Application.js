@@ -1,6 +1,7 @@
 const _package = 'FindBooks.ServiceApplication.Application.';
 
 const Widget = require('../widgets/Widget');
+const WidgetDeps = require('../widgets/WidgetDeps');
 const ApplicationWidgetDeps = require('./ApplicationWidgetDeps');
 const SendResponse = require('../messages/SendResponse');
 const SendData = require('../messages/SendData');
@@ -16,6 +17,14 @@ module.exports = class Application extends Widget {
         super(deps.getBus());
         this._connection = deps.getConnection();
         this._parser = deps.getParser();
+    }
+
+    /**
+     * @override
+     */
+    addWidget(name, type, params = {}) {
+        const deps = new WidgetDeps(this._bus, this, params);
+        this._widgets.set(name, new type(deps));
     }
 
     /**

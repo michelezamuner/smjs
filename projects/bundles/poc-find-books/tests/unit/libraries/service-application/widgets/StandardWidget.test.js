@@ -30,3 +30,47 @@ test('provides bus and app', () => {
 
     expect.assertions(3);
 });
+
+test('adds widget with app', () => {
+    class StubWidget extends StandardWidget {
+        /**
+         * @param {WidgetDeps} deps
+         */
+        constructor(deps) {
+            super(deps);
+            this._params = deps.getParams();
+        }
+
+        /**
+         * @return {MessageBus}
+         */
+        getBus() {
+            return this._bus;
+        }
+
+        /**
+         * @return {Application}
+         */
+        getApp() {
+            return this._app;
+        }
+
+        /**
+         * @return {Object}
+         */
+        getParams() {
+            return this._params;
+        }
+    }
+    const name = 'name';
+    const params = {};
+
+    const widget = new StandardWidget(deps);
+    widget.addWidget(name, StubWidget, params);
+
+    const child = widget.getWidget(name);
+    expect(child).toBeInstanceOf(StandardWidget);
+    expect(child.getBus()).toBe(bus);
+    expect(child.getApp()).toBe(app);
+    expect(child.getParams()).toBe(params);
+});
