@@ -74,3 +74,26 @@ test('adds widget with app', () => {
     expect(child.getApp()).toBe(app);
     expect(child.getParams()).toBe(params);
 });
+
+test('provides default null adapter class', () => {
+    expect(new StandardWidget(deps).getAdapterClass()).toBe(null);
+});
+
+test('provides own adapter', () => {
+    const adapterClass = 'adapter class';
+    class StubWidget extends StandardWidget {
+        /**
+         * @override
+         */
+        getAdapterClass() {
+            return adapterClass;
+        }
+    }
+    const adapter = {};
+
+    app.getAdapter = arg => arg === adapterClass ? adapter : null;
+
+    const widget = new StubWidget(deps);
+
+    expect(widget.getAdapter()).toBe(adapter);
+});

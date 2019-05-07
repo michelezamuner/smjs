@@ -10,6 +10,7 @@ const SendData = require('../../../../../src/libraries/service-application/messa
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');
 const StandardWidget = require('../../../../../src/libraries/service-application/widgets/StandardWidget');
 const WidgetDeps = require('../../../../../src/libraries/service-application/widgets/WidgetDeps');
+const WidgetAdapters = require('../../../../../src/libraries/service-application/widgets/WidgetAdapters');
 
 class StubWidget extends StandardWidget {
     /**
@@ -58,11 +59,6 @@ class StubWidget extends StandardWidget {
 }
 
 /**
- * @type {Object|MessageBus}
- */
-const bus = {};
-
-/**
  * @type {Object|ApplicationWidgetDeps}
  */
 const deps = {};
@@ -71,6 +67,11 @@ const deps = {};
  * @type {null|Application}
  */
 let application = null;
+
+/**
+ * @type {Object|MessageBus}
+ */
+const bus = {};
 
 /**
  * @type {Object|Connection}
@@ -83,12 +84,27 @@ const connection = {};
 const parser = {};
 
 /**
+ * @type {Object|WidgetAdapters}
+ */
+const adapters = {};
+
+/**
  * @type {Object[]}
  */
 const widgets = [
     {name: 'w1', type: StubWidget, params: {}},
     {name: 'w2', type: StubWidget, params: {}},
 ];
+
+/**
+ * @type {string}
+ */
+const widgetClass = 'widgetClass';
+
+/**
+ * @type {Object}
+ */
+const adapter = {};
 
 beforeEach(() => {
     bus.callbacks = {};
@@ -102,9 +118,11 @@ beforeEach(() => {
     deps.getBus = () => bus;
     deps.getConnection = () => connection;
     deps.getParser = () => parser;
+    deps.getAdapters = () => adapters;
     connection.end = jest.fn();
     connection.write = jest.fn();
     connection.on = () => {};
+    adapters.getAdapter = arg => arg === widgetClass ? adapter : null;
 
     application = new ApplicationWidget(deps);
     widgets.forEach(w => application.addWidget(w.name, w.type, w.params));
@@ -137,6 +155,10 @@ test('adds widget with self as app', () => {
 
     const widget2 = application.getWidget('name2');
     expect(widget2.getParams()).toStrictEqual({});
+});
+
+test('provides widget adapters', () => {
+    expect(application.getAdapter(widgetClass)).toBe(adapter);
 });
 
 test('calls parent connect', () => {

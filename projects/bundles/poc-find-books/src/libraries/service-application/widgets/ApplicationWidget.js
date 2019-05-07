@@ -17,6 +17,7 @@ module.exports = class ApplicationWidget extends Widget {
         super(deps.getBus());
         this._connection = deps.getConnection();
         this._parser = deps.getParser();
+        this._adapters = deps.getAdapters();
     }
 
     /**
@@ -25,6 +26,14 @@ module.exports = class ApplicationWidget extends Widget {
     addWidget(name, type, params = {}) {
         const deps = new WidgetDeps(this._bus, this, params);
         this._widgets.set(name, new type(deps));
+    }
+
+    /**
+     * @param {Function} widgetClass
+     * @return {Object}
+     */
+    getAdapter(widgetClass) {
+        return this._adapters.getAdapter(widgetClass);
     }
 
     /**

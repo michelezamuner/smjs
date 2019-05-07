@@ -5,6 +5,9 @@ const ServerFactory = require('./server/ServerFactory');
 const ApplicationWidgetFactory = require('./ApplicationWidgetFactory');
 const ApplicationWidget = require('./widgets/ApplicationWidget');
 
+/**
+ * @abstract
+ */
 module.exports = class ServiceApplication extends ConnectionListener {
     static get __DEPS__() { return [ ServerFactory, ApplicationWidgetFactory ]; }
     static toString() { return _package + ServiceApplication.name; }
@@ -18,7 +21,6 @@ module.exports = class ServiceApplication extends ConnectionListener {
         this._serverFactory = serverFactory;
         this._applicationWidgetFactory = applicationWidgetFactory;
         this._applicationWidgetClass = ApplicationWidget;
-        this._widgets = [];
     }
 
     /**
@@ -38,21 +40,10 @@ module.exports = class ServiceApplication extends ConnectionListener {
     }
 
     /**
-     * @param {string} name
-     * @param {Function} type
-     * @param {Object} params
-     * @return {EndpointWidget}
-     * @protected
-     */
-    addWidget(name, type, params) {
-        this._widgets.push({name: name, type: type, params: params});
-    }
-
-    /**
      * @override
      */
     listen(connection) {
-        const app = this._applicationWidgetFactory.create(this._applicationWidgetClass, this._widgets, connection);
+        const app = this._applicationWidgetFactory.create(this._applicationWidgetClass, connection);
         app.connect();
     }
 };
