@@ -5,9 +5,6 @@ const ServerFactory = require('./server/ServerFactory');
 const ApplicationWidgetFactory = require('./ApplicationWidgetFactory');
 const ApplicationWidget = require('./widgets/ApplicationWidget');
 
-/**
- * @abstract
- */
 module.exports = class ServiceApplication extends ConnectionListener {
     static get __DEPS__() { return [ ServerFactory, ApplicationWidgetFactory ]; }
     static toString() { return _package + ServiceApplication.name; }
