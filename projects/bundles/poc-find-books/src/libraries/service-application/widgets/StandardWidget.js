@@ -23,4 +23,18 @@ module.exports = class StandardWidget extends Widget {
     addWidget(name, type, params) {
         this._widgets.set(name, new type(new WidgetDeps(this._bus, this._app, params)));
     }
+
+    /**
+     * @return {null|Function}
+     */
+    getAdapterClass() {
+        return null;
+    }
+
+    /**
+     * @return {Object}
+     */
+    getAdapter() {
+        return this._app.getAdapter(this.getAdapterClass());
+    }
 };

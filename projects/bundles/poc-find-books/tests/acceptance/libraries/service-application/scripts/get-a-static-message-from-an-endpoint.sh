@@ -22,12 +22,12 @@ if [[ $? != 0 ]]; then
 fi
 
 if [[ "${output1}" != "${response}" ]]; then
-    >&2 echo "Wrong results: expected ${response}, got ${output1}"
+    >&2 echo "Wrong results: expected '${response}', got '${output1}'"
     exit 1
 fi
 
 if [[ "${output2}" != "${response}" ]]; then
-    >&2 echo "Wrong results: expected ${response}, got ${output2}"
+    >&2 echo "Wrong results: expected '${response}', got '${output2}'"
     exit 1
 fi
 
