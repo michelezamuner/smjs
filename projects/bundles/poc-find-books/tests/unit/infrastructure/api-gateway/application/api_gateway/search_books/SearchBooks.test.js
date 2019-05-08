@@ -1,8 +1,8 @@
-const SearchBooks = require('../../../../../../../src/application-services/api-gateway/application/api_gateway/search_books/SearchBooks');
-const Presenter = require('../../../../../../../src/application-services/api-gateway/application/api_gateway/search_books/Presenter');
-const SearchBooksClient = require('../../../../../../../src/application-services/api-gateway/application/clients/SearchBooksClient');
-const Response = require('../../../../../../../src/application-services/api-gateway/application/api_gateway/search_books/Response');
-const Request = require('../../../../../../../src/application-services/api-gateway/application/api_gateway/search_books/Request');
+const SearchBooks = require('../../../../../../../src/infrastructure/api-gateway/application/api_gateway/search_books/SearchBooks');
+const Presenter = require('../../../../../../../src/infrastructure/api-gateway/application/api_gateway/search_books/Presenter');
+const SearchBooksClient = require('../../../../../../../src/infrastructure/api-gateway/application/clients/SearchBooksClient');
+const Response = require('../../../../../../../src/infrastructure/api-gateway/application/api_gateway/search_books/Response');
+const Request = require('../../../../../../../src/infrastructure/api-gateway/application/api_gateway/search_books/Request');
 const SearchBooksRequest = require('../../../../../../../src/domain/api/SearchBooksRequest');
 const SearchBooksResponse = require('../../../../../../../src/domain/api/SearchBooksResponse');
 
