@@ -1,8 +1,8 @@
 const Container = require('container').Container;
 const ServiceApplication = require('../../../../../src/libraries/service-application/ServiceApplication');
-const InputParser=  require('../../../../../src/libraries/service-application/input-parser/InputParser');
+const InputParser = require('../../../../../src/libraries/service-application/input-parser/InputParser');
 const BasicInputParser = require('../../../../../src/libraries/service-application/input-parser/BasicInputParser');
-const EndpointWidget = require('../../../../../src/libraries/service-application/widgets/EndpointWidget');
+const ResponseEndpointWidget = require('../../../../../src/libraries/service-application/widgets/ResponseEndpointWidget');
 const ApplicationWidget = require('../../../../../src/libraries/service-application/widgets/ApplicationWidget');
 const ApplicationWidgetDeps = require('../../../../../src/libraries/service-application/widgets/ApplicationWidgetDeps');
 const WidgetAdapters = require('../../../../../src/libraries/service-application/widgets/WidgetAdapters');
@@ -40,13 +40,10 @@ class StubWidgetAdapters extends WidgetAdapters {
     }
 }
 
-class StubWidget extends EndpointWidget {
-    /**
-     * @override
-     */
-    getAdapterClass() {
-        return UseCase;
-    }
+class StubWidget extends ResponseEndpointWidget {
+    /** @override */
+    getAdapterClass() { return UseCase; }
+
     /**
      * @param {Object} params
      */
