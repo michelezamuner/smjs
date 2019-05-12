@@ -1,19 +1,15 @@
 const promisify = require('util').promisify;
 const exec = promisify(require('child_process').exec);
 
-test('get a static message from an endpoint', async () => {
-    const script = `get-a-static-message-from-an-endpoint.sh "message" "/message" "response message"`;
-    await assertScript(script);
-});
-
 /**
  * @param {string} script
+ * @param {Array} args
  * @return {Promise<void>}
  */
-async function assertScript(script) {
+module.exports = async function (script, args) {
     let error = '';
     try {
-        const output = await exec(`bash ${__dirname}/scripts/${script}`);
+        const output = await exec(`bash ${script} ${args.map(arg => `"${arg}"`).join(' ')}`);
         if (output.stderr) {
             error = output.stderr.trim();
         }
@@ -21,4 +17,4 @@ async function assertScript(script) {
         error = e.stderr;
     }
     expect(error).toBe('');
-}
+};

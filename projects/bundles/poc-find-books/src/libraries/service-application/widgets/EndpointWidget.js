@@ -3,7 +3,6 @@ const _package = 'FindBooks.ServiceApplication.Widgets.';
 const StandardWidget = require('./StandardWidget');
 const WidgetDeps = require('./WidgetDeps');
 const RequestReceived = require('../messages/RequestReceived');
-const SendResponse = require('../messages/SendResponse');
 
 /**
  * @abstract
@@ -32,13 +31,6 @@ module.exports = class EndpointWidget extends StandardWidget {
      */
     receive(params) {
         throw 'Not implemented';
-    }
-
-    /**
-     * @param {string} response
-     */
-    respond(response) {
-        this._bus.send(new SendResponse(response));
     }
 
     /**

@@ -3,7 +3,6 @@ const StandardWidget = require('../../../../../src/libraries/service-application
 const MessageBus = require('message-bus').MessageBus;
 const ApplicationWidget = require('../../../../../src/libraries/service-application/widgets/ApplicationWidget');
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');
-const SendResponse = require('../../../../../src/libraries/service-application/messages/SendResponse');
 const ServiceRequest = require('../../../../../src/libraries/service-application/input-parser/ServiceRequest');
 const WidgetDeps = require('../../../../../src/libraries/service-application/widgets/WidgetDeps');
 
@@ -123,13 +122,4 @@ test('ignores events with different endpoints', () => {
     bus.send(new RequestReceived(request));
 
     expect.assertions(0);
-});
-
-test('sends responses', () => {
-    const response = 'response';
-    const command = new SendResponse(response);
-
-    widget.respond(response);
-
-    expect(bus.send.mock.calls[0][0]).toStrictEqual(command);
 });
