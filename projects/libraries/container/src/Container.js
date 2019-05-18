@@ -19,32 +19,34 @@ module.exports = class Container {
 
     /**
      * @param {Object} ref
+     * @param {Object|null} context
      * @return {Object}
      * @throws {ContainerException}
      */
-    make(ref) {
+    make(ref, context = null) {
         if (ref === Container) {
             return this;
         }
 
         if (this._bound.has(ref)) {
-            return this._makeBound(ref);
+            return this._makeBound(ref, context);
         }
 
         if (ref.__DEPS__ !== undefined) {
-            return this._makeDependent(ref);
+            return this._makeDependent(ref, context);
         }
 
-        return this._makeBare(ref);
+        return this._makeBare(ref, context);
     }
 
     /**
      * @param {Object} ref
+     * @param {Object|null} context
      * @return {Object}
      * @throws {ContainerException}
      * @private
      */
-    _makeBound(ref) {
+    _makeBound(ref, context) {
         const bound = this._bound.get(ref);
         try {
             // instance
@@ -54,11 +56,11 @@ module.exports = class Container {
 
             // type
             if (bound.prototype !== undefined) {
-                return this.make(bound);
+                return this.make(bound, context);
             }
 
             // callback
-            return bound();
+            return bound(this, context);
         } catch (e) {
             throw new ContainerException(`Error making bound reference "${ref}": ${e.message || e}`);
         }
@@ -66,13 +68,14 @@ module.exports = class Container {
 
     /**
      * @param {Function} ref
+     * @param {Object|null} context
      * @return {Object}
      * @throws {ContainerException}
      * @private
      */
-    _makeDependent(ref) {
+    _makeDependent(ref, context) {
         try {
-            return new ref(...ref.__DEPS__.map(dep => this.make(dep)));
+            return new ref(...ref.__DEPS__.map(dep => this.make(dep, context)));
         } catch (e) {
             throw new ContainerException(`Error making reference with dependencies "${ref}": ${e.message || e}`);
         }
@@ -80,12 +83,13 @@ module.exports = class Container {
 
     /**
      * @param {Function} ref
+     * @param {Object|null} context
      * @return {Object}
      * @private
      */
-    _makeBare(ref) {
+    _makeBare(ref, context) {
         try {
-            return new ref();
+            return new ref(context);
         } catch (e) {
             throw new ContainerException(`Error making unbound reference "${ref}": ${e.message || e}`);
         }

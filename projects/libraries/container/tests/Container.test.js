@@ -17,17 +17,25 @@ class Test2 {
 class Interface {
     static toString() { return 'Fully.Qualified.Class.Name'; }
     constructor() {
-        throw 'Cannot instantiate interface';
+        if (new.target === Interface) {
+            throw 'Cannot instantiate interface';
+        }
     }
 }
 
-const container = new Container();
+/**
+ * @type {null|Container}
+ */
+let container = null;
+
+beforeEach(() => {
+    container = new Container();
+});
 
 test('provide fqcn', () => {
     expect(Container.toString()).toBeDefined();
     expect(ContainerException.toString()).toBeDefined();
 });
-
 
 test('returns same instance when creating itself', () => {
     const instance = container.make(Container);
@@ -39,6 +47,14 @@ test('creates instance from class', () => {
     const instance = container.make(Test);
 
     expect(instance).toBeInstanceOf(Test);
+});
+
+test('creates instance from class with context', () => {
+    class Type { constructor(context) { this.context = context; }}
+    const context = 'context';
+    const instance = container.make(Type, context);
+
+    expect(instance.context).toBe(context);
 });
 
 test('creates instance from unbound dependencies', () => {
@@ -58,7 +74,7 @@ test('creates instance from bound instances', () => {
     expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
 });
 
-test('creates object from bound types', () => {
+test('creates instance from bound types', () => {
     container.bind(Test, TestAlternate);
     const instance = container.make(Test2);
 
@@ -66,12 +82,39 @@ test('creates object from bound types', () => {
     expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
 });
 
-test('creates object from bound callbacks', () => {
-    container.bind(Test, () => new TestAlternate());
+test('creates instance from bound callbacks', () => {
+    container.bind(Test, ctr => {
+        const instance = new TestAlternate();
+        instance.container = ctr;
+
+        return instance;
+    });
     const instance = container.make(Test2);
 
     expect(instance.getTest()).toBeInstanceOf(TestAlternate);
     expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
+    expect(instance.getTest().container).toBe(container);
+    expect(instance.getTest1().getTest().container).toBe(container);
+});
+
+test('creates instance from bound callbacks with context', () => {
+    class Regular extends Interface {}
+    class Special extends Interface {}
+    class Target {
+        static get __DEPS__() { return [ Interface ]; }
+        constructor(dep) { this._dep = dep; }
+        getDep() { return this._dep; }
+    }
+
+    const specialContext = 'specialContext';
+
+    container.bind(Interface, (ctr, ctx) => ctx === specialContext ? ctr.make(Special) : new Regular());
+
+    const regular = container.make(Target);
+    expect(regular.getDep()).toBeInstanceOf(Regular);
+
+    const special = container.make(Target, specialContext);
+    expect(special.getDep()).toBeInstanceOf(Special);
 });
 
 test('fails if trying to make an invalid bound type', () => {

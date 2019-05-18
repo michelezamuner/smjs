@@ -17,12 +17,12 @@ run:
 # Instead, what we want is to run tests for a package when all local dependencies have been copied without their
 # node_modules directory, so we clean all packages before running tests on a specific one.
 ci:
-	@yarn && yarn ci
-	@$(foreach project,$(domain),cd $(root) && make clean && cd $(root)/projects/domain/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
-	@$(foreach project,$(application),cd $(root) && make clean && cd $(root)/projects/application/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
-	@$(foreach project,$(adapters),cd $(root) && make clean && cd $(root)/projects/adapters/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
-	@$(foreach project,$(bundles),cd $(root) && make clean && cd $(root)/projects/bundles/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
-	@$(foreach project,$(libraries),cd $(root) && make clean && cd $(root)/projects/libraries/$(project) && echo Running CI for $(project)... && yarn && yarn ci &&) true
+	@yarn >/dev/null && yarn ci
+	@$(foreach project,$(domain),printf "\n\nRUNNING CI FOR $(project)...\n" && cd $(root) && make clean >/dev/null && cd $(root)/projects/domain/$(project) && yarn >/dev/null && yarn ci &&) true
+	@$(foreach project,$(application),printf "\n\nRUNNING CI FOR $(project)...\n" && cd $(root) && make clean >/dev/null && cd $(root)/projects/application/$(project) && yarn >/dev/null && yarn ci &&) true
+	@$(foreach project,$(adapters),printf "\n\nRUNNING CI FOR $(project)...\n" && cd $(root) && make clean >/dev/null && cd $(root)/projects/adapters/$(project) && yarn >/dev/null && yarn ci &&) true
+	@$(foreach project,$(bundles),printf "\n\nRUNNING CI FOR $(project)...\n" && cd $(root) && make clean >/dev/null && cd $(root)/projects/bundles/$(project) && yarn && yarn >/dev/null ci &&) true
+	@$(foreach project,$(libraries),printf "\n\nRUNNING CI FOR $(project)...\n" && cd $(root) && make clean >/dev/null && cd $(root)/projects/libraries/$(project) && yarn >/dev/null && yarn ci &&) true
 
 ssh:
 	@docker run -ti --rm -v $(root):/app:delegated smjs bash
