@@ -6,10 +6,12 @@ module.exports = class ServiceRequest {
     /**
      * @param {string} endpoint
      * @param {Object} params
+     * @param {Object} meta
      */
-    constructor(endpoint, params = {}) {
+    constructor(endpoint, params = {}, meta = {}) {
         this._endpoint = endpoint;
         this._params = params;
+        this._meta = meta;
     }
 
     /**
@@ -24,5 +26,12 @@ module.exports = class ServiceRequest {
      */
     getParams() {
         return this._params;
+    }
+
+    /**
+     * @return {Object}
+     */
+    getMeta() {
+        return this._meta;
     }
 };

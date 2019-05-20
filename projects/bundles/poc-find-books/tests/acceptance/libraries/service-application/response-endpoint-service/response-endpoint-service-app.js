@@ -1,25 +1,18 @@
 const Container = require('container').Container;
 const ServiceApplication = require('../../../../../src/libraries/service-application/ServiceApplication');
 const InputParser = require('../../../../../src/libraries/service-application/input-parser/InputParser');
+const ServiceRequest = require('../../../../../src/libraries/service-application/input-parser/ServiceRequest');
 const BasicInputParser = require('../../../../../src/libraries/service-application/input-parser/BasicInputParser');
 const ResponseEndpointWidget = require('../../../../../src/libraries/service-application/widgets/ResponseEndpointWidget');
 const ApplicationWidget = require('../../../../../src/libraries/service-application/widgets/ApplicationWidget');
 const ApplicationWidgetDeps = require('../../../../../src/libraries/service-application/widgets/ApplicationWidgetDeps');
 const WidgetAdapters = require('../../../../../src/libraries/service-application/widgets/WidgetAdapters');
+const Config = require('../../../../../src/libraries/service-application/Config');
 
 const container = new Container();
 const args = process.argv.slice(2);
 const endpoint = args[0];
 const response = args[1];
-
-class UseCase {
-    /**
-     * @return {string}
-     */
-    getResponse() {
-        return response;
-    }
-}
 
 class StubWidgetAdapters extends WidgetAdapters {
     static get __DEPS__() { return [ Container ]; }
@@ -40,30 +33,39 @@ class StubWidgetAdapters extends WidgetAdapters {
     }
 }
 
-class StubWidget extends ResponseEndpointWidget {
+class SearchBooksAdapter {
+    /**
+     * @return {string}
+     */
+    getResponse() {
+        return response;
+    }
+}
+
+class SearchBooksWidget extends ResponseEndpointWidget {
     /** @override */
-    getAdapterClass() { return UseCase; }
+    getAdapterClass() { return SearchBooksAdapter; }
 
     /**
-     * @param {Object} params
+     * @param {ServiceRequest} request
      */
-    receive(params) {
+    receive(request) {
         const response = this.getAdapter().getResponse();
         this.respond(response);
     }
 }
 
-class StubApplicationWidget extends ApplicationWidget {
+class ServiceWidget extends ApplicationWidget {
     /**
      * @param {ApplicationWidgetDeps} deps
      */
     constructor(deps) {
         super(deps);
-        this.addWidget('endpoint-widget', StubWidget, { endpoint: endpoint });
+        this.addWidget('search-books', SearchBooksWidget, { endpoint: endpoint });
     }
 }
 
-class Application {
+class App {
     static get __DEPS__() { return [ Container ]; }
 
     /**
@@ -72,9 +74,9 @@ class Application {
     constructor(container) {
         container.bind(InputParser, BasicInputParser);
         container.bind(WidgetAdapters, StubWidgetAdapters);
+        container.bind(Config, { getApplicationWidgetClass() { return ServiceWidget; }});
 
         this._app = container.make(ServiceApplication);
-        this._app.setApplicationWidgetClass(StubApplicationWidget);
     }
 
     run() {
@@ -82,4 +84,4 @@ class Application {
     }
 }
 
-container.make(Application).run();
+container.make(App).run();

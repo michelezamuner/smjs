@@ -9,7 +9,7 @@ readonly endpoint="$1"
 readonly input="$2"
 readonly response="$3"
 
-${node} "${current}/response-endpoint-service-app.js" "${endpoint}" "${response}" >/dev/null 2>&1 & disown
+${node} "${current}/response-endpoint-service-app.js" "${endpoint}" "${response}" & disown
 sleep 1
 
 readonly output1="$(${node} ${current}/response-endpoint-service-client.js ${input})"

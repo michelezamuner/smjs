@@ -1,19 +1,19 @@
 const _package = 'FindBooks.ServiceApplication.Widgets.';
 
 const MessageBus = require('message-bus').MessageBus;
-const ApplicationWidget = require('./ApplicationWidget');
+const WidgetAdapterFactory = require('./WidgetAdapterFactory');
 
 module.exports = class WidgetDeps {
     static toString() { return _package + WidgetDeps.name; }
 
     /**
      * @param {MessageBus} bus
-     * @param {ApplicationWidget} app
+     * @param {WidgetAdapterFactory} factory
      * @param {Object} params
      */
-    constructor(bus, app, params = {}) {
+    constructor(bus, factory, params = {}) {
         this._bus = bus;
-        this._app = app;
+        this._factory = factory;
         this._params = params;
     }
 
@@ -25,10 +25,10 @@ module.exports = class WidgetDeps {
     }
 
     /**
-     * @return {ApplicationWidget}
+     * @return {WidgetAdapterFactory}
      */
-    getApp() {
-        return this._app;
+    getWidgetAdapterFactory() {
+        return this._factory;
     }
 
     /**

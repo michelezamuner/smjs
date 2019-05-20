@@ -3,7 +3,6 @@ const _package = 'FindBooks.ServiceApplication.';
 const ConnectionListener = require('./server/ConnectionListener');
 const ServerFactory = require('./server/ServerFactory');
 const ApplicationWidgetFactory = require('./ApplicationWidgetFactory');
-const ApplicationWidget = require('./widgets/ApplicationWidget');
 
 module.exports = class ServiceApplication extends ConnectionListener {
     static get __DEPS__() { return [ ServerFactory, ApplicationWidgetFactory ]; }
@@ -17,14 +16,6 @@ module.exports = class ServiceApplication extends ConnectionListener {
         super();
         this._serverFactory = serverFactory;
         this._applicationWidgetFactory = applicationWidgetFactory;
-        this._applicationWidgetClass = ApplicationWidget;
-    }
-
-    /**
-     * @param {Function} applicationWidgetClass
-     */
-    setApplicationWidgetClass(applicationWidgetClass) {
-        this._applicationWidgetClass = applicationWidgetClass;
     }
 
     /**
@@ -40,7 +31,7 @@ module.exports = class ServiceApplication extends ConnectionListener {
      * @override
      */
     listen(connection) {
-        const app = this._applicationWidgetFactory.create(this._applicationWidgetClass, connection);
+        const app = this._applicationWidgetFactory.create(connection);
         app.connect();
     }
 };

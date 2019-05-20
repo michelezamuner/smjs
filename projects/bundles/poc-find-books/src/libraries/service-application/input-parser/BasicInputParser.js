@@ -6,7 +6,7 @@ const ServiceApplicationException = require('../ServiceApplicationException');
 
 module.exports = class BasicInputParser extends InputParser {
     static toString() { return _package + BasicInputParser.name; }
-    static get _FORMAT() { return /^\/([\w\-]+)\??((?:[\w\-]+=[\w\-+]+&?)+)?/; }
+    static get _FORMAT() { return /^((?:[^\n:]+:[^\n]+\n?)+)?\/([\w\-\/]+)\??((?:[\w\-]+=[\w\-+]+&?)+)?/; }
 
     /**
      * @param {string} input
@@ -19,11 +19,11 @@ module.exports = class BasicInputParser extends InputParser {
             throw new ServiceApplicationException(`Invalid input: "${input}"`);
         }
 
-        return new ServiceRequest(match[1], this._parseParams(match[2]));
+        return new ServiceRequest(match[2], this._parseParams(match[3]), this._parseMeta(match[1]));
     }
 
     /**
-     * @param string
+     * @param {string} string
      * @return {Object}
      * @private
      */
@@ -36,9 +36,33 @@ module.exports = class BasicInputParser extends InputParser {
         const stringParts = string.split('&');
         for (const stringPart of stringParts) {
             const paramParts = stringPart.split('=');
-            params[paramParts[0]] = paramParts[1].replace(/\+/g, ' ');
+            const value = paramParts[1].replace(/\+/g, ' ');
+            const intValue = Number.parseInt(value);
+            params[paramParts[0]] = isNaN(intValue) ? value : intValue;
         }
 
         return params;
+    }
+
+    /**
+     * @param {string} string
+     * @return {Object}
+     * @private
+     */
+    _parseMeta(string) {
+        if (string === undefined) {
+            return {};
+        }
+
+        const meta = {};
+        const stringParts = string.trim().split(/\n/);
+        for (const stringPart of stringParts) {
+            const metaParts = stringPart.split(':');
+            const value = metaParts[1].trim();
+            const intValue = Number.parseInt(value);
+            meta[metaParts[0]] = isNaN(intValue) ? value : intValue;
+        }
+
+        return meta;
     }
 };

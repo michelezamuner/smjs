@@ -9,7 +9,7 @@ const exec = promisify(require('child_process').exec);
 module.exports = async function (script, args) {
     let error = '';
     try {
-        const output = await exec(`bash ${script} ${args.map(arg => `"${arg}"`).join(' ')}`);
+        const output = await exec(`bash ${script} ${args.join(' ')}`, { env: { NEWLINE: '\n' } });
         if (output.stderr) {
             error = output.stderr.trim();
         }

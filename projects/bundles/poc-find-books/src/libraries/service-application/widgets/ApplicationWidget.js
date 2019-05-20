@@ -6,7 +6,11 @@ const ApplicationWidgetDeps = require('./ApplicationWidgetDeps');
 const SendResponse = require('../messages/SendResponse');
 const SendData = require('../messages/SendData');
 const RequestReceived = require('../messages/RequestReceived');
+const WidgetAdapterFactory = require('./WidgetAdapterFactory');
 
+/**
+ * @implements WidgetAdapterFactory
+ */
 module.exports = class ApplicationWidget extends Widget {
     static toString() { return _package + ApplicationWidget.name; }
 
@@ -29,10 +33,9 @@ module.exports = class ApplicationWidget extends Widget {
     }
 
     /**
-     * @param {Function} widgetClass
-     * @return {Object}
+     * @override
      */
-    getAdapter(widgetClass) {
+    createAdapter(widgetClass) {
         return this._adapters.getAdapter(widgetClass);
     }
 
