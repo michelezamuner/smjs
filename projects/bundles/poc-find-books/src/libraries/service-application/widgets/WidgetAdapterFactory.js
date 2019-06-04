@@ -1,5 +1,8 @@
 const _package = 'FindBooks.ServiceApplication.Widgets.';
 
+const WidgetAdapter = require('./WidgetAdapter');
+const StandardWidget = require('./StandardWidget');
+
 /**
  * @interface
  */
@@ -13,10 +16,11 @@ module.exports = class WidgetAdapterFactory {
     }
 
     /**
-     * @param {Function} widgetClass
-     * @return {Object}
+     * @param {Function} adapterClass
+     * @param {StandardWidget} widget
+     * @return {WidgetAdapter}
      */
-    createAdapter(widgetClass) {
+    createAdapter(adapterClass, widget) {
         throw 'Not implemented';
     }
 };

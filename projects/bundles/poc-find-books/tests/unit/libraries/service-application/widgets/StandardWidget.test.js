@@ -1,11 +1,50 @@
 const StandardWidget = require('../../../../../src/libraries/service-application/widgets/StandardWidget');
 const Widget = require('../../../../../src/libraries/service-application/widgets/Widget');
 const WidgetDeps = require('../../../../../src/libraries/service-application/widgets/WidgetDeps');
+const WidgetAdapterFactory = require('../../../../../src/libraries/service-application/widgets/WidgetAdapterFactory');
+const WidgetAdapter = require('../../../../../src/libraries/service-application/widgets/WidgetAdapter');
+const MessageBus = require('message-bus').MessageBus;
 
+/**
+ * @type {Object|MessageBus}
+ */
 const bus = {};
-const app = {};
+
+/**
+ * @type {Object|WidgetAdapterFactory}
+ */
+const factory = {};
+
+/**
+ * @type {Object}
+ */
 const params = {};
-const deps = new WidgetDeps(bus, app, params);
+
+/**
+ * @type {WidgetDeps}
+ */
+const deps = new WidgetDeps(bus, factory, params);
+
+/**
+ * @type {Object}
+ */
+const adapter = {};
+
+/**
+ * @type {Object}
+ */
+const adapterClass = {};
+
+beforeEach(() => {
+    adapter.widget = null;
+    factory.createAdapter = jest.fn((classArg, widgetArg) => {
+        if (classArg !== adapterClass) {
+            return null;
+        }
+        adapter.widget = widgetArg;
+        return adapter;
+    });
+});
 
 test('extends widget', () => {
     expect(new StandardWidget(deps)).toBeInstanceOf(Widget);
@@ -14,14 +53,15 @@ test('extends widget', () => {
 test('provides fqcn', () => {
     expect(StandardWidget.toString()).toBe('FindBooks.ServiceApplication.Widgets.StandardWidget');
     expect(WidgetDeps.toString()).toBe('FindBooks.ServiceApplication.Widgets.WidgetDeps');
+    expect(WidgetAdapter.toString()).toBe('FindBooks.ServiceApplication.Widgets.WidgetAdapter');
 });
 
-test('provides bus and app', () => {
+test('provides bus and factory', () => {
     class StubWidget extends StandardWidget {
         constructor(deps) {
             super(deps);
             expect(this._bus).toBe(bus);
-            expect(this._app).toBe(app);
+            expect(this._factory).toBe(factory);
             expect(deps.getParams()).toBe(params);
         }
     }
@@ -31,7 +71,7 @@ test('provides bus and app', () => {
     expect.assertions(3);
 });
 
-test('adds widget with app', () => {
+test('adds widget with factory', () => {
     class StubWidget extends StandardWidget {
         /**
          * @param {WidgetDeps} deps
@@ -49,10 +89,10 @@ test('adds widget with app', () => {
         }
 
         /**
-         * @return {Application}
+         * @return {WidgetAdapterFactory}
          */
-        getApp() {
-            return this._app;
+        getFactory() {
+            return this._factory;
         }
 
         /**
@@ -71,7 +111,7 @@ test('adds widget with app', () => {
     const child = widget.getWidget(name);
     expect(child).toBeInstanceOf(StandardWidget);
     expect(child.getBus()).toBe(bus);
-    expect(child.getApp()).toBe(app);
+    expect(child.getFactory()).toBe(factory);
     expect(child.getParams()).toBe(params);
 });
 
@@ -79,8 +119,7 @@ test('provides default null adapter class', () => {
     expect(new StandardWidget(deps).getAdapterClass()).toBe(null);
 });
 
-test('provides own adapter', () => {
-    const adapterClass = 'adapter class';
+test('provides own adapter cached', () => {
     class StubWidget extends StandardWidget {
         /**
          * @override
@@ -89,11 +128,10 @@ test('provides own adapter', () => {
             return adapterClass;
         }
     }
-    const adapter = {};
-
-    app.getAdapter = arg => arg === adapterClass ? adapter : null;
-
     const widget = new StubWidget(deps);
 
     expect(widget.getAdapter()).toBe(adapter);
+    expect(widget.getAdapter()).toBe(adapter);
+    expect(widget.getAdapter().widget).toBe(widget);
+    expect(factory.createAdapter).toBeCalledTimes(1);
 });

@@ -10,7 +10,7 @@ const SendData = require('../../../../../src/libraries/service-application/messa
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');
 const StandardWidget = require('../../../../../src/libraries/service-application/widgets/StandardWidget');
 const WidgetDeps = require('../../../../../src/libraries/service-application/widgets/WidgetDeps');
-const WidgetAdapters = require('../../../../../src/libraries/service-application/widgets/WidgetAdapters');
+const WidgetAdapterFactory = require('../../../../../src/libraries/service-application/widgets/WidgetAdapterFactory');
 
 class StubWidget extends StandardWidget {
     /**
@@ -44,10 +44,10 @@ class StubWidget extends StandardWidget {
     }
 
     /**
-     * @return {Application}
+     * @return {WidgetAdapterFactory}
      */
-    getApp() {
-        return this._app;
+    getFactory() {
+        return this._factory;
     }
 
     /**
@@ -84,9 +84,9 @@ const connection = {};
 const parser = {};
 
 /**
- * @type {Object|WidgetAdapters}
+ * @type {Object|WidgetAdapterFactory}
  */
-const adapters = {};
+const adapterFactory = {};
 
 /**
  * @type {Object[]}
@@ -95,16 +95,6 @@ const widgets = [
     {name: 'w1', type: StubWidget, params: {}},
     {name: 'w2', type: StubWidget, params: {}},
 ];
-
-/**
- * @type {string}
- */
-const widgetClass = 'widgetClass';
-
-/**
- * @type {Object}
- */
-const adapter = {};
 
 beforeEach(() => {
     bus.callbacks = {};
@@ -118,11 +108,11 @@ beforeEach(() => {
     deps.getBus = () => bus;
     deps.getConnection = () => connection;
     deps.getParser = () => parser;
-    deps.getAdapters = () => adapters;
+    deps.getAdapterFactory = () => adapterFactory;
     connection.end = jest.fn();
     connection.write = jest.fn();
     connection.on = () => {};
-    adapters.getAdapter = arg => arg === widgetClass ? adapter : null;
+    adapterFactory.createAdapter = () => {};
 
     application = new ApplicationWidget(deps);
     widgets.forEach(w => application.addWidget(w.name, w.type, w.params));
@@ -141,7 +131,7 @@ test('provides fqcn', () => {
     expect(ApplicationWidgetFactory.toString()).toBe('FindBooks.ServiceApplication.ApplicationWidgetFactory');
 });
 
-test('adds widget with self as app', () => {
+test('adds widget with adapter factory', () => {
     const params = {};
 
     application.addWidget('name1', StubWidget, params);
@@ -150,15 +140,11 @@ test('adds widget with self as app', () => {
     const widget1 = application.getWidget('name1');
     expect(widget1).toBeInstanceOf(StubWidget);
     expect(widget1.getBus()).toBe(bus);
-    expect(widget1.getApp()).toBe(application);
+    expect(widget1.getFactory()).toBe(adapterFactory);
     expect(widget1.getParams()).toBe(params);
 
     const widget2 = application.getWidget('name2');
     expect(widget2.getParams()).toStrictEqual({});
-});
-
-test('provides widget adapters', () => {
-    expect(application.getAdapter(widgetClass)).toBe(adapter);
 });
 
 test('calls parent connect', () => {

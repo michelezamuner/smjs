@@ -15,6 +15,7 @@ module.exports = class StandardWidget extends Widget {
     constructor(deps) {
         super(deps.getBus());
         this._factory = deps.getWidgetAdapterFactory();
+        this._adapter = null;
     }
 
     /**
@@ -35,6 +36,10 @@ module.exports = class StandardWidget extends Widget {
      * @return {Object}
      */
     getAdapter() {
-        return this._factory.createAdapter(this.getAdapterClass());
+        if (this._adapter === null) {
+            this._adapter = this._factory.createAdapter(this.getAdapterClass(), this);
+        }
+
+        return this._adapter;
     }
 };

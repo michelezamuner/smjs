@@ -38,9 +38,10 @@ module.exports = class EndpointWidget extends StandardWidget {
      * @param {RequestReceived} event
      */
     _onRequest(event) {
-        if (event.getRequest().getEndpoint() !== this._endpoint) {
+        const request = event.getRequest();
+        if (request.getEndpoint() !== this._endpoint) {
             return;
         }
-        this.receive(event.getRequest());
+        this.receive(request);
     }
 };
