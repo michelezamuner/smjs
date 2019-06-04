@@ -17,23 +17,15 @@ module.exports = class ApplicationWidget extends Widget {
         super(deps.getBus());
         this._connection = deps.getConnection();
         this._parser = deps.getParser();
-        this._adapters = deps.getAdapters();
+        this._adapterFactory = deps.getAdapterFactory();
     }
 
     /**
      * @override
      */
     addWidget(name, type, params = {}) {
-        const deps = new WidgetDeps(this._bus, this, params);
+        const deps = new WidgetDeps(this._bus, this._adapterFactory, params);
         this._widgets.set(name, new type(deps));
-    }
-
-    /**
-     * @param {Function} widgetClass
-     * @return {Object}
-     */
-    getAdapter(widgetClass) {
-        return this._adapters.getAdapter(widgetClass);
     }
 
     /**

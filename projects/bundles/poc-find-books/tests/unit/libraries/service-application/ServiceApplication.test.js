@@ -64,21 +64,6 @@ test('starts server when run', () => {
     expect(server.listen.mock.calls[0][1]).toBe(port);
 });
 
-test('uses default application widget class', () => {
-    application.run('host', 1234);
-
-    expect(applicationWidgetFactory.create.mock.calls[0][0]).toBe(ApplicationWidget);
-});
-
-test('overrides application widget class', () => {
-    class StubApplication extends ApplicationWidget {}
-
-    application.setApplicationWidgetClass(StubApplication);
-    application.run('host', 1234);
-
-    expect(applicationWidgetFactory.create.mock.calls[0][0]).toBe(StubApplication);
-});
-
 test('connects a different application at every connection', () => {
     const app1 = { connect: jest.fn() };
     const connection1 = 'connection1';
@@ -94,8 +79,8 @@ test('connects a different application at every connection', () => {
 
     application.run('host', 1234);
 
-    expect(applicationWidgetFactory.create.mock.calls[0][1]).toBe(connection1);
-    expect(applicationWidgetFactory.create.mock.calls[1][1]).toBe(connection2);
+    expect(applicationWidgetFactory.create.mock.calls[0][0]).toBe(connection1);
+    expect(applicationWidgetFactory.create.mock.calls[1][0]).toBe(connection2);
     expect(app1.connect).toBeCalled();
     expect(app2.connect).toBeCalled();
 });

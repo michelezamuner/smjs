@@ -1,10 +1,9 @@
 const EndpointWidget = require('../../../../../src/libraries/service-application/widgets/EndpointWidget');
 const StandardWidget = require('../../../../../src/libraries/service-application/widgets/StandardWidget');
 const MessageBus = require('message-bus').MessageBus;
-const ApplicationWidget = require('../../../../../src/libraries/service-application/widgets/ApplicationWidget');
 const RequestReceived = require('../../../../../src/libraries/service-application/messages/RequestReceived');
-const ServiceRequest = require('../../../../../src/libraries/service-application/input-parser/ServiceRequest');
 const WidgetDeps = require('../../../../../src/libraries/service-application/widgets/WidgetDeps');
+const WidgetAdapterFactory = require('../../../../../src/libraries/service-application/widgets/WidgetAdapterFactory');
 
 /**
  * @type {Object|MessageBus}
@@ -12,9 +11,9 @@ const WidgetDeps = require('../../../../../src/libraries/service-application/wid
 const bus = {};
 
 /**
- * @type {Object|ApplicationWidget}
+ * @type {Object|WidgetAdapterFactory}
  */
-const app = {};
+const factory = {};
 
 /**
  * @type {string}
@@ -24,7 +23,7 @@ const endpoint = 'endpoint';
 /**
  * @type {WidgetDeps}
  */
-const deps = new WidgetDeps(bus, app, { endpoint: endpoint });
+const deps = new WidgetDeps(bus, factory, { endpoint: endpoint });
 
 /**
  * @type {null|EndpointWidget}
@@ -34,12 +33,7 @@ let widget = null;
 /**
  * @type {Object}
  */
-const params = {};
-
-/**
- * @type {ServiceRequest}
- */
-const request = new ServiceRequest(endpoint, params);
+const request = {};
 
 beforeEach(() => {
     bus.register = (types, callback) => {
@@ -47,6 +41,8 @@ beforeEach(() => {
         bus.callback = callback;
     };
     bus.send = jest.fn(event => event instanceof RequestReceived ? bus.callback(event) : null);
+    factory.createAdapter = () => {};
+    request.getEndpoint = () => endpoint;
 
     widget = new EndpointWidget(deps);
 });
@@ -97,7 +93,7 @@ test('calls parent connect', () => {
 test('calls receive method on input', () => {
     class StubWidget extends EndpointWidget {
         receive(arg) {
-            expect(arg).toStrictEqual(params);
+            expect(arg).toBe(request);
         }
     }
 
@@ -112,11 +108,11 @@ test('calls receive method on input', () => {
 test('ignores events with different endpoints', () => {
     class StubWidget extends EndpointWidget {
         receive(arg) {
-            expect(arg).toStrictEqual(params);
+            expect(arg).toBe(request);
         }
     }
 
-    const widget = new StubWidget(new WidgetDeps(bus, app, {endpoint: 'different-endpoint'}));
+    const widget = new StubWidget(new WidgetDeps(bus, factory, {endpoint: 'different-endpoint'}));
     widget.connect();
 
     bus.send(new RequestReceived(request));

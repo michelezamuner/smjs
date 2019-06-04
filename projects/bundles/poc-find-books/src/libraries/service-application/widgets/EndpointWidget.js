@@ -3,6 +3,7 @@ const _package = 'FindBooks.ServiceApplication.Widgets.';
 const StandardWidget = require('./StandardWidget');
 const WidgetDeps = require('./WidgetDeps');
 const RequestReceived = require('../messages/RequestReceived');
+const ServiceRequest = require('../input-parser/ServiceRequest');
 
 /**
  * @abstract
@@ -27,9 +28,9 @@ module.exports = class EndpointWidget extends StandardWidget {
     }
 
     /**
-     * @param {Object} params
+     * @param {ServiceRequest} request
      */
-    receive(params) {
+    receive(request) {
         throw 'Not implemented';
     }
 
@@ -37,9 +38,10 @@ module.exports = class EndpointWidget extends StandardWidget {
      * @param {RequestReceived} event
      */
     _onRequest(event) {
-        if (event.getRequest().getEndpoint() !== this._endpoint) {
+        const request = event.getRequest();
+        if (request.getEndpoint() !== this._endpoint) {
             return;
         }
-        this.receive(event.getRequest().getParams());
+        this.receive(request);
     }
 };

@@ -14,14 +14,15 @@ module.exports = class StandardWidget extends Widget {
      */
     constructor(deps) {
         super(deps.getBus());
-        this._app = deps.getApp();
+        this._factory = deps.getWidgetAdapterFactory();
+        this._adapter = null;
     }
 
     /**
      * @override
      */
     addWidget(name, type, params) {
-        this._widgets.set(name, new type(new WidgetDeps(this._bus, this._app, params)));
+        this._widgets.set(name, new type(new WidgetDeps(this._bus, this._factory, params)));
     }
 
     /**
@@ -35,6 +36,10 @@ module.exports = class StandardWidget extends Widget {
      * @return {Object}
      */
     getAdapter() {
-        return this._app.getAdapter(this.getAdapterClass());
+        if (this._adapter === null) {
+            this._adapter = this._factory.createAdapter(this.getAdapterClass(), this);
+        }
+
+        return this._adapter;
     }
 };

@@ -23,11 +23,16 @@ test('provides fqcn', () => {
 });
 
 test('parses valid input into request', () => {
-    const input1 = '/search-books?search=my+search+string';
-    expect(parser.parse(input1)).toStrictEqual(new ServiceRequest('search-books', { search: 'my search string'}));
+    const input1 = 'format: json\nclient: 1234\n/books/search?text=search&limit=10';
+    const request1 = new ServiceRequest(
+        'books/search',
+        { text: 'search', limit: 10 },
+        { format: 'json', client: 1234 }
+    );
+    expect(parser.parse(input1)).toStrictEqual(request1);
 
-    const input2 = '/search-books';
-    expect(parser.parse(input2)).toStrictEqual(new ServiceRequest('search-books'));
+    const input2 = '/books/search';
+    expect(parser.parse(input2)).toStrictEqual(new ServiceRequest('books/search'));
 });
 
 test('fails if parsing invalid input', () => {

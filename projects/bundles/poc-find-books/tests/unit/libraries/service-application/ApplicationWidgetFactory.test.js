@@ -1,8 +1,9 @@
 const ApplicationWidgetFactory = require('../../../../src/libraries/service-application/ApplicationWidgetFactory');
 const InputParser = require('../../../../src/libraries/service-application/input-parser/InputParser');
-const WidgetAdapters = require('../../../../src/libraries/service-application/widgets/WidgetAdapters');
+const WidgetAdapterFactory = require('../../../../src/libraries/service-application/widgets/WidgetAdapterFactory');
 const ApplicationWidget = require('../../../../src/libraries/service-application/widgets/ApplicationWidget');
 const ApplicationWidgetDeps = require('../../../../src/libraries/service-application/widgets/ApplicationWidgetDeps');
+const Config = require('../../../../src/libraries/service-application/Config');
 
 class StubApplicationWidget extends ApplicationWidget {
     /**
@@ -27,15 +28,15 @@ class StubApplicationWidget extends ApplicationWidget {
     }
 
     /**
-     * @return {WidgetAdapters}
+     * @return {WidgetAdapterFactory}
      */
-    getAdapters() {
-        return this._adapters;
+    getAdapterFactory() {
+        return this._adapterFactory;
     }
 }
 
 test('can be injected', () => {
-    expect(ApplicationWidgetFactory.__DEPS__).toStrictEqual([ InputParser, WidgetAdapters ]);
+    expect(ApplicationWidgetFactory.__DEPS__).toStrictEqual([ InputParser, WidgetAdapterFactory, Config ]);
 });
 
 test('provides fqcn', () => {
@@ -44,14 +45,15 @@ test('provides fqcn', () => {
 
 test('creates application widget of the given class', () => {
     const parser = {};
-    const adapters = {};
+    const adapterFactory = {};
+    const config = { getApplicationWidgetClass: () => StubApplicationWidget };
     const connection = {};
-    const factory = new ApplicationWidgetFactory(parser, adapters);
+    const factory = new ApplicationWidgetFactory(parser, adapterFactory, config);
 
-    const widget = factory.create(StubApplicationWidget, connection);
+    const widget = factory.create(connection);
 
     expect(widget).toBeInstanceOf(StubApplicationWidget);
     expect(widget.getConnection()).toBe(connection);
     expect(widget.getParser()).toBe(parser);
-    expect(widget.getAdapters()).toBe(adapters);
+    expect(widget.getAdapterFactory()).toBe(adapterFactory);
 });

@@ -9,11 +9,11 @@ readonly endpoint="$1"
 readonly input="$2"
 readonly response="$3"
 
-${node} "${current}/response-endpoint-service-app.js" "${endpoint}" "${response}" >/dev/null 2>&1 & disown
+${node} "${current}/response-endpoint-service-app.js" "${endpoint}" "${response}" & disown
 sleep 1
 
-readonly output1="$(${node} ${current}/response-endpoint-service-client.js ${input})"
-readonly output2="$(${node} ${current}/response-endpoint-service-client.js ${input})"
+readonly output1="$(bash -c "${node} ${current}/response-endpoint-service-client.js \$'${input}'")"
+readonly output2="$(bash -c "${node} ${current}/response-endpoint-service-client.js \$'${input}'")"
 
 ps aux | grep '[r]esponse-endpoint-service-app' | awk '{ print $2 }' | xargs kill -9
 if [[ $? != 0 ]]; then
@@ -35,6 +35,3 @@ if [[ "${output2}" != "${response}" ]]; then
     >&2 printf "Wrong results: expected '${response}', got '${output2}'"
     exit 1
 fi
-
-
-
