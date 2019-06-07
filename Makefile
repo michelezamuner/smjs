@@ -33,3 +33,11 @@ clean:
 	@$(foreach project,$(adapters),cd $(root)/projects/adapters/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
 	@$(foreach project,$(libraries),cd $(root)/projects/libraries/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
 	@$(foreach project,$(bundles),cd $(root)/projects/bundles/$(project) && echo Cleaning $(project)... && rm -rf node_modules/ &&) true
+
+update:
+	@yarn install && yarn upgrade >/dev/null
+	@$(foreach project,$(domain),printf "\n\nUPDATING $(project)...\n" && cd $(root) && make clean >/dev/null && cd $(root)/projects/domain/$(project) && yarn install >/dev/null && yarn upgrade >/dev/null &&) true
+	@$(foreach project,$(application),printf "\n\nUPDATING $(project)...\n" && cd $(root) && make clean >/dev/null && cd $(root)/projects/application/$(project) && yarn install >/dev/null && yarn upgrade >/dev/null &&) true
+	@$(foreach project,$(adapters),printf "\n\nUPDATING $(project)...\n" && cd $(root) && make clean >/dev/null && cd $(root)/projects/adapters/$(project) && yarn install >/dev/null && yarn upgrade >/dev/null &&) true
+	@$(foreach project,$(libraries),printf "\n\nUPDATING $(project)...\n" && cd $(root) && make clean >/dev/null && cd $(root)/projects/libraries/$(project) && yarn install >/dev/null && yarn upgrade >/dev/null &&) true
+	@$(foreach project,$(bundles),printf "\n\nUPDATING $(project)...\n" && cd $(root) && make clean >/dev/null && cd $(root)/projects/bundles/$(project) && yarn install >/dev/null && yarn upgrade >/dev/null &&) true

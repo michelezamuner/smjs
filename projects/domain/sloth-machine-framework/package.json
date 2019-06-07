@@ -7,10 +7,11 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
+    "random": "file:../../libraries/random"
   },
   "devDependencies": {
-    "lib/random": "file:../../libraries/random",
-    "jest": "^24.1.0"
+    "jest": "^24.1.0",
+    "lib/random": "file:../../libraries/random"
   },
   "scripts": {
     "test": "node --use_strict ./node_modules/.bin/jest",
