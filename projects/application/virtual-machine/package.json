@@ -11,7 +11,12 @@
     "app/notifications": "file:../notifications",
     "app/program-loader": "file:../program-loader",
     "app/system": "file:../system",
-    "domain/sloth-machine-framework": "file:../../domain/sloth-machine-framework"
+    "architecture-loader": "file:../architecture-loader",
+    "domain/sloth-machine-framework": "file:../../domain/sloth-machine-framework",
+    "notifications": "file:../notifications",
+    "program-loader": "file:../program-loader",
+    "sloth-machine-framework": "file:../../domain/sloth-machine-framework",
+    "system": "file:../system"
   },
   "devDependencies": {
     "jest": "^24.1.0"

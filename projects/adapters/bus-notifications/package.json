@@ -8,7 +8,8 @@
   "license": "MIT",
   "dependencies": {
     "app/notifications": "file:../../application/notifications",
-    "message-bus": "file:../../libraries/message-bus"
+    "message-bus": "file:../../libraries/message-bus",
+    "notifications": "file:../../application/notifications"
   },
   "devDependencies": {
     "jest": "^24.1.0"

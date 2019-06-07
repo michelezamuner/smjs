@@ -7,7 +7,8 @@
   "author": "Michele Zamuner",
   "license": "MIT",
   "dependencies": {
-    "app/notifications": "file:../notifications"
+    "app/notifications": "file:../notifications",
+    "notifications": "file:../notifications"
   },
   "devDependencies": {
     "jest": "^24.1.0"

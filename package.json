@@ -8,7 +8,7 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "jest": "^23.6.0"
+    "jest": "^24.1.0"
   },
   "scripts": {
     "test": "node --use_strict ./node_modules/.bin/jest",

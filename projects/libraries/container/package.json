@@ -6,8 +6,7 @@
   "repository": "https://github.com/michelezamuner/smjs",
   "author": "Michele Zamuner",
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "jest": "^24.1.0"
   },
