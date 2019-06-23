@@ -19,7 +19,7 @@ module.exports = class SearchBooksWidgetAdapter extends SearchBooksAdapter {
      * @param {string} format
      */
     receive(search, format) {
-        const controller = this._container.make(SearchBooksController, { format: format, adapter: this });
+        const controller = this._container.make(SearchBooksController, { format: format, [SearchBooksAdapter]: this });
         controller.search(search);
     }
 

@@ -66,6 +66,15 @@ test('creates instance from unbound dependencies', () => {
     expect(instance.getTest1().getTest()).toBeInstanceOf(Test);
 });
 
+test('creates instance from unbound dependency as context', () => {
+    const test = new Test();
+    const instance = container.make(Test2, { [Test]: test });
+
+    expect(instance).toBeInstanceOf(Test2);
+    expect(instance.getTest()).toBe(test);
+    expect(instance.getTest1().getTest()).toBe(test);
+});
+
 test('creates instance from bound instances', () => {
     container.bind(Test, new TestAlternate());
     const instance = container.make(Test2);
@@ -107,14 +116,26 @@ test('creates instance from bound callbacks with context', () => {
     }
 
     const specialContext = 'specialContext';
-
-    container.bind(Interface, (ctr, ctx) => ctx === specialContext ? ctr.make(Special) : new Regular());
+    container.bind(Interface, (ctr, ctx) => ctr.make(ctx === specialContext ? Special : Regular));
 
     const regular = container.make(Target);
     expect(regular.getDep()).toBeInstanceOf(Regular);
 
     const special = container.make(Target, specialContext);
     expect(special.getDep()).toBeInstanceOf(Special);
+});
+
+test('dependency as context shadows bound reference', () => {
+    const test1 = new Test();
+    const test2 = new Test();
+
+    container.bind(Test, test1);
+
+    const instance = container.make(Test2, { [Test]: test2 });
+
+    expect(instance).toBeInstanceOf(Test2);
+    expect(instance.getTest()).toBe(test2);
+    expect(instance.getTest1().getTest()).toBe(test2);
 });
 
 test('fails if trying to make an invalid bound type', () => {

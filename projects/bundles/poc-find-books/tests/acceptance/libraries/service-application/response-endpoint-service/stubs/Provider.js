@@ -31,13 +31,7 @@ module.exports = class Provider {
             if (context.format !== 'json') {
                 throw 'Invalid format';
             }
-            return container.make(SearchBooksJsonView, context.adapter);
-        });
-        c.bind(SearchBooksAdapter, (container, adapter) => {
-            if (adapter.constructor !== SearchBooksWidgetAdapter) {
-                throw 'Invalid adapter';
-            }
-            return adapter;
+            return container.make(SearchBooksJsonView, context);
         });
     }
 };
