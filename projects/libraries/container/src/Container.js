@@ -28,7 +28,7 @@ module.exports = class Container {
             return this;
         }
 
-        if (this._bound.has(ref)) {
+        if (this._hasUsableBound(ref, context)) {
             return this._makeBound(ref, context);
         }
 
@@ -37,6 +37,30 @@ module.exports = class Container {
         }
 
         return this._makeBare(ref, context);
+    }
+
+    /**
+     * @param {Object|null} context 
+     * @param {Object} dep
+     * @return {Object}
+     * @private
+     */
+    _getContextDep(context, dep) {
+        return context !== null && context[dep] || null;
+    }
+    
+    /**
+     * @param {Object} ref 
+     * @param {Object|null} context
+     * @return {boolean}
+     * @private
+     */
+    _hasUsableBound(ref, context) {
+        if (!this._bound.has(ref)) {
+            return false;
+        }
+
+        return this._getContextDep(context, ref) === null;
     }
 
     /**
@@ -75,7 +99,7 @@ module.exports = class Container {
      */
     _makeDependent(ref, context) {
         try {
-            return new ref(...ref.__DEPS__.map(dep => this.make(dep, context)));
+            return new ref(...ref.__DEPS__.map(dep => this._getContextDep(context, dep) || this.make(dep, context)));
         } catch (e) {
             throw new ContainerException(`Error making reference with dependencies "${ref}": ${e.message || e}`);
         }

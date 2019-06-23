@@ -36,16 +36,8 @@ module.exports = class Provider {
             if (context.format !== 'txt') {
                 throw 'Invalid format';
             }
-            return container.make(SearchResultsTextView, context.adapter);
+            return container.make(SearchResultsTextView, context);
         });
-        c.bind(SearchCompleteView, (container, context) => {
-            return container.make(SearchCompleteEmptyView, context.adapter);
-        });
-        c.bind(SearchResultsAdapter, (container, adapter) => {
-            if (adapter.constructor !== SearchResultsWidgetAdapter) {
-                throw 'Invalid adapter';
-            }
-            return adapter;
-        });
+        c.bind(SearchCompleteView, SearchCompleteEmptyView);
     }
 };
