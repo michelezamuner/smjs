@@ -8,8 +8,6 @@ const SearchBooksPresenter = require('./application/SearchBooksPresenter');
 const SearchBooksServicePresenter = require('./client-adapter/SearchBooksServicePresenter');
 const SearchBooksView = require('./client-adapter/SearchBooksView');
 const SearchBooksJsonView = require('./client-adapter/SearchBooksJsonView');
-const SearchBooksAdapter = require('./client-adapter/SearchBooksAdapter');
-const SearchBooksWidgetAdapter = require('./widgets-ui/SearchBooksWidgetAdapter');
 
 module.exports = class Provider {
     static get __DEPS__() { return [ Container ]; }
@@ -32,6 +30,6 @@ module.exports = class Provider {
                 throw 'Invalid format';
             }
             return container.make(SearchBooksJsonView, context);
-        });
+        }, SearchBooksServicePresenter);
     }
 };

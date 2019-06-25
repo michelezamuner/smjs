@@ -76,11 +76,13 @@ test('creates instance from unbound dependency as context', () => {
 });
 
 test('creates instance from bound instances', () => {
-    container.bind(Test, new TestAlternate());
+    const expected = new TestAlternate();
+
+    container.bind(Test, expected);
     const instance = container.make(Test2);
 
-    expect(instance.getTest()).toBeInstanceOf(TestAlternate);
-    expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
+    expect(instance.getTest()).toBe(expected);
+    expect(instance.getTest1().getTest()).toBe(expected);
 });
 
 test('creates instance from bound types', () => {
@@ -136,6 +138,54 @@ test('dependency as context shadows bound reference', () => {
     expect(instance).toBeInstanceOf(Test2);
     expect(instance.getTest()).toBe(test2);
     expect(instance.getTest1().getTest()).toBe(test2);
+});
+
+test('creates instance with contextual binding from bound instance', () => {
+    const expected = new TestAlternate();
+    
+    container.bind(Test, expected, Test1);
+    const instance = container.make(Test2);
+
+    expect(instance.getTest()).toBeInstanceOf(Test);
+    expect(instance.getTest1().getTest()).toBe(expected);
+});
+
+test('creates instance with contextual binding from bound type', () => {
+    container.bind(Test, TestAlternate, Test1);
+    const instance = container.make(Test2);
+
+    expect(instance.getTest()).toBeInstanceOf(Test);
+    expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
+});
+
+test('creates instance with contextual binding from bound callback', () => {
+    container.bind(Test, ctr => {
+        const instance = new TestAlternate();
+        instance.container = ctr;
+
+        return instance;
+    }, Test1);
+    const instance = container.make(Test2);
+
+    expect(instance.getTest()).toBeInstanceOf(Test);
+    expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
+    expect(instance.getTest1().getTest().container).toBe(container);
+});
+
+test('creates instance with contextual binding and contextual resolution', () => {
+    container.bind(Test, (ctr, ctx) => {
+        const instance = new TestAlternate();
+        instance.context = ctx;
+
+        return instance;
+    }, Test1);
+
+    const context = {};
+    const instance = container.make(Test2, context);
+
+    expect(instance.getTest()).toBeInstanceOf(Test);
+    expect(instance.getTest1().getTest()).toBeInstanceOf(TestAlternate);
+    expect(instance.getTest1().getTest().context).toBe(context);
 });
 
 test('fails if trying to make an invalid bound type', () => {

@@ -12,8 +12,6 @@ const SearchResultsView = require('./client-adapter/SearchResultsView');
 const SearchResultsTextView = require('./client-adapter/SearchResultsTextView');
 const SearchCompleteView = require('./client-adapter/SearchCompleteView');
 const SearchCompleteEmptyView = require('./client-adapter/SearchCompleteEmptyView');
-const SearchResultsAdapter = require('./client-adapter/SearchResultsAdapter');
-const SearchResultsWidgetAdapter = require('./widgets-ui/SearchResultsWidgetAdapter');
 
 module.exports = class Provider {
     static get __DEPS__() { return [ Container ]; }
@@ -37,7 +35,7 @@ module.exports = class Provider {
                 throw 'Invalid format';
             }
             return container.make(SearchResultsTextView, context);
-        });
-        c.bind(SearchCompleteView, SearchCompleteEmptyView);
+        }, SearchResultsServicePresenter);
+        c.bind(SearchCompleteView, SearchCompleteEmptyView, SearchCompleteServicePresenter);
     }
 };

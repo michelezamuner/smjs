@@ -7,14 +7,21 @@ module.exports = class Container {
 
     constructor() {
         this._bound = new Map();
+        this._boundContext = new Map();
     }
 
     /**
      * @param {Object} ref
      * @param {Object} bound
+     * @param {Object|null} context
      */
-    bind(ref, bound) {
-        this._bound.set(ref, bound);
+    bind(ref, bound, context = null) {
+        if (context === null) {
+            this._bound.set(ref, bound);
+        }
+        if (context !== null) {
+            this._boundContext.set(context, {[ref]: bound});
+        }
     }
 
     /**
@@ -28,8 +35,16 @@ module.exports = class Container {
             return this;
         }
 
-        if (this._hasUsableBound(ref, context)) {
-            return this._makeBound(ref, context);
+        if (this._boundContext.has(ref)) {
+            if (context === null) {
+                context = {};
+            }
+            Object.assign(context, this._boundContext.get(ref));
+        }
+
+        const bound = this._getBound(ref, context);
+        if (bound !== null) {
+            return this._makeBound(ref, context, bound);
         }
 
         if (ref.__DEPS__ !== undefined) {
@@ -40,27 +55,18 @@ module.exports = class Container {
     }
 
     /**
+     * @param {Object} ref 
      * @param {Object|null} context 
-     * @param {Object} dep
      * @return {Object}
      * @private
      */
-    _getContextDep(context, dep) {
-        return context !== null && context[dep] || null;
-    }
-    
-    /**
-     * @param {Object} ref 
-     * @param {Object|null} context
-     * @return {boolean}
-     * @private
-     */
-    _hasUsableBound(ref, context) {
-        if (!this._bound.has(ref)) {
-            return false;
+    _getBound(ref, context) {
+        const contextBound = context !== null && context[ref] || null;
+        if (contextBound !== null) {
+            return contextBound;
         }
 
-        return this._getContextDep(context, ref) === null;
+        return this._bound.has(ref) ? this._bound.get(ref) : null;
     }
 
     /**
@@ -70,8 +76,7 @@ module.exports = class Container {
      * @throws {ContainerException}
      * @private
      */
-    _makeBound(ref, context) {
-        const bound = this._bound.get(ref);
+    _makeBound(ref, context, bound) {
         try {
             // instance
             if (bound.constructor === undefined || bound.constructor.name !== 'Function') {
@@ -99,7 +104,7 @@ module.exports = class Container {
      */
     _makeDependent(ref, context) {
         try {
-            return new ref(...ref.__DEPS__.map(dep => this._getContextDep(context, dep) || this.make(dep, context)));
+            return new ref(...ref.__DEPS__.map(dep => this.make(dep, context)));
         } catch (e) {
             throw new ContainerException(`Error making reference with dependencies "${ref}": ${e.message || e}`);
         }
