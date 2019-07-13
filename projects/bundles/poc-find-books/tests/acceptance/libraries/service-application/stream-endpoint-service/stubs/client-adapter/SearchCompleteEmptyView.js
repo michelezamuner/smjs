@@ -1,21 +1,21 @@
 const SearchCompleteView = require('./SearchCompleteView');
-const SearchResultsAdapter = require('./SearchResultsAdapter');
+const SearchResultsClient = require('./SearchResultsClient');
 
 module.exports = class SearchCompleteEmptyView extends SearchCompleteView {
-    static get __DEPS__() { return [ SearchResultsAdapter ]; }
+    static get __DEPS__() { return [ SearchResultsClient ]; }
 
     /**
-     * @param {SearchResultsAdapter} adapter 
+     * @param {SearchResultsClient} client
      */
-    constructor(adapter) {
+    constructor(client) {
         super();
-        this._adapter = adapter;
+        this._client = client;
     }
 
     /**
      * @override
      */
     render() {
-        this._adapter.close();
+        this._client.close();
     }
 };

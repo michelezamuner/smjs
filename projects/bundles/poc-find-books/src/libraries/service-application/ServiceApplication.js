@@ -3,6 +3,7 @@ const _package = 'FindBooks.ServiceApplication.';
 const ConnectionListener = require('./server/ConnectionListener');
 const ServerFactory = require('./server/ServerFactory');
 const ApplicationWidgetFactory = require('./ApplicationWidgetFactory');
+const MessageBus = require('message-bus').MessageBus;
 
 module.exports = class ServiceApplication extends ConnectionListener {
     static get __DEPS__() { return [ ServerFactory, ApplicationWidgetFactory ]; }
@@ -31,7 +32,7 @@ module.exports = class ServiceApplication extends ConnectionListener {
      * @override
      */
     listen(connection) {
-        const app = this._applicationWidgetFactory.create(connection);
+        const app = this._applicationWidgetFactory.create(new MessageBus(), connection);
         app.connect();
     }
 };

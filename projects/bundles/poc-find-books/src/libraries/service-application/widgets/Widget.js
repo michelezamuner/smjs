@@ -1,28 +1,22 @@
 const _package = 'FindBooks.ServiceApplication.Widgets.';
 
-const MessageBus = require('message-bus').MessageBus;
-
-/**
- * @abstract
- */
 module.exports = class Widget {
     static toString() { return _package + Widget.name; }
 
-    /**
-     * @param {MessageBus} bus
-     */
-    constructor(bus) {
-        this._bus = bus;
+    constructor() {
         this._widgets = new Map();
+    }
+
+    connect() {
+        this._widgets.forEach(widget => widget.connect());
     }
 
     /**
      * @param {string} name
-     * @param {Function} type
-     * @param {Object} params
+     * @param {Widget} widget
      */
-    addWidget(name, type, params) {
-        throw 'Not implemented';
+    addWidget(name, widget) {
+        this._widgets.set(name, widget);
     }
 
     /**
@@ -31,9 +25,5 @@ module.exports = class Widget {
      */
     getWidget(name) {
         return this._widgets.get(name);
-    }
-
-    connect() {
-        this._widgets.forEach(widget => widget.connect());
     }
 };

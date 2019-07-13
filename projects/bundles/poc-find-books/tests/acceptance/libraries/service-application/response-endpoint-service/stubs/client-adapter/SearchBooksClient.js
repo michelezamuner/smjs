@@ -1,6 +1,6 @@
-module.exports = class SearchBooksAdapter {
+module.exports = class SearchBooksClient {
     constructor() {
-        if (new.target === SearchBooksAdapter) {
+        if (new.target === SearchBooksClient) {
             throw 'Cannot instantiate interface';
         }
     }
@@ -8,7 +8,7 @@ module.exports = class SearchBooksAdapter {
     /**
      * @param {string} response 
      */
-    respond(response) {
+    send(response) {
         throw 'Not implemented';
     }
 };

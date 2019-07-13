@@ -1,9 +1,10 @@
 const Container = require('container').Container;
 const InputParser = require('../../../../../../src/libraries/service-application/input-parser/InputParser');
 const BasicInputParser = require('../../../../../../src/libraries/service-application/input-parser/BasicInputParser');
-const WidgetAdapterFactory = require('../../../../../../src/libraries/service-application/widgets/WidgetAdapterFactory');
-const Config = require('../../../../../../src/libraries/service-application/Config');
+const ApplicationWidgetFactory = require('../../../../../../src/libraries/service-application/ApplicationWidgetFactory');
 const ServiceApplicationWidget = require('./widgets-ui/ServiceApplicationWidget');
+const MessageBus = require('message-bus').MessageBus;
+const Connection = require('../../../../../../src/libraries/service-application/server/Connection');
 const SearchBooksPresenter = require('./application/SearchBooksPresenter');
 const SearchBooksServicePresenter = require('./client-adapter/SearchBooksServicePresenter');
 const SearchBooksView = require('./client-adapter/SearchBooksView');
@@ -22,13 +23,16 @@ module.exports = class Provider {
     register() {
         const c = this._container;
         c.bind(InputParser, BasicInputParser);
-        c.bind(WidgetAdapterFactory, { createAdapter(adapterClass, widget) { return new adapterClass(c, widget); }});
-        c.bind(Config, { getApplicationWidgetClass() { return ServiceApplicationWidget; }});
+        c.bind(ApplicationWidgetFactory, { create(bus, connection) {
+            return c.make(ServiceApplicationWidget, { [MessageBus]: bus, [Connection]: connection });
+        }});
+        
         c.bind(SearchBooksPresenter, SearchBooksServicePresenter);
         c.bind(SearchBooksView, (container, context) => {
             if (context.format !== 'json') {
                 throw 'Invalid format';
             }
+
             return container.make(SearchBooksJsonView, context);
         }, SearchBooksServicePresenter);
     }

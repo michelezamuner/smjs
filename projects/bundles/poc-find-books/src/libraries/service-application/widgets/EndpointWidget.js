@@ -1,22 +1,24 @@
 const _package = 'FindBooks.ServiceApplication.Widgets.';
 
-const StandardWidget = require('./StandardWidget');
-const WidgetDeps = require('./WidgetDeps');
+const Widget = require('./Widget');
+const MessageBus = require('message-bus').MessageBus;
 const RequestReceived = require('../messages/RequestReceived');
 const ServiceRequest = require('../input-parser/ServiceRequest');
 
 /**
  * @abstract
  */
-module.exports = class EndpointWidget extends StandardWidget {
+module.exports = class EndpointWidget extends Widget {
     static toString() { return _package + EndpointWidget.name; }
 
     /**
-     * @param {WidgetDeps} deps
+     * @param {MessageBus} bus
+     * @param {Object} params
      */
-    constructor(deps) {
-        super(deps);
-        this._endpoint = deps.getParams().endpoint;
+    constructor(bus, params) {
+        super();
+        this._bus = bus;
+        this._endpoint = params.endpoint;
     }
 
     /**
@@ -24,7 +26,7 @@ module.exports = class EndpointWidget extends StandardWidget {
      */
     connect() {
         super.connect();
-        this._bus.register([RequestReceived], event => this._onRequest(event));
+        this._bus.register([RequestReceived], msg => this._onRequest(msg));
     }
 
     /**
@@ -35,10 +37,10 @@ module.exports = class EndpointWidget extends StandardWidget {
     }
 
     /**
-     * @param {RequestReceived} event
+     * @param {RequestReceived} msg
      */
-    _onRequest(event) {
-        const request = event.getRequest();
+    _onRequest(msg) {
+        const request = msg.getRequest();
         if (request.getEndpoint() !== this._endpoint) {
             return;
         }

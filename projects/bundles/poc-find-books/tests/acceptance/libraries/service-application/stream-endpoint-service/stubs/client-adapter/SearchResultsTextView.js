@@ -1,21 +1,21 @@
 const SearchResultsView = require('./SearchResultsView');
-const SearchResultsAdapter = require('./SearchResultsAdapter');
+const SearchResultsClient = require('./SearchResultsClient');
 
 module.exports = class SearchResultsTextView extends SearchResultsView {
-    static get __DEPS__() { return [ SearchResultsAdapter ]; }
+    static get __DEPS__() { return [ SearchResultsClient ]; }
 
     /**
-     * @param {SearchResultsAdapter} adapter 
+     * @param {SearchResultsClient} client
      */
-    constructor(adapter) {
+    constructor(client) {
         super();
-        this._adapter = adapter;
+        this._client = client;
     }
 
     /**
      * @override
      */
     render(viewModel) {
-        this._adapter.write(viewModel.response);
+        this._client.send(viewModel.response);
     }
 };
