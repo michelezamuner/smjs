@@ -1,21 +1,21 @@
 const SearchBooksView = require('./SearchBooksView');
-const SearchBooksAdapter = require('./SearchBooksAdapter');
+const SearchBooksClient = require('./SearchBooksClient');
 
 module.exports = class SearchBooksJsonView extends SearchBooksView {
-    static get __DEPS__() { return [ SearchBooksAdapter ]; }
+    static get __DEPS__() { return [ SearchBooksClient ]; }
 
     /**
-     * @param {SearchBooksAdapter} adapter 
+     * @param {SearchBooksClient} client
      */
-    constructor(adapter) {
+    constructor(client) {
         super();
-        this._adapter = adapter;
+        this._client = client;
     }
 
     /**
      * @override
      */
     render(viewModel) {
-        this._adapter.respond(viewModel.response);
+        this._client.send(viewModel.response);
     }
 };

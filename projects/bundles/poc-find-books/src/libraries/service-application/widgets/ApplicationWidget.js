@@ -1,8 +1,9 @@
 const _package = 'FindBooks.ServiceApplication.Widgets.';
 
 const Widget = require('./Widget');
-const WidgetDeps = require('./WidgetDeps');
-const ApplicationWidgetDeps = require('./ApplicationWidgetDeps');
+const MessageBus = require('message-bus').MessageBus;
+const Connection = require('../server/Connection');
+const InputParser = require('../input-parser/InputParser');
 const SendResponse = require('../messages/SendResponse');
 const SendData = require('../messages/SendData');
 const RequestReceived = require('../messages/RequestReceived');
@@ -11,21 +12,15 @@ module.exports = class ApplicationWidget extends Widget {
     static toString() { return _package + ApplicationWidget.name; }
 
     /**
-     * @param {ApplicationWidgetDeps} deps
+     * @param {MessageBus} bus
+     * @param {Connection} connection
+     * @param {InputParser} parser
      */
-    constructor(deps) {
-        super(deps.getBus());
-        this._connection = deps.getConnection();
-        this._parser = deps.getParser();
-        this._adapterFactory = deps.getAdapterFactory();
-    }
-
-    /**
-     * @override
-     */
-    addWidget(name, type, params = {}) {
-        const deps = new WidgetDeps(this._bus, this._adapterFactory, params);
-        this._widgets.set(name, new type(deps));
+    constructor(bus, connection, parser) {
+        super();
+        this._bus = bus;
+        this._connection = connection;
+        this._parser = parser;
     }
 
     /**

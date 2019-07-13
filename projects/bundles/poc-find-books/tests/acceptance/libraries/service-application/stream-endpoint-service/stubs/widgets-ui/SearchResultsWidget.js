@@ -1,16 +1,45 @@
 const StreamEndpointWidget = require('../../../../../../../src/libraries/service-application/widgets/StreamEndpointWidget');
-const SearchResultsWidgetAdapter = require('./SearchResultsWidgetAdapter');
+const SearchResultsClient = require('../client-adapter/SearchResultsClient');
+const Container = require('container').Container;
+const MessageBus = require('message-bus').MessageBus;
+const SearchResultsController = require('../client-adapter/SearchResultsController');
 
+/**
+ * @implements {SearchResultsClient}
+ */
 module.exports = class SearchResultsWidget extends StreamEndpointWidget {
-    /** @override **/
-    getAdapterClass() { return SearchResultsWidgetAdapter; }
+    /**
+     * @param {Container} container 
+     * @param {MessageBus} bus 
+     * @param {Object} params 
+     */
+    constructor(container, bus, params) {
+        super(bus, params);
+        this._container = container;
+    }
 
     /**
-     * @param {ServiceRequest} request
+     * @override
      */
     receive(request) {
         const searchId = request.getParams().id;
         const format = request.getMeta().format;
-        this.getAdapter().receive(searchId, format);
+        const controller = this._container.make(SearchResultsController, { format: format, [SearchResultsClient]: this });
+
+        controller.retrieveSearchResults(searchId);
+    }
+
+    /**
+     * @override
+     */
+    send(response) {
+        this.write(response);
+    }
+
+    /**
+     * @override
+     */
+    close() {
+        super.close();
     }
 };

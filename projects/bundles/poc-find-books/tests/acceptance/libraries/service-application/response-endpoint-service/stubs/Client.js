@@ -8,8 +8,6 @@ module.exports = class Client {
     }
 
     connect() {
-        this._client.connect(2222, '127.0.0.1', () => {
-            this._client.write(this._input);
-        });
+        this._client.connect(2222, '127.0.0.1', () => this._client.write(this._input));
     }
 }
