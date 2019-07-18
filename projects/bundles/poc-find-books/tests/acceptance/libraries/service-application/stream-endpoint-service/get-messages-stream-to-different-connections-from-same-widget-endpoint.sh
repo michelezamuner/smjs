@@ -22,7 +22,7 @@ SM_ENDPOINT="${endpoint}" \
     SM_RESPONSE12="${response12}" \
     SM_RESPONSE21="${response21}" \
     SM_RESPONSE22="${response22}" \
-    ${node} -e "C=require('container').Container;(new C()).make(require('${stubs}/App')).run();" \
+    ${node} -e "C=require('container').Container;(new C()).make(require('${stubs}/ui/widgeted/App')).run();" \
     & disown
 sleep 1
 
