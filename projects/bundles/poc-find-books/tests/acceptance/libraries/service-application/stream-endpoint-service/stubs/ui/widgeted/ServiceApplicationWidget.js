@@ -1,8 +1,8 @@
-const ApplicationWidget = require('../../../../../../../src/libraries/service-application/widgets/ApplicationWidget');
+const ApplicationWidget = require('../../../../../../../../src/libraries/service-application/widgets/ApplicationWidget');
 const Container = require('container').Container;
 const MessageBus = require('message-bus').MessageBus;
-const Connection = require('../../../../../../../src/libraries/service-application/server/Connection');
-const InputParser = require('../../../../../../../src/libraries/service-application/input-parser/InputParser');
+const Connection = require('../../../../../../../../src/libraries/service-application/server/Connection');
+const InputParser = require('../../../../../../../../src/libraries/service-application/input-parser/InputParser');
 const SearchResultsWidget = require('./SearchResultsWidget');
 
 module.exports = class ServiceApplicationWidget extends ApplicationWidget {

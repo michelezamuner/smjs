@@ -1,8 +1,8 @@
-const ResponseEndpointWidget = require('../../../../../../../src/libraries/service-application/widgets/ResponseEndpointWidget');
-const SearchBooksView = require('../client-adapter/SearchBooksView');
+const ResponseEndpointWidget = require('../../../../../../../../src/libraries/service-application/widgets/ResponseEndpointWidget');
+const SearchBooksView = require('../../client/SearchBooksView');
 const Container = require('container').Container;
 const MessageBus = require('message-bus').MessageBus;
-const SearchBooksController = require('../client-adapter/SearchBooksController');
+const SearchBooksController = require('../../client/SearchBooksController');
 
 /**
  * @implements {SearchBooksView}

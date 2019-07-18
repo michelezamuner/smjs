@@ -1,9 +1,9 @@
-const StreamEndpointWidget = require('../../../../../../../src/libraries/service-application/widgets/StreamEndpointWidget');
-const SearchResultsView = require('../client-adapter/SearchResultsView');
-const SearchCompleteView = require('../client-adapter/SearchCompleteView');
+const StreamEndpointWidget = require('../../../../../../../../src/libraries/service-application/widgets/StreamEndpointWidget');
+const SearchResultsView = require('../../client/SearchResultsView');
+const SearchCompleteView = require('../../client/SearchCompleteView');
 const Container = require('container').Container;
 const MessageBus = require('message-bus').MessageBus;
-const SearchResultsController = require('../client-adapter/SearchResultsController');
+const SearchResultsController = require('../../client/SearchResultsController');
 
 /**
  * @implements {SearchResultsView}

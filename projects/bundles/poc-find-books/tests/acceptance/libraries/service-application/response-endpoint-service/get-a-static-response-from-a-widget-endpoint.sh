@@ -12,7 +12,7 @@ readonly response="$3"
 
 SM_ENDPOINT="${endpoint}" \
     SM_RESPONSE="${response}" \
-    ${node} -e "C=require('container').Container;(new C()).make(require('${stubs}/App')).run();" \
+    ${node} -e "C=require('container').Container;(new C()).make(require('${stubs}/ui/widgeted/App')).run();" \
     & disown
 sleep 1
 
