@@ -8,7 +8,7 @@ module.exports = class SearchBooksView {
     /**
      * @param {Object} viewModel 
      */
-    render(viewModel) {
+    renderResponse(viewModel) {
         throw 'Not implemented';
     }
 };

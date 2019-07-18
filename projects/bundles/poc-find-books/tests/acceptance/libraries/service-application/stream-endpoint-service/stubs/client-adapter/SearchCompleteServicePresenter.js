@@ -16,6 +16,6 @@ module.exports = class SearchCompleteServicePresenter extends SearchCompletePres
      * @override
      */
     present() {
-        this._view.render();
+        this._view.renderComplete();
     }
 };

@@ -7,8 +7,6 @@ const MessageBus = require('message-bus').MessageBus;
 const Connection = require('../../../../../../src/libraries/service-application/server/Connection');
 const SearchBooksPresenter = require('./application/SearchBooksPresenter');
 const SearchBooksServicePresenter = require('./client-adapter/SearchBooksServicePresenter');
-const SearchBooksView = require('./client-adapter/SearchBooksView');
-const SearchBooksJsonView = require('./client-adapter/SearchBooksJsonView');
 
 module.exports = class Provider {
     static get __DEPS__() { return [ Container ]; }
@@ -28,12 +26,5 @@ module.exports = class Provider {
         }});
         
         c.bind(SearchBooksPresenter, SearchBooksServicePresenter);
-        c.bind(SearchBooksView, (container, context) => {
-            if (context.format !== 'json') {
-                throw 'Invalid format';
-            }
-
-            return container.make(SearchBooksJsonView, context);
-        }, SearchBooksServicePresenter);
     }
 };
