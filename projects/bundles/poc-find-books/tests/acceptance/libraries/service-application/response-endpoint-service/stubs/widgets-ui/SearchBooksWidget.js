@@ -1,11 +1,11 @@
 const ResponseEndpointWidget = require('../../../../../../../src/libraries/service-application/widgets/ResponseEndpointWidget');
-const SearchBooksClient = require('../client-adapter/SearchBooksClient');
+const SearchBooksView = require('../client-adapter/SearchBooksView');
 const Container = require('container').Container;
 const MessageBus = require('message-bus').MessageBus;
 const SearchBooksController = require('../client-adapter/SearchBooksController');
 
 /**
- * @implements {SearchBooksClient}
+ * @implements {SearchBooksView}
  */
 module.exports = class SearchBooksWidget extends ResponseEndpointWidget {
     /**
@@ -22,17 +22,18 @@ module.exports = class SearchBooksWidget extends ResponseEndpointWidget {
      * @override
      */
     receive(request) {
-        const searchText = request.getParams().searchText;
-        const format = request.getMeta().format;
-        const controller = this._container.make(SearchBooksController, { format: format, [SearchBooksClient]: this });
+        if (request.getMeta().format !== 'json') {
+            throw 'Invalid format';
+        }
+        const controller = this._container.make(SearchBooksController, { [SearchBooksView]: this });
 
-        controller.search(searchText);
+        controller.search(request.getParams().searchText);
     }
 
     /**
      * @override
      */
-    send(response) {
-        this.respond(response);
+    renderResponse(viewModel) {
+        this.respond(viewModel.response);
     }
 };

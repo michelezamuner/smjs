@@ -1,11 +1,13 @@
 const StreamEndpointWidget = require('../../../../../../../src/libraries/service-application/widgets/StreamEndpointWidget');
-const SearchResultsClient = require('../client-adapter/SearchResultsClient');
+const SearchResultsView = require('../client-adapter/SearchResultsView');
+const SearchCompleteView = require('../client-adapter/SearchCompleteView');
 const Container = require('container').Container;
 const MessageBus = require('message-bus').MessageBus;
 const SearchResultsController = require('../client-adapter/SearchResultsController');
 
 /**
- * @implements {SearchResultsClient}
+ * @implements {SearchResultsView}
+ * @implements {SearchCompleteView}
  */
 module.exports = class SearchResultsWidget extends StreamEndpointWidget {
     /**
@@ -22,24 +24,25 @@ module.exports = class SearchResultsWidget extends StreamEndpointWidget {
      * @override
      */
     receive(request) {
-        const searchId = request.getParams().id;
-        const format = request.getMeta().format;
-        const controller = this._container.make(SearchResultsController, { format: format, [SearchResultsClient]: this });
+        if (request.getMeta().format !== 'txt') {
+            throw 'Invalid format';
+        }
+        const controller = this._container.make(SearchResultsController, { [SearchResultsView]: this, [SearchCompleteView]: this });
 
-        controller.retrieveSearchResults(searchId);
+        controller.retrieveSearchResults(request.getParams().id);
     }
 
     /**
      * @override
      */
-    send(response) {
-        this.write(response);
+    renderResults(viewModel) {
+        this.write(viewModel.response);
     }
 
     /**
      * @override
      */
-    close() {
+    renderComplete() {
         super.close();
     }
 };

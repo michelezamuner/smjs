@@ -17,6 +17,6 @@ module.exports = class SearchBooksServicePresenter extends SearchBooksPresenter 
      */
     present(response) {
         const viewModel = { response: response };
-        this._view.render(viewModel);
+        this._view.renderResponse(viewModel);
     }
 };

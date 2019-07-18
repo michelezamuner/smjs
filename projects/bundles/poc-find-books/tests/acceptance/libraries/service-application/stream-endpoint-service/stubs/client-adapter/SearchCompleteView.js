@@ -5,7 +5,7 @@ module.exports = class SearchCompleteView {
         }
     }
 
-    render() {
+    renderComplete() {
         throw 'Not implemented';
     }
 };

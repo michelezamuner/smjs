@@ -17,6 +17,6 @@ module.exports = class SearchResultsServicePresenter extends SearchResultsPresen
      */
     present(response) {
         const viewModel = { response: response };
-        this._view.render(viewModel);
+        this._view.renderResults(viewModel);
     }
 };
