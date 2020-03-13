@@ -2,7 +2,7 @@ const _package = 'FindBooks.ServiceApplication.InputParser.';
 
 const InputParser = require('./InputParser');
 const ServiceRequest = require('./ServiceRequest');
-const ServiceApplicationException = require('../ServiceApplicationException');
+const InputParserException = require('./InputParserException');
 
 module.exports = class BasicInputParser extends InputParser {
     static toString() { return _package + BasicInputParser.name; }
@@ -16,7 +16,7 @@ module.exports = class BasicInputParser extends InputParser {
     parse(input) {
         const match = BasicInputParser._FORMAT.exec(input);
         if (match === null) {
-            throw new ServiceApplicationException(`Invalid input: "${input}"`);
+            throw new InputParserException(`Invalid input: "${input}"`);
         }
 
         return new ServiceRequest(match[2], this._parseParams(match[3]), this._parseMeta(match[1]));
