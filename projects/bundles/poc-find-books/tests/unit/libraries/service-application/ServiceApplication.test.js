@@ -1,10 +1,9 @@
 const ServiceApplication = require('../../../../src/libraries/service-application/ServiceApplication');
 const ConnectionListener = require('../../../../src/libraries/service-application/server/ConnectionListener');
 const ServerFactory = require('../../../../src/libraries/service-application/server/ServerFactory');
-const ApplicationWidgetFactory = require('../../../../src/libraries/service-application/ApplicationWidgetFactory');
+const ApplicationFactory = require('../../../../src/libraries/service-application/ApplicationFactory');
 const Server = require('../../../../src/libraries/service-application/server/Server');
 const ApplicationWidget = require('../../../../src/libraries/service-application/widgets/ApplicationWidget');
-const ServiceApplicationException = require('../../../../src/libraries/service-application/ServiceApplicationException');
 const MessageBus = require('message-bus').MessageBus;
 
 /**
@@ -13,9 +12,9 @@ const MessageBus = require('message-bus').MessageBus;
 const serverFactory = {};
 
 /**
- * @type {Object|ApplicationWidgetFactory}
+ * @type {Object|ServiceApplicationFactory}
  */
-const applicationWidgetFactory = {};
+const applicationFactory = {};
 
 /**
  * @type {null|ServiceApplication}
@@ -33,10 +32,10 @@ const server = {};
 const app = {};
 
 beforeEach(() => {
-    applicationWidgetFactory.create = () => app;
+    applicationFactory.create = () => app;
     app.connect = jest.fn();
 
-    application = new ServiceApplication(serverFactory, applicationWidgetFactory);
+    application = new ServiceApplication(serverFactory, applicationFactory);
 
     serverFactory.create = listener => listener === application ? server : null;
     server.listen = jest.fn(() => application.listen({}));
@@ -47,12 +46,11 @@ test('implements interface', () => {
 });
 
 test('can be injected', () => {
-    expect(ServiceApplication.__DEPS__).toStrictEqual([ ServerFactory, ApplicationWidgetFactory ]);
+    expect(ServiceApplication.__DEPS__).toStrictEqual([ ServerFactory, ApplicationFactory ]);
 });
 
 test('provides fqcn', () => {
     expect(ServiceApplication.toString()).toBe('FindBooks.ServiceApplication.ServiceApplication');
-    expect(ServiceApplicationException.toString()).toBe('FindBooks.ServiceApplication.ServiceApplicationException');
 });
 
 test('starts server when run', () => {
@@ -69,17 +67,17 @@ test('connects a different application at every connection', () => {
     let bus1 = null;
     const app1 = { connect: jest.fn() };
     const connection1 = 'connection1';
+
     let bus2 = null;
     const app2 = { connect: jest.fn() };
     const connection2 = 'connection2';
-    let call = 0;
 
     server.listen = () => {
         application.listen(connection1);
         application.listen(connection2);
     };
-    applicationWidgetFactory.create = jest.fn((bus, connection) => {
-        if (call++) {
+    applicationFactory.create = jest.fn((bus, connection) => {
+        if (connection === connection1) {
             bus2 = bus;
             return app2;
         }
@@ -89,11 +87,11 @@ test('connects a different application at every connection', () => {
 
     application.run('host', 1234);
 
-    expect(applicationWidgetFactory.create.mock.calls[0][0]).toBeInstanceOf(MessageBus);
-    expect(applicationWidgetFactory.create.mock.calls[0][1]).toBe(connection1);
-    expect(applicationWidgetFactory.create.mock.calls[1][0]).toBeInstanceOf(MessageBus);
-    expect(applicationWidgetFactory.create.mock.calls[1][1]).toBe(connection2);
+    expect(applicationFactory.create.mock.calls[0][1]).toBe(connection1);
+    expect(applicationFactory.create.mock.calls[1][1]).toBe(connection2);
     expect(app1.connect).toBeCalled();
     expect(app2.connect).toBeCalled();
+    expect(bus1).toBeInstanceOf(MessageBus);
+    expect(bus2).toBeInstanceOf(MessageBus);
     expect(bus1).not.toBe(bus2);
 });

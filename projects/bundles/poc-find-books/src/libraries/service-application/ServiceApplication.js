@@ -2,21 +2,21 @@ const _package = 'FindBooks.ServiceApplication.';
 
 const ConnectionListener = require('./server/ConnectionListener');
 const ServerFactory = require('./server/ServerFactory');
-const ApplicationWidgetFactory = require('./ApplicationWidgetFactory');
+const ApplicationFactory = require('./ApplicationFactory');
 const MessageBus = require('message-bus').MessageBus;
 
 module.exports = class ServiceApplication extends ConnectionListener {
-    static get __DEPS__() { return [ ServerFactory, ApplicationWidgetFactory ]; }
+    static get __DEPS__() { return [ ServerFactory, ApplicationFactory ]; }
     static toString() { return _package + ServiceApplication.name; }
 
     /**
      * @param {ServerFactory} serverFactory
-     * @param {ApplicationWidgetFactory} applicationWidgetFactory
+     * @param {ApplicationFactory} applicationFactory
      */
-    constructor(serverFactory, applicationWidgetFactory) {
+    constructor(serverFactory, applicationFactory) {
         super();
         this._serverFactory = serverFactory;
-        this._applicationWidgetFactory = applicationWidgetFactory;
+        this._applicationFactory = applicationFactory;
     }
 
     /**
@@ -32,7 +32,7 @@ module.exports = class ServiceApplication extends ConnectionListener {
      * @override
      */
     listen(connection) {
-        const app = this._applicationWidgetFactory.create(new MessageBus(), connection);
+        const app = this._applicationFactory.create(new MessageBus(), connection);
         app.connect();
     }
 };

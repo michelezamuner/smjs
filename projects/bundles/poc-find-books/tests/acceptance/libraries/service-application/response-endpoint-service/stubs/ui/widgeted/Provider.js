@@ -1,7 +1,7 @@
 const Container = require('container').Container;
 const InputParser = require('../../../../../../../../src/libraries/service-application/input-parser/InputParser');
 const BasicInputParser = require('../../../../../../../../src/libraries/service-application/input-parser/BasicInputParser');
-const ApplicationWidgetFactory = require('../../../../../../../../src/libraries/service-application/ApplicationWidgetFactory');
+const ApplicationFactory = require('../../../../../../../../src/libraries/service-application/ApplicationFactory');
 const ServiceApplicationWidget = require('./ServiceApplicationWidget');
 const MessageBus = require('message-bus').MessageBus;
 const Connection = require('../../../../../../../../src/libraries/service-application/server/Connection');
@@ -21,7 +21,7 @@ module.exports = class Provider {
     register() {
         const c = this._container;
         c.bind(InputParser, BasicInputParser);
-        c.bind(ApplicationWidgetFactory, { create(bus, connection) {
+        c.bind(ApplicationFactory, { create(bus, connection) {
             return c.make(ServiceApplicationWidget, { [MessageBus]: bus, [Connection]: connection });
         }});
         

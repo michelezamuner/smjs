@@ -1,6 +1,7 @@
 const _package = 'FindBooks.ServiceApplication.InputParser.';
 
 const ServiceRequest = require('./ServiceRequest');
+const InputParserException = require('./InputParserException');
 
 /**
  * @interface
@@ -17,6 +18,7 @@ module.exports = class InputParser {
     /**
      * @param {string} input
      * @return {ServiceRequest}
+     * @throws {InputParserException}
      */
     parse(input) {
         throw 'Not implemented';

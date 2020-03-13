@@ -1,7 +1,7 @@
 const BasicInputParser = require('../../../../../src/libraries/service-application/input-parser/BasicInputParser');
 const InputParser = require('../../../../../src/libraries/service-application/input-parser/InputParser');
 const ServiceRequest = require('../../../../../src/libraries/service-application/input-parser/ServiceRequest');
-const ServiceApplicationException = require('../../../../../src/libraries/service-application/ServiceApplicationException');
+const InputParserException = require('../../../../../src/libraries/service-application/input-parser/InputParserException');
 
 /**
  * @type {null|BasicInputParser}
@@ -17,9 +17,7 @@ test('implements interface', () => {
 });
 
 test('provides fqcn', () => {
-    expect(InputParser.toString()).toBe('FindBooks.ServiceApplication.InputParser.InputParser');
     expect(BasicInputParser.toString()).toBe('FindBooks.ServiceApplication.InputParser.BasicInputParser');
-    expect(ServiceRequest.toString()).toBe('FindBooks.ServiceApplication.InputParser.ServiceRequest');
 });
 
 test('parses valid input into request', () => {
@@ -38,6 +36,6 @@ test('parses valid input into request', () => {
 test('fails if parsing invalid input', () => {
     const input = 'invalid input';
 
-    expect(() => parser.parse(input)).toThrow(ServiceApplicationException);
+    expect(() => parser.parse(input)).toThrow(InputParserException);
     expect(() => parser.parse(input)).toThrow(`Invalid input: "${input}"`);
 });
