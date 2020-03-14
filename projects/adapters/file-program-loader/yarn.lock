@@ -372,9 +372,9 @@ acorn-walk@^6.0.1:
   integrity sha512-7evsyfH1cLOCdAzZAd43Cic04yKydNx0cF+7tiA19p1XnLLPU4dpCQOqpjqwokFe//vS0QqfqqjCS2JkiIs0cA==
 
 acorn@^5.5.3:
-  version "5.7.3"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.3.tgz#67aa231bf8812974b85235a96771eb6bd07ea279"
-  integrity sha512-T/zvzYRfbVojPWahDsE5evJdHb3oJoQfFbsrKM7w5Zcs++Tr257tia3BmMP8XYVjp1S9RZXQMh7gao96BlqZOw==
+  version "5.7.4"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.4.tgz#3e8d8a9947d0599a1796d10225d7432f4a4acf5e"
+  integrity sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==
 
 acorn@^6.0.1:
   version "6.2.0"
@@ -429,8 +429,8 @@ anymatch@^2.0.0:
 "app/program-loader@file:../../application/program-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-program-loader-0.0.0-51433431-d0bf-4840-8dac-0cfde1584abb-1563432554480/node_modules/domain/sloth-machine-framework"
-    sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-program-loader-0.0.0-51433431-d0bf-4840-8dac-0cfde1584abb-1563432554480/node_modules/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../domain/sloth-machine-framework"
+    sloth-machine-framework "file:../../domain/sloth-machine-framework"
 
 aproba@^1.0.3:
   version "1.2.0"
@@ -910,10 +910,10 @@ diff-sequences@^24.3.0:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-24.3.0.tgz#0f20e8a1df1abddaf4d9c226680952e64118b975"
   integrity sha512-xLqpez+Zj9GKSnPWS0WZw1igGocZ+uua8+y+5dDNTT934N3QuY1sp2LkHzwiaYQGz60hMq0pjAshdeXm5VUOEw==
 
-"domain/sloth-machine-framework@file:../../domain/sloth-machine-framework":
+"domain/sloth-machine-framework@file:../../domain/sloth-machine-framework", "sloth-machine-framework@file:../../domain/sloth-machine-framework":
   version "0.0.0"
   dependencies:
-    random "file:../../../../usr/local/share/.cache/yarn/v4/npm-domain-sloth-machine-framework-0.0.0-07fd9c15-6659-44e4-9130-cb57c148ae66-1563432554488/node_modules/libraries/random"
+    random "file:../../libraries/random"
 
 domexception@^1.0.1:
   version "1.0.1"
@@ -2695,8 +2695,8 @@ process-nextick-args@~2.0.0:
 "program-loader@file:../../application/program-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-program-loader-0.0.0-d2e5b0f4-40f7-4246-a520-92484dd08717-1563432569970/domain/sloth-machine-framework"
-    sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-program-loader-0.0.0-d2e5b0f4-40f7-4246-a520-92484dd08717-1563432569970/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../domain/sloth-machine-framework"
+    sloth-machine-framework "file:../../domain/sloth-machine-framework"
 
 prompts@^2.0.1:
   version "2.1.0"
@@ -3013,11 +3013,6 @@ slash@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-2.0.0.tgz#de552851a1759df3a8f206535442f5ec4ddeab44"
   integrity sha512-ZYKh3Wh2z1PpEXWr0MpSBZ0V6mZHAQfYevttO11c51CaWjGTaadiKZ+wVt1PbMlDV5qhMFslpZCemhwOK7C89A==
-
-"sloth-machine-framework@file:../../domain/sloth-machine-framework":
-  version "0.0.0"
-  dependencies:
-    random "file:../../../../usr/local/share/.cache/yarn/v4/npm-sloth-machine-framework-0.0.0-de382763-8eaa-45e8-b7ff-6f64184d2bad-1563432569971/libraries/random"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
