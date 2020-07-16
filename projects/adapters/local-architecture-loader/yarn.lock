@@ -429,8 +429,8 @@ anymatch@^2.0.0:
 "app/architecture-loader@file:../../application/architecture-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-architecture-loader-0.0.0-bcfb4084-e6f9-4c18-a749-5f88f3147f8d-1563432613959/node_modules/domain/sloth-machine-framework"
-    sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-architecture-loader-0.0.0-bcfb4084-e6f9-4c18-a749-5f88f3147f8d-1563432613959/node_modules/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../domain/sloth-machine-framework"
+    sloth-machine-framework "file:../../domain/sloth-machine-framework"
 
 aproba@^1.0.3:
   version "1.2.0"
@@ -440,8 +440,8 @@ aproba@^1.0.3:
 "architecture-loader@file:../../application/architecture-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-architecture-loader-0.0.0-7d88aed4-bcf1-4508-b168-cca4f5636aeb-1563432629025/domain/sloth-machine-framework"
-    sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-architecture-loader-0.0.0-7d88aed4-bcf1-4508-b168-cca4f5636aeb-1563432629025/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../domain/sloth-machine-framework"
+    sloth-machine-framework "file:../../domain/sloth-machine-framework"
 
 are-we-there-yet@~1.1.2:
   version "1.1.5"
@@ -916,10 +916,10 @@ diff-sequences@^24.3.0:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-24.3.0.tgz#0f20e8a1df1abddaf4d9c226680952e64118b975"
   integrity sha512-xLqpez+Zj9GKSnPWS0WZw1igGocZ+uua8+y+5dDNTT934N3QuY1sp2LkHzwiaYQGz60hMq0pjAshdeXm5VUOEw==
 
-"domain/sloth-machine-framework@file:../../domain/sloth-machine-framework":
+"domain/sloth-machine-framework@file:../../domain/sloth-machine-framework", "sloth-machine-framework@file:../../domain/sloth-machine-framework":
   version "0.0.0"
   dependencies:
-    random "file:../../../../usr/local/share/.cache/yarn/v4/npm-domain-sloth-machine-framework-0.0.0-fe65f96e-2395-4e3f-b61b-ec78d87eb4cd-1563432613968/node_modules/libraries/random"
+    random "file:../../libraries/random"
 
 domexception@^1.0.1:
   version "1.0.1"
@@ -2141,9 +2141,9 @@ lodash.sortby@^4.7.0:
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
 lodash@^4.17.11, lodash@^4.17.13:
-  version "4.17.14"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
-  integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
 loose-envify@^1.0.0:
   version "1.4.0"
@@ -3013,11 +3013,6 @@ slash@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-2.0.0.tgz#de552851a1759df3a8f206535442f5ec4ddeab44"
   integrity sha512-ZYKh3Wh2z1PpEXWr0MpSBZ0V6mZHAQfYevttO11c51CaWjGTaadiKZ+wVt1PbMlDV5qhMFslpZCemhwOK7C89A==
-
-"sloth-machine-framework@file:../../domain/sloth-machine-framework":
-  version "0.0.0"
-  dependencies:
-    random "file:../../../../usr/local/share/.cache/yarn/v4/npm-sloth-machine-framework-0.0.0-e241e7b9-3c80-4931-96dc-d31e96a27354-1563432629028/libraries/random"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
