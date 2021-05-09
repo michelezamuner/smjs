@@ -2127,9 +2127,9 @@ lodash.sortby@^4.7.0:
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
 lodash@^4.17.11, lodash@^4.17.13:
-  version "4.17.14"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
-  integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 loose-envify@^1.0.0:
   version "1.4.0"
@@ -2899,7 +2899,7 @@ rimraf@^2.5.4, rimraf@^2.6.1, rimraf@^2.6.3:
 "router@file:../../libraries/router":
   version "0.0.0"
   dependencies:
-    container "file:../../../../usr/local/share/.cache/yarn/v4/npm-router-0.0.0-3b2e608a-8b96-4938-b5e8-55f7573b7298-1563433340100/node_modules/container"
+    container "file:../../libraries/container"
 
 rsvp@^4.8.4:
   version "4.8.5"
