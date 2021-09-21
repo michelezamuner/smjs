@@ -429,8 +429,8 @@ anymatch@^2.0.0:
 "app/architecture-loader@file:../architecture-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-architecture-loader-0.0.0-47187bdb-cca6-4ff4-acbe-9b6b0bef7831-1563432430274/node_modules/domain/sloth-machine-framework"
-    sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-architecture-loader-0.0.0-47187bdb-cca6-4ff4-acbe-9b6b0bef7831-1563432430274/node_modules/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../domain/sloth-machine-framework"
+    sloth-machine-framework "file:../../domain/sloth-machine-framework"
 
 "app/notifications@file:../notifications":
   version "0.0.0"
@@ -438,14 +438,14 @@ anymatch@^2.0.0:
 "app/program-loader@file:../program-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-program-loader-0.0.0-b874c7bc-5466-4063-a8a8-cda8ad2c1f47-1563432430303/node_modules/domain/sloth-machine-framework"
-    sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-program-loader-0.0.0-b874c7bc-5466-4063-a8a8-cda8ad2c1f47-1563432430303/node_modules/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../domain/sloth-machine-framework"
+    sloth-machine-framework "file:../../domain/sloth-machine-framework"
 
 "app/system@file:../system":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-system-0.0.0-ae27f0d3-9fc8-4224-b697-414051fcbb8c-1563432430310/node_modules/domain/sloth-machine-framework"
-    sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-app-system-0.0.0-ae27f0d3-9fc8-4224-b697-414051fcbb8c-1563432430310/node_modules/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../domain/sloth-machine-framework"
+    sloth-machine-framework "file:../../domain/sloth-machine-framework"
 
 aproba@^1.0.3:
   version "1.2.0"
@@ -455,8 +455,8 @@ aproba@^1.0.3:
 "architecture-loader@file:../architecture-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-architecture-loader-0.0.0-2d83c321-1429-43b3-a325-40d7101bd86c-1563432445442/domain/sloth-machine-framework"
-    sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-architecture-loader-0.0.0-2d83c321-1429-43b3-a325-40d7101bd86c-1563432445442/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../domain/sloth-machine-framework"
+    sloth-machine-framework "file:../../domain/sloth-machine-framework"
 
 are-we-there-yet@~1.1.2:
   version "1.1.5"
@@ -931,10 +931,10 @@ diff-sequences@^24.3.0:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-24.3.0.tgz#0f20e8a1df1abddaf4d9c226680952e64118b975"
   integrity sha512-xLqpez+Zj9GKSnPWS0WZw1igGocZ+uua8+y+5dDNTT934N3QuY1sp2LkHzwiaYQGz60hMq0pjAshdeXm5VUOEw==
 
-"domain/sloth-machine-framework@file:../../domain/sloth-machine-framework":
+"domain/sloth-machine-framework@file:../../domain/sloth-machine-framework", "sloth-machine-framework@file:../../domain/sloth-machine-framework":
   version "0.0.0"
   dependencies:
-    random "file:../../../../usr/local/share/.cache/yarn/v4/npm-domain-sloth-machine-framework-0.0.0-d750f8e0-9b77-4606-964b-cfbb81bc2c3e-1563432430283/node_modules/libraries/random"
+    random "file:../../libraries/random"
 
 domexception@^1.0.1:
   version "1.0.1"
@@ -2719,8 +2719,8 @@ process-nextick-args@~2.0.0:
 "program-loader@file:../program-loader":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-program-loader-0.0.0-0b356263-1bda-407c-bdb0-4f3abcd9b0b4-1563432445444/domain/sloth-machine-framework"
-    sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-program-loader-0.0.0-0b356263-1bda-407c-bdb0-4f3abcd9b0b4-1563432445444/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../domain/sloth-machine-framework"
+    sloth-machine-framework "file:../../domain/sloth-machine-framework"
 
 prompts@^2.0.1:
   version "2.1.0"
@@ -3038,11 +3038,6 @@ slash@^2.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-2.0.0.tgz#de552851a1759df3a8f206535442f5ec4ddeab44"
   integrity sha512-ZYKh3Wh2z1PpEXWr0MpSBZ0V6mZHAQfYevttO11c51CaWjGTaadiKZ+wVt1PbMlDV5qhMFslpZCemhwOK7C89A==
 
-"sloth-machine-framework@file:../../domain/sloth-machine-framework":
-  version "0.0.0"
-  dependencies:
-    random "file:../../../../usr/local/share/.cache/yarn/v4/npm-sloth-machine-framework-0.0.0-59cdddb3-f214-416f-be5d-0975a763ef95-1563432445445/libraries/random"
-
 snapdragon-node@^2.0.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/snapdragon-node/-/snapdragon-node-2.1.1.tgz#6c175f86ff14bdb0724563e8f3c1b021a286853b"
@@ -3263,8 +3258,8 @@ symbol-tree@^3.2.2:
 "system@file:../system":
   version "0.0.0"
   dependencies:
-    domain/sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-system-0.0.0-51b726a0-5f89-4d40-bffd-b4ab6ae0a6bf-1563432445446/domain/sloth-machine-framework"
-    sloth-machine-framework "file:../../../../usr/local/share/.cache/yarn/v4/npm-system-0.0.0-51b726a0-5f89-4d40-bffd-b4ab6ae0a6bf-1563432445446/domain/sloth-machine-framework"
+    domain/sloth-machine-framework "file:../../domain/sloth-machine-framework"
+    sloth-machine-framework "file:../../domain/sloth-machine-framework"
 
 tar@^4:
   version "4.4.10"
@@ -3295,9 +3290,9 @@ throat@^4.0.0:
   integrity sha1-iQN8vJLFarGJJua6TLsgDhVnKmo=
 
 tmpl@1.0.x:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.4.tgz#23640dd7b42d00433911140820e5cf440e521dd1"
-  integrity sha1-I2QN17QtAEM5ERQIIOXPRA5SHdE=
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.5.tgz#8683e0b902bb9c20c4f726e3c0b69f36518c07cc"
+  integrity sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==
 
 to-fast-properties@^2.0.0:
   version "2.0.0"
