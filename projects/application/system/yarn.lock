@@ -836,9 +836,9 @@ decamelize@^1.2.0:
   integrity sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
 
 decode-uri-component@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
-  integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
+  integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
 
 deep-extend@^0.6.0:
   version "0.6.0"
@@ -907,7 +907,7 @@ diff-sequences@^24.3.0:
 "domain/sloth-machine-framework@file:../../domain/sloth-machine-framework":
   version "0.0.0"
   dependencies:
-    random "file:../../../../usr/local/share/.cache/yarn/v4/npm-domain-sloth-machine-framework-0.0.0-7d3cb1a4-e2d7-4ca9-891b-3971e4c55670-1563432370545/node_modules/libraries/random"
+    random "file:../../libraries/random"
 
 domexception@^1.0.1:
   version "1.0.1"
@@ -3005,7 +3005,7 @@ slash@^2.0.0:
 "sloth-machine-framework@file:../../domain/sloth-machine-framework":
   version "0.0.0"
   dependencies:
-    random "file:../../../../usr/local/share/.cache/yarn/v4/npm-sloth-machine-framework-0.0.0-83999c4e-b909-45f9-8e39-664a0dc24e87-1563432385454/libraries/random"
+    random "file:../../libraries/random"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
