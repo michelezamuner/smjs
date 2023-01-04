@@ -907,7 +907,7 @@ diff-sequences@^24.3.0:
 "domain/sloth-machine-framework@file:../../domain/sloth-machine-framework":
   version "0.0.0"
   dependencies:
-    random "file:../../../../usr/local/share/.cache/yarn/v4/npm-domain-sloth-machine-framework-0.0.0-7d3cb1a4-e2d7-4ca9-891b-3971e4c55670-1563432370545/node_modules/libraries/random"
+    random "file:../../libraries/random"
 
 domexception@^1.0.1:
   version "1.0.1"
@@ -2035,11 +2035,9 @@ json-stringify-safe@~5.0.1:
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
 json5@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/json5/-/json5-2.1.0.tgz#e7a0c62c48285c628d20a10b85c89bb807c32850"
-  integrity sha512-8Mh9h6xViijj36g7Dxi+Y4S6hNGV96vcJZr/SrlHh1LR/pEn/8j/+qIBbs44YKl69Lrfctp4QD+AdWLTMqEZAQ==
-  dependencies:
-    minimist "^1.2.0"
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
+  integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
 jsprim@^1.2.2:
   version "1.4.1"
@@ -3005,7 +3003,7 @@ slash@^2.0.0:
 "sloth-machine-framework@file:../../domain/sloth-machine-framework":
   version "0.0.0"
   dependencies:
-    random "file:../../../../usr/local/share/.cache/yarn/v4/npm-sloth-machine-framework-0.0.0-83999c4e-b909-45f9-8e39-664a0dc24e87-1563432385454/libraries/random"
+    random "file:../../libraries/random"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
